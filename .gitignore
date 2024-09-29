@@ -1,6 +1,8 @@
 # Created by https://www.toptal.com/developers/gitignore/api/visualstudio,visualstudiocode,vs
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudio,visualstudiocode,vs
 
+# currently ignored: vs, VisualStudioCode, VisualStudio, env
+
 # ENV - Andris
 .ENV
 .env

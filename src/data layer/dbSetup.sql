@@ -63,7 +63,8 @@ CREATE TABLE Movie (
     language VARCHAR(50) NULL,
     releaseDate DATE NULL,
     posterURL VARCHAR(255) NULL,
-    rating DECIMAL(2, 2) NULL, -- 2 digits and 2 digits after the decimal point
+    promoURL VARCHAR(255) NULL,
+    rating DECIMAL(2, 2) NULL, -- 2 digits and 2 digits after the decimal point 1.00 - 10.00
     trailerURL VARCHAR(255) NULL
 );
 
@@ -98,14 +99,14 @@ CREATE TABLE Showing (
 CREATE TABLE TicketType (
     ticketTypeId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     name VARCHAR(50) NOT NULL,
-    price DECIMAL(5, 2) NOT NULL, -- 5 digits and 2 digits after the decimal point
+    price DECIMAL(5, 2) NOT NULL, -- 5 digits and 2 digits after the decimal point 0.00 - 999.99
     description VARCHAR(255) NULL
 );
 
 CREATE TABLE Reservation (
     reservationId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     userId INT NOT NULL,
-    status ENUM('pending', 'confirmed', 'cancelled') NOT NULL,
+    status ENUM('pending', 'confirmed', 'cancelled') NOT NULL, -- enum?
     FOREIGN KEY (userId) REFERENCES User(userId)
 );
 
@@ -123,9 +124,9 @@ CREATE TABLE Ticket (
 
 CREATE TABLE Payment (
     paymentId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    method ENUM('credit_card', 'paypal', 'mobile_payu') NOT NULL,
+    method ENUM('credit_card', 'paypal', 'mobile_pay') NOT NULL,
     `date` DATE NOT NULL,
-    totalPrice DECIMAL(8, 2) NOT NULL, -- 8 digits and 2 digits after the decimal point
+    totalPrice DECIMAL(8, 2) NOT NULL, -- 8 digits and 2 digits after the decimal point 0.00 - 999999.99
     userId INT NOT NULL,
     addressId INT NOT NULL,
     reservationId INT NOT NULL,
@@ -136,6 +137,7 @@ CREATE TABLE Payment (
 
 CREATE TABLE News (
     newsId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    imageURL VARCHAR(255) NOT NULL, -- blob?
     header VARCHAR(255) NOT NULL,
     content TEXT NOT NULL
 );
