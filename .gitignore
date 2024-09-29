@@ -9,6 +9,9 @@
 .dev.env
 .prod.env
 
+# Ignore FTP configuration
+ftp.config
+
 ### VisualStudioCode ###
 .vscode/*
 !.vscode/settings.json
