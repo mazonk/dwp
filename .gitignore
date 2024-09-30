@@ -6,11 +6,8 @@
 # db credentials
 credentials.php
 
-# ENV - Andris
-.ENV
-.env
-.dev.env
-.prod.env
+# mac binary files ignore
+.DS_Store
 
 # Ignore FTP configuration
 ftp.config
