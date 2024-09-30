@@ -3,6 +3,9 @@
 
 # currently ignored: vs, VisualStudioCode, VisualStudio, env
 
+# db credentials
+credentials.php
+
 # ENV - Andris
 .ENV
 .env
