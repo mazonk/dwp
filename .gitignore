@@ -1,11 +1,16 @@
 # Created by https://www.toptal.com/developers/gitignore/api/visualstudio,visualstudiocode,vs
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudio,visualstudiocode,vs
 
-# ENV - Andris
-.ENV
-.env
-.dev.env
-.prod.env
+# currently ignored: vs, VisualStudioCode, VisualStudio, env
+
+# db credentials
+credentials.php
+
+# mac binary files ignore
+.DS_Store
+
+# Ignore FTP configuration
+ftp.config
 
 ### VisualStudioCode ###
 .vscode/*
