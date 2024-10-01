@@ -27,12 +27,17 @@ DROP TABLE IF EXISTS Address;
 -- Enable foreign key checks
 SET FOREIGN_KEY_CHECKS = 1;
 
+CREATE TABLE PostalCode (
+    postalCode int PRIMARY KEY NOT NULL,
+    city VARCHAR(50) NOT NULL
+)
+
 CREATE TABLE Address (
     addressId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     street VARCHAR(100) NOT NULL,
     streetNr VARCHAR(10) NOT NULL,
-    city VARCHAR(50) NOT NULL,
-    postalCode VARCHAR(20) NOT NULL
+    postalCode INT NOT NULL,
+    FOREIGN KEY (postalCode) REFERENCES PostalCode(postalCode)
 );
 
 CREATE TABLE Venue (
@@ -70,6 +75,11 @@ CREATE TABLE Seat (
     FOREIGN KEY (roomId) REFERENCES Room(roomId)
 );
 
+CREATE TABLE UserRole (
+    roleId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    type VARCHAR(50) NOT NULL
+)
+
 CREATE TABLE User (
     userId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     firstName VARCHAR(50) NOT NULL,
@@ -77,7 +87,8 @@ CREATE TABLE User (
     DoB DATE NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     passwordHash VARCHAR(1000) NULL, -- null for anonymous users | Is this a good idea?
-    role ENUM('customer', 'admin') DEFAULT 'customer' NOT NULL -- enum?
+    roleId INT NOT NULL,
+    FOREIGN KEY (roleId) REFERENCES UserRole(roleId)
 );
 
 CREATE TABLE Movie (
@@ -89,8 +100,8 @@ CREATE TABLE Movie (
     releaseDate DATE NULL,
     posterURL VARCHAR(255) NULL,
     promoURL VARCHAR(255) NULL,
+    trailerURL VARCHAR(255) NULL,
     rating DECIMAL(2, 2) NULL, -- 2 digits and 2 digits after the decimal point 1.00 - 10.00
-    trailerURL VARCHAR(255) NULL
 );
 
 CREATE TABLE Genre (
@@ -125,7 +136,7 @@ CREATE TABLE TicketType (
     ticketTypeId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     name VARCHAR(50) NOT NULL,
     price DECIMAL(5, 2) NOT NULL, -- 5 digits and 2 digits after the decimal point 0.00 - 999.99
-    description VARCHAR(255) NULL
+    description TEXT NULL
 );
 
 CREATE TABLE Reservation (
@@ -147,14 +158,21 @@ CREATE TABLE Ticket (
     FOREIGN KEY (reservationId) REFERENCES Reservation(reservationId)
 );
 
+CREATE TABLE PaymentMethod (
+    methodId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    name VARCHAR(50) NOT NULL
+);
+
 CREATE TABLE Payment (
     paymentId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    method ENUM('credit_card', 'paypal', 'mobile_pay') NOT NULL,
-    `date` DATE NOT NULL,
+    paymentDate DATE NOT NULL,
+    paymentTime TIME NOT NULL,
     totalPrice DECIMAL(8, 2) NOT NULL, -- 8 digits and 2 digits after the decimal point 0.00 - 999999.99
     userId INT NOT NULL,
     addressId INT NOT NULL,
     reservationId INT NOT NULL,
+    methodId INT NOT NULL,
+    FOREIGN KEY (methodId) REFERENCES PaymentMethod(methodId),
     FOREIGN KEY (userId) REFERENCES User(userId),
     FOREIGN KEY (addressId) REFERENCES Address(addressId),
     FOREIGN KEY (reservationId) REFERENCES Reservation(reservationId)
