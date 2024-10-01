@@ -2,6 +2,9 @@
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- Drop all tables
+DROP TABLE IF EXISTS PostalCode;
+DROP TABLE IF EXISTS PaymentMethod;
+DROP TABLE IF EXISTS UserRole;
 DROP TABLE IF EXISTS MovieActor;
 DROP TABLE IF EXISTS VenueShowing;
 DROP TABLE IF EXISTS VenueOpeningHour;
@@ -30,7 +33,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 CREATE TABLE PostalCode (
     postalCode int PRIMARY KEY NOT NULL,
     city VARCHAR(50) NOT NULL
-)
+);
 
 CREATE TABLE Address (
     addressId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
@@ -78,7 +81,7 @@ CREATE TABLE Seat (
 CREATE TABLE UserRole (
     roleId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     type VARCHAR(50) NOT NULL
-)
+);
 
 CREATE TABLE User (
     userId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
@@ -101,7 +104,7 @@ CREATE TABLE Movie (
     posterURL VARCHAR(255) NULL,
     promoURL VARCHAR(255) NULL,
     trailerURL VARCHAR(255) NULL,
-    rating DECIMAL(2, 2) NULL, -- 2 digits and 2 digits after the decimal point 1.00 - 10.00
+    rating DECIMAL(2, 2) NULL -- 2 digits and 2 digits after the decimal point 1.00 - 10.00
 );
 
 CREATE TABLE Genre (
