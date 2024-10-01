@@ -72,7 +72,7 @@ CREATE TABLE Room (
 
 CREATE TABLE Seat (
     seatId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    row INT NOT NULL,
+    `row` INT NOT NULL,
     seatNr INT NOT NULL,
     roomId INT NOT NULL,
     FOREIGN KEY (roomId) REFERENCES Room(roomId)
