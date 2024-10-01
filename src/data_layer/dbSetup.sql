@@ -1,6 +1,31 @@
-DROP DATABASE IF EXISTS Cinema;
-CREATE DATABASE Cinema;
-USE Cinema;
+-- Disable foreign key checks (so tables can be dropped)
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- Drop all tables
+DROP TABLE IF EXISTS MovieActor;
+DROP TABLE IF EXISTS VenueShowing;
+DROP TABLE IF EXISTS VenueOpeningHour;
+DROP TABLE IF EXISTS MovieDirector;
+DROP TABLE IF EXISTS MovieGenre;
+DROP TABLE IF EXISTS News;
+DROP TABLE IF EXISTS Payment;
+DROP TABLE IF EXISTS Ticket;
+DROP TABLE IF EXISTS Reservation;
+DROP TABLE IF EXISTS TicketType;
+DROP TABLE IF EXISTS Showing;
+DROP TABLE IF EXISTS Actor;
+DROP TABLE IF EXISTS Director;
+DROP TABLE IF EXISTS Genre;
+DROP TABLE IF EXISTS Movie;
+DROP TABLE IF EXISTS User;
+DROP TABLE IF EXISTS Seat;
+DROP TABLE IF EXISTS Room;
+DROP TABLE IF EXISTS OpeningHour;
+DROP TABLE IF EXISTS Venue;
+DROP TABLE IF EXISTS Address;
+
+-- Enable foreign key checks
+SET FOREIGN_KEY_CHECKS = 1;
 
 CREATE TABLE Address (
     addressId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
@@ -189,3 +214,5 @@ CREATE TABLE VenueOpeningHour (
     FOREIGN KEY (openingHourId) REFERENCES OpeningHour(openingHourId)
 );
 
+-- TEST DATA INSERTION
+INSERT INTO Actor(firstName, lastName, `character`) VALUES ('John', 'Doe', 'Maximus');
