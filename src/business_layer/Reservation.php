@@ -1,11 +1,18 @@
 <?php
 
+enum Status
+{
+    case pending;
+    case confirmed;
+    case cancelled;
+}
+
 class Resevation {
     private int $reservationId;
     private int $userId;
-    private enum $status;
+    private Status $status;
 
-    public function __construct(int $reservationId, int $userId, string $status) {
+    public function __construct(int $reservationId, int $userId, Status $status) {
         $this->reservationId = $reservationId;
         $this->userId = $userId;
         $this->status = $status;
@@ -19,18 +26,16 @@ class Resevation {
         return $this->userId;
     }
 
-    public function getStatus(): string {
+    public function getStatus(): Status {
         return $this->status;
+    }
+
+    public function setStatus(Status $status): void {
+        $this->status = $status;
     }
 
     public function setStatus(string $status): void { 
           
 }
 
-enum status
-{
-    case pending;
-    case confirmed;
-    case cancelled;
-}
 
