@@ -1,6 +1,6 @@
 <html>
     <body>
-        <h1>Hello World!! WE ROCK</h1>
+        <h1>Hello World!! WE ROCK AND ROLL</h1>
         <?php
         require("../src/data_layer/dbcon/dbcon.php");
         $query = $db->prepare("SELECT * FROM Actor");
