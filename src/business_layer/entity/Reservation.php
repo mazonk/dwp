@@ -35,7 +35,7 @@ class Resevation {
     }
 
     public function setStatus(string $status): void { 
-          
+    }    
 }
 
 
