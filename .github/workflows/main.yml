@@ -26,5 +26,5 @@ jobs:
     - name: Install Composer dependencies
       run: composer install --no-progress --prefer-dist
 
-    - name: Build project
-      run: php artisan build # Adjust based on your framework or build process
+    - name: Install Composer dependencies
+      run: composer install --no-progress --prefer-dist
