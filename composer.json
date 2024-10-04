@@ -3,12 +3,14 @@
     "description": "DWP Cinema project",
     "type": "project",
     "require": {
-        "php": "^8.1",
+        "php": "^8.1"
+    },
+    "require-dev": {
         "phpunit/phpunit": "^9.5"
     },
     "autoload": {
         "psr-4": {
-            "YourNamespace\\": "src/"
+            "DWPCinema\\": "src/"
         }
     }
 }
