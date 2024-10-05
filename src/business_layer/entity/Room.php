@@ -29,5 +29,9 @@ class Room {
   public function setRoomNumber(int $roomNumber): void {
     $this->roomNumber = $roomNumber;
   }
+
+  public function setVenue(Venue $venue): void {
+    $this->venue = $venue;
+  }
 }
 ?>
