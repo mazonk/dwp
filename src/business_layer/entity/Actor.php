@@ -15,3 +15,4 @@ class Actor extends Person {
     $this->character = $character;
   }
 }
+?>

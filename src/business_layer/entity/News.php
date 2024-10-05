@@ -45,3 +45,4 @@ class News {
     $this->content = $content;
   }
 }
+?>

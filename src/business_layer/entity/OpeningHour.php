@@ -66,3 +66,4 @@ class OpeningHour {
     $this->isCurrent = $isCurrent;
   }
 }
+?>
