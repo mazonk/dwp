@@ -39,5 +39,9 @@ class Seat {
   public function setSeatNr(int $seatNr): void {
     $this->seatNr = $seatNr;
   }
+
+  public function setRoom(Room $room): void {
+    $this->room = $room;
+  }
 }
 ?>
