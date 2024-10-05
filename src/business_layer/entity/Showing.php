@@ -39,6 +39,14 @@ class Showing {
         $this->showingId = $showingId;
     }
 
+    public function setMovie(Movie $movie): void {
+        $this->movie = $movie;
+    }
+
+    public function setRoom(Room $room): void {
+        $this->room = $room;
+    }
+
     public function setShowingDate(DateTime $showingDate): void {
         $this->showingDate = $showingDate;
     }
