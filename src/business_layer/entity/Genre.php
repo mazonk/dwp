@@ -17,6 +17,10 @@ class Genre {
         return $this->name;
     }
 
+    public function setGenreId(int $genreId): void {
+        $this->genreId = $genreId;
+    }
+
     public function setName(string $name): void {
         $this->name = $name;
     }
