@@ -39,6 +39,10 @@ class  Address {
   public function setStreetNr(string $streetNr): void {
     $this->streetNr = $streetNr;
   }
+
+  public function setPostalCode(PostalCode $postalCode): void {
+    $this->postalCode = $postalCode;
+  }
 }
 
 ?>
