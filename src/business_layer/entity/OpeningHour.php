@@ -11,7 +11,7 @@ enum Day {
 
 }
 
-class OpeningHours {
+class OpeningHour {
   private int $openingHourId;
   private Day $day;
   private DateTime $openingTime;
