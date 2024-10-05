@@ -3,9 +3,9 @@ class TicketType {
   private int $ticketTypeId;
   private string $name;
   private float $price;
-  private string $description;
+  private ?string $description;
 
-  public function __construct(int $ticketTypeId, string $name, float $price, string $description) {
+  public function __construct(int $ticketTypeId, string $name, float $price, string $description = null) {
     $this->ticketTypeId = $ticketTypeId;
     $this->name = $name;
     $this->price = $price;
