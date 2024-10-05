@@ -14,16 +14,16 @@ class Movie
     private ?string $trailerURL;
 
     public function __construct(
-        $movieId,
-        $title,
-        $description = null,
-        $duration = null,
-        $language = null,
-        $releaseDate = null,
-        $posterURL = null,
-        $promoURL = null,
-        $rating = null,
-        $trailerURL = null
+        int $movieId,
+        string $title,
+        string $description = null,
+        int $duration = null,
+        string $language = null,
+        DateTime $releaseDate = null,
+        string $posterURL = null,
+        string $promoURL = null,
+        float $rating = null,
+        string $trailerURL = null
     ) {
         $this->movieId = $movieId;
         $this->title = $title;
