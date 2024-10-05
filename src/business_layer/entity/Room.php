@@ -2,12 +2,12 @@
 class Room {
   private int $roomId;
   private int $roomNumber;
-  private Venue $venueId;
+  private Venue $venue;
 
-  public function __construct(int $roomId, int $roomNumber, Venue $venueId) {
+  public function __construct(int $roomId, int $roomNumber, Venue $venue) {
     $this->roomId = $roomId;
     $this->roomNumber = $roomNumber;
-    $this->venueId = $venueId;
+    $this->venue = $venue;
   }
 
   public function getRoomId(): int {
@@ -18,8 +18,8 @@ class Room {
     return $this->roomNumber;
   }
 
-  public function getVenueId(): Venue {
-    return $this->venueId;
+  public function getVenue(): Venue {
+    return $this->venue;
   }
 
   public function setRoomId(int $roomId): void {
