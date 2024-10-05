@@ -65,3 +65,4 @@ class OpeningHours {
   public function setIsCurrent(bool $isCurrent): void {
     $this->isCurrent = $isCurrent;
   }
+}
