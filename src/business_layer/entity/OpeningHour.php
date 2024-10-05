@@ -71,5 +71,9 @@ class OpeningHour {
   public function setIsCurrent(bool $isCurrent): void {
     $this->isCurrent = $isCurrent;
   }
+
+  public function setVenue(Venue $venue): void {
+    $this->venue = $venue;
+  }
 }
 ?>
