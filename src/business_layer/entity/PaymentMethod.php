@@ -1,26 +1,27 @@
 <?php
 class PaymentMethod {
   private int $methodId;
-  private string $methodName;
+  private string $name;
 
-  public function __construct(int $methodId, string $methodName) {
+  public function __construct(int $methodId, string $name) {
     $this->methodId = $methodId;
-    $this->methodName = $methodName;
+    $this->name = $name;
   }
 
   public function getMethodId(): int {
     return $this->methodId;
   }
 
-  public function getMethodName(): string {
-    return $this->methodName;
+  public function getName(): string {
+    return $this->name;
   }
 
   public function setMethodId(int $methodId): void {
     $this->methodId = $methodId;
   }
 
-  public function setMethodName(string $methodName): void {
-    $this->methodName = $methodName;
+  public function setName(string $name): void {
+    $this->name = $name;
+  }
 }
 ?>
