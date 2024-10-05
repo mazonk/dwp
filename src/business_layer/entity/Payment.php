@@ -67,5 +67,21 @@ class Payment {
   public function setPaymentTime(DateTime $paymentTime): void {
     $this->paymentTime = $paymentTime;
   }
+
+  public function setUser(User $user): void {
+    $this->user = $user;
+  }
+
+  public function setAddress(Address $address): void {
+    $this->address = $address;
+  }
+
+  public function setReservation(Reservation $reservation): void {
+    $this->reservation = $reservation;
+  }
+
+  public function setPaymentMethod(PaymentMethod $paymentMethod): void {
+    $this->paymentMethod = $paymentMethod;
+  }
 }
 ?>
