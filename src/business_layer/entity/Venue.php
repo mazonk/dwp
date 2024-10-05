@@ -50,5 +50,9 @@ class Venue {
     public function setContactEmail(string $contactEmail): void {        
         $this->contactEmail = $contactEmail;
     }
+
+    public function setAddress(Address $address): void {
+        $this->address = $address;
+    }
 }
 ?>
