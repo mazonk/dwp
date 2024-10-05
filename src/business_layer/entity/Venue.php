@@ -5,14 +5,14 @@ class Venue {
     private string $name;
     private string $phoneNr;
     private string $contactEmail;
-    private Address $addressId;
+    private Address $address;
 
-    public function __construct(int $venueId, string $name, string $phoneNr, string $contactEmail, Address $addressId) {
+    public function __construct(int $venueId, string $name, string $phoneNr, string $contactEmail, Address $address) {
         $this->venueId = $venueId;
         $this->name = $name;
         $this->phoneNr = $phoneNr;
         $this->contactEmail = $contactEmail;
-        $this->addressId = $addressId;
+        $this->address = $address;
     }
 
     public function getVenueId(): int {
@@ -31,8 +31,8 @@ class Venue {
         return $this->contactEmail;
     }
 
-    public function getAddressId(): Address {
-        return $this->addressId;
+    public function getAddress(): Address {
+        return $this->address;
     }
 
     public function setVenueId(int $venueId): void {
