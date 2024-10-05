@@ -24,7 +24,7 @@ class Person {
         return $this->lastName;
     }
 
-    public function setID(int $id): void {
+    public function setId(int $id): void {
         $this->id = $id;
     }
 
