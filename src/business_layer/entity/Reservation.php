@@ -34,6 +34,10 @@ class Resevation {
         $this->reservationId = $reservationId;
     }
 
+    public function setUser(User $user): void {
+        $this->user = $user;
+    }
+
     public function setStatus(Status $status): void {
         $this->status = $status;
     }   
