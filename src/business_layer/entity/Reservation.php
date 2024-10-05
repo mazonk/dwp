@@ -9,12 +9,12 @@ enum Status
 
 class Resevation {
     private int $reservationId;
-    private int $userId;
+    private User $user;
     private Status $status;
 
-    public function __construct(int $reservationId, int $userId, Status $status) {
+    public function __construct(int $reservationId, User $user, Status $status) {
         $this->reservationId = $reservationId;
-        $this->userId = $userId;
+        $this->user = $user;
         $this->status = $status;
     }
 
@@ -22,20 +22,21 @@ class Resevation {
         return $this->reservationId;
     }
 
-    public function getUserId(): int {
-        return $this->userId;
+    public function getUser(): User {
+        return $this->user;
     }
 
     public function getStatus(): Status {
         return $this->status;
     }
 
-    public function setStatus(Status $status): void {
-        $this->status = $status;
+    public function setReservationId(int $reservationId): void {
+        $this->reservationId = $reservationId;
     }
 
-    public function setStatus(string $status): void { 
-    }    
+    public function setStatus(Status $status): void {
+        $this->status = $status;
+    }   
 }
 ?>
 
