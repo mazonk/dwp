@@ -92,3 +92,31 @@ INSERT INTO News (imageURL, header, content) VALUES
 ('gotham_news.jpg', 'New Batman Movie Showing', 'Join us for the latest Batman movie screening at Gotham Cinema!'),
 ('hollywood_news.jpg', 'Spider-Man Marathon', 'Enjoy a Spider-Man marathon at Hollywood Stars Cinema this weekend.'),
 ('empire_news.jpg', 'Iron Man Reboot', 'Catch the Iron Man reboot at Empire Cinema with new special effects.');
+
+INSERT INTO MovieGenre (movieId, genreId) VALUES
+(1, 1),  -- The Dark Knight -> Action
+(1, 2),  -- The Dark Knight -> Drama
+(2, 1),  -- Spider-Man: No Way Home -> Action
+(2, 3),  -- Spider-Man: No Way Home -> Sci-Fi
+(3, 1),  -- Iron Man -> Action
+(3, 3);  -- Iron Man -> Sci-Fi
+
+INSERT INTO MovieDirector (movieId, directorId) VALUES
+(1, 1),  -- The Dark Knight -> Christopher Nolan
+(2, 2),  -- Spider-Man: No Way Home -> Jon Watts
+(3, 3);  -- Iron Man -> Jon Favreau
+
+INSERT INTO MovieActor (movieId, actorId) VALUES
+(1, 1),  -- The Dark Knight -> Christian Bale
+(2, 2),  -- Spider-Man: No Way Home -> Tom Holland
+(3, 3);  -- Iron Man -> Robert Downey Jr.
+
+INSERT INTO VenueShowing (venueId, showingId) VALUES
+(1, 1),  -- Gotham Cinema -> Showing of The Dark Knight
+(2, 2),  -- Hollywood Stars Cinema -> Showing of Spider-Man: No Way Home
+(3, 3);  -- Empire Cinema -> Showing of Iron Man
+
+INSERT INTO VenueOpeningHour (venueId, openingHourId) VALUES
+(1, 1),  -- Gotham Cinema -> Monday's opening hours
+(2, 2),  -- Hollywood Stars Cinema -> Tuesday's opening hours
+(3, 3);  -- Empire Cinema -> Wednesday's opening hours
