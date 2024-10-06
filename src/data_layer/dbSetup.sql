@@ -1,13 +1,46 @@
-DROP DATABASE IF EXISTS Cinema;
-CREATE DATABASE Cinema;
-USE Cinema;
+-- Disable foreign key checks (so tables can be dropped)
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- Drop all tables
+DROP TABLE IF EXISTS PostalCode;
+DROP TABLE IF EXISTS PaymentMethod;
+DROP TABLE IF EXISTS UserRole;
+DROP TABLE IF EXISTS MovieActor;
+DROP TABLE IF EXISTS VenueShowing;
+DROP TABLE IF EXISTS VenueOpeningHour;
+DROP TABLE IF EXISTS MovieDirector;
+DROP TABLE IF EXISTS MovieGenre;
+DROP TABLE IF EXISTS News;
+DROP TABLE IF EXISTS Payment;
+DROP TABLE IF EXISTS Ticket;
+DROP TABLE IF EXISTS Reservation;
+DROP TABLE IF EXISTS TicketType;
+DROP TABLE IF EXISTS Showing;
+DROP TABLE IF EXISTS Actor;
+DROP TABLE IF EXISTS Director;
+DROP TABLE IF EXISTS Genre;
+DROP TABLE IF EXISTS Movie;
+DROP TABLE IF EXISTS User;
+DROP TABLE IF EXISTS Seat;
+DROP TABLE IF EXISTS Room;
+DROP TABLE IF EXISTS OpeningHour;
+DROP TABLE IF EXISTS Venue;
+DROP TABLE IF EXISTS Address;
+
+-- Enable foreign key checks
+SET FOREIGN_KEY_CHECKS = 1;
+
+CREATE TABLE PostalCode (
+    postalCode int PRIMARY KEY NOT NULL,
+    city VARCHAR(50) NOT NULL
+);
 
 CREATE TABLE Address (
     addressId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     street VARCHAR(100) NOT NULL,
     streetNr VARCHAR(10) NOT NULL,
-    city VARCHAR(50) NOT NULL,
-    postalCode VARCHAR(20) NOT NULL
+    postalCode INT NOT NULL,
+    FOREIGN KEY (postalCode) REFERENCES PostalCode(postalCode)
 );
 
 CREATE TABLE Venue (
@@ -39,10 +72,15 @@ CREATE TABLE Room (
 
 CREATE TABLE Seat (
     seatId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    row INT NOT NULL,
+    `row` INT NOT NULL,
     seatNr INT NOT NULL,
     roomId INT NOT NULL,
     FOREIGN KEY (roomId) REFERENCES Room(roomId)
+);
+
+CREATE TABLE UserRole (
+    roleId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    type VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE User (
@@ -52,7 +90,8 @@ CREATE TABLE User (
     DoB DATE NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     passwordHash VARCHAR(1000) NULL, -- null for anonymous users | Is this a good idea?
-    role ENUM('customer', 'admin') DEFAULT 'customer' NOT NULL -- enum?
+    roleId INT NOT NULL,
+    FOREIGN KEY (roleId) REFERENCES UserRole(roleId)
 );
 
 CREATE TABLE Movie (
@@ -64,8 +103,8 @@ CREATE TABLE Movie (
     releaseDate DATE NULL,
     posterURL VARCHAR(255) NULL,
     promoURL VARCHAR(255) NULL,
-    rating DECIMAL(2, 2) NULL, -- 2 digits and 2 digits after the decimal point 1.00 - 10.00
-    trailerURL VARCHAR(255) NULL
+    trailerURL VARCHAR(255) NULL,
+    rating DECIMAL(2, 2) NULL -- 2 digits and 2 digits after the decimal point 1.00 - 10.00
 );
 
 CREATE TABLE Genre (
@@ -100,7 +139,7 @@ CREATE TABLE TicketType (
     ticketTypeId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     name VARCHAR(50) NOT NULL,
     price DECIMAL(5, 2) NOT NULL, -- 5 digits and 2 digits after the decimal point 0.00 - 999.99
-    description VARCHAR(255) NULL
+    description TEXT NULL
 );
 
 CREATE TABLE Reservation (
@@ -122,14 +161,21 @@ CREATE TABLE Ticket (
     FOREIGN KEY (reservationId) REFERENCES Reservation(reservationId)
 );
 
+CREATE TABLE PaymentMethod (
+    methodId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    name VARCHAR(50) NOT NULL
+);
+
 CREATE TABLE Payment (
     paymentId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    method ENUM('credit_card', 'paypal', 'mobile_pay') NOT NULL,
-    `date` DATE NOT NULL,
+    paymentDate DATE NOT NULL,
+    paymentTime TIME NOT NULL,
     totalPrice DECIMAL(8, 2) NOT NULL, -- 8 digits and 2 digits after the decimal point 0.00 - 999999.99
     userId INT NOT NULL,
     addressId INT NOT NULL,
     reservationId INT NOT NULL,
+    methodId INT NOT NULL,
+    FOREIGN KEY (methodId) REFERENCES PaymentMethod(methodId),
     FOREIGN KEY (userId) REFERENCES User(userId),
     FOREIGN KEY (addressId) REFERENCES Address(addressId),
     FOREIGN KEY (reservationId) REFERENCES Reservation(reservationId)
@@ -188,4 +234,3 @@ CREATE TABLE VenueOpeningHour (
     FOREIGN KEY (venueId) REFERENCES Venue(venueId),
     FOREIGN KEY (openingHourId) REFERENCES OpeningHour(openingHourId)
 );
-
