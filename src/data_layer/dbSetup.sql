@@ -234,6 +234,3 @@ CREATE TABLE VenueOpeningHour (
     FOREIGN KEY (venueId) REFERENCES Venue(venueId),
     FOREIGN KEY (openingHourId) REFERENCES OpeningHour(openingHourId)
 );
-
--- TEST DATA INSERTION
-INSERT INTO Actor(firstName, lastName, `character`) VALUES ('John', 'Doe', 'Maximus');
