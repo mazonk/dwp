@@ -1,0 +1,13 @@
+{
+    "name": "vendor/package",
+    "description": "DWP Cinema project",
+    "type": "project",
+    "require": {
+        "php": "^8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "DWPCinema\\": "src/"
+        }
+    }
+}
