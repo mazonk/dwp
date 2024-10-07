@@ -2,6 +2,12 @@
 
 require_once __DIR__.'/router.php';
 
+// To be extended later with additional simple getter routes
+// As well as post, put, and delete routes.
+// TODO: Add more routes
+
+// Simple getters
+
 // In the URL -> http://localhost/dwp
 // The output -> index.php (from pages folder)
 get('/dwp', 'src/presentation_layer/pages/LandingPage.php');
