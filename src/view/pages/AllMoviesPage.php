@@ -8,28 +8,13 @@ include_once "src/view/components/MovieCard.php";
 <head>
   <meta charset="UTF-8">
   <title>All Movies</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #0d0101;
-      color: white;
-      padding: 2vw;
-      margin: 0;
-    }
-    
-    .movies-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 20px;
-      padding: 20px;
-    }
-  </style>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-[#0d0101] text-white p-4">
 
-  <h1>All Movies</h1>
+  <h1 class="text-[1.875rem] mb-4">All Movies</h1>
 
-  <div class="movies-container">
+  <div class="grid grid-cols-1 gap-4">
     <?php
     // Create a new instance of MovieController and fetch all movies
     $movieController = new MovieController();
@@ -37,7 +22,7 @@ include_once "src/view/components/MovieCard.php";
 
     // Loop through each movie and render its movie card
     foreach ($allMovies as $movie) {
-        MovieCard::render($movie->getTitle(), $movie->getPosterURL());
+        MovieCard::render($movie->getTitle(), $movie->getPosterURL(), $movie->getReleaseDate()->format('F j, Y'));
     }
     ?>
   </div>
