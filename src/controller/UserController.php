@@ -13,8 +13,8 @@ if (isset($_GET['action']) && $_GET['action'] === 'register') {
 }
 
 class UserController {
-    private $userRepository;
-    private $userRoleRepository;
+    private UserRepository $userRepository;
+    private UserRoleRepository $userRoleRepository;
     private $message;
 
     public function __construct() {
@@ -33,37 +33,43 @@ class UserController {
             $password = $_POST['password'];
             $confirmPassword = $_POST['confirmPassword'];
 
-            // Validate input and hash password and create User if inputs valid
-            if($this->validateRegister($firstName, $lastName, $dob, $email, $password, $confirmPassword)) {
-                // Hash the password
-                $iterations = ['cost' => 10];
-                $hashedPassword = password_hash($password, PASSWORD_BCRYPT, $iterations);
+            // Validations
+            $this->validateRegisterInputs($firstName, $lastName, $dob, $email, $password, $confirmPassword);
+
+            if ($this->message) {
+                // Handle message display on the registration page
+                include 'src/view/pages/RegisterPage.php';
+                die; // Stop further processing
+            }
+
+            // Hash the password
+            $iterations = ['cost' => 10];
+            $hashedPassword = password_hash($password, PASSWORD_BCRYPT, $iterations);
+            
+            // Get UserRole: customer
+            try {
+                $userRole = $this->userRoleRepository->getUserRole('Customer');
+            } catch (Exception $e) {
+                $this->message = "Registration failed. Please try again.";
+            }
+
+            // Create User object
+            $userRole = new UserRole($userRole->getRoleId(), $userRole->getType());
+            $user = new User(null, $firstName, $lastName, new DateTime($dob), $email, $hashedPassword, $userRole);
+
+            // Try to insert the new user into the database
+            try {
+                $newUser = $this->userRepository->createUser($user);
                 
-                // Get UserRole: customer
-                try {
-                    $userRole = $this->userRoleRepository->getUserRole('Customer');
-                } catch (Exception $e) {
+                if ($newUser) {
+                    // If registration was successful, redirect to login page
+                    header("Location: /dwp/login");
+                    exit;
+                } else {
                     $this->message = "Registration failed. Please try again.";
                 }
-
-                // Create User object
-                $userRole = new UserRole($userRole->getRoleId(), $userRole->getType());
-                $user = new User(null, $firstName, $lastName, new DateTime($dob), $email, $hashedPassword, $userRole);
-
-                // Try to insert the new user into the database
-                try {
-                    $newUser = $this->userRepository->createUser($user);
-                    
-                    if ($newUser) {
-                        // If registration was successful, redirect to login page
-                        header("Location: /dwp/login");
-                        exit;
-                    } else {
-                        $this->message = "Registration failed. Please try again.";
-                    }
-                } catch (Exception $e) {
-                    $this->message = "Registration failed. Please try again.";
-                }
+            } catch (Exception $e) {
+                $this->message = "Registration failed. Please try again.";
             }
         } else { // Fallback to invalid request
             $this->message = "Invalid request.";
@@ -85,7 +91,7 @@ class UserController {
 
     // Reset password
     
-    private function validateRegister($firstName, $lastName, $dob, $email, $password, $confirmPassword): bool {
+    private function validateRegisterInputs($firstName, $lastName, $dob, $email, $password, $confirmPassword): bool {
         $isValid = false;
 
         // Define regexes for validation
