@@ -59,13 +59,18 @@ class UserController {
                 $userRole = new UserRole(); // TODO get "Customer" role from database
                 $user = new User(null, $firstName, $lastName, new DateTime($dob), $email, $hashedPassword, $userRole);
 
-                // Ask to insert the new user into the database
-                $newUser = $this->userRepository->createUser($user);
-                if ($newUser) {
-                    // Redirect to login page
-                    header("Location: /dwp/login");
-                    exit;
-                } else {
+                // Try to insert the new user into the database
+                try {
+                    $newUser = $this->userRepository->createUser($user);
+                    
+                    if ($newUser) {
+                        // If registration was successful, redirect to login page
+                        header("Location: /dwp/login");
+                        exit;
+                    } else {
+                        $this->message = "Registration failed. Please try again.";
+                    }
+                } catch (Exception $e) {
                     $this->message = "Registration failed. Please try again.";
                 }
             }
