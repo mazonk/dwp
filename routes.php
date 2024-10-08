@@ -6,7 +6,9 @@ require_once __DIR__.'/router.php';
 // As well as post, put, and delete routes.
 // TODO: Add more routes
 
-// Simple getters
+#############################################################################
+
+// GET ROUTES
 
 // In the URL -> http://localhost/dwp
 // The output -> index.php (from pages folder)
@@ -58,3 +60,10 @@ get('/dwp/upcoming', 'src/view/pages/UpcomingMoviesPage.php');
 
 // This could be 404 not found page
 // any('/404','views/404.php');
+
+#############################################################################
+
+// POST ROUTES
+
+// In the URL -> http://localhost/dwp/register
+post('/dwp/register', 'src/controller/UserController.php?action=register');
