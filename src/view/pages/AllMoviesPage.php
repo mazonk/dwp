@@ -22,7 +22,7 @@ include_once "src/view/components/MovieCard.php";
 
     // Loop through each movie and render its movie card
     foreach ($allMovies as $movie) {
-        MovieCard::render($movie->getTitle(), $movie->getPosterURL(), $movie->getReleaseDate()->format('F j, Y'));
+        MovieCard::render($movie->getTitle(), $movie->getPosterURL());
     }
     ?>
   </div>
