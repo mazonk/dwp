@@ -1,7 +1,8 @@
 <?php
-require_once '../models/User.php';
-require_once '../models/UserRole.php';
-require_once '../repository/UserRepository.php';
+require_once 'src/model/entity/User.php';
+require_once 'src/model/entity/UserRole.php';
+require_once 'src/model/repositories/UserRepository.php';
+require_once 'src/model/repositories/UserRoleRepository.php';
 
 // Check if action is set and create the UserController
 
@@ -32,27 +33,8 @@ class UserController {
             $password = $_POST['password'];
             $confirmPassword = $_POST['confirmPassword'];
 
-            // Validations
-
-            // Regexes
-            $nameRegex = "/^[\p{Letter}\s\-.']+$/u"; // https://brettrawlins.com/blog/regular-expression-for-international-names/
-            $dobRegex = "/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/";
-            $emailRegex = "/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/";
-            // Checks
-            if (!preg_match($nameRegex, $firstName) || !preg_match($nameRegex, $lastName)) {
-                $this->message = "Name must only contain letters and spaces.";
-            } elseif (!preg_match($dobRegex, $dob)) {
-                $this->message = "Invalid date format. Please use the format YYYY-MM-DD.";
-            } elseif (!preg_match($emailRegex, $email)) {
-                $this->message = "Invalid email format.";
-            } elseif (empty($firstName) || empty($lastName) || empty($dob) || empty($email) || empty($password) || empty($confirmPassword)) {
-                $this->message = "All fields are required.";
-            } elseif ($password !== $confirmPassword) {
-                $this->message = "Passwords do not match.";
-            } elseif ($this->userRepository->emailExists($email)) {
-                // TODO modify that we register the user under that email what we found in the database (sg like repo->registerToExistingUser())
-                $this->message = "Email is already in use.";
-            } else {
+            // Validate input and hash password and create User if inputs valid
+            if($this->validateRegister($firstName, $lastName, $dob, $email, $password, $confirmPassword)) {
                 // Hash the password
                 $iterations = ['cost' => 10];
                 $hashedPassword = password_hash($password, PASSWORD_BCRYPT, $iterations);
@@ -102,6 +84,34 @@ class UserController {
     // Forgot password
 
     // Reset password
+    
+    private function validateRegister($firstName, $lastName, $dob, $email, $password, $confirmPassword): bool {
+        $isValid = false;
+
+        // Define regexes for validation
+        $nameRegex = "/^[\p{Letter}\s\-.']+$/u";
+        $dobRegex = "/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/";
+        $emailRegex = "/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/";
+
+        // Perform checks
+        if (!preg_match($nameRegex, $firstName) || !preg_match($nameRegex, $lastName)) {
+            $this->message = "Name must only contain letters and spaces.";
+        } elseif (!preg_match($dobRegex, $dob)) {
+            $this->message = "Invalid date format. Please use the format YYYY-MM-DD.";
+        } elseif (!preg_match($emailRegex, $email)) {
+            $this->message = "Invalid email format.";
+        } elseif (empty($firstName) || empty($lastName) || empty($dob) || empty($email) || empty($password) || empty($confirmPassword)) {
+            $this->message = "All fields are required.";
+        } elseif ($password !== $confirmPassword) {
+            $this->message = "Passwords do not match.";
+        } elseif ($this->userRepository->emailExists($email)) {
+            $this->message = "Email is already in use.";
+        } else {
+            $isValid = true;
+        }
+
+        return $isValid;
+    }
     
     public function getMessage(): string {
         return $this->message;
