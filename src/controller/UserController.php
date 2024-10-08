@@ -22,25 +22,41 @@ class UserController {
             $email = htmlspecialchars(trim($_POST['email']));
             $password = $_POST['password'];
             $confirmPassword = $_POST['confirmPassword'];
-            
-            // Create User object
-            $userRole = new UserRole();
-            $user = new User(null, $firstName, $lastName, new DateTime($dob), $email, $hashedPassword, $userRole);
 
-            // Ask repo layer to insert the new user into the database
-            $newUser = $this->userRepository->createUser($user);
-            if ($newUser) {
-                // Redirect to login page
-                header("Location: /dwp/login");
-                exit;
+            // Validation
+            if (empty($firstName) || empty($lastName) || empty($dob) || empty($email) || empty($password) || empty($confirmPassword)) {
+                $this->message = "All fields are required.";
+            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $this->message = "Invalid email format.";
+            } elseif ($password !== $confirmPassword) {
+                $this->message = "Passwords do not match.";
+            } elseif ($this->userRepository->emailExists($email)) {
+                // TODO modify that we register the user under that email what we found in the database (sg like repo->registerToExistingUser())
+                $this->message = "Email is already in use.";
             } else {
-                $this->message = "Registration failed. Please try again.";
+                // Hash the password
+                $iterations = ['cost' => 10];
+                $hashedPassword = password_hash($password, PASSWORD_BCRYPT, $iterations);
+                
+                // Create User object
+                $userRole = new UserRole(); // Adjust as needed
+                $user = new User(null, $firstName, $lastName, new DateTime($dob), $email, $hashedPassword, $userRole);
+
+                // Ask to insert the new user into the database
+                $newUser = $this->userRepository->createUser($user);
+                if ($newUser) {
+                    // Redirect to login page
+                    header("Location: /dwp/login");
+                    exit;
+                } else {
+                    $this->message = "Registration failed. Please try again.";
+                }
             }
         }
         return $newUser;
     }
 
-    public function getMessage() {
+    public function getMessage(): string {
         return $this->message;
     }
 }
