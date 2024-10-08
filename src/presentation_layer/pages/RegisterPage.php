@@ -1,5 +1,2 @@
-<html>
-    <body>
-        asdasd
-    </body>
-</html>
+<?php 
+include("src/presentation_layer/components/RegisterForm.php");
