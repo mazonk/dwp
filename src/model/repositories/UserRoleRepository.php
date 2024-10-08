@@ -16,4 +16,12 @@ class UserRoleRepository {
         }
         return $retArray;
     }
+
+    public function getUserRole(string $roleType): UserRole {
+        $db = $this->getdb();
+        $query = $db->prepare("SELECT * FROM UserRole ur WHERE ur.type = :type");
+        $query->execute(array(":type" => $roleType));
+        $result = $query->fetch(PDO::FETCH_ASSOC);
+        return new UserRole($result['id'], type: $result['type']);
+    }
 }
