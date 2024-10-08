@@ -4,7 +4,7 @@
     <body>
         <h1>Hello World!! WE ROCK</h1>
         <?php
-        require("src/data_layer/dbcon/dbcon.php");
+        require("src/model/database/dbcon/dbcon.php");
         $query = $db->prepare("SELECT * FROM Actor");
         $query->execute();
         $result = $query->fetchAll(PDO::FETCH_ASSOC);

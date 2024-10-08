@@ -10,51 +10,51 @@ require_once __DIR__.'/router.php';
 
 // In the URL -> http://localhost/dwp
 // The output -> index.php (from pages folder)
-get('/dwp', 'src/presentation_layer/pages/LandingPage.php');
+get('/dwp', 'src/view/pages/LandingPage.php');
 
 // In the URL -> http://localhost/dwp/about
 // The output -> AboutPage.php (from pages folder)
-get('/dwp/about', 'src/presentation_layer/pages/AboutPage.php');
+get('/dwp/about', 'src/view/pages/AboutPage.php');
 
 // In the URL -> http://localhost/dwp/admin
 // The output -> AdminPage.php (from pages folder)
-get('/dwp/admin', 'src/presentation_layer/pages/AdminPage.php');
+get('/dwp/admin', 'src/view/pages/AdminPage.php');
 
 // In the URL -> http://localhost/dwp/movies
 // The output -> AllMoviesPage.php (from pages folder)
-get('/dwp/movies', 'src/presentation_layer/pages/AllMoviesPage.php');
+get('/dwp/movies', 'src/view/pages/AllMoviesPage.php');
 
 // In the URL -> http://localhost/dwp/movies/1
 // The output -> MovieDetailsPage.php and its query string id = 1 for example (from pages folder)
-get('/dwp/movies/$id', 'src/presentation_layer/pages/MovieDetailsPage.php');
+get('/dwp/movies/$id', 'src/view/pages/MovieDetailsPage.php');
 
 // In the URL -> http://localhost/dwp/booking
 // The output -> BookingPage.php (from pages folder)
-get('/dwp/booking', 'src/presentation_layer/pages/BookingPage.php');
+get('/dwp/booking', 'src/view/pages/BookingPage.php');
 
 // In the URL -> http://localhost/dwp/booking/checkout
 // The output -> CheckoutPage.php (from pages folder)
-get('/dwp/booking/checkout', 'src/presentation_layer/pages/CheckoutPage.php');
+get('/dwp/booking/checkout', 'src/view/pages/CheckoutPage.php');
 
 // In the URL -> http://localhost/dwp/login
 // The output -> LoginPage.php (from pages folder)
-get('/dwp/login', 'src/presentation_layer/pages/LoginPage.php');
+get('/dwp/login', 'src/view/pages/LoginPage.php');
 
 // In the URL -> http://localhost/dwp/register
 // The output -> RegisterPage.php (from pages folder)
-get('/dwp/register', 'src/presentation_layer/pages/RegisterPage.php');
+get('/dwp/register', 'src/view/pages/RegisterPage.php');
 
 // In the URL -> http://localhost/dwp/profile
 // The output -> ProfilePage.php (from pages folder)
-get('/dwp/profile', 'src/presentation_layer/pages/ProfilePage.php');
+get('/dwp/profile', 'src/view/pages/ProfilePage.php');
 
 // In the URL -> http://localhost/dwp/schedule
 // The output -> SchedulePage.php (from pages folder)
-get('/dwp/schedule', 'src/presentation_layer/pages/SchedulePage.php');
+get('/dwp/schedule', 'src/view/pages/SchedulePage.php');
 
 // In the URL -> http://localhost/dwp/upcoming
 // The output -> UpcomingMoviesPage.php (from pages folder)
-get('/dwp/upcoming', 'src/presentation_layer/pages/UpcomingMoviesPage.php');
+get('/dwp/upcoming', 'src/view/pages/UpcomingMoviesPage.php');
 
 // This could be 404 not found page
 // any('/404','views/404.php');
