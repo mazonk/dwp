@@ -13,7 +13,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'register') {
 
 class UserController {
     private $userRepository;
-    private $message = '';
+    private $message;
 
     public function __construct() {
         $this->userRepository = new UserRepository();
