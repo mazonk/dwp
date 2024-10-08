@@ -40,6 +40,10 @@ get('/dwp/booking/checkout', 'src/presentation_layer/pages/CheckoutPage.php');
 // The output -> LoginPage.php (from pages folder)
 get('/dwp/login', 'src/presentation_layer/pages/LoginPage.php');
 
+// In the URL -> http://localhost/dwp/register
+// The output -> RegisterPage.php (from pages folder)
+get('/dwp/register', 'src/presentation_layer/pages/RegisterPage.php');
+
 // In the URL -> http://localhost/dwp/profile
 // The output -> ProfilePage.php (from pages folder)
 get('/dwp/profile', 'src/presentation_layer/pages/ProfilePage.php');

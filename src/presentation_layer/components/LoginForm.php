@@ -14,7 +14,7 @@
                     style="background: #FADF24;" type="submit" name="loginButton" value="Login" />
                     <input class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full w-1/2 mt-6" 
                     type="button" name="registerButton" value="Register instead"
-                    onclick="window.location.href = '/dwp/register';" />
+                    onclick="window.location.href = '/dwp/register'" />
                 </div>
             </form>
             <?php
