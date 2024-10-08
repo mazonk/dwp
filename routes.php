@@ -4,6 +4,8 @@ require_once __DIR__.'/router.php';
 
 // To be extended later with additional simple getter routes
 // As well as post, put, and delete routes.
+// TODO: Admin routes
+// TODO: Development/production routes
 // TODO: Add more routes
 
 #############################################################################
