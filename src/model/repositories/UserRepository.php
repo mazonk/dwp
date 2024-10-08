@@ -29,4 +29,16 @@ class UserRepository {
             return null;
         }
     }
+
+    public function emailExists(string $email): bool {
+        $db = $this->getdb();
+        $query = $db->prepare("SELECT * FROM User WHERE email = :email");
+        try {
+            $query->execute(array(":email" => $email));
+            $result = $query->fetch(PDO::FETCH_ASSOC);
+            return !empty($result); // Return true if the result is not empty (MEANING EMAIL EXISTS)
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
 }
