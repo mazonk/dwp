@@ -13,10 +13,12 @@ if (isset($_GET['action']) && $_GET['action'] === 'register') {
 
 class UserController {
     private $userRepository;
+    private $userRoleRepository;
     private $message;
 
     public function __construct() {
         $this->userRepository = new UserRepository();
+        $this->userRoleRepository = new UserRoleRepository();
         $this->message = '';
     }
 
@@ -55,8 +57,15 @@ class UserController {
                 $iterations = ['cost' => 10];
                 $hashedPassword = password_hash($password, PASSWORD_BCRYPT, $iterations);
                 
+                // Get UserRole: customer
+                try {
+                    $userRole = $this->userRoleRepository->getUserRole('Customer');
+                } catch (Exception $e) {
+                    $this->message = "Registration failed. Please try again.";
+                }
+
                 // Create User object
-                $userRole = new UserRole(); // TODO get "Customer" role from database
+                $userRole = new UserRole($userRole->getRoleId(), $userRole->getType());
                 $user = new User(null, $firstName, $lastName, new DateTime($dob), $email, $hashedPassword, $userRole);
 
                 // Try to insert the new user into the database
