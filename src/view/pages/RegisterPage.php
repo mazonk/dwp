@@ -1,2 +1,2 @@
 <?php 
-include("src/presentation_layer/components/RegisterForm.php");
+include("src/view/components/RegisterForm.php");
