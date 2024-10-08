@@ -5,7 +5,7 @@ class User extends Person {
   private ?string $passwordHash;
   private UserRole $userRole;
 
-  public function __construct(int $userId, string $firstName, string $lastName, DateTime $dob = null, string $email, string $passwordHash = null, UserRole $userRole) {
+  public function __construct(int $userI = null, string $firstName, string $lastName, DateTime $dob = null, string $email, string $passwordHash = null, UserRole $userRole) {
     parent::__construct($userId, $firstName, $lastName);
     $this->dob = $dob;
     $this->email = $email;
