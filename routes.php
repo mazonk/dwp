@@ -67,5 +67,12 @@ get('/dwp/upcoming', 'src/view/pages/UpcomingMoviesPage.php');
 
 // POST ROUTES
 
-// In the URL -> http://localhost/dwp/register
-post('/dwp/register', 'src/controller/UserController.php?action=register');
+post('/dwp/register', function() {
+    require_once 'src/controller/UserController.php';
+    $userController = new UserController();
+    
+    // Check the action parameter
+    if (isset($_GET['action']) && $_GET['action'] === 'register') {
+        $userController->register();
+    }
+});
