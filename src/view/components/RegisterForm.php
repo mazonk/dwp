@@ -5,7 +5,7 @@
         </head>
         <div class="w-full max-w-xs mx-auto flex flex-col items-center">
             <form class="space-y-4"
-            action="/dwp/register" method="post">
+            action="/dwp/register?action=register" method="post">
                 <div>
                     <label for="firstName">First name:</label>
                     <input type="text" name="firstName" id="firstNameInput" value="" maxlength="50" class="w-full p-2 border border-gray-300 rounded">
