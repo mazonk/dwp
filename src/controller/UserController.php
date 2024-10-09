@@ -52,9 +52,7 @@ class UserController {
             } catch (Exception $e) {
                 $this->message = "Registration failed. Please try again.";
             }
-
-            // Create User object
-            $userRole = new UserRole($userRole->getRoleId(), $userRole->getType());
+            
             $user = new User(null, $firstName, $lastName, new DateTime($dob), $email, $hashedPassword, $userRole);
 
             // Try to insert the new user into the database
@@ -95,7 +93,7 @@ class UserController {
         $isValid = false;
 
         // Define regexes for validation
-        $nameRegex = "/^[\p{Letter}\s\-.']+$/u";
+        $nameRegex = "/^[a-zA-ZáéíóöúüűæøåÆØÅ\s\-']+$/";
         $dobRegex = "/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/";
         $emailRegex = "/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/";
 
