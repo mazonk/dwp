@@ -4,9 +4,6 @@ require_once 'src/model/entity/UserRole.php';
 require_once 'src/model/repositories/UserRepository.php';
 require_once 'src/model/repositories/UserRoleRepository.php';
 
-// Check if action is set and create the UserController
-
-//THIS HAS TO BE CHANGED LATER WHEN WE WANT TO ADD MORE ACTIONS
 if (isset($_GET['action']) && $_GET['action'] === 'register') {
     $userController = new UserController();
     $userController->register();
@@ -15,109 +12,107 @@ if (isset($_GET['action']) && $_GET['action'] === 'register') {
 class UserController {
     private UserRepository $userRepository;
     private UserRoleRepository $userRoleRepository;
-    private $message;
 
     public function __construct() {
         $this->userRepository = new UserRepository();
         $this->userRoleRepository = new UserRoleRepository();
-        $this->message = '';
     }
 
-    public function register(): User {
+    public function register(): void {
+        $errors = [];
+        $formData = [];
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Retrieve and sanitize input
-            $firstName = htmlspecialchars(trim($_POST['firstName']));
-            $lastName = htmlspecialchars(trim($_POST['lastName']));
-            $dob = htmlspecialchars(trim($_POST['dob']));
-            $email = htmlspecialchars(trim($_POST['email']));
-            $password = $_POST['password'];
-            $confirmPassword = $_POST['confirmPassword'];
+            $formData['firstName'] = htmlspecialchars(trim($_POST['firstName']));
+            $formData['lastName'] = htmlspecialchars(trim($_POST['lastName']));
+            $formData['dob'] = htmlspecialchars(trim($_POST['dob']));
+            $formData['email'] = htmlspecialchars(trim($_POST['email']));
+            $formData['password'] = $_POST['password'];
+            $formData['confirmPassword'] = $_POST['confirmPassword'];
 
             // Validations
-            $this->validateRegisterInputs($firstName, $lastName, $dob, $email, $password, $confirmPassword);
+            $this->validateRegisterInputs($formData, $errors);
 
-            if ($this->message) {
-                // Handle message display on the registration page
-                include 'src/view/pages/RegisterPage.php';
-                die; // Stop further processing
-            }
-
-            // Hash the password
-            $iterations = ['cost' => 10];
-            $hashedPassword = password_hash($password, PASSWORD_BCRYPT, $iterations);
-            
-            // Get UserRole: customer
-            try {
-                $userRole = $this->userRoleRepository->getUserRole('Customer');
-            } catch (Exception $e) {
-                $this->message = "Registration failed. Please try again.";
-            }
-            
-            $user = new User(null, $firstName, $lastName, new DateTime($dob), $email, $hashedPassword, $userRole);
-
-            // Try to insert the new user into the database
-            try {
-                $newUser = $this->userRepository->createUser($user);
+            if (empty($errors)) {
+                // Hash the password
+                $iterations = ['cost' => 10];
+                $hashedPassword = password_hash($formData['password'], PASSWORD_BCRYPT, $iterations);
                 
-                if ($newUser) {
-                    // If registration was successful, redirect to login page
-                    header("Location: /dwp/login");
-                    exit;
-                } else {
-                    $this->message = "Registration failed. Please try again.";
+                // Get UserRole: customer
+                try {
+                    $userRole = $this->userRoleRepository->getUserRole('Customer');
+                } catch (Exception $e) {
+                    $errors[] = "Registration failed. Please try again.";
                 }
-            } catch (Exception $e) {
-                $this->message = "Registration failed. Please try again.";
+                
+                $user = new User(null, $formData['firstName'], $formData['lastName'], new DateTime($formData['dob']), $formData['email'], $hashedPassword, $userRole);
+
+                // Try to insert the new user into the database
+                try {
+                    $newUser = $this->userRepository->createUser($user);
+                    
+                    if ($newUser) {
+                        // If registration was successful, redirect to login page
+                        header("Location: /dwp/login");
+                        exit;
+                    } else {
+                        $errors[] = "Registration failed. Please try again.";
+                    }
+                } catch (Exception $e) {
+                    $errors[] = "Registration failed. Please try again.";
+                }
             }
-        } else { // Fallback to invalid request
-            $this->message = "Invalid request.";
         }
-        return $newUser;
+
+        // Include the registration page with errors
+        include 'src/view/pages/RegisterPage.php';
     }
 
-    // Register to an existing user
-
-    // Register anonymus user
-
-    // Login
-
-    // Logout
-
-    // Change password
-
-    // Forgot password
-
-    // Reset password
-    
-    private function validateRegisterInputs($firstName, $lastName, $dob, $email, $password, $confirmPassword): bool {
-        $isValid = false;
-
+    private function validateRegisterInputs(array $formData, array &$errors): void {
         // Define regexes for validation
         $nameRegex = "/^[a-zA-ZáéíóöúüűæøåÆØÅ\s\-']+$/";
         $dobRegex = "/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/";
         $emailRegex = "/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/";
+        $containsCapital = "/[A-Z]/";
+        $containsNumber = "/[0-9]/";
 
         // Perform checks
-        if (!preg_match($nameRegex, $firstName) || !preg_match($nameRegex, $lastName)) {
-            $this->message = "Name must only contain letters and spaces.";
-        } elseif (!preg_match($dobRegex, $dob)) {
-            $this->message = "Invalid date format. Please use the format YYYY-MM-DD.";
-        } elseif (!preg_match($emailRegex, $email)) {
-            $this->message = "Invalid email format.";
-        } elseif (empty($firstName) || empty($lastName) || empty($dob) || empty($email) || empty($password) || empty($confirmPassword)) {
-            $this->message = "All fields are required.";
-        } elseif ($password !== $confirmPassword) {
-            $this->message = "Passwords do not match.";
-        } elseif ($this->userRepository->emailExists($email)) {
-            $this->message = "Email is already in use.";
-        } else {
-            $isValid = true;
+        if (!preg_match($nameRegex, $formData['firstName'])) {
+            $errors['name'] = "Name must only contain letters and spaces.";
         }
-
-        return $isValid;
+        if (!preg_match($nameRegex, $formData['lastName'])) {
+            $errors['name'] = "Name must only contain letters and spaces.";
+        if ($formData['firstName'] < 2) {
+            $errors['name'] = "Name must be at least 2 characters long.";
+        }
+        if ($formData['lastName'] < 2) {
+            $errors['name'] = "Name must be at least 2 characters long.";
+        }
+        if (!preg_match($dobRegex, $formData['dob'])) {
+            $errors['dob'] = "Invalid date format. Please use the format YYYY-MM-DD.";
+        }
+        if (!preg_match($emailRegex, $formData['email'])) {
+            $errors['email'] = "Invalid email format.";
+        }
+        if (empty($formData['firstName']) || empty($formData['lastName']) || empty($formData['dob']) || empty($formData['email']) || empty($formData['password']) || empty($formData['confirmPassword'])) {
+            $errors['general'] = "All fields are required.";
+        }
+        if ($formData['password'] !== $formData['confirmPassword']) {
+            $errors['password'] = "Passwords do not match.";
+        }
+        if (strlen($formData['password']) < 8) {
+            $errors['password'] = "Password must be at least 8 characters long.";
+        }
+        if (!preg_match($containsCapital, $formData['password'])) {
+            $errors['password'] = "Password must contain at least one capital letter.";
+        }
+        if (!preg_match($containsNumber, $formData['password'])) {
+            $errors['password'] = "Password must contain at least one number.";
+        }
+        if ($this->userRepository->emailExists($formData['email'])) {
+            $errors['email'] = "Email is already in use."; //TODO: Rework this in a way that if email already exists register user to that entry
+        }
     }
-    
-    public function getMessage(): string {
-        return $this->message;
-    }
+}
 }

@@ -27,7 +27,7 @@ class DatabaseConnection {
                 self::$instance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             } catch (PDOException $e) {
                 echo "Failed to establish a database connection: " . $e->getMessage();
-                exit; // Stop execution if the connection fails
+                exit;
             }
         }
 
