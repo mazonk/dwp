@@ -2,7 +2,7 @@
 
 // Parent class
 class Person {
-    protected int $id; // Common property for both Director and Actor
+    protected ?int $id; // Common property for both Director and Actor | Nullable so we can construct objects to db (i dont think its good practice tho xd)
     protected string $firstName;
     protected string $lastName;
 

@@ -23,6 +23,6 @@ class UserRoleRepository {
         $query = $db->prepare("SELECT * FROM UserRole ur WHERE ur.type = :type");
         $query->execute(array(":type" => $roleType));
         $result = $query->fetch(PDO::FETCH_ASSOC);
-        return new UserRole($result['id'], type: $result['type']);
+        return new UserRole($result['roleId'], type: $result['type']);
     }
 }

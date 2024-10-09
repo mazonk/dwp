@@ -8,13 +8,14 @@ class UserRepository {
 
     public function createUser(User $user): User | null {
         $db = $this->getdb();
-        $query = $db->prepare("INSERT INTO User (firstName, lastName, DoB, email, roleId) VALUES (:firstName, :lastName, :DoB, :email, :roleId)");
+        $query = $db->prepare("INSERT INTO User (firstName, lastName, DoB, email, passwordHash, roleId) VALUES (:firstName, :lastName, :DoB, :email, :passwordHash, :roleId)");
         try {
             $wasInserted = $query->execute(array(
                 ":firstName" => $user->getFirstName(),
                 ":lastName" => $user->getLastName(),
-                ":DoB" => $user->getDoB(),
+                ":DoB" => $user->getDoB()->format('Y-m-d'), // Convert DateTime to string
                 ":email" => $user->getEmail(),
+                ":passwordHash" => $user->getPasswordHash(),
                 ":roleId" => $user->getUserRole()->getRoleId()
             ));
 
