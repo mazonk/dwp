@@ -2,8 +2,8 @@
 
 class UserRepository {
     private function getdb(): PDO {
-        include_once "src/model/database/dbcon/dbcon.php";
-        return $db;
+        require_once 'src/model/database/dbcon/DatabaseConnection.php';
+        return DatabaseConnection::getInstance(); // singleton
     }
 
     public function createUser(User $user): User | null {
@@ -21,7 +21,7 @@ class UserRepository {
             if (!$wasInserted) {
                 return null;
             } else {
-                $user->setId($db->lastInsertId());
+                $user->setId($this->getdb()->lastInsertId());
             }
 
             return $user;
