@@ -1,6 +1,6 @@
 <?php
-include_once "src/controller/MovieController.php";
-include_once "src/view/components/MovieCard.php";
+  include_once "src/controller/MovieController.php";
+  include_once "src/view/components/MovieCard.php";
 ?>
 
 <!DOCTYPE html>
@@ -9,8 +9,10 @@ include_once "src/view/components/MovieCard.php";
   <meta charset="UTF-8">
   <title>All Movies</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <?php include_once("src/assets/tailwindConfig.php"); ?>
 </head>
 <body class="bg-[#0d0101] text-white p-4">
+  <?php include_once("src/view/components/Navbar.php"); ?>
 
   <h1 class="text-[1.875rem] mb-4">All Movies</h1>
 

@@ -22,7 +22,7 @@ get('/dwp/admin', 'src/view/pages/AdminPage.php');
 
 // In the URL -> http://localhost/dwp/movies
 // The output -> AllMoviesPage.php (from pages folder)
-get('/dwp/movies', 'src/view/pages/AllMoviesPage.php');
+get('/projects/dwp/movies', 'src/view/pages/AllMoviesPage.php');
 
 // In the URL -> http://localhost/dwp/movies/1
 // The output -> MovieDetailsPage.php and its query string id = 1 for example (from pages folder)
