@@ -31,7 +31,7 @@
       </button>
 
       <!-- Login -->
-      <a href="" class="py-[.625rem] px-[1.25rem] bg-primary text-textDark font-medium leading-tight rounded-[8px]">
+      <a href="" class="py-[.625rem] px-[1.25rem] bg-primary text-textDark font-medium leading-tight rounded-[8px] ease-in-out duration-[.15s] hover:bg-primaryHover ">
         Login
       </a>
     </div>
