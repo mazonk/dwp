@@ -8,6 +8,7 @@
   <head>
     <meta charset="UTF-8">
     <title>All Movies</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet"/>
     <script src="https://cdn.tailwindcss.com"></script>
     <?php include_once("src/assets/tailwindConfig.php"); ?>
   </head>
