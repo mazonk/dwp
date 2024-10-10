@@ -7,17 +7,19 @@
     <!-- (the ml-[] is for balancing the different width of the elements on either siede of the navbar thus it is in the center of the page) -->
     <div class="flex justify-center items-center gap-[2.5rem] ml-[195px]">
       <div>
-        <a href="" class="font-medium">Home</a>
+        <a href="/dwp" class="font-medium">Home</a>
       </div>
       <div>
-        <a href="" class="font-medium">All Movies</a>
+        <a href="/dwp/movies" class="font-medium">All Movies</a>
       </div>
       <div>
-        <a href="" class="font-medium">Upcoming Movies</a>
+        <a href="/dwp/upcoming" class="font-medium">Upcoming Movies</a>
       </div>
+      <!-- TODO: Scroll down to ticket section -->
       <div>
         <a href="" class="font-medium">Tickets</a>
       </div>
+      <!-- TODO: Scroll down to contact section it is in the footer -->
       <div>
         <a href="" class="font-medium">Contact</a>
       </div>
