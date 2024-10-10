@@ -11,10 +11,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <?php include_once("src/assets/tailwindConfig.php"); ?>
   </head>
-  <body class="bg-bgDark text-textLight">
+  <body class="max-w-[1440px] w-[100%] mx-auto px-[100px] bg-bgDark text-textLight overflow-hidden">
     <!-- Navbar -->
     <?php include_once("src/view/components/Navbar.php"); ?>
-    <main class="p-4">
+    <main class="mt-[56px] p-4">
       <h1 class="text-[1.875rem] mb-4">All Movies</h1>
       <div class="grid grid-cols-1 gap-4">
         <?php
