@@ -5,29 +5,29 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>All Movies</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <?php include_once("src/assets/tailwindConfig.php"); ?>
-</head>
-<body class="bg-[#0d0101] text-white p-4">
-  <?php include_once("src/view/components/Navbar.php"); ?>
+  <head>
+    <meta charset="UTF-8">
+    <title>All Movies</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <?php include_once("src/assets/tailwindConfig.php"); ?>
+  </head>
+  <body class="bg-bgDark text-textLight">
+    <!-- Navbar -->
+    <?php include_once("src/view/components/Navbar.php"); ?>
+    <main class="p-4">
+      <h1 class="text-[1.875rem] mb-4">All Movies</h1>
+      <div class="grid grid-cols-1 gap-4">
+        <?php
+        // Create a new instance of MovieController and fetch all movies
+        $movieController = new MovieController();
+        $allMovies = $movieController->getAllMovies();
 
-  <h1 class="text-[1.875rem] mb-4">All Movies</h1>
-
-  <div class="grid grid-cols-1 gap-4">
-    <?php
-    // Create a new instance of MovieController and fetch all movies
-    $movieController = new MovieController();
-    $allMovies = $movieController->getAllMovies();
-
-    // Loop through each movie and render its movie card
-    foreach ($allMovies as $movie) {
-        MovieCard::render($movie->getTitle(), $movie->getPosterURL());
-    }
-    ?>
-  </div>
-
-</body>
+        // Loop through each movie and render its movie card
+        foreach ($allMovies as $movie) {
+            MovieCard::render($movie->getTitle(), $movie->getPosterURL());
+        }
+        ?>
+      </div>
+    </main>
+  </body>
 </html>

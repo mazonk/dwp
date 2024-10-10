@@ -1,4 +1,4 @@
-<header class="bg-blueGreen">
+<header class="bg-bgDark">
   <nav>
     test
   </nav>
