@@ -8,9 +8,9 @@ $formData = isset($_SESSION['formData']) ? $_SESSION['formData'] : [
     'dob' => '',
     'email' => '',
 ];
+$errors = isset($_SESSION['errors']) ? $_SESSION['errors'] : [];
 
-// unset session's formdata
-unset($_SESSION['formData']);
+
 ?>
 <html lang="en">
 <head>
@@ -29,7 +29,7 @@ unset($_SESSION['formData']);
             <?php
                 require_once('src/view/components/RegisterForm.php');
                 $registerForm = new RegisterForm();
-                $registerForm->render($formData, $message);
+                $registerForm->render($formData, $errors);
                 ?>
         </div>
     </div>
