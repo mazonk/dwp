@@ -35,6 +35,15 @@ class AuthController {
                 $iterations = ['cost' => 10];
                 $hashedPassword = password_hash($formData['password'], PASSWORD_BCRYPT, $iterations);
                 
+                // Check if user already exists
+                if ($this->userRepository->userExists($formData['email'])) {
+                    $errors['email'] = "User with this email already exists.";
+                    $_SESSION['errors'] = $errors;
+                    $_SESSION['formData'] = $formData;
+                    header("Location: /dwp/register");
+                    exit;
+                }
+
                 // Get UserRole: customer
                 try {
                     $userRole = $this->userRoleRepository->getUserRole('Customer');
@@ -46,7 +55,11 @@ class AuthController {
 
                 // Try to insert the new user into the database
                 try {
-                    $newUser = $this->userRepository->createUser($user);
+                    if ($this->userRepository->emailExists($formData['email'])) {
+                        $newUser = $this->userRepository->createUserToExistingEmail($user);
+                    }  else {
+                        $newUser = $this->userRepository->createUser($user);
+                    }
                     if ($newUser) {
                         // If registration was successful, redirect to login page
                         header("Location: /dwp/login");
@@ -114,9 +127,6 @@ class AuthController {
         if ($formData['password'] !== $formData['confirmPassword']) {
             $errors['password'] = "Passwords do not match.";
             $errors['confirmPassword'] = "Passwords do not match.";
-        }
-        if ($this->userRepository->emailExists($formData['email'])) {
-            $errors['email'] = "Email is already in use."; //TODO: Rework this in a way that if email already exists register user to that entry
         }
 
         if (count($errors) > 0) {
