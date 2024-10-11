@@ -1,6 +1,5 @@
 <?php
 require_once "src/model/entity/Person.php";
-
 class User extends Person {
   private ?DateTime $dob;
   private string $email;

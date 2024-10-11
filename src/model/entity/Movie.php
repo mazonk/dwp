@@ -19,7 +19,7 @@ class Movie
         string $description = null,
         int $duration = null,
         string $language = null,
-        DateTime $releaseDate = null,
+        string $releaseDate = null,
         string $posterURL = null,
         string $promoURL = null,
         float $rating = null,
