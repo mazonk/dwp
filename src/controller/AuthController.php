@@ -3,15 +3,15 @@ session_start();
 require_once 'src/model/entity/User.php';
 require_once 'src/model/entity/UserRole.php';
 require_once 'src/model/repositories/UserRepository.php';
-require_once 'src/model/repositories/UserRoleRepository.php';
+require_once 'src/controller/UserRoleController.php';
 
 class AuthController {
     private UserRepository $userRepository;
-    private UserRoleRepository $userRoleRepository;
+    private UserRoleController $userRoleController;
 
     public function __construct() {
         $this->userRepository = new UserRepository();
-        $this->userRoleRepository = new UserRoleRepository();
+        $this->userRoleController = new UserRoleController();
     }
 
     public function register(): void {
@@ -46,7 +46,7 @@ class AuthController {
 
                 // Get UserRole: customer
                 try {
-                    $userRole = $this->userRoleRepository->getUserRole('Customer');
+                    $userRole = $this->userRoleController->getUserRole('Customer');
                 } catch (Exception $e) {
                     $errors[] = "Registration failed. Please try again.";
                 }

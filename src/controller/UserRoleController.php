@@ -19,6 +19,15 @@ class UserRoleController {
         }
     }
 
+    public function getUserRole(string $roleType): ?UserRole {
+        try {
+            return $this->userRoleRepository->getUserRole($roleType);
+        } catch (Exception $e) {
+            $this->message = $e->getMessage();
+            return null;
+        }
+    }
+
     public function getMessage(): string {
         return $this->message;
     }
