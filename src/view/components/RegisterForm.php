@@ -4,7 +4,7 @@ class RegisterForm {
         // Display the message directly passed to the form (optional)
         ?>
         <div class="w-full max-w-xs mx-auto flex flex-col items-center">
-            <form class="space-y-4" action="/dwp/register?action=register" method="post">
+            <form class="space-y-2" action="/dwp/register?action=register" method="post">
                 <div>
                     <label for="firstName">First name:</label>
                     <input type="text" name="firstName" id="firstNameInput" 
@@ -27,7 +27,7 @@ class RegisterForm {
                 </div>
                 <div>
                     <label for="dob">Date of birth:</label>
-                    <input type="date" name="dob" id="dobInput" 
+                    <input type="date" name="dob" id="dobInput"
                            value="<?= htmlspecialchars($formData['dob'] ?? '') ?>" 
                            class="w-full p-2 border border-gray-300 rounded <?= isset($errors['dob']) ? 'border-red-500' : '' ?>">
                     <?php if (isset($errors['dob'])): ?>
@@ -65,12 +65,10 @@ class RegisterForm {
                     <?php endif; ?>
                 </div>
 
-                <div class="flex justify-between space-x-4">
-                    <input class="text-white font-bold py-2 px-4 rounded-full w-1/2 mt-6 cursor-pointer" 
-                           style="background: #FADF24;" type="submit" name="registerButton" value="Register" />
-                    <input class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full w-1/2 mt-6" 
-                           type="button" name="loginInsteadButton" value="Login instead"
-                           onclick="window.location.href = '/dwp/login'" />
+                <div class="flex flex-col items-center w-full">
+                    <input class="text-white font-bold py-2 px-4 rounded text-center w-full mt-4 cursor-pointer" 
+                           style="background: #FADF24;" type="submit" name="registerButton" value="Sign up" />
+                    <p class="mt-2 -mb-4 text-gray-500"> Already have an account? <a class="underline text-blue-700" href="/dwp/login">Log in</></p>
                 </div>
             </form>
         </div>

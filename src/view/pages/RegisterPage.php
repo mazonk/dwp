@@ -17,13 +17,20 @@ unset($_SESSION['errors']);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
+    <title>Sign up</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-image: url('assets/register-background.png');
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
-    <div class="max-w-md w-full bg-white shadow-md rounded-lg p-8">
+    <div class="max-w-sm w-full bg-white shadow-md rounded-lg p-3.5 -mt-24">
         <div class="text-center mb-6">
-            <h1 class="text-2xl font-bold text-gray-800">Register</h1>
+            <h1 class="text-3xl font-semibold text-gray-800">Sign up</h1>
         </div>
 
         <div>
@@ -31,7 +38,7 @@ unset($_SESSION['errors']);
                 require_once('src/view/components/RegisterForm.php');
                 $registerForm = new RegisterForm();
                 $registerForm->render($formData, $errors);
-                ?>
+            ?>
         </div>
     </div>
 </body>
