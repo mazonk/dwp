@@ -5,7 +5,7 @@ require_once 'src/model/entity/UserRole.php';
 require_once 'src/model/repositories/UserRepository.php';
 require_once 'src/model/repositories/UserRoleRepository.php';
 
-class UserController {
+class AuthController {
     private UserRepository $userRepository;
     private UserRoleRepository $userRoleRepository;
 

@@ -68,11 +68,11 @@ get('/dwp/upcoming', 'src/view/pages/UpcomingMoviesPage.php');
 // POST ROUTES
 
 post('/dwp/register', function() {
-    require_once 'src/controller/UserController.php';
-    $userController = new UserController();
+    require_once 'src/controller/AuthController.php';
+    $authController = new AuthController();
     
     // Check the action parameter
     if (isset($_GET['action']) && $_GET['action'] === 'register') {
-        $userController->register();
+        $authController->register();
     }
 });
