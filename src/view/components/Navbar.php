@@ -1,4 +1,7 @@
 <?php
+  /* Get the venues */
+  include_once "src/controller/VenueController.php";
+
   /* Venue dropdown */
   $isVenueDropdownOpen = isset($_POST['isVenueDropdownOpen']) ? filter_var($_POST['isVenueDropdownOpen'], FILTER_VALIDATE_BOOLEAN) : false;
 
@@ -54,15 +57,17 @@
         <!-- Dropdown -->
         <?php if ($isVenueDropdownOpen): ?>
         <div class="absolute min-w-[150px] top-[40px] right-[0] py-[.75rem] bg-bgDark border-[1px] border-bgLight rounded-[10px]">
-          <button class="w-full py-[.5rem] px-[.625rem] text-[.875rem] text-left leading-tight bg-bgDark ease-in-out duration-[.15s] hover:bg-bgSemiDark">
-            Venue Name
-          </button>
-          <button class="w-full py-[.5rem] px-[.625rem] text-[.875rem] text-left leading-tight bg-bgDark ease-in-out duration-[.15s] hover:bg-bgSemiDark">
-            Venue Name
-          </button>
-          <button class="w-full py-[.5rem] px-[.625rem] text-[.875rem] text-left leading-tight bg-bgDark ease-in-out duration-[.15s] hover:bg-bgSemiDark">
-            Venue Name
-          </button>
+          <?php
+          // Create a new instance of VenueController and fetch all venues
+          $venueController = new VenueController();
+          $allVenues = $venueController->getAllVenues();
+
+          foreach ($allVenues as $venue) {
+            echo '<button class="w-full py-[.5rem] px-[.625rem] text-[.875rem] text-left leading-tight bg-bgDark ease-in-out duration-[.15s] hover:bg-bgSemiDark">';
+            echo $venue->getName();
+            echo '</button>';
+          }
+          ?>
         </div>
         <?php endif; ?>
       </div>

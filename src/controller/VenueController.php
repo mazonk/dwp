@@ -1,5 +1,5 @@
 <?php
-include_one "src/model/repositories/VenueRepository.php";
+include_once "src/model/repositories/VenueRepository.php";
 
 class VenueController {
   private VenueRepository $venueRepository;
@@ -12,3 +12,4 @@ class VenueController {
     return $this->venueRepository->getAllVenues();
   }
 }
+?>
