@@ -4,7 +4,7 @@
       extend: {
         colors: {
           bgDark: '#120E01',
-          bgSemiDark: '#222222',
+          bgSemiDark: '#242424',
           primary: '#FADF24',
           primaryHover: '#dec516',
           textDark: '#120E01',
