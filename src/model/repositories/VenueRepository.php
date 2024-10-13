@@ -1,5 +1,6 @@
 <?php
 include "src/model/entity/Venue.php";
+include_once "src/model/repositories/AddressController.php";
 
 class VenueRepository {
   private function getdb() {
@@ -14,8 +15,18 @@ class VenueRepository {
     $result = $query->fetchAll(PDO::FETCH_ASSOC);
     $retArray = [];
 
+    $addressController = new AddressController();
+    $allAddresses = $addressController->getAllAdresses();
+
     foreach($result as $row) {
-      $retArray[] = new Venue($row['venueId'], $row['name'], $row['phoneNr'], $row['contactEmail'], $row['address']);
+      /* Find the address object that matches the addressId of the venue */
+      foreach($allAdresses ad $address) {
+        if ($row['addressId'] == $address->getAddressId()) {
+          $retArray[] = new Venue($row['venueId'], $row['name'], $row['phoneNr'], $row['contactEmail'], $address);
+        }
+
+        break;
+      }
     }
     return $retArray;
   }
