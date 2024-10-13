@@ -27,6 +27,7 @@ class AddressRepository {
     }
 
     foreach($addressResult as $addressRow) {
+      /* Find the postal code object that matches the postal code of the address */
       foreach($postalCodeArray as $postalCodeRow) {
         if ($addressRow['postalCode'] == $postalCodeRow->getPostalCode()) {
           $addressArray[] = new Address($addressRow['addressId'], $addressRow['street'], $addressRow['streetNr'], $postalCode);
