@@ -2,7 +2,7 @@
 include_once "src/model/repositories/AddressRepository.php";
 
 class AddressController {
-  private AddressRepository= $addressRepository;
+  private AddressRepository $addressRepository;
 
   public function __construct() {
     $this->addressRepository = new AddressRepository();

@@ -8,7 +8,7 @@ class AddressRepository {
     return $db;
   }
 
-  public function getAllAddresses(): {
+  public function getAllAddresses(): array {
     $db = $this->getdb();
     /* Get postal codes */
     $postalCodeQuery = $db->prepare("SELECT * FROM PostalCode");
@@ -30,7 +30,7 @@ class AddressRepository {
       /* Find the postal code object that matches the postal code of the address */
       foreach($postalCodeArray as $postalCodeRow) {
         if ($addressRow['postalCode'] == $postalCodeRow->getPostalCode()) {
-          $addressArray[] = new Address($addressRow['addressId'], $addressRow['street'], $addressRow['streetNr'], $postalCode);
+          $addressArray[] = new Address($addressRow['addressId'], $addressRow['street'], $addressRow['streetNr'], $postalCodeRow);
 
           break;
         }

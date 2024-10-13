@@ -1,6 +1,6 @@
 <?php
 include "src/model/entity/Venue.php";
-include_once "src/model/repositories/AddressController.php";
+include_once "src/controller/AddressController.php";
 
 class VenueRepository {
   private function getdb() {
@@ -16,11 +16,11 @@ class VenueRepository {
     $retArray = [];
 
     $addressController = new AddressController();
-    $allAddresses = $addressController->getAllAdresses();
+    $allAddresses = $addressController->getAllAddresses();
 
     foreach($result as $row) {
       /* Find the address object that matches the addressId of the venue */
-      foreach($allAdresses ad $address) {
+      foreach($allAddresses as $address) {
         if ($row['addressId'] == $address->getAddressId()) {
           $retArray[] = new Venue($row['venueId'], $row['name'], $row['phoneNr'], $row['contactEmail'], $address);
         }
