@@ -1,6 +1,6 @@
 <?php
 
-class UserRepository {
+class AuthRepository {
     private function getdb(): PDO {
         require_once 'src/model/database/dbcon/DatabaseConnection.php';
         return DatabaseConnection::getInstance(); // singleton

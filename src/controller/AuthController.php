@@ -2,15 +2,15 @@
 session_start();
 require_once 'src/model/entity/User.php';
 require_once 'src/model/entity/UserRole.php';
-require_once 'src/model/repositories/UserRepository.php';
+require_once 'src/model/repositories/AuthRepository.php';
 require_once 'src/controller/UserRoleController.php';
 
 class AuthController {
-    private UserRepository $userRepository;
+    private AuthRepository $authRepository;
     private UserRoleController $userRoleController;
 
     public function __construct() {
-        $this->userRepository = new UserRepository();
+        $this->authRepository = new AuthRepository();
         $this->userRoleController = new UserRoleController();
     }
 
@@ -35,8 +35,8 @@ class AuthController {
                 $iterations = ['cost' => 10];
                 $hashedPassword = password_hash($formData['password'], PASSWORD_BCRYPT, $iterations);
                 
-                // Check if user already exists
-                if ($this->userRepository->userExists($formData['email'])) {
+                // Check if user with this email exists already
+                if ($this->authRepository->userExists($formData['email'])) {
                     $errors['email'] = "User with this email already exists.";
                     $_SESSION['errors'] = $errors;
                     $_SESSION['formData'] = $formData;
@@ -55,10 +55,10 @@ class AuthController {
 
                 // Try to insert the new user into the database
                 try {
-                    if ($this->userRepository->emailExists($formData['email'])) {
-                        $newUser = $this->userRepository->createUserToExistingEmail($user);
+                    if ($this->authRepository->emailExists($formData['email'])) {
+                        $newUser = $this->authRepository->createUserToExistingEmail($user);
                     }  else {
-                        $newUser = $this->userRepository->createUser($user);
+                        $newUser = $this->authRepository->createUser($user);
                     }
                     if ($newUser) {
                         // If registration was successful, redirect to login page
