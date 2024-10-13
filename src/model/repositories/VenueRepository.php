@@ -24,8 +24,6 @@ class VenueRepository {
         if ($row['addressId'] == $address->getAddressId()) {
           $retArray[] = new Venue($row['venueId'], $row['name'], $row['phoneNr'], $row['contactEmail'], $address);
         }
-
-        break;
       }
     }
     return $retArray;
