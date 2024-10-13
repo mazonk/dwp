@@ -67,6 +67,7 @@ get('/dwp/upcoming', 'src/view/pages/UpcomingMoviesPage.php');
 
 // POST ROUTES
 
+// Post route for register
 post('/dwp/register', function() {
     require_once 'src/controller/AuthController.php';
     $authController = new AuthController();
@@ -74,5 +75,16 @@ post('/dwp/register', function() {
     // Check the action parameter
     if (isset($_GET['action']) && $_GET['action'] === 'register') {
         $authController->register();
+    }
+});
+
+// Post route for login
+post('/dwp/login', function() {
+    require_once 'src/controller/AuthController.php';
+    $authController = new AuthController();
+    
+    // Check the action parameter
+    if (isset($_GET['action']) && $_GET['action'] === 'login') {
+        $authController->login();
     }
 });
