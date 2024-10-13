@@ -3,7 +3,7 @@ class LoginForm {
     public function render(array $formData = [], array $errors = [], string $message = ''): void {
         ?>
         <div class="w-full max-w-xs mx-auto flex flex-col ">
-            <form class="space-y-2" action="" method="post">
+            <form class="space-y-2" action="/dwp/login/action?action=login" method="post">
                 <div>
                     <label for="email">Email:</label>
                     <input type="text" name="email" id="emailInput" 
