@@ -88,3 +88,9 @@ post('/dwp/login', function() {
         $authController->login();
     }
 });
+
+post('/dwp/logout', function() {
+    require_once 'src/controller/AuthController.php';
+    $authController = new AuthController();
+    $authController->logout();
+});

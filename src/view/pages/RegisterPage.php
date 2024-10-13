@@ -1,5 +1,9 @@
 <?php 
-session_start();
+require_once 'session_config.php';
+
+if (isLoggedIn()) {
+    header("Location: /dwp/");
+}
 
 // Get input values from the session if available
 $formData = isset($_SESSION['formData']) ? $_SESSION['formData'] : [

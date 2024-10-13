@@ -107,17 +107,32 @@ class AuthController {
                     $_SESSION['formData'] = $formData;
                     header("Location: /dwp/login");
                     exit;
-                }                
+                }
+
+                require_once "session_config.php";
+                $newSessionId = session_create_id();
+                $sessionId = $newSessionId . "_" . $user->getId(); //append session id with user id
+                session_id($sessionId);
 
                 // If login was successful, redirect to homepage
-                $_SESSION['loggedIn']['userId'] = $user->getId();
-                $_SESSION['loggedIn']['userEmail'] = $user->getEmail();
-                $_SESSION['loggedIn']['firstName'] = $user->getFirstName();
-                $_SESSION['loggedIn']['lastName'] = $user->getLastName();
+                $_SESSION['userId'] = $user->getId();
+                $_SESSION['userEmail'] = htmlspecialchars($user->getEmail());
+                $_SESSION['firstName'] = htmlspecialchars($user->getFirstName());
+                $_SESSION['lastName'] = htmlspecialchars($user->getLastName());
+                $_SESSION['lastGeneration'] = time();
+
                 header("Location: /dwp");
                 exit;
             }
         }
+    }
+
+    public function logout(): void {
+        session_start();
+        session_unset();
+        session_destroy();
+        header("Location: /dwp/login");
+        exit;
     }
 
     private function validateRegisterInputs(array $formData, array &$errors): void {
