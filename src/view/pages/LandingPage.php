@@ -1,4 +1,8 @@
-<?php echo 'This is the landing page';
+<?php 
+session_start();
+echo "Welcome " . $_SESSION['loggedIn']['userId'] . "!<br>";
+echo 'This is the landing page';
+
 ?>
 <html>
     <body>

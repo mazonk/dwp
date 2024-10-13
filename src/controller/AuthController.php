@@ -31,7 +31,7 @@ class AuthController {
             $this->validateRegisterInputs($formData, $errors);
 
             if (count($errors) == 0) {
-                // Hash the password
+                // Hash password
                 $iterations = ['cost' => 10];
                 $hashedPassword = password_hash($formData['password'], PASSWORD_BCRYPT, $iterations);
                 
@@ -107,7 +107,15 @@ class AuthController {
                     $_SESSION['formData'] = $formData;
                     header("Location: /dwp/login");
                     exit;
-                }
+                }                
+
+                // If login was successful, redirect to homepage
+                $_SESSION['loggedIn']['userId'] = $user->getId();
+                $_SESSION['loggedIn']['userEmail'] = $user->getEmail();
+                $_SESSION['loggedIn']['firstName'] = $user->getFirstName();
+                $_SESSION['loggedIn']['lastName'] = $user->getLastName();
+                header("Location: /dwp");
+                exit;
             }
         }
     }

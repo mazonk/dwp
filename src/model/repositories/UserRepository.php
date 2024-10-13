@@ -108,7 +108,7 @@ class UserRepository {
             } else {
                 // Create the User object and pass both roleId and roleType to UserRole constructor
                 return new User(
-                    $result['id'],
+                    $result['userId'],
                     $result['firstName'],
                     $result['lastName'],
                     new DateTime($result['DoB']),
