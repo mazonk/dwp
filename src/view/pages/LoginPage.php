@@ -1,5 +1,17 @@
 <?php 
-include("src/view/components/LoginForm.php");
+session_start();
+
+// Get input values from the session if available
+$formData = isset($_SESSION['formData']) ? $_SESSION['formData'] : [
+    'firstName' => '',
+    'lastName' => '',
+    'dob' => '',
+    'email' => '',
+];
+$errors = isset($_SESSION['errors']) ? $_SESSION['errors'] : [];
+
+unset($_SESSION['formData']);
+unset($_SESSION['errors']);
 ?>
 <html lang="en">
 <head>
@@ -23,8 +35,9 @@ include("src/view/components/LoginForm.php");
 
         <div>
             <?php
+                include("src/view/components/LoginForm.php");
                 $loginForm = new LoginForm();
-                $loginForm->render();
+                $loginForm->render($formData, $errors);
             ?>
         </div>
     </div>
