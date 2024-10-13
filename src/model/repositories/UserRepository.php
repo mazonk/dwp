@@ -1,6 +1,6 @@
 <?php
 
-class AuthRepository {
+class UserRepository {
 
     /**
      * Gets the PDO database connection singleton
@@ -84,6 +84,44 @@ class AuthRepository {
             return null;
         }
     }
+
+    /**
+     * Returns a User object from the database given an email address.
+     * @param string $email The email address to search for
+     * @return User|null The User object if found, null otherwise
+     */
+    public function getUserByEmail(string $email): ?User {
+        $db = $this->getdb();
+        
+        // Modify the query to join the UserRole (or Role) table
+        $query = $db->prepare("SELECT u.*, ur.type
+            FROM User u
+            JOIN UserRole ur ON u.roleId = ur.roleId
+            WHERE u.email = :email");
+        
+        try {
+            $query->execute(array(":email" => $email));
+            $result = $query->fetch(PDO::FETCH_ASSOC);
+            
+            if (empty($result)) {
+                return null;
+            } else {
+                // Create the User object and pass both roleId and roleType to UserRole constructor
+                return new User(
+                    $result['id'],
+                    $result['firstName'],
+                    $result['lastName'],
+                    new DateTime($result['DoB']),
+                    $result['email'],
+                    $result['passwordHash'],
+                    new UserRole($result['roleId'], $result['type'])
+                );
+            }
+        } catch (PDOException $e) {
+            return null;
+        }
+    }
+    
     
     /**
      * Checks if the given email exists in the database

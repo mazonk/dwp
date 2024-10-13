@@ -2,15 +2,15 @@
 session_start();
 require_once 'src/model/entity/User.php';
 require_once 'src/model/entity/UserRole.php';
-require_once 'src/model/repositories/AuthRepository.php';
+require_once 'src/model/repositories/UserRepository.php';
 require_once 'src/controller/UserRoleController.php';
 
 class AuthController {
-    private AuthRepository $authRepository;
+    private UserRepository $userRepository;
     private UserRoleController $userRoleController;
 
     public function __construct() {
-        $this->authRepository = new AuthRepository();
+        $this->userRepository = new UserRepository();
         $this->userRoleController = new UserRoleController();
     }
 
@@ -36,7 +36,7 @@ class AuthController {
                 $hashedPassword = password_hash($formData['password'], PASSWORD_BCRYPT, $iterations);
                 
                 // Check if user with this email exists already
-                if ($this->authRepository->userExists($formData['email'])) {
+                if ($this->userRepository->userExists($formData['email'])) {
                     $errors['email'] = "User with this email already exists.";
                     $_SESSION['errors'] = $errors;
                     $_SESSION['formData'] = $formData;
@@ -55,10 +55,10 @@ class AuthController {
 
                 // Try to insert the new user into the database
                 try {
-                    if ($this->authRepository->emailExists($formData['email'])) {
-                        $newUser = $this->authRepository->createUserToExistingEmail($user);
+                    if ($this->userRepository->emailExists($formData['email'])) {
+                        $newUser = $this->userRepository->createUserToExistingEmail($user);
                     }  else {
-                        $newUser = $this->authRepository->createUser($user);
+                        $newUser = $this->userRepository->createUser($user);
                     }
                     if ($newUser) {
                         // If registration was successful, redirect to login page
@@ -69,6 +69,44 @@ class AuthController {
                     }
                 } catch (Exception $e) {
                     $errors['general'] = "Registration failed. Please try again.";
+                }
+            }
+        }
+    }
+
+    public function login(): void {
+        $errors = [];
+        $formData = [];
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Retrieve and sanitize input
+            $formData['email'] = htmlspecialchars(trim($_POST['email']));
+            $formData['password'] = $_POST['password'];
+
+            // Validations
+            $this->validateLoginInputs($formData, $errors);
+
+            if (count($errors) == 0) {
+                // Check if user with this email exists
+                if (!$this->userRepository->userExists($formData['email'])) {
+                    $errors['email'] = "User with this email does not exist.";
+                    $_SESSION['errors'] = $errors;
+                    $_SESSION['formData'] = $formData;
+                    header("Location: /dwp/login");
+                    exit;
+                }
+
+                // Check if password is correct
+                $user = $this->userRepository->getUserByEmail($formData['email']);
+
+                // TODO: Handle admin login somewhere here!!
+                
+                if (!password_verify($formData['password'], $user->getPasswordHash())) {
+                    $errors['password'] = "Incorrect password.";
+                    $_SESSION['errors'] = $errors;
+                    $_SESSION['formData'] = $formData;
+                    header("Location: /dwp/login");
+                    exit;
                 }
             }
         }
@@ -134,6 +172,23 @@ class AuthController {
             $_SESSION['formData'] = $formData;
             $_SESSION['errors'] = $errors;
             header("Location: /dwp/register");
+            exit;
+        }
+    }
+
+    private function validateLoginInputs(array $formData, array &$errors): void {
+        $emailRegex = "/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/";
+        if (!preg_match($emailRegex, $formData['email'])) {
+            $errors['email'] = "Invalid email format.";
+        }
+        if (empty($formData['email']) || empty($formData['password'])) {
+            $errors['general'] = "All fields are required.";
+        }
+        if (count($errors) > 0) {
+            // If there are errors, redirect to login page with errors
+            $_SESSION['formData'] = $formData;
+            $_SESSION['errors'] = $errors;
+            header("Location: /dwp/login");
             exit;
         }
     }
