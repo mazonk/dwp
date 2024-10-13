@@ -1,6 +1,6 @@
 <?php 
 session_start();
-echo "Welcome " . $_SESSION['loggedIn']['userId'] . "!<br>";
+echo "Welcome " . $_SESSION['loggedIn']['firstName'] . " " . $_SESSION['loggedIn']['lastName'] . "!<br>";
 echo 'This is the landing page';
 
 ?>
