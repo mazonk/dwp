@@ -4,9 +4,13 @@ require_once __DIR__.'/router.php';
 
 // To be extended later with additional simple getter routes
 // As well as post, put, and delete routes.
+// TODO: Admin routes
+// TODO: Development/production routes
 // TODO: Add more routes
 
-// Simple getters
+#############################################################################
+
+// GET ROUTES
 
 // In the URL -> http://localhost/dwp
 // The output -> index.php (from pages folder)
@@ -59,3 +63,35 @@ get('/dwp/upcoming', 'src/view/pages/UpcomingMoviesPage.php');
 
 // This could be 404 not found page
 // any('/404','views/404.php');
+
+#############################################################################
+
+// POST ROUTES
+
+// Post route for register
+post('/dwp/register', function() {
+    require_once 'src/controller/AuthController.php';
+    $authController = new AuthController();
+    
+    // Check the action parameter
+    if (isset($_GET['action']) && $_GET['action'] === 'register') {
+        $authController->register();
+    }
+});
+
+// Post route for login
+post('/dwp/login', function() {
+    require_once 'src/controller/AuthController.php';
+    $authController = new AuthController();
+    
+    // Check the action parameter
+    if (isset($_GET['action']) && $_GET['action'] === 'login') {
+        $authController->login();
+    }
+});
+
+post('/dwp/logout', function() {
+    require_once 'src/controller/AuthController.php';
+    $authController = new AuthController();
+    $authController->logout();
+});

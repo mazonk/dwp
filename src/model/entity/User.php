@@ -1,11 +1,12 @@
 <?php
+require_once "src/model/entity/Person.php";
 class User extends Person {
   private ?DateTime $dob;
   private string $email;
   private ?string $passwordHash;
   private UserRole $userRole;
 
-  public function __construct(int $userId, string $firstName, string $lastName, DateTime $dob = null, string $email, string $passwordHash = null, UserRole $userRole) {
+  public function __construct(int $userId = null, string $firstName, string $lastName, DateTime $dob = null, string $email, string $passwordHash = null, UserRole $userRole) {
     parent::__construct($userId, $firstName, $lastName);
     $this->dob = $dob;
     $this->email = $email;
