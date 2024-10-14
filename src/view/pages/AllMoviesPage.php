@@ -3,7 +3,6 @@ include_once "src/controller/MovieController.php";
 include_once "src/view/components/MovieCard.php";
 require_once 'session_config.php';
 
-confirm_logged_in();
 ?>
 
 <!DOCTYPE html>

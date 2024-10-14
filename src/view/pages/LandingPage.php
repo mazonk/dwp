@@ -1,7 +1,6 @@
 <?php 
 require_once 'session_config.php';
 
-confirm_logged_in();
 echo "Welcome " . $_SESSION['userId'];
 echo "<br>";
 echo "SessionId: " . session_id();

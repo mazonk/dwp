@@ -9,7 +9,7 @@
             if (time() - $_SESSION['lastRegeneration'] >= $interval) {
                 regenerate_session_id_loggedin();
             }
-        }
+        } 
     } else { //the user is not logged in
         if (!isset($_SESSION['lastRegeneration'])) {
             regenerate_session_id();
