@@ -3,7 +3,7 @@ require_once 'session_config.php';
 
 echo "Welcome " . $_SESSION['userId'];
 echo "<br>";
-echo "SessionId: " . session_id();
+echo "SessionId: " . $_SESSION['session_userId'];
 echo "<br>";
 echo "Last Regeneration: " . $_SESSION['lastRegeneration'];
 echo "<br>";
