@@ -4,8 +4,8 @@ include "src/model/entity/PostalCode.php";
 
 class AddressRepository {
   private function getdb() {
-    include "src/model/database/dbcon/dbcon.php";
-    return $db;
+    require_once 'src/model/database/dbcon/DatabaseConnection.php';
+    return DatabaseConnection::getInstance(); // singleton
   }
 
   public function getAllAddresses(): array {

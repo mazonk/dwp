@@ -2,8 +2,8 @@
 include "src/model/entity/Movie.php";
 class MovieRepository {
     private function getdb() {
-        include_once "src/model/database/dbcon/dbcon.php";
-        return $db;
+        require_once 'src/model/database/dbcon/DatabaseConnection.php';
+        return DatabaseConnection::getInstance(); // singleton
     }
     public function getAllMovies(): array {
         $db = $this->getdb();

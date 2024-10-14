@@ -3,9 +3,9 @@ include "src/model/entity/Venue.php";
 include_once "src/controller/AddressController.php";
 
 class VenueRepository {
-  private function getdb() {
-    include_once "src/model/database/dbcon/dbcon.php";
-    return $db;
+  private function getdb(): PDO {
+    require_once 'src/model/database/dbcon/DatabaseConnection.php';
+    return DatabaseConnection::getInstance(); // singleton
   }
 
   public function getAllVenues(): array {
