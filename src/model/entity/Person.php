@@ -2,11 +2,11 @@
 
 // Parent class
 class Person {
-    protected int $id; // Common property for both Director and Actor
+    protected ?int $id; // Common property for both Director and Actor | Nullable so we can construct objects to db (i dont think its good practice tho xd)
     protected string $firstName;
     protected string $lastName;
 
-    public function __construct(int $id, string $firstName, string $lastName) {
+    public function __construct(int $id = null, string $firstName, string $lastName) {
         $this->id = $id;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
