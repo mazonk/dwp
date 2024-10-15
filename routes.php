@@ -15,7 +15,6 @@ require_once __DIR__.'/router.php';
 // In the URL -> http://localhost/dwp
 // The output -> index.php (from pages folder)
 get('/dwp', 'src/view/pages/LandingPage.php');
-post('/dwp', 'src/view/pages/LandingPage.php'); // used at toggle dropdown
 
 // In the URL -> http://localhost/dwp/about
 // The output -> AboutPage.php (from pages folder)
@@ -28,11 +27,6 @@ get('/dwp/admin', 'src/view/pages/AdminPage.php');
 // In the URL -> http://localhost/dwp/movies
 // The output -> AllMoviesPage.php (from pages folder)
 get('/dwp/movies', 'src/view/pages/AllMoviesPage.php');
-post('/dwp/movies', 'src/view/pages/AllMoviesPage.php'); // used at toggle dropdown
-
-// In the URL -> http://localhost/dwp/movies/1
-// The output -> MovieDetailsPage.php and its query string id = 1 for example (from pages folder)
-get('/dwp/movies/$id', 'src/view/pages/MovieDetailsPage.php');
 
 // In the URL -> http://localhost/dwp/booking
 // The output -> BookingPage.php (from pages folder)
@@ -69,6 +63,9 @@ get('/dwp/upcoming', 'src/view/pages/UpcomingMoviesPage.php');
 
 // POST ROUTES
 
+post('/dwp/movies', 'src/view/pages/AllMoviesPage.php'); // used at toggle dropdown
+post('/dwp', 'src/view/pages/LandingPage.php'); // used at toggle dropdown
+
 // Post route for register
 post('/dwp/register', function() {
     require_once 'src/controller/AuthController.php';
@@ -96,3 +93,8 @@ post('/dwp/logout', function() {
     $authController = new AuthController();
     $authController->logout();
 });
+
+// Query string routes
+
+get('/dwp/movies/$id', 'src/view/pages/MovieDetailsPage.php');
+get('/dwp/news/$id', 'src/view/pages/NewsPage.php');
