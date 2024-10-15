@@ -1,5 +1,5 @@
 <?php
-include "src/model/entity/Venue.php";
+include_once "src/model/entity/Venue.php";
 include_once "src/controller/AddressController.php";
 
 class VenueRepository {

@@ -1,6 +1,6 @@
 <?php
-include "src/model/entity/Address.php";
-include "src/model/entity/PostalCode.php";
+include_once "src/model/entity/Address.php";
+include_once "src/model/entity/PostalCode.php";
 
 class AddressRepository {
   private function getdb() {
