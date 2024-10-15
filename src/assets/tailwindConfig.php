@@ -8,6 +8,7 @@
           primary: '#FADF24',
           primaryHover: '#dec516',
           textDark: '#120E01',
+          textNormal: '#d8d8d8',
           textLight: '#FFFFFB',
           borderDark: '#363636',
         }
