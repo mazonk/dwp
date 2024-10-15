@@ -9,7 +9,11 @@ class VenueController {
   }
 
   public function getAllVenues(): array {
-    return $this->venueRepository->getAllVenues();
+    try {
+      return $this->venueRepository->getAllVenues();
+    } catch (Exception $e) {
+      return [];
+    }
   }
 }
 ?>
