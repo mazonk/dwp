@@ -17,8 +17,15 @@
         <a href="" class="w-fit text-[.875rem] text-textNormal leading-snug ease-in-out duration-[.15s] hover:text-textLight">Contact</a>
       </div>
     </div>
-    <!-- Company Info -->
-    <div></div>
+    <!-- Contact Info -->
+    <div class="min-w-[250px] flex flex-col gap-[1.5rem]">
+      <h4 class="text-[1rem] font-bold leading-tight">Contact Information</h4>
+      <div class="flex flex-col gap-[.75rem]">
+        <a href="mailto:" class="w-fit text-[.875rem] text-textNormal leading-snug ease-in-out duration-[.15s] hover:text-textLight">Email Address</a>
+        <div class="w-fit text-[.875rem] text-textNormal leading-snug">Phone Nr</div>
+        <div class="w-fit text-[.875rem] text-textNormal leading-snug">Address</div>
+      </div>
+    </div>
     <div></div>
   </div>
   <div class="text-textNormal text-[.875rem]">&copy; cinema all rights reserved</div>
