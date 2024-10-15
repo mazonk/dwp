@@ -2,11 +2,11 @@
 
 ?>
 
-<footer class="flex flex-col gap-[4rem]">
-  <div class="flex justify-center gap-[2rem]">
+<footer class="flex flex-col gap-[4rem] mt-[8rem]">
+  <div class="flex justify-between gap-[2rem]">
     <!-- Site Links -->
     <div class="min-w-[250px] flex flex-col gap-[1.5rem]">
-      <h4 class="text-[1rem] font-bold leading-tight">Useful Links</h4>
+      <h4 class="text-[1.125rem] font-bold leading-tight">Useful Links</h4>
       <div class="flex flex-col gap-[.75rem]">
         <a href="/dwp" class="w-fit text-[.875rem] text-textNormal leading-snug ease-in-out duration-[.15s] hover:text-textLight">Home</a>
         <a href="/dwp/movies" class="w-fit text-[.875rem] text-textNormal leading-snug ease-in-out duration-[.15s] hover:text-textLight">All Movies</a>
@@ -19,7 +19,7 @@
     </div>
     <!-- Contact Info -->
     <div class="min-w-[250px] flex flex-col gap-[1.5rem]">
-      <h4 class="text-[1rem] font-bold leading-tight">Contact Information</h4>
+      <h4 class="text-[1.125rem] font-bold leading-tight">Contact Information</h4>
       <div class="flex flex-col gap-[.75rem]">
         <!-- TODO: Populate contact info based on selected venue -->
         <a href="mailto:" class="w-fit text-[.875rem] text-textNormal leading-snug ease-in-out duration-[.15s] hover:text-textLight">Email Address</a>
@@ -29,7 +29,7 @@
     </div>
     <!-- Opening Hours -->
     <div class="min-w-[250px] flex flex-col gap-[1.5rem]">
-      <h4 class="text-[1rem] font-bold leading-tight">Opening Hours</h4>
+      <h4 class="text-[1.125rem] font-bold leading-tight">Opening Hours</h4>
       <div class="flex flex-col gap-[.75rem]">
         <!-- TODO: Populate opening hours based on selected venue -->
         <div class="w-fit text-[.875rem] text-textNormal leading-snug">
@@ -46,8 +46,15 @@
         </div>
       </div>
     </div>
-    
-    <div></div>
+    <!-- Contact Form -->
+    <div class="min-w-[250px] flex flex-col gap-[1.5rem]">
+      <h4 class="text-[1.125rem] font-bold leading-tight">Contact Us</h4>
+      <form action="" method="post" class="flex flex-col gap-[.75rem] text-textDark">
+        <input type="text" name="email" id="emailInput" placeholder="Email" class="h-[36px] py-[.5rem] px-[.875rem] bg-bgSemiDark text-[.875rem] text-textNormal leading-snug border-[1px] border-borderDark rounded-[6px] outline-none ease-in-out duration-[.15s] focus:border-textNormal">
+        <textarea name="message" id="messageInput" placeholder="Message" class="min-h-[100px] py-[.5rem] px-[.875rem] bg-bgSemiDark text-[.875rem] text-textNormal leading-snug border-[1px] border-borderDark rounded-[6px] outline-none ease-in-out duration-[.15s] focus:border-textNormal"></textarea>
+        <button type="submit" class="h-[36px] py-[.5rem] px-[1.25rem] bg-primary text-[.875rem] text-textDark font-medium leading-tight rounded-[6px] ease-in-out duration-[.15s] hover:bg-primaryHover">Send</button>
+      </form>
+    </div>
   </div>
   <div class="text-textNormal text-[.875rem]">&copy; cinema all rights reserved</div>
 </footer>
