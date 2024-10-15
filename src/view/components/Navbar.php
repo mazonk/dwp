@@ -72,9 +72,11 @@
         <?php endif; ?>
       </div>
       <!-- Login -->
-      <a href="" class="py-[.625rem] px-[1.25rem] bg-primary text-textDark font-medium leading-tight rounded-[8px] ease-in-out duration-[.15s] hover:bg-primaryHover ">
+      <?php if (!isLoggedIn()): ?>
+      <a href="/dwp/login" class="py-[.625rem] px-[1.25rem] bg-primary text-textDark font-medium leading-tight rounded-[8px] ease-in-out duration-[.15s] hover:bg-primaryHover ">
         Login
       </a>
+      <?php else: ?>
       <div class="relative">
         <form action="" method="post">
           <input type="hidden" name="isProfileDropdownOpen" value="<?php echo $isProfileDropdownOpen ? 'true' : 'false'; ?>">
@@ -100,7 +102,7 @@
         </div>
         <?php endif; ?>
       </div>
-      
+      <?php endif; ?>
     </div>
   </nav>
 </header>
