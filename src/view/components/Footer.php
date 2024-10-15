@@ -56,5 +56,6 @@
       </form>
     </div>
   </div>
-  <div class="text-textNormal text-[.875rem]">&copy; cinema all rights reserved</div>
+  <!-- TODO: Company name display -->
+  <div class="text-textNormal text-[.875rem]">&copy; cinema/companyName_here all rights reserved</div>
 </footer>
