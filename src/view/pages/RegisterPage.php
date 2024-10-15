@@ -2,7 +2,7 @@
 require_once 'session_config.php';
 
 if (isLoggedIn()) {
-    header("Location: /dwp/");
+    header("Location: /dwp/home");
 }
 
 // Get input values from the session if available

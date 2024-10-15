@@ -14,7 +14,7 @@ require_once __DIR__.'/router.php';
 
 // In the URL -> http://localhost/dwp
 // The output -> index.php (from pages folder)
-get('/dwp', 'src/view/pages/LandingPage.php');
+get('/dwp/home', 'src/view/pages/LandingPage.php');
 
 // In the URL -> http://localhost/dwp/about
 // The output -> AboutPage.php (from pages folder)
@@ -64,7 +64,7 @@ get('/dwp/upcoming', 'src/view/pages/UpcomingMoviesPage.php');
 // POST ROUTES
 
 post('/dwp/movies', 'src/view/pages/AllMoviesPage.php'); // used at toggle dropdown
-post('/dwp', 'src/view/pages/LandingPage.php'); // used at toggle dropdown
+post('/dwp/home', 'src/view/pages/LandingPage.php'); // used at toggle dropdown
 
 // Post route for register
 post('/dwp/register', function() {

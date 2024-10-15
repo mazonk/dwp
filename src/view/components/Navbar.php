@@ -26,7 +26,7 @@
     <!-- (the ml-[] is for balancing the different width of the elements on either siede of the navbar thus it is in the center of the page) -->
     <div class="flex justify-center items-center gap-[2.5rem] ml-[195px]">
       <div>
-        <a href="/dwp" class="font-medium">Home</a>
+        <a href="/dwp/home" class="font-medium">Home</a>
       </div>
       <div>
         <a href="/dwp/movies" class="font-medium">All Movies</a>

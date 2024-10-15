@@ -1,7 +1,9 @@
-<?php 
+<?php
 require_once 'session_config.php';
 include_once "src/controller/NewsController.php";
-include_once "src/view/components/NewsCard.php"
+include_once "src/view/components/NewsCard.php";
+
+$tab = isset($_GET['tab']) ? $_GET['tab'] : 'news'; // Default to 'news' if no tab is set in query string
 
 ?>
 <!DOCTYPE html>
@@ -17,23 +19,38 @@ include_once "src/view/components/NewsCard.php"
 <body class="max-w-[1440px] w-[100%] mx-auto px-[100px] bg-bgDark text-textLight overflow-hidden">
     <!-- Navbar -->
     <?php include_once("src/view/components/Navbar.php"); ?>
-    <main class="mt-[56px] p-4">
-      <div class="grid grid-cols-1 gap-4">
-      </div>
 
-        <!-- News -->
-        <div class="grid grid-cols-3 gap-4 flex flex-row items-center">
+    <main class="mt-8 p-4">
+
+        <!-- Tab Navigation -->
+        <div class="flex space-x-4 justify-center mt-8 mb-8">
+            <a href="?tab=news" class="text-white <?php echo $tab === 'news' ? 'underline font-semibold' : 'b'; ?>">News & Articles</a>
+            <a href="?tab=company" class="text-white <?php echo $tab === 'company' ? 'underline font-semibold' : ''; ?>">Company Information</a>
+            <a href="?tab=tickets" class="text-white <?php echo $tab === 'tickets' ? 'underline font-semibold' : ''; ?>">Ticket Prices</a>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4">
             <?php
-            $newsController = new NewsController();
-            $allNews = $newsController->getNews();
+            // Render content based on the selected tab
+            if ($tab === 'news') {
+                $newsController = new NewsController();
+                $allNews = $newsController->getNews();
 
-            // Loop through each movie and render its movie card
-            foreach ($allNews as $news) {
-                NewsCard::render($news->getNewsId(), $news->getHeader(), $news->getImageURL(), $news->getContent());
+                // Loop through each news item and render it using NewsCard
+                echo '<div class="grid grid-cols-3 gap-4 flex flex-row items-center">';
+                foreach ($allNews as $news) {
+                    NewsCard::render($news->getNewsId(), $news->getHeader(), $news->getImageURL(), $news->getContent());
+                }
+                echo '</div>';
+            } elseif ($tab === 'company') {
+                echo '<h2 class="text-2xl font-bold text-white">Company Information</h2>';
+                echo '<p class="text-lg text-gray-300 mt-4">space reserved for company info.</p>';
+            } elseif ($tab === 'tickets') {
+                echo '<h2 class="text-2xl font-bold text-white">Ticket Prices</h2>';
+                echo '<p class="text-lg text-gray-300 mt-4">space reserved for ticket prices.</p>';
             }
             ?>
-      </div>
-
+        </div>
     </main>
 
     <h2>Testing some stuff here:</h2>

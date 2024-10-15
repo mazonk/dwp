@@ -3,7 +3,7 @@ include_once "src/controller/NewsController.php";
 
 if ($id === null) { // this is from the query string
     // Redirect back if id not found
-    header("Location: /dwp/");
+    header("Location: /dwp/home");
     exit;
 }
 
@@ -26,7 +26,7 @@ if (!$newsArticle) {
 <body class="bg-gray-900 text-white">
     <!-- Back to News List Icon -->
     <div class="absolute top-4 left-4">
-        <a href="/dwp/" class="text-white flex items-center hover:text-gray-400">
+        <a href="/dwp/home" class="text-white flex items-center hover:text-gray-400">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
             </svg>
