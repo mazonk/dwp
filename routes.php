@@ -15,6 +15,7 @@ require_once __DIR__.'/router.php';
 // In the URL -> http://localhost/dwp
 // The output -> index.php (from pages folder)
 get('/dwp', 'src/view/pages/LandingPage.php');
+post('/dwp', 'src/view/pages/LandingPage.php'); // used at toggle dropdown
 
 // In the URL -> http://localhost/dwp/about
 // The output -> AboutPage.php (from pages folder)
