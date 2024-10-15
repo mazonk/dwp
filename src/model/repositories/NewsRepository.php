@@ -22,7 +22,7 @@ class NewsRepository {
                 $query->execute();
                 $result = $query->fetchAll(PDO::FETCH_ASSOC);
                 foreach($result as $row) {
-                    $retarray[] = new News($result['newsId'], $result['imageURL'], $result['header'], $result['content']);
+                    $retarray[] = new News($row['newsId'], $row['imageURL'], $row['header'], $row['content']);
                 }
                 return $retarray;
             }
