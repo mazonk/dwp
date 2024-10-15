@@ -12,15 +12,15 @@ $currentDate = new DateTime();
 <head>
   <meta charset="UTF-8">
   <title>Upcoming Movies</title>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet"/>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-[#0d0101] text-white p-8">
-
+<body class="max-w-[1440px] w-[100%] mx-auto px-[100px] bg-[#0d0101] text-white p-8">
+<?php include_once("src/view/components/Navbar.php"); ?>
+<main class="mt-[56px] p-4">
   <h1 class="text-[1.875rem] font-bold mb-6">Upcoming Movies</h1>
-
-  <div class="grid grid-cols-1 gap-6">
+  <div class="grid grid-cols-1 gap-4">
     <?php
-    // Create a new instance of MovieController and fetch all movies
     $movieController = new MovieController();
     $allMovies = $movieController->getAllMovies();
 
@@ -35,6 +35,6 @@ $currentDate = new DateTime();
     }
     ?>
   </div>
-
+</main>
 </body>
 </html>
