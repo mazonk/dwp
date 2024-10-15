@@ -36,6 +36,8 @@ class AddressRepository {
           foreach($postalCodeArray as $postalCodeRow) {
             if ($addressRow['postalCode'] == $postalCodeRow->getPostalCode()) {
               $addressArray[] = new Address($addressRow['addressId'], $addressRow['street'], $addressRow['streetNr'], $postalCodeRow);
+
+              break;
             }
           }
         }
