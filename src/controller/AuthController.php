@@ -121,7 +121,7 @@ class AuthController {
                 $_SESSION['lastName'] = htmlspecialchars($user->getLastName());
                 $_SESSION['lastGeneration'] = time();
 
-                header("Location: /dwp");
+                header("Location: /dwp/home");
                 exit;
             }
         }
