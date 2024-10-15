@@ -25,7 +25,7 @@ unset($_SESSION['errors']);
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css" rel="stylesheet">
     <style>
         body {
-            background-image: url('assets/register-background.png');
+            background-image: url('src/assets/register-background.png');
             background-size: cover;
             background-position: center;
         }
