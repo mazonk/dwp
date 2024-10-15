@@ -29,7 +29,7 @@ include_once "src/view/components/NewsCard.php"
 
             // Loop through each movie and render its movie card
             foreach ($allNews as $news) {
-                NewsCard::render($news->getHeader(), $news->getImageURL(), $news->getContent());
+                NewsCard::render($news->getNewsId(), $news->getHeader(), $news->getImageURL(), $news->getContent());
             }
             ?>
       </div>
