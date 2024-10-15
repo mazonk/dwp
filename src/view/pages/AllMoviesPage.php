@@ -31,5 +31,7 @@ require_once 'session_config.php';
         ?>
       </div>
     </main>
+    <!-- Navbar -->
+    <?php include_once("src/view/components/Footer.php"); ?>
   </body>
 </html>
