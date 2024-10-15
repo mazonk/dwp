@@ -2,13 +2,16 @@
 include_once "src/controller/MovieController.php";
 include_once "src/view/components/MovieCard.php";
 require_once 'session_config.php';
+
+// Get the current date
+$currentDate = new DateTime();
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>All Movies</title>
+  <title>Upcoming Movies</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-[#0d0101] text-white p-8">
@@ -21,9 +24,14 @@ require_once 'session_config.php';
     $movieController = new MovieController();
     $allMovies = $movieController->getAllMovies();
 
-    // Loop through each movie and render its movie card
+    // Loop through each movie and render its movie card if the release date is in the future
     foreach ($allMovies as $movie) {
-        MovieCard::render($movie->getTitle(), $movie->getPosterURL(), $movie->getReleaseDate()->format('Y-m-d'));
+        $releaseDate = $movie->getReleaseDate();
+        
+        // Check if the release date is in the future
+        if ($releaseDate > $currentDate) {
+            MovieCard::render($movie->getTitle(), $movie->getPosterURL(), $releaseDate->format('Y-m-d'));
+        }
     }
     ?>
   </div>
