@@ -1,5 +1,7 @@
 <?php 
 require_once 'session_config.php';
+include_once "src/controller/NewsController.php";
+include_once "src/view/components/NewsCard.php"
 
 ?>
 <!DOCTYPE html>
@@ -18,10 +20,25 @@ require_once 'session_config.php';
     <main class="mt-[56px] p-4">
       <div class="grid grid-cols-1 gap-4">
       </div>
+
+        <!-- News -->
+        <div class="grid grid-cols-3 gap-4 flex flex-row items-center">
+            <?php
+            $newsController = new NewsController();
+            $allNews = $newsController->getNews();
+
+            // Loop through each movie and render its movie card
+            foreach ($allNews as $news) {
+                NewsCard::render($news->getHeader(), $news->getImageURL(), $news->getContent());
+            }
+            ?>
+      </div>
+
     </main>
+
     <h2>Testing some stuff here:</h2>
-        <form action="/dwp/logout" method="post">
-            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">Logout</button>
-        </form>
+    <form action="/dwp/logout" method="post">
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">Logout</button>
+    </form>
 </body>
 </html>
