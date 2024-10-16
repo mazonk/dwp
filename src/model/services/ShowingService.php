@@ -21,13 +21,17 @@ class ShowingService {
         $this->venueRepository = new VenueRepository();
     }
 
-    public function getShowingById(int $showingId): Showing {
+    public function getShowingById(int $showingId, int $venueId): Showing {
         $showingData = $this->showingRepository->getShowingById($showingId);
         if ($showingData) {
+            $venue = $this->venueRepository->getVenueById($venueId);
+            $roomData = $this->roomRepository->getRoomById($showingData['roomId']);
+            $room = new Room($roomData["roomId"], $roomData["roomNumber"], $venue);
+            $movie = $this->movieRepository->getMovieById($showingData['movieId']);
             return new Showing(
                 $showingData['showingId'],
-                $this->movieRepository->getMovieById($showingData['movieId']),
-                $this->roomRepository->getRoomById($showingData['roomId']),
+                $movie,
+                $room,
                 new DateTime($showingData['showingDate']),
                 new DateTime($showingData['showingTime'])
             );
@@ -43,7 +47,7 @@ class ShowingService {
         }
         else {
         foreach ($showingIds as $showingId) {
-            $showings[] = $this->getShowingById($showingId);
+            $showings[] = $this->getShowingById($showingId["showingId"], $showingId["venueId"]);
         }
     }
         return $showings;

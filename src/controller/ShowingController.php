@@ -18,4 +18,3 @@ class ShowingController {
         return $this->showingService->getAllShowingsForVenue($venueId);
     }
 }
-?>

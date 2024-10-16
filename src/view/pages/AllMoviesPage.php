@@ -35,14 +35,17 @@ include_once "src/controller/ShowingController.php";
         <?php
         $showingController = new ShowingController();
         $showings = $showingController->getAllShowingsForVenue(1);
-        echo count($showings);
-        foreach ($showings as $showing) {
-            echo "<div class='bg-white p-4 rounded shadow'>";
-            echo "<h3 class='text-lg'>" . $showing->getMovie()->getTitle() . "</h3>";
-            echo "<p>Room: " . $showing->getRoom()->getRoomNumber() . "</p>";
-            echo "<p>Date: " . $showing->getShowingDate()->format('Y-m-d') . "</p>";
-            echo "<p>Time: " . $showing->getShowingTime()->format('H:i') . "</p>";
-            echo "</div>";
+        if (empty($showings)) {
+            echo "No showings found for this venue.";
+        } else {
+            echo "Showings fetched from database: <br>";
+            foreach ($showings as $showing) {
+                echo "Showing ID: " . $showing->getShowingId() . "<br>";
+                echo "Movie Title: " . $showing->getMovie()->getTitle() . "<br>";
+                echo "Room Number: " . $showing->getRoom()->getRoomNumber() . "<br>";
+                echo "Showing Date: " . $showing->getShowingDate()->format('Y-m-d') . "<br>";
+                echo "Showing Time: " . $showing->getShowingTime()->format('H:i') . "<br>";
+            }
         }
         ?>
       </div>

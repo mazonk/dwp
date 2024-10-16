@@ -10,7 +10,7 @@ class ShowingRepository {
         return DatabaseConnection::getInstance(); // singleton
     }
 
-    public function getShowingById($showingId): Showing {
+    public function getShowingById($showingId) {
         $db = $this->getdb();
         try {
             $query = $db->prepare("SELECT * FROM Showing as s WHERE s.showingId = ?");

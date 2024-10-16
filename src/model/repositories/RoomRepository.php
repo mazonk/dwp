@@ -8,19 +8,18 @@ class RoomRepository {
         return DatabaseConnection::getInstance(); // singleton
     }
 
-    private function getRoomById(int $roomId): Room {
+    public function getRoomById(int $roomId) {
         $db = $this->getdb();
-        $query = $db->prepare("SELECT * FROM Room as r WHERE r.roomId = ? JOIN Venue ON r.venueId = Venue.venueId WHERE r.roomId = ?");
+        $query = $db->prepare("SELECT * FROM Room as r WHERE r.roomId = :roomId");
         try{
-        $query->execute([$roomId]);
-        $row = $query->fetch(PDO::FETCH_ASSOC);
-        if (empty($row)) {
+        $query->execute(array(":roomId" => $roomId));
+        $result = $query->fetch(PDO::FETCH_ASSOC);
+        if (empty($result)) {
             return null;
         }
-        $room = new Room($row['roomId'], $row['roomNumber'], new Venue($row['venueId']));
         } catch (PDOException $e) {
             echo "Couldn't fetch room: " . $e->getMessage();
         }
-        return $room;
+        return $result;
     }
 }
