@@ -29,12 +29,30 @@ class VenueRepository {
           foreach($allAddresses as $address) {
             if ($row['addressId'] == $address->getAddressId()) {
               $retArray[] = new Venue($row['venueId'], $row['name'], $row['phoneNr'], $row['contactEmail'], $address);
-
               break;
             }
           }
         }
         return $retArray;
+      }
+    } catch (PDOException $e) {
+      return null;
+    }
+  }
+
+  public function getVenueById(int $venueId): ?Venue {
+    $db = $this->getdb();
+    $query = $db->prepare("SELECT * FROM Venue WHERE venueId = ?");
+    try {
+      $query->execute([$venueId]);
+      $result = $query->fetch(PDO::FETCH_ASSOC);
+      if (empty($result)) {
+        return null;
+      }
+      else {
+        $addressController = new AddressController();
+        $address = $addressController->getAddressById($result['addressId']);
+        return new Venue($result['venueId'], $result['name'], $result['phoneNr'], $result['contactEmail'], $address);
       }
     } catch (PDOException $e) {
       return null;

@@ -12,6 +12,8 @@ class Movie
     private ?string $promoURL;
     private ?float $rating;
     private ?string $trailerURL;
+    private array $actors;
+    private array $directors;
 
     public function __construct(
         int $movieId,
@@ -23,7 +25,9 @@ class Movie
         string $posterURL = null,
         string $promoURL = null,
         float $rating = null,
-        string $trailerURL = null
+        string $trailerURL = null,
+        array $actors,
+        array $directors
     ) {
         $this->movieId = $movieId;
         $this->title = $title;
@@ -35,6 +39,8 @@ class Movie
         $this->promoURL = $promoURL;
         $this->rating = $rating;
         $this->trailerURL = $trailerURL;
+        $this->actors = $actors;
+        $this->directors = $directors;
     }
 
     // Getters
@@ -78,6 +84,14 @@ class Movie
         return $this->trailerURL;
     }
 
+    public function getActors(): array {
+        return $this->actors;
+    }
+
+    public function getDirectors(): array {
+        return $this->directors;
+    }
+
     // Setters
     public function setMovieId(int $movieId): void {
         $this->movieId = $movieId;
@@ -117,6 +131,14 @@ class Movie
 
     public function setTrailerURL(?string $trailerURL): void {
         $this->trailerURL = $trailerURL;
+    }
+    
+    public function setActors(array $actors): void {
+        $this->actors = $actors;
+    }
+    
+    public function setDirectors(array $directors): void {
+        $this->directors = $directors;
     }
 }
 ?>
