@@ -2,6 +2,7 @@
 include_once "src/controller/MovieController.php";
 include_once "src/view/components/MovieCard.php";
 require_once 'session_config.php';
+include_once "src/controller/ShowingController.php";
 ?>
 
 <!DOCTYPE html>
@@ -30,6 +31,15 @@ require_once 'session_config.php';
         }
         ?>
       </div>
+      <div>
+        <?php
+        $showingController = new ShowingController();
+        $showings = $showingController->getAllShowingsForVenue(1);
+        foreach ($showings as $showing) {
+            echo $showing->getMovie()->getTitle();
+        }
+        ?>
+        </div>
     </main>
   </body>
 </html>
