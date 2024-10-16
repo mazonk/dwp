@@ -1,7 +1,4 @@
 <?php
-// If you are using namespaces, include the appropriate declaration
-// namespace YourNamespace;
-
 include "src/model/entity/Showing.php";
 include "src/model/entity/Movie.php";
 include "src/model/entity/Room.php";
@@ -9,33 +6,40 @@ include "src/model/entity/Venue.php";
 
 class ShowingRepository {
     private function getdb() {
-        require 'src/model/database/dbcon/DatabaseConnection.php';
+        require_once 'src/model/database/dbcon/DatabaseConnection.php';
         return DatabaseConnection::getInstance(); // singleton
     }
 
-    public function getAllShowings(): array {
+    public function getShowingById($showingId): Showing {
+        $db = $this->getdb();
+        try {
+            $query = $db->prepare("SELECT * FROM Showing WHERE showingId = ?");
+            $query->execute([$showingId]);
+            $result = $query->fetch(PDO::FETCH_ASSOC);
+            if (empty($result)) {
+                return null;
+            }
+            return $result;
+        } catch (PDOException $e) {
+            return null;
+    }
+
+    public function getShowingIdsForVenue($venueId): array {
         $db = $this->getdb();
         
         try {
-            $query = $db->prepare("SELECT * FROM Showing");
-            $query->execute();
-            $result = $query->fetchAll(PDO::FETCH_ASSOC);
-            
+            $query = $db->prepare("SELECT * FROM VenueShowing WHERE venueId = ?");
+            $query->execute([$venueId]);
+            $result = $query->fetchAll(PDO::FETCH_ASSOC);            
             $retArray = [];
             foreach ($result as $row) {
                 $retArray[] = new Showing(
                     $row['showingId'], 
-                    $row['movieId'], 
-                    $row['roomId'], 
-                    $row['venueId'], 
-                    $row['startTime'], 
-                    $row['endTime']
+                    $row['venueId']
                 );
             }
             return $retArray;
         } catch (PDOException $e) {
-            // Handle error, maybe log it or return an empty array
-            // error_log($e->getMessage()); // Example logging
             return [];
         }
     }

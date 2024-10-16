@@ -1,14 +1,21 @@
 <?php
 include_once "src/model/repository/ShowingRepository.php";
+include_once "src/model/entity/Movie.php";
+include_once "src/model/entity/Room.php";
+include_once "src/model/entity/Showing.php";
+include_once "src/model/entity/Venue.php";
+include_once "src/mode/services/ShowingService.php"
 
 class ShowingController {
-    private $showingRepository;
+    private ShowingService $showingService;
+
 
     public function __construct() {
-        $this->showingRepository = new ShowingRepository();
+        $this->showingService = new ShowingService();
     }
 
-    public function getAllShowings() {
-        return $this->showingRepository->getAllShowings();
+    public function getAllShowingsForVenue(int $venueId): array {
+        return $this->showingService->getAllShowingsForVenue($venueId);
     }
 }
+?>
