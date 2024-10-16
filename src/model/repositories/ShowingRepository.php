@@ -13,7 +13,7 @@ class ShowingRepository {
     public function getShowingById($showingId): Showing {
         $db = $this->getdb();
         try {
-            $query = $db->prepare("SELECT * FROM Showing WHERE showingId = ?");
+            $query = $db->prepare("SELECT * FROM Showing as s WHERE s.showingId = ?");
             $query->execute([$showingId]);
             $result = $query->fetch(PDO::FETCH_ASSOC);
             if (empty($result)) {
@@ -29,17 +29,10 @@ class ShowingRepository {
         $db = $this->getdb();
         
         try {
-            $query = $db->prepare("SELECT * FROM VenueShowing WHERE venueId = ?");
-            $query->execute([$venueId]);
-            $result = $query->fetchAll(PDO::FETCH_ASSOC);            
-            $retArray = [];
-            foreach ($result as $row) {
-                $retArray[] = new Showing(
-                    $row['showingId'], 
-                    $row['venueId']
-                );
-            }
-            return $retArray;
+            $query = $db->prepare("SELECT * FROM VenueShowing as vs WHERE vs.venueId = :venueId");
+            $query->execute(array(":venueId" => $venueId));
+            $result = $query->fetchAll(PDO::FETCH_ASSOC);   
+            return $result;
         } catch (PDOException $e) {
             return [];
         }

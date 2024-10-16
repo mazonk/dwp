@@ -42,7 +42,7 @@ class VenueRepository {
 
   public function getVenueById(int $venueId): ?Venue {
     $db = $this->getdb();
-    $query = $db->prepare("SELECT * FROM Venue WHERE venueId = ?");
+    $query = $db->prepare("SELECT * FROM Venue as v WHERE v.venueId = ?");
     try {
       $query->execute([$venueId]);
       $result = $query->fetch(PDO::FETCH_ASSOC);

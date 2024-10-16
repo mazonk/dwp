@@ -27,7 +27,7 @@ include_once "src/controller/ShowingController.php";
 
         // Loop through each movie and render its movie card
         foreach ($allMovies as $movie) {
-            MovieCard::render($movie->getTitle(), $movie->getPosterURL());
+            //MovieCard::render($movie->getTitle(), $movie->getPosterURL());
         }
         ?>
       </div>
@@ -35,10 +35,17 @@ include_once "src/controller/ShowingController.php";
         <?php
         $showingController = new ShowingController();
         $showings = $showingController->getAllShowingsForVenue(1);
+        echo count($showings);
         foreach ($showings as $showing) {
-            echo $showing->getMovie()->getTitle();
+            echo "<div class='bg-white p-4 rounded shadow'>";
+            echo "<h3 class='text-lg'>" . $showing->getMovie()->getTitle() . "</h3>";
+            echo "<p>Room: " . $showing->getRoom()->getRoomNumber() . "</p>";
+            echo "<p>Date: " . $showing->getShowingDate()->format('Y-m-d') . "</p>";
+            echo "<p>Time: " . $showing->getShowingTime()->format('H:i') . "</p>";
+            echo "</div>";
         }
         ?>
+      </div>
         </div>
     </main>
   </body>

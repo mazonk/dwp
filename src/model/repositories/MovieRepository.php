@@ -1,6 +1,7 @@
 <?php
-include "src/model/entity/Movie.php";
-include "src/model/entity/Actor.php";
+include_once "src/model/entity/Movie.php";
+include_once "src/model/entity/Actor.php";
+include_once "src/model/entity/Director.php";
 class MovieRepository {
     private function getdb() {
         require_once 'src/model/database/dbcon/DatabaseConnection.php';
@@ -44,7 +45,7 @@ class MovieRepository {
 
     public function getMovieById(int $movieId): Movie {
         $db = $this->getdb();
-        $query = $db->prepare("SELECT * FROM Movie WHERE movieId = ?");
+        $query = $db->prepare("SELECT * FROM Movie as m WHERE m.movieId = ?");
         try{
         $query->execute([$movieId]);
         $result = $query->fetch(PDO::FETCH_ASSOC); 

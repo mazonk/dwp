@@ -10,7 +10,7 @@ class RoomRepository {
 
     private function getRoomById(int $roomId): Room {
         $db = $this->getdb();
-        $query = $db->prepare("SELECT * FROM Room WHERE roomId = ? JOIN Venue ON Room.venueId = Venue.venueId WHERE roomId = ?");
+        $query = $db->prepare("SELECT * FROM Room as r WHERE r.roomId = ? JOIN Venue ON r.venueId = Venue.venueId WHERE r.roomId = ?");
         try{
         $query->execute([$roomId]);
         $row = $query->fetch(PDO::FETCH_ASSOC);
