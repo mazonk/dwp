@@ -1,8 +1,8 @@
 <?php
-include "src/model/entity/Showing.php";
-include "src/model/entity/Movie.php";
-include "src/model/entity/Room.php";
-include "src/model/entity/Venue.php";
+include_once "src/model/entity/Showing.php";
+include_once "src/model/entity/Movie.php";
+include_once "src/model/entity/Room.php";
+include_once "src/model/entity/Venue.php";
 
 class ShowingRepository {
     private function getdb() {
@@ -23,6 +23,7 @@ class ShowingRepository {
         } catch (PDOException $e) {
             return null;
     }
+}
 
     public function getShowingIdsForVenue($venueId): array {
         $db = $this->getdb();

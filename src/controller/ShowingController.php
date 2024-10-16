@@ -1,10 +1,10 @@
 <?php
-include_once "src/model/repository/ShowingRepository.php";
+include_once "src/model/repositories/ShowingRepository.php";
 include_once "src/model/entity/Movie.php";
 include_once "src/model/entity/Room.php";
 include_once "src/model/entity/Showing.php";
 include_once "src/model/entity/Venue.php";
-include_once "src/mode/services/ShowingService.php"
+include_once "src/model/services/ShowingService.php";
 
 class ShowingController {
     private ShowingService $showingService;

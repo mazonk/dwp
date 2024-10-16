@@ -1,8 +1,8 @@
 <?php
-include_once "src/model/repository/ShowingRepository.php";
-include_once "src/model/repository/MovieRepository.php";
-include_once "src/model/repository/RoomRepository.php";
-include_once "src/model/repository/VenueRepository.php";
+include_once "src/model/repositories/ShowingRepository.php";
+include_once "src/model/repositories/MovieRepository.php";
+include_once "src/model/repositories/RoomRepository.php";
+include_once "src/model/repositories/VenueRepository.php";
 include_once "src/model/entity/Showing.php";
 include_once "src/model/entity/Movie.php";
 include_once "src/model/entity/Room.php";
@@ -30,8 +30,7 @@ class ShowingService {
                 $this->roomRepository->getRoomById($showingData['roomId']),
                 new DateTime($showingData['showingDate']),
                 new DateTime($showingData['showingTime'])
-            
-            )
+            );
         }
         return null; //nothing was found
     }
