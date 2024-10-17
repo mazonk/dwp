@@ -20,5 +20,11 @@ class VenueController {
         return null;
     }
   }
+
+  /* Store the selected venu's venueId in the session */
+  public function selectVenue(Venue $venue): void {
+    $_SESSION['selectedVenueId'] = $venue->getVenueId();
+    $_SESSION['selectedVenueName'] = $venue->getName();
+  }
 }
 ?>
