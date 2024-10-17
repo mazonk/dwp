@@ -42,7 +42,6 @@ class MovieRepository {
         return $directors;
     }
 
-
     public function getMovieById(int $movieId): Movie {
         $db = $this->getdb();
         $query = $db->prepare("SELECT * FROM Movie as m WHERE m.movieId = ?");

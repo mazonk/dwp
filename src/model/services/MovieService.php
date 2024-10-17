@@ -10,10 +10,10 @@ class MovieService {
     }
 
     public function getAllMovies(): array {
-        return $movieRepository->getAllMovies();
+        return $this->movieRepository->getAllMovies();
     }
 
     public function getMovieById(int $movieId): Movie {
-        return $movieRepository->getMovieById($movieId);
+        return $this->movieRepository->getMovieById($movieId);
     }
 }

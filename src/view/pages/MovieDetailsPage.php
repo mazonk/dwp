@@ -8,26 +8,27 @@ include_once "src/view/components/ShowingCard.php";
 
 $id = $_GET['id'];
 echo 'The id you entered is: '. $id;
-$movieController = new MovieController();
-$allMovies = $movieController->getMovieById($id)->getAllMovies();
 $showingController = new ShowingController();
-$showings = $showingController->getAllShowingsForVenue(2);
-if (empty($showings)) {
-  echo "No showings found for this venue.";
+$movieController = new MovieController();
+$movie = $movieController->getMovieById($id);
+
+if (!$movie) {
+  echo "No movie found with the given ID.";
+  exit;
 } else {
-// Loop through each movie and render its movie card
-foreach ($allMovies as $movie) {
+  $showings = $showingController->getAllShowingsForVenue(2);
+  if (empty($showings)) {
+    echo "No showings found for this venue.";
+  } else {
   $showingsForMovie = $showingController->getAllShowingsForMovie($movie->getMovieId(), $showings);
   echo '<div class="grid grid-cols-3 gap-4 flex flex-row items-center">';
-  MovieCard::render($movie->getTitle(), $movie->getPosterURL());
   foreach ($showingsForMovie as $showing) {
     ShowingCard::render($showing);
   }
   echo '</div>';
 }
 }
-
-echo 'The id you entered is: '. $id ?>
+?>
 
 <!DOCTYPE html>
 <html lang="en">
