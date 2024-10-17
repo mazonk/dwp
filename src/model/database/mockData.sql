@@ -180,8 +180,55 @@ INSERT INTO MovieActor (movieId, actorId) VALUES
 
 INSERT INTO VenueShowing (venueId, showingId) VALUES
 (1, 1),  -- Gotham Cinema -> Showing of The Dark Knight
-(2, 2),  -- Hollywood Stars Cinema -> Showing of Spider-Man: No Way Home
-(3, 3);  -- Empire Cinema -> Showing of Iron Man
+(1, 2),  -- Gotham Cinema -> Showing of Spider-Man: No Way Home
+(1, 3),  -- Gotham Cinema -> Showing of Iron Man
+(2, 4),  -- Hollywood Stars Cinema -> Showing of Inception
+(2, 5),  -- Hollywood Stars Cinema -> Showing of The Matrix
+(2, 6),  -- Hollywood Stars Cinema -> Showing of John Wick
+(3, 7),  -- Empire Cinema -> Showing of Avengers: Endgame
+(3, 8),  -- Empire Cinema -> Showing of Black Panther
+(3, 9),  -- Empire Cinema -> Showing of Doctor Strange
+(4, 10), -- Regal Cinema -> Showing of Interstellar
+(4, 11), -- Regal Cinema -> Showing of Dunkirk
+(4, 12), -- Regal Cinema -> Showing of Tenet
+(5, 13), -- Cineplex -> Showing of The Lord of the Rings
+(5, 14), -- Cineplex -> Showing of The Hobbit
+(5, 15), -- Cineplex -> Showing of Harry Potter and the Sorcerer's Stone
+(6, 16), -- Paramount Theatre -> Showing of The Lion King
+(6, 17), -- Paramount Theatre -> Showing of Frozen
+(6, 18), -- Paramount Theatre -> Showing of Beauty and the Beast
+(7, 19), -- IMAX Theatre -> Showing of Avatar
+(7, 20), -- IMAX Theatre -> Showing of Dune
+(7, 21), -- IMAX Theatre -> Showing of Star Wars: The Force Awakens
+(8, 22), -- Odeon -> Showing of Jurassic Park
+(8, 23), -- Odeon -> Showing of Jurassic World
+(8, 24), -- Odeon -> Showing of Pacific Rim
+(9, 25), -- AMC Cinemas -> Showing of The Batman
+(9, 26), -- AMC Cinemas -> Showing of Joker
+(9, 27), -- AMC Cinemas -> Showing of Venom
+(10, 28), -- Alamo Drafthouse -> Showing of Mad Max: Fury Road
+(10, 29), -- Alamo Drafthouse -> Showing of The Revenant
+(10, 30), -- Alamo Drafthouse -> Showing of The Hateful Eight
+(1, 31),  -- Gotham Cinema -> Showing of Deadpool
+(2, 32),  -- Hollywood Stars Cinema -> Showing of Logan
+(3, 33),  -- Empire Cinema -> Showing of The Wolverine
+(4, 34),  -- Regal Cinema -> Showing of Fantastic Beasts
+(5, 35),  -- Cineplex -> Showing of Wonder Woman
+(6, 36),  -- Paramount Theatre -> Showing of Aquaman
+(7, 37),  -- IMAX Theatre -> Showing of The Suicide Squad
+(8, 38),  -- Odeon -> Showing of Guardians of the Galaxy
+(9, 39),  -- AMC Cinemas -> Showing of Thor: Ragnarok
+(10, 40), -- Alamo Drafthouse -> Showing of The Irishman
+(1, 41),  -- Gotham Cinema -> Showing of The Godfather
+(2, 42),  -- Hollywood Stars Cinema -> Showing of Pulp Fiction
+(3, 43),  -- Empire Cinema -> Showing of Fight Club
+(4, 44),  -- Regal Cinema -> Showing of Goodfellas
+(5, 45),  -- Cineplex -> Showing of The Shawshank Redemption
+(6, 46),  -- Paramount Theatre -> Showing of Schindler's List
+(7, 47),  -- IMAX Theatre -> Showing of Blade Runner 2049
+(8, 48),  -- Odeon -> Showing of The Fifth Element
+(9, 49),  -- AMC Cinemas -> Showing of The Prestige
+(10, 50); -- Alamo Drafthouse -> Showing of The Departed
 
 INSERT INTO VenueOpeningHour (venueId, openingHourId) VALUES
 (1, 1),  -- Gotham Cinema -> Monday's opening hours
