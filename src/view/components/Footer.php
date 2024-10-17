@@ -1,8 +1,15 @@
 <?php
-
+/* Get the venues */
+include_once "src/controller/VenueController.php";
 ?>
 
 <footer class="flex flex-col gap-[4rem] mt-[8rem]">
+  <?php
+  // Create a new instance of VenueController and fetch all venues
+  $venueController = new VenueController();
+  $selectedVenue = $venueController->getVenue($_SESSION['selectedVenueId']);
+
+  ?>
   <div class="flex justify-between gap-[2rem]">
     <!-- Site Links -->
     <div class="min-w-[250px] flex flex-col gap-[1.5rem]">
@@ -21,10 +28,16 @@
     <div class="min-w-[250px] flex flex-col gap-[1.5rem]">
       <h4 class="text-[1.125rem] font-bold leading-tight">Contact Information</h4>
       <div class="flex flex-col gap-[.75rem]">
-        <!-- TODO: Populate contact info based on selected venue -->
-        <a href="mailto:" class="w-fit text-[.875rem] text-textNormal leading-snug ease-in-out duration-[.15s] hover:text-textLight">Email Address</a>
-        <div class="w-fit text-[.875rem] text-textNormal leading-snug">Phone Nr</div>
-        <div class="w-fit text-[.875rem] text-textNormal leading-snug">Address</div>
+        <a href="mailto:<?= $selectedVenue->getContactEmail() ?>" class="w-fit text-[.875rem] text-textNormal leading-snug ease-in-out duration-[.15s] hover:text-textLight">
+          <?= $selectedVenue->getContactEmail()?>
+        </a>
+        <div class="w-fit text-[.875rem] text-textNormal leading-snug">
+          <?= $selectedVenue->getPhoneNr()?>
+        </div>
+        <div class="w-fit text-[.875rem] text-textNormal leading-snug">
+          <?= $selectedVenue->getAddress()->getStreet() . " " . $selectedVenue->getAddress()->getStreetNr() . "<br/>" .
+          $selectedVenue->getAddress()->getPostalCode()->getPostalCode() . " " . $selectedVenue->getAddress()->getPostalCode()->getCity()?>
+        </div>
       </div>
     </div>
     <!-- Opening Hours -->
@@ -57,5 +70,5 @@
     </div>
   </div>
   <!-- TODO: Company name display -->
-  <div class="text-textNormal text-[.875rem]">&copy; cinema/companyName_here all rights reserved</div>
+  <div class="text-textNormal text-[.875rem]">&copy; <?= $_SESSION['selectedVenueName'] ?> all rights reserved</div>
 </footer>
