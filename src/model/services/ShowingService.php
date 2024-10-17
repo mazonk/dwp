@@ -52,4 +52,14 @@ class ShowingService {
     }
         return $showings;
     }
+
+    public function getAllShowingsForMovie(int $movieId, array $showings): array {
+        $allShowingsForMovie = [];
+        foreach ($showings as $showing) {
+            if ($showing->getMovie()->getMovieId() == $movieId) {
+                $allShowingsForMovie[] = $showing;
+            }
+        }
+        return $allShowingsForMovie ?? [];
+    }
 }

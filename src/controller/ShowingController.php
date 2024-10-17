@@ -17,4 +17,10 @@ class ShowingController {
     public function getAllShowingsForVenue(int $venueId): array {
         return $this->showingService->getAllShowingsForVenue($venueId);
     }
+
+    public function getAllShowingsForMovie(int $movieId, array $showings): array {
+        return $this->showingService->getAllShowingsForMovie($movieId, $showings);
+    }
+
+    
 }

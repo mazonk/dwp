@@ -19,7 +19,7 @@ $currentDate = new DateTime();
 <?php include_once("src/view/components/Navbar.php"); ?>
 <main class="mt-[56px] p-4">
   <h1 class="text-[1.875rem] font-bold mb-6">Upcoming Movies</h1>
-  <div class="grid grid-cols-1 gap-4">
+  <div class="grid grid-cols-5 gap-16">
     <?php
     $movieController = new MovieController();
     $allMovies = $movieController->getAllMovies();
@@ -30,7 +30,7 @@ $currentDate = new DateTime();
         
         // Check if the release date is in the future
         if ($releaseDate > $currentDate) {
-            MovieCard::render($movie->getTitle(), $movie->getPosterURL(), $releaseDate->format('Y-m-d'));
+            MovieCard::render($movie);
         }
     }
     ?>

@@ -2,6 +2,8 @@
 <?php 
 require_once 'session_config.php';
 
+
+
 echo 'The id you entered is: '. $id ?>
 
 <!DOCTYPE html>
@@ -104,7 +106,6 @@ echo 'The id you entered is: '. $id ?>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
           Proin blandit justo at mauris efficitur, vitae dictum nibh placerat.
         </div>
-
         <div class="movie-info"><span>Duration:</span> 120 minutes</div>
         <div class="movie-info"><span>Language:</span> English</div>
         <div class="movie-info"><span>Release Date:</span> 2024-10-01</div>
