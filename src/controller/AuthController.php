@@ -78,9 +78,8 @@ class AuthController {
     }
 
     public function logout(): void {
-        session_start();
-        session_unset();
-        session_destroy();
+        $this->authService->logout();
+
         header("Location: /dwp/login");
         exit;
     }

@@ -99,6 +99,12 @@ class AuthService {
         return ['user' => $user];
     }
 
+    public function logout(): void {
+        // Unset session and destroy it
+        session_unset();
+        session_destroy();
+    }
+
     private function validateRegisterInputs(array $formData, array &$errors): void {
         // Define regexes for validation
         $nameRegex = "/^[a-zA-ZáéíóöúüűæøåÆØÅ\s\-']+$/";
