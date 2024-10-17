@@ -54,7 +54,5 @@ class VenueRepository {
     } catch (PDOException $e) {
       return null;
     }
-
-
   }
 }
