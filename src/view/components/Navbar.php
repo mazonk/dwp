@@ -15,6 +15,12 @@
   if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['profileDropdownToggler'])) {
     $isProfileDropdownOpen = !$isProfileDropdownOpen;
   }
+
+  /* Select venue */
+  if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['selectVenue'])) {
+    $venueController = new VenueController();
+    $selectedVenue = $venueController->selectVenue($venueController->getVenue($_POST['venueId']));
+  }
 ?>
 
 <header class="w-[100%] fixed top-0 left-0 right-0 bg-bgDark z-[10]">
@@ -51,7 +57,7 @@
           <input type="hidden" name="isVenueDropdownOpen" value="<?php echo $isVenueDropdownOpen ? 'true' : 'false'; ?>">
           <button type="submit" name="venueDropdownToggler" class="flex gap-[.375rem]">
             <i class="ri-map-pin-2-fill h-[18px] text-[18px]"></i>
-            <span class="translate-y-[.5px]">Venue Name</span>
+            <span class="translate-y-[.5px]"><?= $_SESSION['selectedVenueName'] ?></span>
           </button>
         </form>
         <!-- Dropdown -->
@@ -63,9 +69,12 @@
           $allVenues = $venueController->getAllVenues();
 
           foreach ($allVenues as $venue) {
-            echo '<button class="w-full py-[.5rem] px-[.625rem] text-[.875rem] text-left leading-tight bg-bgDark ease-in-out duration-[.15s] hover:bg-bgSemiDark">';
-            echo $venue->getName();
+            echo '<form action="" method="post">';
+            echo '<input type="hidden" name="venueId" value="' . htmlspecialchars($venue->getVenueId()) . '">';
+            echo '<button type="submit" name="selectVenue" class="w-full py-[.5rem] px-[.625rem] text-[.875rem] text-left leading-tight bg-bgDark ease-in-out duration-[.15s] hover:bg-bgSemiDark">';
+            echo htmlspecialchars($venue->getName());
             echo '</button>';
+            echo '</form>';
           }
           ?>
         </div>
