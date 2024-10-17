@@ -8,10 +8,12 @@ class VenueController {
     $this->venueRepository = new VenueRepository();
   }
 
+  /* Get all venues */
   public function getAllVenues(): array {
     return $this->venueRepository->getAllVenues();
   }
 
+  /* Get a specific venue by venueId */
   public function getVenue(int $venueId): ?Venue {
     try {
       return $this->venueRepository->getVenue($venueId);
@@ -21,7 +23,7 @@ class VenueController {
     }
   }
 
-  /* Store the selected venu's venueId in the session */
+  /* Store the selected venue's venueId and name in the session */
   public function selectVenue(Venue $venue): void {
     $_SESSION['selectedVenueId'] = $venue->getVenueId();
     $_SESSION['selectedVenueName'] = $venue->getName();

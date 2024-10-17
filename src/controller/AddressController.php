@@ -8,6 +8,7 @@ class AddressController {
     $this->addressRepository = new AddressRepository();
   }
 
+  /* Get all addresses */
   public function getAllAddresses(): array {
     return $this->addressRepository->getAllAddresses();
   }

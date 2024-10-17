@@ -19,6 +19,7 @@
   /* Select venue */
   if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['selectVenue'])) {
     $venueController = new VenueController();
+    /* Setting the selected venue in the session */
     $selectedVenue = $venueController->selectVenue($venueController->getVenue($_POST['venueId']));
   }
 ?>
@@ -68,6 +69,7 @@
           $venueController = new VenueController();
           $allVenues = $venueController->getAllVenues();
 
+          // Loop through each venue and render its name (when clicked, the venue is selected and stored in the session)
           foreach ($allVenues as $venue) {
             echo '<form action="" method="post">';
             echo '<input type="hidden" name="venueId" value="' . htmlspecialchars($venue->getVenueId()) . '">';

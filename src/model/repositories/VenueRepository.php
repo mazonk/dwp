@@ -8,6 +8,7 @@ class VenueRepository {
     return DatabaseConnection::getInstance(); // singleton
   }
 
+  /* Get all venues */
   public function getAllVenues(): array {
     $db = $this->getdb();
     $query = $db->prepare("SELECT * FROM Venue");
@@ -29,6 +30,7 @@ class VenueRepository {
     return $retArray;
   }
 
+  /* Get the venue by venueId */
   public function getVenue(int $venueId): ?Venue {
     $db = $this->getdb();
     $query = $db->prepare("SELECT * FROM Venue WHERE venueId = :venueId");
