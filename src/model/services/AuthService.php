@@ -68,6 +68,37 @@ class AuthService {
         return $errors;
     }
 
+    public function login(array $formData): array {
+        $errors = [];
+
+        // Validate login inputs
+        $this->validateLoginInputs($formData, $errors);
+
+        if (!empty($errors)) {
+            return ['errors' => $errors];
+        }
+
+        // Check if the user with this email exists
+        if (!$this->userRepository->userExists($formData['email'])) {
+            $errors['email'] = "User with this email does not exist.";
+            return ['errors' => $errors];
+        }
+
+        // Fetch user from repository
+        $user = $this->userRepository->getUserByEmail($formData['email']);
+
+        // TODO: Handle admin login here if needed
+
+        // Verify the password
+        if (!password_verify($formData['password'], $user->getPasswordHash())) {
+            $errors['password'] = "Incorrect password.";
+            return ['errors' => $errors];
+        }
+
+        // Return the user object on successful login
+        return ['user' => $user];
+    }
+
     private function validateRegisterInputs(array $formData, array &$errors): void {
         // Define regexes for validation
         $nameRegex = "/^[a-zA-ZáéíóöúüűæøåÆØÅ\s\-']+$/";
@@ -121,6 +152,16 @@ class AuthService {
         if ($formData['password'] !== $formData['confirmPassword']) {
             $errors['password'] = "Passwords do not match.";
             $errors['confirmPassword'] = "Passwords do not match.";
+        }
+    }
+
+    private function validateLoginInputs(array $formData, array &$errors): void {
+        $emailRegex = "/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/";
+        if (!preg_match($emailRegex, $formData['email'])) {
+            $errors['email'] = "Invalid email format.";
+        }
+        if (empty($formData['email']) || empty($formData['password'])) {
+            $errors['general'] = "All fields are required.";
         }
     }
 }

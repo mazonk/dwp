@@ -46,47 +46,34 @@ class AuthController {
             $formData['email'] = htmlspecialchars(trim($_POST['email']));
             $formData['password'] = $_POST['password'];
 
-            // Validations
-            $this->validateLoginInputs($formData, $errors);
+            $result = $this->authService->login($formData);
 
-            if (count($errors) == 0) {
-                // Check if user with this email exists
-                if (!$this->userRepository->userExists($formData['email'])) {
-                    $errors['email'] = "User with this email does not exist.";
-                    $_SESSION['errors'] = $errors;
-                    $_SESSION['formData'] = $formData;
-                    header("Location: /dwp/login");
-                    exit;
-                }
-
-                // Check if password is correct
-                $user = $this->userRepository->getUserByEmail($formData['email']);
-
-                // TODO: Handle admin login somewhere here!!
-                
-                if (!password_verify($formData['password'], $user->getPasswordHash())) {
-                    $errors['password'] = "Incorrect password.";
-                    $_SESSION['errors'] = $errors;
-                    $_SESSION['formData'] = $formData;
-                    header("Location: /dwp/login");
-                    exit;
-                }
-
-                require_once "session_config.php";
-                $newSessionId = session_create_id();
-                $sessionId = $newSessionId . "_" . $user->getId(); //append session id with user id
-                session_id($sessionId);
-
-                // If login was successful, redirect to homepage
-                $_SESSION['userId'] = $user->getId();
-                $_SESSION['userEmail'] = htmlspecialchars($user->getEmail());
-                $_SESSION['firstName'] = htmlspecialchars($user->getFirstName());
-                $_SESSION['lastName'] = htmlspecialchars($user->getLastName());
-                $_SESSION['lastGeneration'] = time();
-
-                header("Location: /dwp/home");
-                exit;
+            if (is_array($result) && isset($result['errors'])) {
+                // If there are errors, handle them (e.g., set error messages)
+                $_SESSION['errors'] = $result['errors'];
+                $_SESSION['formData'] = $formData;
+                header("Location: /dwp/login");
+                exit();
             }
+
+            // Session handling and redirection logic
+            $user = $result['user'];
+            require_once "session_config.php";
+            $newSessionId = session_create_id();
+            $sessionId = $newSessionId . "_" . $user->getId(); // append session id with user id
+            session_id($sessionId);
+            session_start();
+
+            // Set session variables
+            $_SESSION['userId'] = $user->getId();
+            $_SESSION['userEmail'] = htmlspecialchars($user->getEmail());
+            $_SESSION['firstName'] = htmlspecialchars($user->getFirstName());
+            $_SESSION['lastName'] = htmlspecialchars($user->getLastName());
+            $_SESSION['lastGeneration'] = time();
+
+            // Redirect to homepage after successful login
+            header("Location: /dwp/home");
+            exit();
         }
     }
 
@@ -96,22 +83,5 @@ class AuthController {
         session_destroy();
         header("Location: /dwp/login");
         exit;
-    }
-
-    private function validateLoginInputs(array $formData, array &$errors): void {
-        $emailRegex = "/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/";
-        if (!preg_match($emailRegex, $formData['email'])) {
-            $errors['email'] = "Invalid email format.";
-        }
-        if (empty($formData['email']) || empty($formData['password'])) {
-            $errors['general'] = "All fields are required.";
-        }
-        if (count($errors) > 0) {
-            // If there are errors, redirect to login page with errors
-            $_SESSION['formData'] = $formData;
-            $_SESSION['errors'] = $errors;
-            header("Location: /dwp/login");
-            exit;
-        }
     }
 }
