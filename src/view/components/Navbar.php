@@ -2,25 +2,42 @@
   /* Get the venues */
   include_once "src/controller/VenueController.php";
 
-  /* Venue dropdown */
-  $isVenueDropdownOpen = isset($_POST['isVenueDropdownOpen']) ? filter_var($_POST['isVenueDropdownOpen'], FILTER_VALIDATE_BOOLEAN) : false;
-
-  if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['venueDropdownToggler'])) {
-    $isVenueDropdownOpen = !$isVenueDropdownOpen;
+  // Ensure session variables are set for dropdowns
+  if (!isset($_SESSION['isVenueDropdownOpen'])) {
+    $_SESSION['isVenueDropdownOpen'] = false;
   }
 
-  /* Profile dropdown */
-  $isProfileDropdownOpen = isset($_POST['isProfileDropdownOpen']) ? filter_var($_POST['isProfileDropdownOpen'], FILTER_VALIDATE_BOOLEAN) : false;
+  if (!isset($_SESSION['isProfileDropdownOpen'])) {
+      $_SESSION['isProfileDropdownOpen'] = false;
+  }
 
-  if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['profileDropdownToggler'])) {
-    $isProfileDropdownOpen = !$isProfileDropdownOpen;
+  // Retrieve the dropdown states
+  $isVenueDropdownOpen = $_SESSION['isVenueDropdownOpen'];
+  $isProfileDropdownOpen = $_SESSION['isProfileDropdownOpen'];
+
+  // Check if the form is submitted
+  if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      if (isset($_POST['venueDropdownToggler'])) {
+          $_SESSION['isProfileDropdownOpen'] = false; // Close the profile dropdown if it is open
+          $_SESSION['isVenueDropdownOpen'] = !$_SESSION['isVenueDropdownOpen'];
+          // Redirect to avoid form resubmission
+          header("Location: " . $_SERVER['REQUEST_URI']);
+          exit();
+      }
+
+      if (isset($_POST['profileDropdownToggler'])) {
+          $_SESSION['isVenueDropdownOpen'] = false; // Close the venue dropdown if it is open
+          $_SESSION['isProfileDropdownOpen'] = !$_SESSION['isProfileDropdownOpen'];
+          // Redirect to avoid form resubmission
+          header("Location: " . $_SERVER['REQUEST_URI']);
+          exit();
+      }
   }
 
   /* Select venue */
   if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['selectVenue'])) {
     $venueController = new VenueController();
-    /* Setting the selected venue in the session */
-    $selectedVenue = $venueController->selectVenue($venueController->getVenue($_POST['venueId']));
+    $selectedVenue = $venueController->selectVenue($venueController->getVenue($_POST['venueId'])); // Setting the selected venue in the session
   }
 ?>
 
@@ -111,7 +128,6 @@
         </div>
         <?php endif; ?>
       </div>
-      
     </div>
   </nav>
 </header>
