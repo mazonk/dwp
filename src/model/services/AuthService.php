@@ -1,7 +1,6 @@
 <?php
 require_once 'session_config.php';
 require_once 'src/model/entity/User.php';
-require_once 'src/model/entity/UserRole.php';
 require_once 'src/model/repositories/UserRepository.php';
 require_once 'src/controller/UserRoleController.php';
 
@@ -39,7 +38,7 @@ class AuthService {
                 return $errors;
             }
             
-            $user = new User(
+            $userToBeInserted = new User(
                 null,
                 $formData['firstName'],
                 $formData['lastName'], 
@@ -52,9 +51,9 @@ class AuthService {
             // Try to insert the new user into the database
             try {
                 if ($this->userRepository->emailExists($formData['email'])) {
-                    $newUser = $this->userRepository->createUserToExistingEmail($user);
+                    $newUser = $this->userRepository->createUserToExistingEmail($userToBeInserted);
                 }  else {
-                    $newUser = $this->userRepository->createUser($user);
+                    $newUser = $this->userRepository->createUser($userToBeInserted);
                 }
                 if (!$newUser) {
                     // If registration was noy successful
