@@ -30,15 +30,14 @@ include_once "src/controller/OpeningHourController.php";
     <div class="min-w-[250px] flex flex-col gap-[1.5rem]">
       <h4 class="text-[1.125rem] font-bold leading-tight">Contact Information</h4>
       <div class="flex flex-col gap-[.75rem]">
-        <a href="mailto:<?= $selectedVenue->getContactEmail() ?>" class="w-fit text-[.875rem] text-textNormal leading-snug ease-in-out duration-[.15s] hover:text-textLight">
-          <?= $selectedVenue->getContactEmail()?>
+        <a href="mailto:<?= htmlspecialchars($selectedVenue->getContactEmail()) ?>" class="w-fit text-[.875rem] text-textNormal leading-snug ease-in-out duration-[.15s] hover:text-textLight">
+          <?= htmlspecialchars($selectedVenue->getContactEmail())?>
         </a>
         <div class="w-fit text-[.875rem] text-textNormal leading-snug">
-          <?= $selectedVenue->getPhoneNr()?>
+          <?= htmlspecialchars($selectedVenue->getPhoneNr()) ?>
         </div>
         <div class="w-fit text-[.875rem] text-textNormal leading-snug">
-          <?= $selectedVenue->getAddress()->getStreet() . " " . $selectedVenue->getAddress()->getStreetNr() . "<br/>" .
-          $selectedVenue->getAddress()->getPostalCode()->getPostalCode() . " " . $selectedVenue->getAddress()->getPostalCode()->getCity()?>
+          <?= htmlspecialchars($selectedVenue->getAddress()->getStreet()) . " " . htmlspecialchars($selectedVenue->getAddress()->getStreetNr()) . "<br/>" . htmlspecialchars($selectedVenue->getAddress()->getPostalCode()->getPostalCode()) . " " . htmlspecialchars($selectedVenue->getAddress()->getPostalCode()->getCity()) ?>
         </div>
       </div>
     </div>
