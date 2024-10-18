@@ -1,6 +1,8 @@
 <?php
 /* Get the venues */
 include_once "src/controller/VenueController.php";
+/* Get the opening hours */
+include_once "src/controller/OpeningHourController.php";
 ?>
 
 <footer class="flex flex-col gap-[4rem] mt-[8rem]">
@@ -45,18 +47,18 @@ include_once "src/controller/VenueController.php";
       <h4 class="text-[1.125rem] font-bold leading-tight">Opening Hours</h4>
       <div class="flex flex-col gap-[.75rem]">
         <!-- TODO: Populate opening hours based on selected venue -->
-        <div class="w-fit text-[.875rem] text-textNormal leading-snug">
-          <span class="font-medium">Mon-Fri:</span>
-          <span>10:00 - 22:00</span>
-        </div>
-        <div class="w-fit text-[.875rem] text-textNormal leading-snug">
-          <span class="font-medium">Sat:</span>
-          <span>11:00 - 23:00</span>
-        </div>
-        <div class="w-fit text-[.875rem] text-textNormal leading-snug">
-          <span class="font-medium">Sun:</span>
-          <span>12:00 - 20:00</span>
-        </div>
+        <?php
+        $openingHourController = new OpeningHourController();
+        $openingHours = $openingHourController->getOpeningHoursById($_SESSION['selectedVenueId']);
+
+        foreach ($openingHours as $openingHour) {
+          echo 
+            "<div class='w-fit text-[.875rem] text-textNormal leading-snug'>" .
+            "<span class='font-medium'>" . htmlspecialchars($openingHour->getDay()) . ": </span>" .
+            "<span>" . htmlspecialchars($openingHour->getOpeningTime()->format('H:i')) . " - " . htmlspecialchars($openingHour->getClosingTime()->format('H:i')) . "</span>" .
+            "</div>";
+        }
+        ?>
       </div>
     </div>
     <!-- Contact Form -->
