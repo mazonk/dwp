@@ -1,17 +1,17 @@
 <?php
-include_once "src/model/repositories/OpeningHourRepository.php";
+include_once "src/service/OpeningHourService.php";
 
 class OpeningHourController {
-  private OpeningHourRepository $openingHourRepository;
+  private OpeningHourService $openingHourService;
 
   public function __construct() {
-    $this->openingHourRepository = new OpeningHourRepository();
+    $this->openingHourService = new OpeningHourService();
   }
 
   /* Get opening hours by venueId */
   public function getOpeningHoursById(int $venueId): ?array {
     try {
-      return $this->openingHourRepository->getOpeningHoursById($venueId);
+      return $this->openingHourService->getOpeningHoursById($venueId);
     } catch (Exception $e) {
         echo $e->getMessage();
         return null;
