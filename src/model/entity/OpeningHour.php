@@ -1,13 +1,13 @@
 <?php
 
 enum Day {
-  case monday;
-  case tuesday;
-  case wednesday;
-  case thursday;
-  case friday;
-  case saturday;
-  case sunday;
+  case Monday;
+  case Tuesday;
+  case Wednesday;
+  case Thursday;
+  case Friday;
+  case Saturday;
+  case Sunday;
 
 }
 
@@ -20,20 +20,20 @@ class OpeningHour {
   private Venue $venue;
 
   public function __construct (int $openingHourId, Day $day, DateTime $openingTime, DateTime $closingTime, bool $isCurrent, Venue $venue) {
-    $this->$openingHourId = $openingHourId;
-    $this->$day = $day;
-    $this->$openingTime = $openingTime;
-    $this->$closingTime = $closingTime;
-    $this->$isCurrent = $isCurrent;
-    $this->$venue = $venue;
+    $this->openingHourId = $openingHourId;
+    $this->day = $day;
+    $this->openingTime = $openingTime;
+    $this->closingTime = $closingTime;
+    $this->isCurrent = $isCurrent;
+    $this->venue = $venue;
   }
 
   public function getOpeningHourId():int {
     return $this->getOpeningHourId;
   }
 
-  public function getDay(): Day {
-    return $this->day;
+  public function getDay(): string {
+    return $this->day->name; // Return the name of the enum (ex. Monday)
   }
 
   public function getOpeningTime(): DateTime {

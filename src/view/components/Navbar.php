@@ -2,18 +2,42 @@
   /* Get the venues */
   include_once "src/controller/VenueController.php";
 
-  /* Venue dropdown */
-  $isVenueDropdownOpen = isset($_POST['isVenueDropdownOpen']) ? filter_var($_POST['isVenueDropdownOpen'], FILTER_VALIDATE_BOOLEAN) : false;
-
-  if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['venueDropdownToggler'])) {
-    $isVenueDropdownOpen = !$isVenueDropdownOpen;
+  // Ensure session variables are set for dropdowns
+  if (!isset($_SESSION['isVenueDropdownOpen'])) {
+    $_SESSION['isVenueDropdownOpen'] = false;
   }
 
-  /* Profile dropdown */
-  $isProfileDropdownOpen = isset($_POST['isProfileDropdownOpen']) ? filter_var($_POST['isProfileDropdownOpen'], FILTER_VALIDATE_BOOLEAN) : false;
+  if (!isset($_SESSION['isProfileDropdownOpen'])) {
+      $_SESSION['isProfileDropdownOpen'] = false;
+  }
 
-  if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['profileDropdownToggler'])) {
-    $isProfileDropdownOpen = !$isProfileDropdownOpen;
+  // Retrieve the dropdown states
+  $isVenueDropdownOpen = $_SESSION['isVenueDropdownOpen'];
+  $isProfileDropdownOpen = $_SESSION['isProfileDropdownOpen'];
+
+  // Check if the form is submitted
+  if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      if (isset($_POST['venueDropdownToggler'])) {
+          $_SESSION['isProfileDropdownOpen'] = false; // Close the profile dropdown if it is open
+          $_SESSION['isVenueDropdownOpen'] = !$_SESSION['isVenueDropdownOpen'];
+          // Redirect to avoid form resubmission
+          header("Location: " . $_SERVER['REQUEST_URI']);
+          exit();
+      }
+
+      if (isset($_POST['profileDropdownToggler'])) {
+          $_SESSION['isVenueDropdownOpen'] = false; // Close the venue dropdown if it is open
+          $_SESSION['isProfileDropdownOpen'] = !$_SESSION['isProfileDropdownOpen'];
+          // Redirect to avoid form resubmission
+          header("Location: " . $_SERVER['REQUEST_URI']);
+          exit();
+      }
+  }
+
+  /* Select venue */
+  if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['selectVenue'])) {
+    $venueController = new VenueController();
+    $selectedVenue = $venueController->selectVenue($venueController->getVenue($_POST['venueId'])); // Setting the selected venue in the session
   }
 ?>
 
@@ -51,7 +75,7 @@
           <input type="hidden" name="isVenueDropdownOpen" value="<?php echo $isVenueDropdownOpen ? 'true' : 'false'; ?>">
           <button type="submit" name="venueDropdownToggler" class="flex gap-[.375rem]">
             <i class="ri-map-pin-2-fill h-[18px] text-[18px]"></i>
-            <span class="translate-y-[.5px]">Venue Name</span>
+            <span class="translate-y-[.5px]"><?= $_SESSION['selectedVenueName'] ?></span>
           </button>
         </form>
         <!-- Dropdown -->
@@ -62,10 +86,14 @@
           $venueController = new VenueController();
           $allVenues = $venueController->getAllVenues();
 
+          // Loop through each venue and render its name (when clicked, the venue is selected and stored in the session)
           foreach ($allVenues as $venue) {
-            echo '<button class="w-full py-[.5rem] px-[.625rem] text-[.875rem] text-left leading-tight bg-bgDark ease-in-out duration-[.15s] hover:bg-bgSemiDark">';
-            echo $venue->getName();
+            echo '<form action="" method="post">';
+            echo '<input type="hidden" name="venueId" value="' . htmlspecialchars($venue->getVenueId()) . '">';
+            echo '<button type="submit" name="selectVenue" class="w-full py-[.5rem] px-[.625rem] text-[.875rem] text-left leading-tight bg-bgDark ease-in-out duration-[.15s] hover:bg-bgSemiDark">';
+            echo htmlspecialchars($venue->getName());
             echo '</button>';
+            echo '</form>';
           }
           ?>
         </div>

@@ -8,6 +8,7 @@ class AddressRepository {
     return DatabaseConnection::getInstance(); // singleton
   }
 
+  /* Get all addresses */
   public function getAllAddresses(): array {
     $db = $this->getdb();
     /* Get postal codes */
