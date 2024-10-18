@@ -24,7 +24,7 @@ class OpeningHourRepository {
         $venue = $venueController->getVenue($venueId);
 
         foreach($result as $row) {
-          if ($row['isCurrent'] == 1 && $row['venueId'] == $venueId) {
+          if ($row['isCurrent'] == 1) {
             // Map string from DB to Day enum
             $day = match ($row['day']) {
               'Monday' => Day::Monday,
