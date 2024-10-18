@@ -10,6 +10,10 @@ class AddressController {
 
   /* Get all addresses */
   public function getAllAddresses(): array {
-    return $this->addressRepository->getAllAddresses();
+    try {
+      return $this->addressRepository->getAllAddresses();
+    } catch (Exception $e) {
+      return [];
+    }
   }
 }

@@ -9,8 +9,12 @@ class UserRoleRepository {
     public function getAll(): array {
         $db = $this->getdb();
         $query = $db->prepare("SELECT * FROM UserRole");
-        $query->execute();
-        $result = $query->fetchAll(PDO::FETCH_ASSOC);
+        try {
+            $query->execute();
+            $result = $query->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo 'unable to fetch user roles: '. $e;
+        }
         $retArray = [];
         foreach ($result as $row) {
             $retArray[] = new UserRole($row['id'], type: $row['type']);
@@ -21,8 +25,12 @@ class UserRoleRepository {
     public function getUserRole(string $roleType): UserRole {
         $db = $this->getdb();
         $query = $db->prepare("SELECT * FROM UserRole ur WHERE ur.type = :type");
-        $query->execute(array(":type" => $roleType));
-        $result = $query->fetch(PDO::FETCH_ASSOC);
+        try {
+            $query->execute(array(":type" => $roleType));
+            $result = $query->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo 'unable to fetch user role: '. $e;
+        }
         return new UserRole($result['roleId'], type: $result['type']);
     }
 }
