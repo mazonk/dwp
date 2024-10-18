@@ -30,7 +30,7 @@ include_once "src/view/components/ShowingCard.php";
         } else {
         // Loop through each movie and render its movie card
         foreach ($allMovies as $movie) {
-          MovieCard::render($movie);
+          MovieCard::render($movie, false);
 
       }
     }

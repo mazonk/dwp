@@ -3,7 +3,7 @@ include_once "src/model/entity/Movie.php";
 class MovieCard {
 
   
-    public static function render(Movie $movie) {
+    public static function render(Movie $movie, $showReleaseDate) {
         ?>
         <html>
           <head>
@@ -21,7 +21,7 @@ class MovieCard {
               </form>
         <div class="text-[1.2rem] text-white"><?php echo htmlspecialchars($movie->getTitle()); ?></div>
 
-          <?php if ($_SERVER['REQUEST_METHOD'] === 'GET' && $_SERVER['REQUEST_URI'] !== '/dwp/movies'): // Check if request method is GET and URI is /dwp/movies ?>
+          <?php if ($showReleaseDate):?>
               <div class="text-[0.875rem] text-white">Release Date: <?php echo htmlspecialchars($movie->getReleaseDate()->format('Y-m-d')); ?></div>
           <?php endif; ?>
 

@@ -1,10 +1,17 @@
 <?php
 require_once 'session_config.php';
+
 include_once "src/controller/NewsController.php";
+include_once "src/controller/ShowingController.php";
+
 include_once "src/view/components/NewsCard.php";
+include_once "src/view/components/MovieCard.php";
 
 $tab = isset($_GET['tab']) ? $_GET['tab'] : 'news'; // Default to 'news' if no tab is set in query string
 
+
+$newsController = new NewsController();
+$showingController = new ShowingController();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,8 +27,20 @@ $tab = isset($_GET['tab']) ? $_GET['tab'] : 'news'; // Default to 'news' if no t
     <!-- Navbar -->
     <?php include_once("src/view/components/Navbar.php"); ?>
 
-    <main class="mt-8 p-4">
+    <main class="mt-16 p-4">
+        <!-- Daily showings -->
+      <div class="grid grid-cols-5">
+        
+        <?php
+            $moviesPlayingToday = $showingController->getMoviesPlayingToday(2); //TODO: change to get venueid from session
 
+            foreach ($moviesPlayingToday as $movie) {
+                MovieCard::render($movie,false);
+            }
+        ?>
+      </div>
+
+        <!-- News -->
         <!-- Tab Navigation -->
         <div class="flex space-x-4 justify-center mt-8 mb-8">
             <a href="?tab=news" class="text-white <?php echo $tab === 'news' ? 'underline font-semibold' : 'b'; ?>">News & Articles</a>
@@ -33,7 +52,6 @@ $tab = isset($_GET['tab']) ? $_GET['tab'] : 'news'; // Default to 'news' if no t
             <?php
             // Render content based on the selected tab
             if ($tab === 'news') {
-                $newsController = new NewsController();
                 $allNews = $newsController->getNews();
 
                 // Loop through each news item and render it using NewsCard
@@ -52,10 +70,5 @@ $tab = isset($_GET['tab']) ? $_GET['tab'] : 'news'; // Default to 'news' if no t
             ?>
         </div>
     </main>
-
-    <h2>Testing some stuff here:</h2>
-    <form action="/dwp/logout" method="post">
-        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">Logout</button>
-    </form>
 </body>
 </html>
