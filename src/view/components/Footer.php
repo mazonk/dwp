@@ -70,5 +70,5 @@ include_once "src/controller/VenueController.php";
     </div>
   </div>
   <!-- TODO: Company name display -->
-  <div class="text-textNormal text-[.875rem]">&copy; <?= $_SESSION['selectedVenueName'] ?> all rights reserved</div>
+  <div class="text-textNormal text-[.875rem]">&copy; company_name all rights reserved</div>
 </footer>
