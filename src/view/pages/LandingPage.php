@@ -52,7 +52,6 @@ if ($page > 1 && $startIndex === 0) {
     <?php include_once("src/view/components/Navbar.php"); ?>
 
     <main class="mt-16 p-4">
-        <!-- Daily showings -->
         <div class="flex items-center justify-between">
             <!-- Left Arrow - Previous -->
             <?php if ($page > 1): ?>
@@ -64,17 +63,16 @@ if ($page > 1 && $startIndex === 0) {
                 <div class="w-[48px]"></div>
             <?php endif; ?>
 
-            <!-- Daily showings grid -->
+            <!-- Daily showings -->
             <div class="grid grid-cols-5 gap-4 w-full">
                 <?php
-                    // Display the movies for the current page
                     foreach ($moviesToDisplay as $movie) {
                         MovieCard::render($movie, false);
                     }
                 ?>
             </div>
 
-            <!-- Right Arrow for Next -->
+            <!-- Right Arrow - Next -->
             <?php if ($startIndex + $moviesPerPage < $totalMovies): ?>
                 <a href="?page=<?php echo $page + 1; ?>" class="text-white p-2">
                     <i class="ri-arrow-right-s-line text-4xl ml-8"></i>
