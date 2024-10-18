@@ -21,7 +21,7 @@ class ShowingService {
         $this->venueRepository = new VenueRepository();
     }
 
-    public function getShowingById(int $showingId, int $venueId): Showing {
+    public function getShowingById(int $showingId, int $venueId): ?Showing {
         $showingData = $this->showingRepository->getShowingById($showingId);
         if ($showingData) {
             $venue = $this->venueRepository->getVenueById($venueId);
@@ -61,5 +61,15 @@ class ShowingService {
             }
         }
         return $allShowingsForMovie ?? [];
+    }
+    
+    public function getMoviesPlayingToday(int $venueId): array {
+        $moviesPlayingToday = [];
+        $queryResult = $this->showingRepository->getMoviesPlayingToday($venueId);
+        foreach ($queryResult as $result) {
+            $moviesPlayingToday[] = $this->movieRepository->getMovieById($result['movieId']);
+        }
+
+        return $moviesPlayingToday;
     }
 }

@@ -22,5 +22,8 @@ class ShowingController {
         return $this->showingService->getAllShowingsForMovie($movieId, $showings);
     }
 
+    public function getMoviesPlayingToday(int $venueId){
+        return $this->showingService->getMoviesPlayingToday($venueId);
+    }
     
 }
