@@ -85,47 +85,47 @@ INSERT INTO Showing (showingDate, showingTime, movieId, roomId) VALUES
 ('2024-10-20', '18:00:00', 2, 1),
 ('2024-10-22', '20:15:00', 2, 2),
 ('2024-10-25', '22:00:00', 2, 3),
-('2024-10-17', '19:30:00', 3, 4),
+('2024-10-17', '19:30:00', 3, 2),
 ('2024-10-19', '18:15:00', 3, 1),
 ('2024-10-24', '20:00:00', 3, 2),
 ('2024-10-28', '22:45:00', 4, 3),
-('2024-10-30', '21:00:00', 4, 4),
+('2024-10-30', '21:00:00', 4, 1),
 ('2024-11-01', '17:30:00', 4, 1),
 ('2024-10-15', '16:45:00', 5, 2),
 ('2024-10-21', '19:00:00', 5, 3),
-('2024-10-26', '21:15:00', 5, 4),
+('2024-10-26', '21:15:00', 5, 1),
 ('2024-10-23', '18:30:00', 6, 1),
 ('2024-10-27', '20:00:00', 6, 2),
 ('2024-11-02', '22:30:00', 6, 3),
-('2024-10-16', '15:00:00', 7, 4),
+('2024-10-16', '15:00:00', 7, 3),
 ('2024-10-18', '19:00:00', 7, 1),
 ('2024-10-20', '21:30:00', 7, 2),
 ('2024-10-22', '17:45:00', 8, 3),
-('2024-10-29', '19:30:00', 8, 4),
+('2024-10-29', '19:30:00', 8, 3),
 ('2024-10-31', '22:15:00', 8, 1),
 ('2024-10-17', '20:45:00', 9, 2),
 ('2024-10-25', '21:30:00', 9, 3),
-('2024-11-01', '19:15:00', 9, 4),
+('2024-11-01', '19:15:00', 9, 2),
 ('2024-10-18', '16:30:00', 10, 1),
 ('2024-10-22', '20:00:00', 10, 2),
 ('2024-10-28', '22:00:00', 10, 3),
-('2024-10-15', '14:00:00', 1, 4),
+('2024-10-15', '14:00:00', 1, 1),
 ('2024-10-23', '18:00:00', 2, 1),
 ('2024-10-29', '19:45:00', 3, 2),
 ('2024-10-24', '21:00:00', 4, 3),
-('2024-10-30', '17:15:00', 5, 4),
+('2024-10-30', '17:15:00', 5, 2),
 ('2024-10-27', '18:30:00', 6, 1),
 ('2024-10-31', '20:45:00', 7, 2),
 ('2024-11-02', '22:15:00', 8, 3),
-('2024-10-19', '19:00:00', 9, 4),
+('2024-10-19', '19:00:00', 9, 2),
 ('2024-10-20', '16:30:00', 10, 1),
 ('2024-10-25', '20:15:00', 1, 2),
 ('2024-10-26', '21:45:00', 2, 3),
-('2024-10-28', '17:30:00', 3, 4),
+('2024-10-28', '17:30:00', 3, 1),
 ('2024-10-18', '19:15:00', 4, 1),
 ('2024-10-21', '20:30:00', 5, 2),
 ('2024-11-01', '21:45:00', 6, 3),
-('2024-11-02', '17:00:00', 7, 4),
+('2024-11-02', '17:00:00', 7, 3),
 ('2024-10-23', '19:00:00', 8, 1),
 ('2024-10-27', '20:30:00', 9, 2),
 ('2024-10-29', '22:00:00', 10, 3);
@@ -188,47 +188,47 @@ INSERT INTO VenueShowing (venueId, showingId) VALUES
 (3, 7),  -- Empire Cinema -> Showing of Avengers: Endgame
 (3, 8),  -- Empire Cinema -> Showing of Black Panther
 (3, 9),  -- Empire Cinema -> Showing of Doctor Strange
-(4, 10), -- Regal Cinema -> Showing of Interstellar
-(4, 11), -- Regal Cinema -> Showing of Dunkirk
-(4, 12), -- Regal Cinema -> Showing of Tenet
-(5, 13), -- Cineplex -> Showing of The Lord of the Rings
-(5, 14), -- Cineplex -> Showing of The Hobbit
-(5, 15), -- Cineplex -> Showing of Harry Potter and the Sorcerer's Stone
-(6, 16), -- Paramount Theatre -> Showing of The Lion King
-(6, 17), -- Paramount Theatre -> Showing of Frozen
-(6, 18), -- Paramount Theatre -> Showing of Beauty and the Beast
-(7, 19), -- IMAX Theatre -> Showing of Avatar
-(7, 20), -- IMAX Theatre -> Showing of Dune
-(7, 21), -- IMAX Theatre -> Showing of Star Wars: The Force Awakens
-(8, 22), -- Odeon -> Showing of Jurassic Park
-(8, 23), -- Odeon -> Showing of Jurassic World
-(8, 24), -- Odeon -> Showing of Pacific Rim
-(9, 25), -- AMC Cinemas -> Showing of The Batman
-(9, 26), -- AMC Cinemas -> Showing of Joker
-(9, 27), -- AMC Cinemas -> Showing of Venom
-(10, 28), -- Alamo Drafthouse -> Showing of Mad Max: Fury Road
-(10, 29), -- Alamo Drafthouse -> Showing of The Revenant
-(10, 30), -- Alamo Drafthouse -> Showing of The Hateful Eight
-(1, 31),  -- Gotham Cinema -> Showing of Deadpool
+(1, 10), -- Regal Cinema -> Showing of Interstellar
+(1, 11), -- Regal Cinema -> Showing of Dunkirk
+(1, 12), -- Regal Cinema -> Showing of Tenet
+(2, 13), -- Cineplex -> Showing of The Lord of the Rings
+(2, 14), -- Cineplex -> Showing of The Hobbit
+(2, 15), -- Cineplex -> Showing of Harry Potter and the Sorcerer's Stone
+(3, 16), -- Paramount Theatre -> Showing of The Lion King
+(3, 17), -- Paramount Theatre -> Showing of Frozen
+(3, 18), -- Paramount Theatre -> Showing of Beauty and the Beast
+(1, 19), -- IMAX Theatre -> Showing of Avatar
+(1, 20), -- IMAX Theatre -> Showing of Dune
+(1, 21), -- IMAX Theatre -> Showing of Star Wars: The Force Awakens
+(2, 22), -- Odeon -> Showing of Jurassic Park
+(2, 23), -- Odeon -> Showing of Jurassic World
+(2, 24), -- Odeon -> Showing of Pacific Rim
+(3, 25), -- AMC Cinemas -> Showing of The Batman
+(3, 26), -- AMC Cinemas -> Showing of Joker
+(3, 27), -- AMC Cinemas -> Showing of Venom
+(1, 28), -- Alamo Drafthouse -> Showing of Mad Max: Fury Road
+(1, 29), -- Alamo Drafthouse -> Showing of The Revenant
+(1, 30), -- Alamo Drafthouse -> Showing of The Hateful Eight
+(2, 31),  -- Gotham Cinema -> Showing of Deadpool
 (2, 32),  -- Hollywood Stars Cinema -> Showing of Logan
-(3, 33),  -- Empire Cinema -> Showing of The Wolverine
-(4, 34),  -- Regal Cinema -> Showing of Fantastic Beasts
-(5, 35),  -- Cineplex -> Showing of Wonder Woman
-(6, 36),  -- Paramount Theatre -> Showing of Aquaman
-(7, 37),  -- IMAX Theatre -> Showing of The Suicide Squad
-(8, 38),  -- Odeon -> Showing of Guardians of the Galaxy
-(9, 39),  -- AMC Cinemas -> Showing of Thor: Ragnarok
-(10, 40), -- Alamo Drafthouse -> Showing of The Irishman
-(1, 41),  -- Gotham Cinema -> Showing of The Godfather
+(2, 33),  -- Empire Cinema -> Showing of The Wolverine
+(3, 34),  -- Regal Cinema -> Showing of Fantastic Beasts
+(3, 35),  -- Cineplex -> Showing of Wonder Woman
+(3, 36),  -- Paramount Theatre -> Showing of Aquaman
+(1, 37),  -- IMAX Theatre -> Showing of The Suicide Squad
+(1, 38),  -- Odeon -> Showing of Guardians of the Galaxy
+(1, 39),  -- AMC Cinemas -> Showing of Thor: Ragnarok
+(2, 40), -- Alamo Drafthouse -> Showing of The Irishman
+(2, 41),  -- Gotham Cinema -> Showing of The Godfather
 (2, 42),  -- Hollywood Stars Cinema -> Showing of Pulp Fiction
 (3, 43),  -- Empire Cinema -> Showing of Fight Club
-(4, 44),  -- Regal Cinema -> Showing of Goodfellas
-(5, 45),  -- Cineplex -> Showing of The Shawshank Redemption
-(6, 46),  -- Paramount Theatre -> Showing of Schindler's List
-(7, 47),  -- IMAX Theatre -> Showing of Blade Runner 2049
-(8, 48),  -- Odeon -> Showing of The Fifth Element
-(9, 49),  -- AMC Cinemas -> Showing of The Prestige
-(10, 50); -- Alamo Drafthouse -> Showing of The Departed
+(3, 44),  -- Regal Cinema -> Showing of Goodfellas
+(3, 45),  -- Cineplex -> Showing of The Shawshank Redemption
+(1, 46),  -- Paramount Theatre -> Showing of Schindler's List
+(1, 47),  -- IMAX Theatre -> Showing of Blade Runner 2049
+(1, 48),  -- Odeon -> Showing of The Fifth Element
+(2, 49),  -- AMC Cinemas -> Showing of The Prestige
+(2, 50); -- Alamo Drafthouse -> Showing of The Departed
 
 INSERT INTO VenueOpeningHour (venueId, openingHourId) VALUES
 (1, 1),  -- Gotham Cinema -> Monday's opening hours
