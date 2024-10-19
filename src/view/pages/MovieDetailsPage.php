@@ -5,6 +5,7 @@ include_once "src/controller/MovieController.php";
 include_once "src/view/components/MovieCard.php";
 include_once "src/controller/ShowingController.php";
 include_once "src/view/components/ShowingCard.php";
+include_once "src/model/entity/Showing.php";
 
 $id = $_GET['id'];
 echo 'The id you entered is: '. $id;
@@ -125,21 +126,17 @@ if (!$movie) {
         <!-- Placeholder for movie poster -->
       </div>
       <div class="movie-details">
-        <div class="movie-title">Movie Title Placeholder</div>
-        <div class="movie-description">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-          Proin blandit justo at mauris efficitur, vitae dictum nibh placerat.
-        </div>
-        <div class="movie-info"><span>Duration:</span> 120 minutes</div>
-        <div class="movie-info"><span>Language:</span> English</div>
-        <div class="movie-info"><span>Release Date:</span> 2024-10-01</div>
-        <div class="movie-info"><span>Rating:</span> 8.5/10</div>
-
-        <div class="movie-actions">
-          <a href="#">Watch Promo</a>
-          <a href="#">Buy Tickets</a>
-        </div>
-      </div>
+    <div class="movie-title">
+      <?php echo htmlspecialchars($movie->getTitle()); ?>
+    </div>
+    <div class="movie-description"> 
+     <?php echo $movie->getDescription(); ?>
+    </div>
+    <div class="movie-info"><span>Duration: </span> <?php echo $movie->getDuration(); ?></div>
+    <div class="movie-info"><span>Language: </span> <?php echo $movie->getLanguage(); ?></div>
+    <div class="movie-info"><span>Release Date: </span><?php echo $movie->getReleaseDate()->format('Y-m-d');?></div>
+    <div class="movie-info"><span>Rating: </span> <?php echo $movie->getRating(); ?></div>
+  </div>
     </div>
 
     <div class="trailer-video">
