@@ -42,9 +42,11 @@ class ShowingRepository {
         $db = $this->getdb();
 
         try {
-            $query = $db->prepare("SELECT * FROM Showing as s JOIN VenueShowing as vs ON s.showingId = vs.showingId WHERE vs.venueId = :venueId AND s.movieId = :movieId");
+            $query = $db->prepare("SELECT * FROM Showing as s JOIN VenueShowing as vs ON s.showingId = vs.showingId WHERE vs.venueId = :venueId 
+            AND s.movieId = :movieId ORDER BY s.showingDate, s.showingTime ASC");
             $query->execute(array(":movieId" => $movieId, ":venueId" => $selectedVenueId));
             $result = $query->fetchAll(PDO::FETCH_ASSOC);
+
             return $result;
         } catch (PDOException $e) {
             return [];

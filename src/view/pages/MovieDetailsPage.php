@@ -8,7 +8,6 @@ include_once "src/view/components/ShowingCard.php";
 include_once "src/model/entity/Showing.php";
 
 $id = $_GET['id'];
-//echo 'The id you entered is: '. $id;
 $showingController = new ShowingController();
 $movieController = new MovieController();
 $movie = $movieController->getMovieById($id);
@@ -18,16 +17,6 @@ if (!$movie) {
   exit;
 } else {
   $showingsForMovie = $showingController->getAllShowingsForMovie($movie->getMovieId());
-  if (empty($showingsForMovie)) {
-    echo "No showings found for this movie.";
-    exit;
-  } else {
-  echo '<div class="grid grid-cols-3 gap-4 flex flex-row items-center">';
-  foreach ($showingsForMovie as $showing) {
-    ShowingCard::render($showing);
-  }
-  echo '</div>';
-  }
 }
 
 ?>
@@ -35,6 +24,9 @@ if (!$movie) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <?php include_once("src/assets/tailwindConfig.php"); ?>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Movie Details</title>
@@ -120,11 +112,9 @@ if (!$movie) {
   </style>
 </head>
 <body>
-
   <div class="container">
     <div class="movie-header">
-  <?php MovieCard::render($movie); ?> 
-      </div>
+    <img class="w-full h-[18.75rem] rounded-[0.625rem] m-[0.625rem] bg-center bg-cover" src="../src/assets/<?php echo $movie->getPosterURL(); ?>" alt="Movie Poster">      </div>
       <div class="movie-details">
     <div class="movie-title">
       <?php echo htmlspecialchars($movie->getTitle()); ?>
@@ -136,11 +126,33 @@ if (!$movie) {
     <div class="movie-info"><span>Language: </span> <?php echo $movie->getLanguage(); ?></div>
     <div class="movie-info"><span>Release Date: </span><?php echo $movie->getReleaseDate()->format('Y-m-d');?></div>
     <div class="movie-info"><span>Rating: </span> <?php echo $movie->getRating(); ?></div>
-  </div>
     </div>
+    </div>
+    <div class="flex flex-row items-center">
+    <?php
+    $today = new DateTime();
+    for($i=0; $i<7; $i++){
+      $currentDay = clone $today;
+      $currentDay->modify("+$i day");
+      $formatedDay = $currentDay->format('l d, M');
+      echo '<div class="bg-bgLight text-textDark py-2 px-4 my-2 rounded-md w-full text-center">';
+      echo "$formatedDay";
+      echo '<div class="flex flex-col items-center">';
+      foreach($showingsForMovie as $showing){
+        if($showing->getShowingDate()->format('l d, M') == $formatedDay){
+          ShowingCard::render($showing);
+        }
+      } echo '</div>';
+      echo "</div>";
+    }
+    ?>
+
+    </div>
+
 
     <div class="trailer-video">
       <iframe src= "https://www.youtube.com/embed/<?php echo $movie->getTrailerURL(); ?>" frameborder="0" allowfullscreen></iframe> <!--this doesnt work yet-->
+       <?php echo $movie->getTrailerURL(); ?>
     </div>
   </div>
 
