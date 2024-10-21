@@ -27,7 +27,8 @@ class ShowingService {
             $venue = $this->venueRepository->getVenueById($venueId);
             $roomData = $this->roomRepository->getRoomById($showingData['roomId']);
             $room = new Room($roomData["roomId"], $roomData["roomNumber"], $venue);
-            $movie = $this->movieRepository->getMovieById($showingData['movieId']);
+            $rawMovie = $this->movieRepository->getMovieById($showingData['movieId']);
+            $movie = $this->mapMovie($rawMovie);
             return new Showing(
                 $showingData['showingId'],
                 $movie,
@@ -71,9 +72,39 @@ class ShowingService {
         $moviesPlayingToday = [];
         $queryResult = $this->showingRepository->getMoviesPlayingToday($venueId);
         foreach ($queryResult as $result) {
-            $moviesPlayingToday[] = $this->movieRepository->getMovieById($result['movieId']);
+            $rawMovie = $this->movieRepository->getMovieById($result['movieId']);
+            if ($rawMovie) {  // If movie exists in the database, add it to the list.
+            $moviesPlayingToday[] = $this->mapMovie($rawMovie);
+            }
         }
-
         return $moviesPlayingToday;
+    }
+
+    private function mapMovie($row) {
+        $movieId = $row['movieId'] ?? null;
+        $actors = [];
+        $directors = [];
+        $rawActors = $this->movieRepository->getActorsByMovieId($movieId);
+        foreach ($rawActors as $actorRow) {
+            $actors[] = new Actor($actorRow['actorId'], $actorRow['firstName'], $actorRow['lastName'], $actorRow['character']);
+        }
+        $rawDirectors = $this->movieRepository->getDirectorsByMovieId($movieId);
+        foreach ($rawDirectors as $directorRow) {
+            $directors[] = new Director($directorRow['directorId'], $directorRow['firstName'], $directorRow['lastName']);
+        }
+        return new Movie(
+            $movieId,
+            $row['title'] ?? '',
+            $row['description'] ?? '',
+            $row['duration'] ?? '',
+            $row['language'] ?? '',
+            $row['releaseDate'] ?? '',
+            $row['posterURL'] ?? '',
+            $row['promoURL'] ?? '',
+            $row['rating'] ?? '',
+            $row['trailerURL'] ?? '',
+            $actors,
+            $directors
+        );
     }
 }
