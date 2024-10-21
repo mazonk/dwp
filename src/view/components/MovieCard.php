@@ -22,8 +22,7 @@ class MovieCard {
         <div class="text-[1.2rem] text-white"><?php echo htmlspecialchars($movie->getTitle()); ?></div>
 
           <?php if ($_SERVER['REQUEST_METHOD'] === 'GET' && $_SERVER['REQUEST_URI'] !== '/dwp/movies'): // Check if request method is GET and URI is /dwp/movies ?>
-              <div class="text-[0.875rem] text-white">Release Date: <?php echo htmlspecialchars($movie->getReleaseDate()->format('Y-m-d')); ?></div>
-          <?php endif; ?>
+              <div class="text-[0.875rem] text-white">Release Date: <?php echo htmlspecialchars($movie->getReleaseDate()->format('Y-m-d')); ?></div>          <?php endif; ?>
 
         </div>
         </body>

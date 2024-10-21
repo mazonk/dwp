@@ -53,13 +53,17 @@ class ShowingService {
         return $showings;
     }
 
-    public function getAllShowingsForMovie(int $movieId, array $showings): array {
-        $allShowingsForMovie = [];
-        foreach ($showings as $showing) {
-            if ($showing->getMovie()->getMovieId() == $movieId) {
-                $allShowingsForMovie[] = $showing;
-            }
+    public function getAllShowingsForMovie(int $movieId, int $selectedVenueId): array {
+        $result = $this->showingRepository->getShowingForMovie($movieId, $selectedVenueId);
+        $showings = [];
+        if (!$result) {
+            return [];
         }
-        return $allShowingsForMovie ?? [];
+        else {
+        foreach ($result as $showing) {
+            $showings[] = $this->getShowingById($showing["showingId"], $showing["venueId"]);
+        }
+    }
+        return $showings;
     }
 }

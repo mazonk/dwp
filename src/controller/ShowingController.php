@@ -18,9 +18,10 @@ class ShowingController {
         return $this->showingService->getAllShowingsForVenue($venueId);
     }
 
-    public function getAllShowingsForMovie(int $movieId, array $showings): array {
-        return $this->showingService->getAllShowingsForMovie($movieId, $showings);
-    }
+    public function getAllShowingsForMovie(int $movieId): array {
+ //       return $this->showingService->getAllShowingsForMovie($movieId,$_SESSION["selectedVenueId"] );
+ return $this->showingService->getAllShowingsForMovie($movieId,1); //$_SESSION["1"] );
 
+    }
     
 }

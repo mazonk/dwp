@@ -37,4 +37,18 @@ class ShowingRepository {
             return [];
         }
     }
+
+    public function getShowingForMovie($movieId, $selectedVenueId): array {
+        $db = $this->getdb();
+
+        try {
+            $query = $db->prepare("SELECT * FROM Showing as s JOIN VenueShowing as vs ON s.showingId = vs.showingId WHERE vs.venueId = :venueId AND s.movieId = :movieId");
+            $query->execute(array(":movieId" => $movieId, ":venueId" => $selectedVenueId));
+            $result = $query->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+        } catch (PDOException $e) {
+            return [];
+        }
+}
+
 }

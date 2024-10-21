@@ -8,7 +8,7 @@ include_once "src/view/components/ShowingCard.php";
 include_once "src/model/entity/Showing.php";
 
 $id = $_GET['id'];
-echo 'The id you entered is: '. $id;
+//echo 'The id you entered is: '. $id;
 $showingController = new ShowingController();
 $movieController = new MovieController();
 $movie = $movieController->getMovieById($id);
@@ -17,18 +17,19 @@ if (!$movie) {
   echo "No movie found with the given ID.";
   exit;
 } else {
-  $showings = $showingController->getAllShowingsForVenue(2);
-  if (empty($showings)) {
-    echo "No showings found for this venue.";
+  $showingsForMovie = $showingController->getAllShowingsForMovie($movie->getMovieId());
+  if (empty($showingsForMovie)) {
+    echo "No showings found for this movie.";
+    exit;
   } else {
-  $showingsForMovie = $showingController->getAllShowingsForMovie($movie->getMovieId(), $showings);
   echo '<div class="grid grid-cols-3 gap-4 flex flex-row items-center">';
   foreach ($showingsForMovie as $showing) {
     ShowingCard::render($showing);
   }
   echo '</div>';
+  }
 }
-}
+
 ?>
 
 <!DOCTYPE html>
@@ -50,21 +51,21 @@ if (!$movie) {
       max-width: 1200px;
       margin: 0 auto;
       padding: 20px;
-    }
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-start;
+      gap: 20px;
+      }
+
+      .showings {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;}
 
     .movie-header {
       display: flex;
       align-items: flex-start;
       gap: 20px;
-    }
-
-    .movie-poster {
-      width: 300px;
-      height: 450px;
-      background-color: #ddd;
-      background-size: cover;
-      background-position: center;
-      border-radius: 1vw;
     }
 
     .movie-details {
@@ -122,8 +123,7 @@ if (!$movie) {
 
   <div class="container">
     <div class="movie-header">
-      <div class="movie-poster" style="background-image: url('placeholder-poster.jpg');">
-        <!-- Placeholder for movie poster -->
+  <?php MovieCard::render($movie); ?> 
       </div>
       <div class="movie-details">
     <div class="movie-title">
@@ -140,7 +140,7 @@ if (!$movie) {
     </div>
 
     <div class="trailer-video">
-      <iframe src="https://www.youtube.com/embed/trailer-url-placeholder" allowfullscreen></iframe>
+      <iframe src= "https://www.youtube.com/embed/<?php echo $movie->getTrailerURL(); ?>" frameborder="0" allowfullscreen></iframe> <!--this doesnt work yet-->
     </div>
   </div>
 
