@@ -13,7 +13,7 @@ require_once 'session_config.php';
     <script src="https://cdn.tailwindcss.com"></script>
     <?php include_once("src/assets/tailwindConfig.php"); ?>
   </head>
-  <body class="max-w-[1440px] w-[100%] mx-auto px-[100px] bg-bgDark text-textLight overflow-hidden">
+  <body class="max-w-[1440px] w-[100%] mx-auto mt-[72px] mb-[2rem] px-[100px] bg-bgDark text-textLight">
     <!-- Navbar -->
     <?php include_once("src/view/components/Navbar.php"); ?>
     <main class="mt-[56px] p-4">
@@ -31,5 +31,7 @@ require_once 'session_config.php';
         ?>
       </div>
     </main>
+    <!-- Navbar -->
+    <?php include_once("src/view/components/Footer.php"); ?>
   </body>
 </html>
