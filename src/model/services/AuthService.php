@@ -35,7 +35,10 @@ class AuthService {
 
             // Get UserRole: customer
             try {
-                $userRole = $this->userRoleRepository->getUserRole('Customer');
+                $result = $this->userRoleRepository->getUserRole('Customer');
+                if ($result) {
+                    $userRole = new UserRole($result['roleId'], $result['type']);
+                }
             } catch (Exception $e) {
                 $errors[] = "Registration failed. Please try again.";
                 return $errors;
