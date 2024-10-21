@@ -7,7 +7,7 @@ class NewsRepository {
         return DatabaseConnection::getInstance();
     }
 
-    public function get($id): News {
+    public function get($id) {
         $db = $this->getdb();
         try {
             $query = $db->prepare("SELECT * FROM News n WHERE n.newsId = :id");
@@ -16,22 +16,18 @@ class NewsRepository {
         } catch (PDOException $e) {
             echo 'Failed to fetch news: '. $e;
         }
-        return new News($result['newsId'], $result['imageURL'], $result['header'], $result['content']);
+        return $result;
     }
 
-    public function getAll(): array {
+    public function getAll() {
         $db = $this->getdb();
-        $retarray = [];
         try {
             $query = $db->prepare("SELECT * FROM News");
             $query->execute();
             $result = $query->fetchAll(PDO::FETCH_ASSOC);
-            foreach($result as $row) {
-                $retarray[] = new News($row['newsId'], $row['imageURL'], $row['header'], $row['content']);
-            }
         } catch (PDOException $e) {
             echo 'Failed to fetch news: '. $e;
         }
-        return $retarray;
+        return $result;
     }
 }

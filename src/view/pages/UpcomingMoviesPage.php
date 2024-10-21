@@ -30,7 +30,7 @@ $currentDate = new DateTime();
         
         // Check if the release date is in the future
         if ($releaseDate > $currentDate) {
-            MovieCard::render($movie);
+            MovieCard::render($movie, true);
         }
     }
     ?>

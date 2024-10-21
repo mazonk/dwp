@@ -19,9 +19,12 @@ class ShowingController {
     }
 
     public function getAllShowingsForMovie(int $movieId): array {
- //       return $this->showingService->getAllShowingsForMovie($movieId,$_SESSION["selectedVenueId"] );
- return $this->showingService->getAllShowingsForMovie($movieId,1); //$_SESSION["1"] );
+        //return $this->showingService->getAllShowingsForMovie($movieId,$_SESSION["selectedVenueId"] );
+        return $this->showingService->getAllShowingsForMovie($movieId,1); //$_SESSION["1"] );
+    }
 
+    public function getMoviesPlayingToday(int $venueId){
+        return $this->showingService->getMoviesPlayingToday($venueId);
     }
     
 }
