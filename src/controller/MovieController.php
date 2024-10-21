@@ -1,15 +1,19 @@
 <?php
-include_once "src/model/repositories/MovieRepository.php";
+include_once "src/model/services/MovieService.php";
 
 class MovieController {
-    private MovieRepository $movieRepository;
+    private MovieService $movieService;
 
     public function __construct() {
-        $this->movieRepository = new MovieRepository();
+        $this->movieService = new MovieService();
     }
 
     public function getAllMovies(): array {
-        return $this->movieRepository->getAllMovies();
+        return $this->movieService->getAllMovies();
+    }
+
+    public function getMovieById(int $movieId): Movie {
+        return $this->movieService->getMovieById($movieId);
     }
 }
 ?>

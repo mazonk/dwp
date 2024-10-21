@@ -1,10 +1,41 @@
 <?php
 require_once 'session_config.php';
+
 include_once "src/controller/NewsController.php";
+include_once "src/controller/ShowingController.php";
+
 include_once "src/view/components/NewsCard.php";
+include_once "src/view/components/MovieCard.php";
+
+$newsController = new NewsController();
+$showingController = new ShowingController();
 
 $tab = isset($_GET['tab']) ? $_GET['tab'] : 'news'; // Default to 'news' if no tab is set in query string
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Set default page number
 
+$moviesPerPage = 5;
+
+// Get the total number of movies playing today
+$moviesPlayingToday = $showingController->getMoviesPlayingToday(2); //TODO: change to get venueid from session
+$totalMovies = count($moviesPlayingToday);
+
+// Calculate the starting index
+$startIndex = ($page - 1) * $moviesPerPage;
+
+// Check if we have enough movies for the current page
+if ($startIndex + $moviesPerPage > $totalMovies) {
+    $startIndex = max(0, $totalMovies - $moviesPerPage); // Adjust startIndex if we exceed total movies
+}
+
+// Fetch the subset of movies for the current page
+$moviesToDisplay = array_slice($moviesPlayingToday, $startIndex, $moviesPerPage);
+
+// Ensure the display logic is correct for the last page
+if ($page > 1 && $startIndex === 0) {
+    // On the first page and there are more than 5 movies
+    // Show the last 5 movies if available
+    $moviesToDisplay = array_slice($moviesPlayingToday, -$moviesPerPage);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,8 +51,39 @@ $tab = isset($_GET['tab']) ? $_GET['tab'] : 'news'; // Default to 'news' if no t
     <!-- Navbar -->
     <?php include_once("src/view/components/Navbar.php"); ?>
 
-    <main class="mt-8 p-4">
+    <main class="mt-16 p-4">
+        <div class="flex items-center justify-between">
+            <!-- Left Arrow - Previous -->
+            <?php if ($page > 1): ?>
+                <a href="?page=<?php echo $page - 1; ?>" class="text-white p-2">
+                    <i class="ri-arrow-left-s-line text-4xl"></i>
+                </a>
+            <?php else: ?>
+                <!-- Empty space when no previous page -->
+                <div class="w-[48px]"></div>
+            <?php endif; ?>
 
+            <!-- Daily showings -->
+            <div class="grid grid-cols-5 gap-4 w-full">
+                <?php
+                    foreach ($moviesToDisplay as $movie) {
+                        MovieCard::render($movie, false);
+                    }
+                ?>
+            </div>
+
+            <!-- Right Arrow - Next -->
+            <?php if ($startIndex + $moviesPerPage < $totalMovies): ?>
+                <a href="?page=<?php echo $page + 1; ?>" class="text-white p-2">
+                    <i class="ri-arrow-right-s-line text-4xl ml-8"></i>
+                </a>
+            <?php else: ?>
+                <!-- Empty space when no next page -->
+                <div class="w-[48px]"></div>
+            <?php endif; ?>
+        </div>
+
+        <!-- News -->
         <!-- Tab Navigation -->
         <div class="flex space-x-4 justify-center mt-8 mb-8">
             <a href="?tab=news" class="text-white <?php echo $tab === 'news' ? 'underline font-semibold' : 'b'; ?>">News & Articles</a>
@@ -33,7 +95,6 @@ $tab = isset($_GET['tab']) ? $_GET['tab'] : 'news'; // Default to 'news' if no t
             <?php
             // Render content based on the selected tab
             if ($tab === 'news') {
-                $newsController = new NewsController();
                 $allNews = $newsController->getNews();
 
                 // Loop through each news item and render it using NewsCard
@@ -52,10 +113,5 @@ $tab = isset($_GET['tab']) ? $_GET['tab'] : 'news'; // Default to 'news' if no t
             ?>
         </div>
     </main>
-
-    <h2>Testing some stuff here:</h2>
-    <form action="/dwp/logout" method="post">
-        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">Logout</button>
-    </form>
 </body>
 </html>

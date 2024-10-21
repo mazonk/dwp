@@ -1,4 +1,5 @@
 <?php
+require_once "src/model/entity/Person.php";
 class Actor extends Person {
   private ?string $character;
 

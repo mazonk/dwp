@@ -1,5 +1,6 @@
 -- Disable foreign key checks (so tables can be dropped)
 SET FOREIGN_KEY_CHECKS = 0;
+USE cinema;
 
 -- Drop all tables
 DROP TABLE IF EXISTS PostalCode;

@@ -15,4 +15,12 @@ class AddressController {
       return [];
     }
   }
+
+  public function getAddressById(int $addressId) {
+    try {
+      return $this->addressRepository->getAddressById($addressId);
+    } catch (Exception $e) {
+      return [];
+    }
+  }
 }

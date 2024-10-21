@@ -1,8 +1,34 @@
 <!-- In the URL -> http://localhost/dwp/movies/1 - this is how you send query string with req. URL -->
 <?php 
 require_once 'session_config.php';
+include_once "src/controller/MovieController.php";
+include_once "src/view/components/MovieCard.php";
+include_once "src/controller/ShowingController.php";
+include_once "src/view/components/ShowingCard.php";
 
-echo 'The id you entered is: '. $id ?>
+$id = $_GET['id'];
+echo 'The id you entered is: '. $id;
+$showingController = new ShowingController();
+$movieController = new MovieController();
+$movie = $movieController->getMovieById($id);
+
+if (!$movie) {
+  echo "No movie found with the given ID.";
+  exit;
+} else {
+  $showings = $showingController->getAllShowingsForVenue(2);
+  if (empty($showings)) {
+    echo "No showings found for this venue.";
+  } else {
+  $showingsForMovie = $showingController->getAllShowingsForMovie($movie->getMovieId(), $showings);
+  echo '<div class="grid grid-cols-3 gap-4 flex flex-row items-center">';
+  foreach ($showingsForMovie as $showing) {
+    ShowingCard::render($showing);
+  }
+  echo '</div>';
+}
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -104,7 +130,6 @@ echo 'The id you entered is: '. $id ?>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
           Proin blandit justo at mauris efficitur, vitae dictum nibh placerat.
         </div>
-
         <div class="movie-info"><span>Duration:</span> 120 minutes</div>
         <div class="movie-info"><span>Language:</span> English</div>
         <div class="movie-info"><span>Release Date:</span> 2024-10-01</div>
