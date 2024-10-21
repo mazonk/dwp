@@ -4,6 +4,7 @@ class MovieCard {
 
   
     public static function render(Movie $movie, $showReleaseDate) {
+
         ?>
         <html>
           <head>
@@ -16,7 +17,8 @@ class MovieCard {
                 <input type="hidden" name="id" value="<?php echo $movie->getMovieId(); ?>">
                 <!-- Submit button with the poster image -->
                 <button type="submit">
-                  <img class="w-full h-[18.75rem] rounded-[0.625rem] m-[0.625rem] bg-center bg-cover" src="src/assets/<?php echo $movie->getPosterURL(); ?>" alt="Movie Poster">
+                  <img class="w-full h-[18.75rem] rounded-[0.625rem] m-[0.625rem] bg-center bg-cover" 
+                  src="src/assets/<?php echo $movie->getPosterURL(); ?>" alt="Movie Poster">
                 </button>
               </form>
         <div class="text-[1.2rem] text-white"><?php echo htmlspecialchars($movie->getTitle()); ?></div>
