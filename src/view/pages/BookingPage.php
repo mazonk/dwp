@@ -1,21 +1,19 @@
 <?php
-require_once 'session_config.php';
+// BookingPage.php
 
-$movieId = isset($_GET['id']) ? htmlspecialchars($_GET['id']) : 'No movie selected';
-$showingTime = isset($_GET['showing_time']) ? htmlspecialchars($_GET['showing_time']) : 'No time selected';
+// Check if the required parameters are set
+if (isset($_GET['id']) && isset($_GET['showing_time'])) {
+    $movieId = $_GET['id'];
+    $showingTime = $_GET['showing_time'];
+
+    // Use these parameters to fetch movie details or show confirmation, etc.
+    // Example: Fetch the movie details using the movie ID
+    // $movieDetails = getMovieDetails($movieId); // Assume you have this function
+
+    // Display the information
+    echo "<h1>Booking for Movie ID: $movieId</h1>";
+    echo "<p>Showing Time: $showingTime</p>";
+} else {
+    echo "<h1>Error: Missing booking information.</h1>";
+}
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Showing Time</title>
-</head>
-<body>
-    <h1>Selected Movie and Showing Time</h1>
-    <p>Movie ID: <?php echo $movieId; ?></p>
-    <p>Showing Time: <?php echo $showingTime; ?></p>
-</body>
-</html>
-
