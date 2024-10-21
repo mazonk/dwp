@@ -16,7 +16,7 @@ $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Set default page numbe
 $moviesPerPage = 5;
 
 // Get the total number of movies playing today
-$moviesPlayingToday = $showingController->getMoviesPlayingToday(2); //TODO: change to get venueid from session
+$moviesPlayingToday = $showingController->getMoviesPlayingToday(1); //TODO: change to get venueid from session
 $totalMovies = count($moviesPlayingToday);
 
 // Calculate the starting index
