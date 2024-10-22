@@ -15,7 +15,7 @@ class UserRepository {
      * Returns a User object from the database given an email address.
      * @param string $email The email address to search for
      */
-    public function getUserByEmail(string $email) {
+    public function getUserByEmail(string $email): array {
         $db = $this->getdb();
         
         // Modify the query to join the UserRole (or Role) table
@@ -29,7 +29,7 @@ class UserRepository {
             $result = $query->fetch(PDO::FETCH_ASSOC);
             return $result;
         } catch (PDOException $e) {
-            return null;
+            throw new Exception("Unable to fetch user by email: ". $e);
         }
     }
     
