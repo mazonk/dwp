@@ -55,10 +55,11 @@ if (!$movie) {
         }
     </style>
 </head>
-<body class="font-sans bg-[#0d0101] text-white m-0 p-[2vw]">
+<body class="max-w-[1440px] w-[100%] mx-auto mt-[72px] mb-[2rem] px-[100px] font-sans bg-[#0d0101] text-white m-0 p-[2vw]">
+<?php include_once("src/view/components/Navbar.php"); ?>
   <div class="flex flex-row justify-between">
   <div class="movie-header">
-            <img class="w-[300px] h-auto rounded-[0.625rem] m-[0.625rem] bg-center bg-cover border-2 border-yellow-900" src="../src/assets/<?php echo $movie->getPosterURL(); ?>" alt="Movie Poster">   
+            <img class="w-[300px] h-auto rounded-[0.625rem] m-[0.625rem] bg-center bg-cover" src="../src/assets/<?php echo $movie->getPosterURL(); ?>" alt="Movie Poster">   
         </div>
     <div class="container w-1/2 justify-start">
         <div class="text-[2.5rem] font-bold mb-2.5">
