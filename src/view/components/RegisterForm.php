@@ -4,7 +4,7 @@ class RegisterForm {
         // Display the message directly passed to the form (optional)
         ?>
         <div class="w-full max-w-xs mx-auto flex flex-col items-center">
-            <form class="space-y-2" action="/dwp/register?action=register" method="post">
+            <form class="space-y-2" action="<?php echo $_SESSION['baseRoute'] ?>register?action=register" method="post">
                 <div>
                     <label for="firstName">First name:</label>
                     <input type="text" name="firstName" id="firstNameInput" 

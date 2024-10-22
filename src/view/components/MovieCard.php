@@ -12,7 +12,7 @@ class MovieCard {
           </head>
           <body>
         <div class="w-[12.5rem] text-center m-[0.625rem]">
-         <form action="/dwp/movies/<?php echo $movie->getMovieId(); ?>" method="GET">
+         <form action="<?php echo $_SESSION['baseRoute'] ?>movies/<?php echo $movie->getMovieId(); ?>" method="GET">
                 <!-- Hidden input to pass the movie ID -->
                 <input type="hidden" name="id" value="<?php echo $movie->getMovieId(); ?>">
                 <!-- Submit button with the poster image -->
