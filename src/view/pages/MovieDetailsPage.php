@@ -57,14 +57,14 @@ if (!$movie) {
 </head>
 <body class="font-sans bg-[#0d0101] text-white m-0 p-[2vw]">
   <div class="flex flex-row justify-between">
-    <div class="container w-1/2 justify-start">
-        <div class="movie-header">
-            <img class="w-[300px] h-auto rounded-[0.625rem] m-[0.625rem] bg-center bg-cover border-2 border-yellow-00" src="../src/assets/<?php echo $movie->getPosterURL(); ?>" alt="Movie Poster">   
+  <div class="movie-header">
+            <img class="w-[300px] h-auto rounded-[0.625rem] m-[0.625rem] bg-center bg-cover border-2 border-yellow-900" src="../src/assets/<?php echo $movie->getPosterURL(); ?>" alt="Movie Poster">   
         </div>
-        <div class="flex-1">
-            <div class="text-[2.5rem] font-bold mb-2.5">
+    <div class="container w-1/2 justify-start">
+        <div class="text-[2.5rem] font-bold mb-2.5">
                 <?php echo htmlspecialchars($movie->getTitle()); ?>
             </div>
+            
             <div class="text-[1.2rem] mb-5"> 
                 <?php echo $movie->getDescription(); ?>
             </div>
@@ -81,9 +81,8 @@ if (!$movie) {
                 <span class="font-bold">Rating: </span> <?php echo $movie->getRating(); ?>
             </div>
         </div>
-    </div>
     <div class="trailer-video mt-10">
-        <iframe class="w-full h-[500px] m-[0.625rem] rounded-[1.5rem]" src="https://www.youtube.com/embed/<?php echo $movie->getTrailerURL(); ?>" frameborder="0" allowfullscreen></iframe>
+        <iframe class="w-full h-[300px] m-[0.625rem] rounded-[1.5rem]" src="https://www.youtube.com/embed/<?php echo $movie->getTrailerURL(); ?>" frameborder="0" allowfullscreen></iframe>
     </div>
         </div>
 

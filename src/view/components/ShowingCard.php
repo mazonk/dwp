@@ -12,6 +12,8 @@ class ShowingCard {
             <form action="/dwp/booking" method="GET">
                 <!-- Hidden input to pass the movie ID -->
                 <input type="hidden" name="id" value="<?php echo $movie->getMovieId(); ?>">
+                <!-- Hidden input to pass the showing date -->
+                <input type="hidden" name="showing_date" value="<?php echo $showing->getShowingDate()->format('Y-m-d'); ?>">
                 <!-- Hidden input to pass the showing time -->
                 <input type="hidden" name="showing_time" value="<?php echo $showing->getShowingTime()->format('H:i'); ?>">
                 <button type="submit" class="w-[6rem] h-[2.5rem] flex items-center justify-center rounded-[0.375rem] text-center m-[0.625rem] bg-pink-950 ease-in-out duration-300 hover:bg-lime-600 text-white">
