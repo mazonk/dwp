@@ -21,7 +21,12 @@ class AuthController {
             $formData['password'] = $_POST['password'];
             $formData['confirmPassword'] = $_POST['confirmPassword'];
 
-            $errors = $this->authService->register($formData);
+            // Validate form data (e.g., check for empty fields before proceeding)
+            if (empty($formData['firstName']) || empty($formData['lastName']) || empty($formData['email']) || empty($formData['password'])) {
+                $errors[] = "All fields are required.";
+            } else {
+                $errors = $this->authService->register($formData);
+            }
 
             if (count($errors) == 0) {
                 // Registration successful, redirect to login

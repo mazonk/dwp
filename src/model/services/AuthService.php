@@ -18,81 +18,85 @@ class AuthService {
 
     public function register(array $formData): array {
         $errors = [];
-
-        // Validations
+    
+        // Validate inputs
         $this->validateRegisterInputs($formData, $errors);
-
+    
         if (count($errors) == 0) {
-            // Hash password
-            $iterations = ['cost' => 10];
-            $hashedPassword = password_hash($formData['password'], PASSWORD_BCRYPT, $iterations);
-            
-            // Check if user with this email exists already
-            if ($this->authRepository->userExists($formData['email'])) {
-                $errors['email'] = "User with this email already exists.";
-                return $errors;
-            }
-
-            // Get UserRole: customer
             try {
-                $result = $this->userRoleRepository->getUserRole('Customer');
-                if ($result) {
-                    $userRole = new UserRole($result['roleId'], $result['type']);
-                }
-            } catch (Exception $e) {
-                $errors[] = "Registration failed. Please try again.";
-                return $errors;
-            }
-            
-            $userToBeInserted = new User(
-                null,
-                $formData['firstName'],
-                $formData['lastName'], 
-                new DateTime($formData['dob']), 
-                $formData['email'], 
-                $hashedPassword, 
-                $userRole
-            );
-
-            // Try to insert the new user into the database
-            try {
-                if ($this->authRepository->emailExists($formData['email'])) {
-                    $newUser = $this->authRepository->createUserToExistingEmail($userToBeInserted);
-                }  else {
-                    $newUser = $this->authRepository->createUser($userToBeInserted);
-                }
-                if (!$newUser) {
-                    // If registration was noy successful
-                    $errors['general'] = "Registration failed. Please try again.";
+                // Hash the password
+                $hashedPassword = password_hash($formData['password'], PASSWORD_BCRYPT, ['cost' => 10]);
+    
+                // Check if a user with this email already exists
+                if ($this->authRepository->userExists($formData['email'])) {
+                    $errors['email'] = "User with this email already exists.";
                     return $errors;
                 }
+    
+                // Fetch the 'Customer' user role
+                $result = $this->userRoleRepository->getUserRole('Customer');
+                if (!$result) {
+                    throw new Exception("User role not found.");
+                }
+                $userRole = new UserRole($result['roleId'], $result['type']);
+    
+                $userToBeInserted = new User(
+                    null,
+                    $formData['firstName'],
+                    $formData['lastName'],
+                    new DateTime($formData['dob']),
+                    $formData['email'],
+                    $hashedPassword,
+                    $userRole
+                );
+    
+                // Insert the new user into the database
+                if ($this->authRepository->emailExists($formData['email'])) {
+                    $newUserId = $this->authRepository->createUserToExistingEmail($userToBeInserted); //update the existing user
+                } else {
+                    $newUserId = $this->authRepository->createUser($userToBeInserted); //new user
+                }
+    
+                if (!$newUserId) {
+                    throw new Exception("Failed to register the user.");
+                }
+    
             } catch (Exception $e) {
+                // Log the actual exception for internal tracking
+                error_log($e->getMessage());
+    
+                // Provide a generic error message to the user
                 $errors['general'] = "Registration failed. Please try again.";
             }
-        } 
+        }
+    
         return $errors;
     }
+    
 
     public function login(array $formData): array {
         $errors = [];
-
-        // Validate login inputs
+    
+        // Validate inputs
         $this->validateLoginInputs($formData, $errors);
-
+    
         if (!empty($errors)) {
             return ['errors' => $errors];
         }
-
-        // Check if the user with this email exists
-        if (!$this->authRepository->userExists($formData['email'])) {
-            $errors['email'] = "User with this email does not exist.";
-            return ['errors' => $errors];
-        }
-
-        // Fetch user from repository
-        $result = $this->userRepository->getUserByEmail($formData['email']);
-
-        if ($result) {
+    
+        try {
+            // Check if the user exists
+            if (!$this->authRepository->userExists($formData['email'])) {
+                $errors['email'] = "User with this email does not exist.";
+                return ['errors' => $errors];
+            }
+    
+            // Fetch user by email
+            $result = $this->userRepository->getUserByEmail($formData['email']);
+            if (!$result) {
+                throw new Exception("User not found.");
+            }
+    
             $user = new User(
                 $result['userId'],
                 $result['firstName'],
@@ -102,19 +106,23 @@ class AuthService {
                 $result['passwordHash'],
                 new UserRole($result['roleId'], $result['type'])
             );
+    
+            // Verify password
+            if (!password_verify($formData['password'], $user->getPasswordHash())) {
+                $errors['password'] = "Incorrect password.";
+                return ['errors' => $errors];
+            }
+    
+            return ['user' => $user];
+    
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+            $errors['general'] = "Login failed. Please try again.";
         }
-
-        // TODO: Handle admin login here if needed
-
-        // Verify the password
-        if (!password_verify($formData['password'], $user->getPasswordHash())) {
-            $errors['password'] = "Incorrect password.";
-            return ['errors' => $errors];
-        }
-
-        // Return the user object on successful login
-        return ['user' => $user];
+    
+        return ['errors' => $errors];
     }
+    
 
     public function logout(): void {
         // Unset session and destroy it
