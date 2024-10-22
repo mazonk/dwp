@@ -20,12 +20,12 @@ class AuthRepository {
         $query = $db->prepare("INSERT INTO User (firstName, lastName, DoB, email, passwordHash, roleId) VALUES (:firstName, :lastName, :DoB, :email, :passwordHash, :roleId)");
         try {
             $wasInserted = $query->execute(array(
-                ":firstName" => $user->getFirstName(),
-                ":lastName" => $user->getLastName(),
-                ":DoB" => $user->getDoB()->format('Y-m-d'), // Convert DateTime to string
-                ":email" => $user->getEmail(),
-                ":passwordHash" => $user->getPasswordHash(),
-                ":roleId" => $user->getUserRole()->getRoleId()
+                ":firstName" => htmlspecialchars($user->getFirstName()),
+                ":lastName" => htmlspecialchars($user->getLastName()),
+                ":DoB" => htmlspecialchars($user->getDoB()->format('Y-m-d')), // Convert DateTime to string
+                ":email" => htmlspecialchars($user->getEmail()),
+                ":passwordHash" => htmlspecialchars($user->getPasswordHash()),
+                ":roleId" => htmlspecialchars($user->getUserRole()->getRoleId())
             ));
 
             if (!$wasInserted) {
@@ -56,20 +56,15 @@ class AuthRepository {
             AND passwordHash IS NULL"); // Correct the NULL check
     
         try {
-            // Begin transaction
-            $db->beginTransaction();
     
             $wasUpdated = $query->execute([
-                ":firstName" => $user->getFirstName(),
-                ":lastName" => $user->getLastName(),
-                ":DoB" => $user->getDoB()->format('Y-m-d'),
-                ":passwordHash" => $user->getPasswordHash(),
-                ":roleId" => $user->getUserRole()->getRoleId(),
-                ":email" => $user->getEmail()
+                ":firstName" => htmlspecialchars($user->getFirstName()),
+                ":lastName" => htmlspecialchars($user->getLastName()),
+                ":DoB" => htmlspecialchars($user->getDoB()->format('Y-m-d')),
+                ":passwordHash" => htmlspecialchars($user->getPasswordHash()),
+                ":roleId" => htmlspecialchars($user->getUserRole()->getRoleId()),
+                ":email" => htmlspecialchars($user->getEmail())
             ]);
-    
-            // Commit transaction
-            $db->commit();
     
             if (!$wasUpdated) {
                 return null;
@@ -78,8 +73,6 @@ class AuthRepository {
             return $user;
     
         } catch (PDOException $e) {
-            // Rollback in case of error
-            $db->rollBack();
             return null;
         }
     }
@@ -93,7 +86,7 @@ class AuthRepository {
         $db = $this->getdb();
         $query = $db->prepare("SELECT * FROM User WHERE email = :email");
         try {
-            $query->execute(array(":email" => $email));
+            $query->execute(array(":email" => htmlspecialchars($email)));
             $result = $query->fetch(PDO::FETCH_ASSOC);
             return !empty($result); // Return true if the result is not empty (MEANING EMAIL EXISTS)
         } catch (PDOException $e) {
@@ -110,7 +103,7 @@ class AuthRepository {
         $db = $this->getdb();
         $query = $db->prepare("SELECT * FROM User WHERE email = :email AND passwordHash IS NOT NULL");
         try {
-            $query->execute(array(":email" => $email));
+            $query->execute(array(":email" => htmlspecialchars($email)));
             $result = $query->fetch(PDO::FETCH_ASSOC);
             return !empty($result); // Return true if the result is not empty (MEANING USER EXISTS)
         } catch (PDOException $e) {

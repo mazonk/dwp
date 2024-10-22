@@ -53,7 +53,7 @@ class AddressRepository {
     $db = $this->getdb();
     $query = $db->prepare("SELECT * FROM `Address` WHERE addressId = :addressId");
     try {
-      $query->execute(['addressId' => $addressId]);
+      $query->execute(['addressId' => htmlspecialchars($addressId)]);
       $result = $query->fetch(PDO::FETCH_ASSOC);
       if ($result === false) {
         return null;

@@ -25,7 +25,7 @@ class UserRepository {
             WHERE u.email = :email");
         
         try {
-            $query->execute(array(":email" => $email));
+            $query->execute(array(":email" => htmlspecialchars($email)));
             $result = $query->fetch(PDO::FETCH_ASSOC);
             return $result;
         } catch (PDOException $e) {

@@ -30,7 +30,7 @@ class ShowingRepository {
         
         try {
             $query = $db->prepare("SELECT * FROM VenueShowing as vs WHERE vs.venueId = :venueId");
-            $query->execute(array(":venueId" => $venueId));
+            $query->execute(array(":venueId" => htmlspecialchars($venueId)));
             $result = $query->fetchAll(PDO::FETCH_ASSOC);   
             return $result;
         } catch (PDOException $e) {
@@ -44,7 +44,7 @@ class ShowingRepository {
         try {
             $query = $db->prepare("SELECT * FROM Showing as s JOIN VenueShowing as vs ON s.showingId = vs.showingId WHERE vs.venueId = :venueId 
             AND s.movieId = :movieId ORDER BY s.showingDate, s.showingTime ASC");
-            $query->execute(array(":movieId" => $movieId, ":venueId" => $selectedVenueId));
+            $query->execute(array(":movieId" => $movieId, ":venueId" => htmlspecialchars($selectedVenueId)));
             $result = $query->fetchAll(PDO::FETCH_ASSOC);
             return $result;
         } catch (PDOException $e) {

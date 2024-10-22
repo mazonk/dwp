@@ -11,7 +11,7 @@ class NewsRepository {
         $db = $this->getdb();
         try {
             $query = $db->prepare("SELECT * FROM News n WHERE n.newsId = :id");
-            $query->execute(array(":id" => $id));
+            $query->execute(array(":id" => htmlspecialchars($id)));
             $result = $query->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             echo 'Failed to fetch news: '. $e;
