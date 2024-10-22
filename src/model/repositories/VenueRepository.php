@@ -8,6 +8,7 @@ class VenueRepository {
     return DatabaseConnection::getInstance(); // singleton
   }
 
+  /* Get all venues */
   public function getAllVenues(): array {
     $db = $this->getdb();
     $query = $db->prepare("SELECT * FROM Venue");
@@ -40,19 +41,27 @@ class VenueRepository {
     }
   }
 
-  public function getVenueById(int $venueId): ?Venue {
+  /* Get the venue by venueId */
+  public function getVenue(int $venueId): ?Venue {
     $db = $this->getdb();
-    $query = $db->prepare("SELECT * FROM Venue as v WHERE v.venueId = ?");
+    $query = $db->prepare("SELECT * FROM Venue WHERE venueId = :venueId");
+    $query->bindParam(":venueId", $venueId);
+
     try {
-      $query->execute([$venueId]);
+      $query->execute();
       $result = $query->fetch(PDO::FETCH_ASSOC);
-      if (empty($result)) {
-        return null;
-      }
-      else {
+
+      if ($result) {
         $addressController = new AddressController();
-        $address = $addressController->getAddressById($result['addressId']);
-        return new Venue($result['venueId'], $result['name'], $result['phoneNr'], $result['contactEmail'], $address);
+        $allAddresses = $addressController->getAllAddresses();
+
+        foreach($allAddresses as $address) {
+          if ($result['addressId'] == $address->getAddressId()) {
+            return new Venue($result['venueId'], $result['name'], $result['phoneNr'], $result['contactEmail'], $address);
+          }
+        }
+      } else {
+        return null;
       }
     } catch (PDOException $e) {
       return null;

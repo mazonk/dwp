@@ -15,7 +15,7 @@ include_once "src/view/components/ShowingCard.php";
     <script src="https://cdn.tailwindcss.com"></script>
     <?php include_once("src/assets/tailwindConfig.php"); ?>
   </head>
-  <body class="max-w-[1440px] w-[100%] mx-auto px-[100px] bg-bgDark text-textLight">
+  <body class="max-w-[1440px] w-[100%] mx-auto mt-[72px] mb-[2rem] px-[100px] bg-bgDark text-textLight">
     <!-- Navbar -->
     <?php include_once("src/view/components/Navbar.php"); ?>
     <main class="mt-[56px] p-4">
@@ -56,5 +56,7 @@ include_once "src/view/components/ShowingCard.php";
       </div>
         </div>
     </main>
+    <!-- Navbar -->
+    <?php include_once("src/view/components/Footer.php"); ?>
   </body>
 </html>
