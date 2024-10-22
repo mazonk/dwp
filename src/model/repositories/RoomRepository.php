@@ -12,7 +12,7 @@ class RoomRepository {
         $db = $this->getdb();
         $query = $db->prepare("SELECT * FROM Room as r WHERE r.roomId = :roomId");
         try{
-        $query->execute(array(":roomId" => $roomId));
+        $query->execute(array(":roomId" => htmlspecialchars($roomId)));
         $result = $query->fetch(PDO::FETCH_ASSOC);
         if (empty($result)) {
             return null;

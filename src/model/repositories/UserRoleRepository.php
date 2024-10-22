@@ -26,7 +26,7 @@ class UserRoleRepository {
         $db = $this->getdb();
         $query = $db->prepare("SELECT * FROM UserRole ur WHERE ur.type = :type");
         try {
-            $query->execute(array(":type" => $roleType));
+            $query->execute(array(":type" => htmlspecialchars($roleType)));
             $result = $query->fetch(PDO::FETCH_ASSOC);
             if (empty($result)) {
                 throw new Exception("User role not found");
