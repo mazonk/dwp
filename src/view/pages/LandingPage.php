@@ -66,12 +66,9 @@ if ($page > 1 && $startIndex === 0) {
             <!-- Daily showings -->
             <div class="grid grid-cols-5 gap-4 w-full">
                 <?php
-                    echo '<div class="flex flex-col gap-2">';
                         foreach ($moviesToDisplay as $movie) {
                             MovieCard::render($movie, false);
                         }
-                        echo "<button class='w-full text-center text-lg border font-semibold'>Book a ticket</button>";
-                    echo "</div>";
                 ?>
             </div>
 

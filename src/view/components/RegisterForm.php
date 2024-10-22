@@ -68,7 +68,7 @@ class RegisterForm {
                 <div class="flex flex-col items-center w-full">
                     <input class="text-white font-bold py-2 px-4 rounded text-center w-full mt-4 cursor-pointer" 
                            style="background: #FADF24;" type="submit" name="registerButton" value="Sign up" />
-                    <p class="mt-2 -mb-4 text-gray-500"> Already have an account? <a class="underline text-blue-700" href="/dwp/login">Log in</></p>
+                    <p class="mt-2 -mb-4 text-gray-500"> Already have an account? <a class="underline text-blue-700" href="<?php echo $_SESSION['baseRoute'] ?>login">Log in</></p>
                 </div>
             </form>
         </div>

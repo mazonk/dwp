@@ -25,13 +25,13 @@ class AuthController {
 
             if (count($errors) == 0) {
                 // Registration successful, redirect to login
-                header("Location: /dwp/login");
+                header("Location: " . $_SESSION['baseRoute'] . "login");
                 exit;
             } else {
                 // Handle errors (session-based error handling, redirect back)
                 $_SESSION['errors'] = $errors;
                 $_SESSION['formData'] = $formData;
-                header("Location: /dwp/register");
+                header("Location: " . $_SESSION['baseRoute'] . "register");
                 exit;
             }
         }
@@ -52,7 +52,7 @@ class AuthController {
                 // If there are errors, handle them (e.g., set error messages)
                 $_SESSION['errors'] = $result['errors'];
                 $_SESSION['formData'] = $formData;
-                header("Location: /dwp/login");
+                header("Location: " . $_SESSION['baseRoute'] . "login");
                 exit();
             }
 
@@ -72,7 +72,7 @@ class AuthController {
             $_SESSION['lastGeneration'] = time();
 
             // Redirect to homepage after successful login
-            header("Location: /dwp/home");
+            header("Location: " . $_SESSION['baseRoute'] . "home");
             exit();
         }
     }
@@ -80,7 +80,7 @@ class AuthController {
     public function logout(): void {
         $this->authService->logout();
 
-        header("Location: /dwp/login");
+        header("Location: " . $_SESSION['baseRoute'] . "login");
         exit;
     }
 }

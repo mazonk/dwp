@@ -50,13 +50,13 @@
     <!-- (the ml-[] is for balancing the different width of the elements on either siede of the navbar thus it is in the center of the page) -->
     <div class="flex justify-center items-center gap-[2.5rem] ml-[195px]">
       <div>
-        <a href="/dwp/home" class="font-medium">Home</a>
+        <a href="<?php echo $_SESSION['baseRoute']?>home" class="font-medium">Home</a>
       </div>
       <div>
-        <a href="/dwp/movies" class="font-medium">All Movies</a>
+        <a href="<?php echo $_SESSION['baseRoute']?>movies" class="font-medium">All Movies</a>
       </div>
       <div>
-        <a href="/dwp/upcoming" class="font-medium">Upcoming Movies</a>
+        <a href="<?php echo $_SESSION['baseRoute']?>upcoming" class="font-medium">Upcoming Movies</a>
       </div>
       <!-- TODO: Scroll down to ticket section -->
       <div>

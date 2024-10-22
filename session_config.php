@@ -1,6 +1,8 @@
 <?php
 session_start();
 
+$_SESSION['baseRoute'] = $_SERVER['HTTP_HOST'] == 'localhost' ? '/dwp/' : '/';
+
 // Time interval for id regeneration
 $interval = 30 * 60; 
 
@@ -24,7 +26,7 @@ function isLoggedIn() {
 
 function confirm_logged_in() {
     if (!isLoggedIn()) {
-        header("Location: /dwp/login");
+        header("Location: " . $_SESSION['baseRoute'] . "login");
         exit;
     }
 }

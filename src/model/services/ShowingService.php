@@ -24,7 +24,7 @@ class ShowingService {
     public function getShowingById(int $showingId, int $venueId): ?Showing {
         $showingData = $this->showingRepository->getShowingById($showingId);
         if ($showingData) {
-            $venue = $this->venueRepository->getVenueById($venueId);
+            $venue = $this->venueRepository->getVenue($venueId);
             $roomData = $this->roomRepository->getRoomById($showingData['roomId']);
             $room = new Room($roomData["roomId"], $roomData["roomNumber"], $venue);
             $rawMovie = $this->movieRepository->getMovieById($showingData['movieId']);
