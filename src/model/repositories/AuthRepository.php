@@ -56,8 +56,6 @@ class AuthRepository {
             AND passwordHash IS NULL"); // Correct the NULL check
     
         try {
-            // Begin transaction
-            $db->beginTransaction();
     
             $wasUpdated = $query->execute([
                 ":firstName" => htmlspecialchars($user->getFirstName()),
@@ -68,9 +66,6 @@ class AuthRepository {
                 ":email" => htmlspecialchars($user->getEmail())
             ]);
     
-            // Commit transaction
-            $db->commit();
-    
             if (!$wasUpdated) {
                 return null;
             }
@@ -78,8 +73,6 @@ class AuthRepository {
             return $user;
     
         } catch (PDOException $e) {
-            // Rollback in case of error
-            $db->rollBack();
             return null;
         }
     }
