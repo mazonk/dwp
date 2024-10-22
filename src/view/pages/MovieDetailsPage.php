@@ -1,126 +1,113 @@
 <!-- In the URL -> http://localhost/dwp/movies/1 - this is how you send query string with req. URL -->
 <?php 
 require_once 'session_config.php';
+include_once "src/controller/MovieController.php";
+include_once "src/view/components/MovieCard.php";
+include_once "src/controller/ShowingController.php";
+include_once "src/view/components/ShowingCard.php";
+include_once "src/model/entity/Showing.php";
 
-echo 'The id you entered is: '. $id ?>
+$id = $_GET['id'];
+$showingController = new ShowingController();
+$movieController = new MovieController();
+$movie = $movieController->getMovieById($id);
+
+if (!$movie) {
+  echo "No movie found with the given ID.";
+  exit;
+} else {
+  $showingsForMovie = $showingController->getAllShowingsForMovie($movie->getMovieId());
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Movie Details</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #0d0101;
-      color: white;
-      margin: 0;
-      padding: 2vw;
-    }
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <?php include_once("src/assets/tailwindConfig.php"); ?>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Details</title>
+    <style>
+        .movie-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
-    }
+        .movie-actions {
+            margin-top: 30px;
+        }
 
-    .movie-header {
-      display: flex;
-      align-items: flex-start;
-      gap: 20px;
-    }
+        .movie-actions a {
+            text-decoration: none;
+            background-color: #fabb2c;
+            color: black;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 5vw;
+            margin-right: 10px;
+        }
 
-    .movie-poster {
-      width: 300px;
-      height: 450px;
-      background-color: #ddd;
-      background-size: cover;
-      background-position: center;
-      border-radius: 1vw;
-    }
-
-    .movie-details {
-      flex: 1;
-    }
-
-    .movie-title {
-      font-size: 2.5rem;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    .movie-description {
-      font-size: 1.2rem;
-      margin-bottom: 20px;
-    }
-
-    .movie-info {
-      margin-bottom: 10px;
-    }
-
-    .movie-info span {
-      font-weight: bold;
-    }
-
-    .movie-actions {
-      margin-top: 30px;
-    }
-
-    .movie-actions a {
-      text-decoration: none;
-      background-color: #fabb2c;
-      color: black;
-      font-weight: bold;
-      padding: 10px 20px;
-      border-radius: 5vw;
-      margin-right: 10px;
-    }
-
-    .movie-actions a:hover {
-      background-color: #123A6B;
-    }
-
-    .trailer-video {
-      margin-top: 40px;
-    }
-
-    .trailer-video iframe {
-      width: 100%;
-      height: 500px;
-    }
-  </style>
+        .movie-actions a:hover {
+            background-color: #123A6B;
+        }
+    </style>
 </head>
-<body>
-
-  <div class="container">
-    <div class="movie-header">
-      <div class="movie-poster" style="background-image: url('placeholder-poster.jpg');">
-        <!-- Placeholder for movie poster -->
-      </div>
-      <div class="movie-details">
-        <div class="movie-title">Movie Title Placeholder</div>
-        <div class="movie-description">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-          Proin blandit justo at mauris efficitur, vitae dictum nibh placerat.
+<body class="font-sans bg-[#0d0101] text-white m-0 p-[2vw]">
+  <div class="flex flex-row justify-between">
+  <div class="movie-header">
+            <img class="w-[300px] h-auto rounded-[0.625rem] m-[0.625rem] bg-center bg-cover border-2 border-yellow-900" src="../src/assets/<?php echo $movie->getPosterURL(); ?>" alt="Movie Poster">   
+        </div>
+    <div class="container w-1/2 justify-start">
+        <div class="text-[2.5rem] font-bold mb-2.5">
+                <?php echo htmlspecialchars($movie->getTitle()); ?>
+            </div>
+            
+            <div class="text-[1.2rem] mb-5"> 
+                <?php echo $movie->getDescription(); ?>
+            </div>
+            <div class="movie-info mb-2">
+                <span class="font-bold">Duration: </span> <?php echo $movie->getDuration(); ?>
+            </div>
+            <div class="movie-info mb-2">
+                <span class="font-bold">Language: </span> <?php echo $movie->getLanguage(); ?>
+            </div>
+            <div class="movie-info mb-2">
+                <span class="font-bold">Release Date: </span> <?php echo $movie->getReleaseDate()->format('Y-m-d'); ?>
+            </div>
+            <div class="movie-info mb-2">
+                <span class="font-bold">Rating: </span> <?php echo $movie->getRating(); ?>
+            </div>
+        </div>
+    <div class="trailer-video mt-10">
+        <iframe class="w-full h-[300px] m-[0.625rem] rounded-[1.5rem]" src="https://www.youtube.com/embed/<?php echo $movie->getTrailerURL(); ?>" frameborder="0" allowfullscreen></iframe>
+    </div>
         </div>
 
-        <div class="movie-info"><span>Duration:</span> 120 minutes</div>
-        <div class="movie-info"><span>Language:</span> English</div>
-        <div class="movie-info"><span>Release Date:</span> 2024-10-01</div>
-        <div class="movie-info"><span>Rating:</span> 8.5/10</div>
-
-        <div class="movie-actions">
-          <a href="#">Watch Promo</a>
-          <a href="#">Buy Tickets</a>
+    <div class="bg-yellow-900 text-white p-4 mt-6 rounded-md">
+        <h2 class="text-2xl text-center font-bold mb-4">Showing Times</h2>
+        <div class="flex gap-4">
+            <?php
+            $today = new DateTime();
+            for ($i = 0; $i < 7; $i++) {
+                $currentDay = clone $today;
+                $currentDay->modify("+$i day");
+                $formatedDay = $currentDay->format('l d, M');
+                echo '<div class="bg-bgLight text-white py-2 px-4 my-2 rounded-md w-full text-center">';
+                echo "$formatedDay";
+                echo '<div class="flex flex-col items-center">';
+                foreach ($showingsForMovie as $showing) {
+                    if ($showing->getShowingDate()->format('l d, M') == $formatedDay) {
+                        ShowingCard::render($showing);
+                    }
+                }
+                echo '</div>';
+                echo "</div>";
+            }
+            ?>
         </div>
-      </div>
     </div>
-
-    <div class="trailer-video">
-      <iframe src="https://www.youtube.com/embed/trailer-url-placeholder" allowfullscreen></iframe>
-    </div>
-  </div>
-
 </body>
 </html>

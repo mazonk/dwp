@@ -2,14 +2,17 @@
 require_once 'session_config.php';
 require_once 'src/model/entity/User.php';
 require_once 'src/model/repositories/UserRepository.php';
+include_once 'src/model/repositories/AuthRepository.php';
 require_once 'src/controller/UserRoleController.php';
 
 class AuthService {
     private UserRepository $userRepository;
+    private AuthRepository $authRepository;
     private UserRoleRepository $userRoleRepository;
 
     public function __construct(){
         $this->userRepository = new UserRepository();
+        $this->authRepository = new AuthRepository();
         $this->userRoleRepository = new UserRoleRepository();
     }
 
@@ -25,14 +28,17 @@ class AuthService {
             $hashedPassword = password_hash($formData['password'], PASSWORD_BCRYPT, $iterations);
             
             // Check if user with this email exists already
-            if ($this->userRepository->userExists($formData['email'])) {
+            if ($this->authRepository->userExists($formData['email'])) {
                 $errors['email'] = "User with this email already exists.";
                 return $errors;
             }
 
             // Get UserRole: customer
             try {
-                $userRole = $this->userRoleRepository->getUserRole('Customer');
+                $result = $this->userRoleRepository->getUserRole('Customer');
+                if ($result) {
+                    $userRole = new UserRole($result['roleId'], $result['type']);
+                }
             } catch (Exception $e) {
                 $errors[] = "Registration failed. Please try again.";
                 return $errors;
@@ -50,10 +56,10 @@ class AuthService {
 
             // Try to insert the new user into the database
             try {
-                if ($this->userRepository->emailExists($formData['email'])) {
-                    $newUser = $this->userRepository->createUserToExistingEmail($userToBeInserted);
+                if ($this->authRepository->emailExists($formData['email'])) {
+                    $newUser = $this->authRepository->createUserToExistingEmail($userToBeInserted);
                 }  else {
-                    $newUser = $this->userRepository->createUser($userToBeInserted);
+                    $newUser = $this->authRepository->createUser($userToBeInserted);
                 }
                 if (!$newUser) {
                     // If registration was noy successful
@@ -78,13 +84,25 @@ class AuthService {
         }
 
         // Check if the user with this email exists
-        if (!$this->userRepository->userExists($formData['email'])) {
+        if (!$this->authRepository->userExists($formData['email'])) {
             $errors['email'] = "User with this email does not exist.";
             return ['errors' => $errors];
         }
 
         // Fetch user from repository
-        $user = $this->userRepository->getUserByEmail($formData['email']);
+        $result = $this->userRepository->getUserByEmail($formData['email']);
+
+        if ($result) {
+            $user = new User(
+                $result['userId'],
+                $result['firstName'],
+                $result['lastName'],
+                new DateTime($result['DoB']),
+                $result['email'],
+                $result['passwordHash'],
+                new UserRole($result['roleId'], $result['type'])
+            );
+        }
 
         // TODO: Handle admin login here if needed
 

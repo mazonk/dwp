@@ -30,7 +30,6 @@ class VenueRepository {
           foreach($allAddresses as $address) {
             if ($row['addressId'] == $address->getAddressId()) {
               $retArray[] = new Venue($row['venueId'], $row['name'], $row['phoneNr'], $row['contactEmail'], $address);
-
               break;
             }
           }
@@ -64,7 +63,6 @@ class VenueRepository {
       } else {
         return null;
       }
-
     } catch (PDOException $e) {
       return null;
     }

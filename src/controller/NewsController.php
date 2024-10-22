@@ -1,19 +1,19 @@
 <?php
-include_once "src/model/repositories/NewsRepository.php";
+include_once "src/model/services/NewsService.php";
 
 class NewsController {
-    private NewsRepository $newsRepository;
+    private NewsService $newsService;
 
     public function __construct() {
-        $this->newsRepository = new NewsRepository();
+        $this->newsService = new NewsService();
     }
 
     public function getNews($id = null): array {
-        return $this->newsRepository->getAll();
+        return $this->newsService->getNews();
     }
 
     public function getNewsById($id): News {
-        return $this->newsRepository->get($id);
+        return $this->newsService->getNewsById($id);
     }
 }
 ?>

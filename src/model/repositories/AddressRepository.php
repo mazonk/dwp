@@ -48,4 +48,30 @@ class AddressRepository {
       return null;
     }
   }
+
+  
+  public function getAddressById(int $addressId): ?Address {
+    $db = $this->getdb();
+    $query = $db->prepare("SELECT * FROM `Address` WHERE addressId = :addressId");
+    try {
+      $query->execute(['addressId' => htmlspecialchars($addressId)]);
+      $result = $query->fetch(PDO::FETCH_ASSOC);
+      if ($result === false) {
+        return null;
+      }
+      else {
+        $postalCodeQuery = $db->prepare("SELECT * FROM PostalCode WHERE postalCode = :postalCode");
+        $postalCodeQuery->execute(['postalCode' => $result['postalCode']]);
+        $postalCodeResult = $postalCodeQuery->fetch(PDO::FETCH_ASSOC);
+        if ($postalCodeResult === false) {
+          return null;
+        }
+        else {
+          return new Address($result['addressId'], $result['street'], $result['streetNr'], new PostalCode($postalCodeResult['postalCode'], $postalCodeResult['city']));
+        }
+      }
+    } catch (PDOException $e) {
+      return null;
+    }
+  }
 }

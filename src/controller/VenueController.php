@@ -8,6 +8,13 @@ class VenueController {
     $this->venueRepository = new VenueRepository();
   }
 
+  public function getVenueById(int $venueId): ?Venue {
+    try {
+      return $this->venueRepository->getVenue($venueId);
+    } catch (Exception $e) {
+      return null;
+    }
+  }
   /* Get all venues */
   public function getAllVenues(): array {
     try {
