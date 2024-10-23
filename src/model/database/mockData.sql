@@ -63,7 +63,17 @@ INSERT INTO Movie (title, description, duration, language, releaseDate, posterUR
 INSERT INTO Genre (name) VALUES
 ('Action'),
 ('Drama'),
-('Sci-Fi');
+('Sci-Fi'),
+('Comedy'),
+('Horror'),
+('Fantasy'),
+('Thriller'),
+('Animation'),
+('Mystery'),
+('Romance'),
+('Adventure'),
+('Documentary'),
+('Musical');
 
 INSERT INTO Director (firstName, lastName) VALUES
 ('Christopher', 'Nolan'),
@@ -167,6 +177,40 @@ INSERT INTO MovieGenre (movieId, genreId) VALUES
 (2, 3),  -- Spider-Man: No Way Home -> Sci-Fi
 (3, 1),  -- Iron Man -> Action
 (3, 3);  -- Iron Man -> Sci-Fi
+(4, 3),  -- Interstellar -> Sci-Fi
+(4, 2),  -- Interstellar -> Drama
+(5, 5),  -- Andre Rieu -> Music
+(5, 6),  -- Andre Rieu -> Documentary
+(6, 4),  -- En Panda i Afrika -> Animation
+(6, 7),  -- En Panda i Afrika -> Family
+(7, 2),  -- The Apprentice -> Drama
+(8, 1),  -- Deadpool -> Action
+(8, 8),  -- Deadpool -> Comedy
+(9, 2),  -- It Ends with Us -> Drama
+(9, 9),  -- It Ends with Us -> Romance
+(10, 3),  -- Robot -> Sci-Fi
+(10, 1),  -- Robot -> Action
+(11, 2),  -- Joker -> Drama
+(11, 10),  -- Joker -> Thriller
+(12, 11),  -- Føreren og Forføreren -> Biography
+(12, 12),  -- Føreren og Forføreren -> History
+(13, 4),  -- Minions -> Animation
+(13, 7),  -- Minions -> Family
+(14, 3),  -- Star Wars: Episode V -> Sci-Fi
+(14, 1),  -- Star Wars: Episode V -> Action
+(15, 3),  -- Star Wars: Episode VI -> Sci-Fi
+(15, 1),  -- Star Wars: Episode VI -> Action
+(16, 3),  -- Guardians of the Multiverse -> Sci-Fi
+(16, 1),  -- Guardians of the Multiverse -> Action
+(17, 3),  -- Space Explorers -> Sci-Fi
+(17, 13),  -- Space Explorers -> Adventure
+(18, 3),  -- The Time Jumper -> Sci-Fi
+(18, 2),  -- The Time Jumper -> Drama
+(19, 3),  -- AI: Awakening -> Sci-Fi
+(19, 10),  -- AI: Awakening -> Thriller
+(20, 1),  -- Rise of the Phoenix -> Action
+(20, 14);  -- Rise of the Phoenix -> Fantasy
+
 
 INSERT INTO MovieDirector (movieId, directorId) VALUES
 (1, 1),  -- The Dark Knight -> Christopher Nolan
