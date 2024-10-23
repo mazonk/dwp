@@ -16,7 +16,7 @@ $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Set default page numbe
 $moviesPerPage = 5;
 
 // Get the total number of movies playing today
-$moviesPlayingToday = $showingController->getMoviesPlayingToday(1); //TODO: change to get venueid from session
+$moviesPlayingToday = $showingController->getMoviesPlayingToday($_SESSION['selectedVenueId']); //TODO: change to get venueid from session
 $totalMovies = count($moviesPlayingToday);
 
 // Calculate the starting index
@@ -85,6 +85,7 @@ if ($page > 1 && $startIndex === 0) {
 
         <!-- News -->
         <!-- Tab Navigation -->
+        <?php echo $_SESSION['selectedVenueId']?>
         <div class="flex space-x-4 justify-center mt-8 mb-8">
             <a href="?tab=news" class="text-white <?php echo $tab === 'news' ? 'underline font-semibold' : 'b'; ?>">News & Articles</a>
             <a href="?tab=company" class="text-white <?php echo $tab === 'company' ? 'underline font-semibold' : ''; ?>">Company Information</a>

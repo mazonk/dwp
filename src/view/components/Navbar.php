@@ -15,23 +15,16 @@
   $isVenueDropdownOpen = $_SESSION['isVenueDropdownOpen'];
   $isProfileDropdownOpen = $_SESSION['isProfileDropdownOpen'];
 
-  // Check if the form is submitted
-  if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-      if (isset($_POST['venueDropdownToggler'])) {
-          $_SESSION['isProfileDropdownOpen'] = false; // Close the profile dropdown if it is open
-          $_SESSION['isVenueDropdownOpen'] = !$_SESSION['isVenueDropdownOpen'];
-          // Redirect to avoid form resubmission
-          header("Location: " . $_SERVER['REQUEST_URI']);
-          exit();
-      }
-
-      if (isset($_POST['profileDropdownToggler'])) {
-          $_SESSION['isVenueDropdownOpen'] = false; // Close the venue dropdown if it is open
-          $_SESSION['isProfileDropdownOpen'] = !$_SESSION['isProfileDropdownOpen'];
-          // Redirect to avoid form resubmission
-          header("Location: " . $_SERVER['REQUEST_URI']);
-          exit();
-      }
+  // Handle AJAX request for toggleDropdowns
+  if (isset($_POST['action'])) { //action is what we request at line 61: xhr.send(`action=${action}`);
+    if ($_POST['action'] === 'toggleVenueDropdown') {
+        $_SESSION['isVenueDropdownOpen'] = !$_SESSION['isVenueDropdownOpen'];
+        $_SESSION['isProfileDropdownOpen'] = false; // Close profile dropdown if open
+    } elseif ($_POST['action'] === 'toggleProfileDropdown') {
+        $_SESSION['isProfileDropdownOpen'] = !$_SESSION['isProfileDropdownOpen'];
+        $_SESSION['isVenueDropdownOpen'] = false; // Close venue dropdown if open
+    }
+    exit();
   }
 
   /* Select venue */
@@ -42,6 +35,33 @@
 ?>
 
 <header class="w-[100%] fixed top-0 left-0 right-0 bg-bgDark z-[10]">
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const venueDropdownToggler = document.querySelector('#venueDropdownToggler');
+      const profileDropdownToggler = document.querySelector('#profileDropdownToggler');
+
+      venueDropdownToggler?.addEventListener('click', () => {
+          toggleDropdown('toggleVenueDropdown');
+      });
+
+      profileDropdownToggler?.addEventListener('click', () => {
+          toggleDropdown('toggleProfileDropdown');
+      });
+
+      function toggleDropdown(action) {
+          const xhr = new XMLHttpRequest();
+          xhr.open('POST', '', true); // @params (method, url, async)
+          xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+          xhr.onreadystatechange = function() { //event handler to check when the request is done
+              if (xhr.readyState === 4 && xhr.status === 200) { // if http response 200 (ok)
+                  // Reload the page to reflect the updated dropdown state
+                  window.location.reload();
+              }
+          };
+          xhr.send(`action=${action}`);
+      }
+    });
+  </script>
   <nav class="max-w-[1440px] w-[100%] flex justify-between items-center gap-[4rem] mx-auto py-[1rem] px-[100px] z-[10]">
     <!-- Logo -->
     <div>logo</div>
@@ -71,13 +91,10 @@
     <div class="flex items-center gap-[2rem]">
       <!-- Venue -->
       <div class="relative">
-        <form action="" method="post">
-          <input type="hidden" name="isVenueDropdownOpen" value="<?php echo $isVenueDropdownOpen ? 'true' : 'false'; ?>">
-          <button type="submit" name="venueDropdownToggler" class="flex gap-[.375rem]">
-            <i class="ri-map-pin-2-fill h-[18px] text-[18px]"></i>
-            <span class="translate-y-[.5px]"><?= $_SESSION['selectedVenueName'] ?></span>
-          </button>
-        </form>
+        <button id="venueDropdownToggler" type="button" class="flex gap-[.375rem]">
+          <i class="ri-map-pin-2-fill h-[18px] text-[18px]"></i>
+          <span class="translate-y-[.5px]"><?= $_SESSION['selectedVenueName'] ?></span>
+        </button>
         <!-- Dropdown -->
         <?php if ($isVenueDropdownOpen): ?>
         <div class="absolute min-w-[150px] top-[40px] right-[0] py-[.75rem] bg-bgDark border-[1px] border-bgLight rounded-[10px]">
@@ -106,12 +123,9 @@
       </a>
       <?php else: ?>
       <div class="relative">
-        <form action="" method="post">
-          <input type="hidden" name="isProfileDropdownOpen" value="<?php echo $isProfileDropdownOpen ? 'true' : 'false'; ?>">
-          <button type="submit" name="profileDropdownToggler" class="h-[40px] w-[40px] bg-primary text-textDark font-medium leading-tight rounded-full ease-in-out duration-[.15s] hover:bg-primaryHover ">
-            P
-          </button>
-        </form>
+      <button id="profileDropdownToggler" type="button" class="h-[40px] w-[40px] bg-primary text-textDark font-medium leading-tight rounded-full ease-in-out duration-[.15s] hover:bg-primaryHover">
+        P
+      </button>
         <!-- Dropdown -->
         <?php if ($isProfileDropdownOpen): ?>
         <div class="absolute min-w-[150px] top-[48px] right-[0] py-[.75rem] bg-bgDark border-[1px] border-bgLight rounded-[10px]">

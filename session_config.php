@@ -1,7 +1,12 @@
 <?php
+require_once "src/controller/VenueController.php";
+
 session_start();
 
+$venueController = new VenueController();
 $_SESSION['baseRoute'] = $_SERVER['HTTP_HOST'] == 'localhost' ? '/dwp/' : '/';
+$initialVenue = $venueController->getVenue(1);
+$_SESSION['selectedVenueId'] ? '' : $venueController->selectVenue($initialVenue);
 
 // Time interval for id regeneration
 $interval = 30 * 60; 
