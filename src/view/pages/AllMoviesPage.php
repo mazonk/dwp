@@ -40,18 +40,7 @@ include_once "src/view/components/ShowingCard.php";
         <?php
         $showingController = new ShowingController();
         $showings = $showingController->getAllShowingsForVenue(1);
-        if (empty($showings)) {
-            echo "No showings found for this venue.";
-        } else {
-            echo "Showings fetched from database: <br>";
-            foreach ($showings as $showing) {
-                echo "Showing ID: " . $showing->getShowingId() . "<br>";
-                echo "Movie Title: " . $showing->getMovie()->getTitle() . "<br>";
-                echo "Room Number: " . $showing->getRoom()->getRoomNumber() . "<br>";
-                echo "Showing Date: " . $showing->getShowingDate()->format('Y-m-d') . "<br>";
-                echo "Showing Time: " . $showing->getShowingTime()->format('H:i') . "<br>";
-            }
-        }
+        
         ?>
       </div>
         </div>
