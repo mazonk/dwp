@@ -148,7 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="flex items-center justify-between">
             <!-- Left Arrow - Previous -->  
             <!-- Set button to disable, so they can't navigate to page < 1 -->
-            <button disabled id="prev-page" class="text-white p-2">
+            <button disabled id="prev-page" class="text-white p-2 disabled:text-gray-500">
                 <i class="ri-arrow-left-s-line text-4xl"></i>
             </button>
 
@@ -160,7 +160,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <!-- Right Arrow - Next -->
-            <button id="next-page" class="text-white p-2">
+            <button id="next-page" class="text-white p-2 disabled:text-gray-500">
                 <i class="ri-arrow-right-s-line text-4xl ml-8"></i>
             </button>
         </div>
