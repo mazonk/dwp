@@ -80,6 +80,7 @@ INSERT INTO Director (firstName, lastName) VALUES
 ('Jon', 'Watts'),
 ('Jon', 'Favreau');
 
+
 INSERT INTO Actor (firstName, lastName, `character`) VALUES
 ('Christian', 'Bale', 'Bruce Wayne/Batman'),
 ('Tom', 'Holland', 'Peter Parker/Spider-Man'),
@@ -215,12 +216,49 @@ INSERT INTO MovieGenre (movieId, genreId) VALUES
 INSERT INTO MovieDirector (movieId, directorId) VALUES
 (1, 1),  -- The Dark Knight -> Christopher Nolan
 (2, 2),  -- Spider-Man: No Way Home -> Jon Watts
-(3, 3);  -- Iron Man -> Jon Favreau
+(3, 3),  -- Iron Man -> Jon Favreau
+(4, 1),  -- Interstellar -> Christopher Nolan
+(5, 4),  -- Andre Rieu -> Michael Williams
+(6, 5),  -- En Panda i Afrika -> Emil Johnsen
+(7, 6),  -- The Apprentice -> Alex Garland
+(8, 7),  -- Deadpool -> Tim Miller
+(9, 8),  -- It Ends with Us -> Justin Baldoni
+(10, 9),  -- Robot -> Michael Bay
+(11, 10),  -- Joker -> Todd Phillips
+(12, 11), -- Føreren og Forføreren -> Søren Kragh-Jacobsen
+(13, 12),  -- Minions -> Pierre Coffin
+(14, 13),  -- Star Wars: Episode V -> Irvin Kershner
+(15, 14),  -- Star Wars: Episode VI -> Richard Marquand
+(16, 15),  -- Guardians of the Multiverse -> James Gunn
+(17, 16),  -- Space Explorers: The Next Journey -> Denis Villeneuve
+(18, 1),  -- The Time Jumper -> Christopher Nolan
+(19, 6),  -- AI: Awakening -> Alex Garland
+(20, 17);  -- Rise of the Phoenix -> Zack Snyder
+
+INSERT INTO MovieActor (movieId, actorId) VALUES
 
 INSERT INTO MovieActor (movieId, actorId) VALUES
 (1, 1),  -- The Dark Knight -> Christian Bale
 (2, 2),  -- Spider-Man: No Way Home -> Tom Holland
-(3, 3);  -- Iron Man -> Robert Downey Jr.
+(3, 3),  -- Iron Man -> Robert Downey Jr.
+(4, 4),  -- Interstellar -> Matthew McConaughey
+(5, 5),  -- Andre Rieu -> Andre Rieu
+(6, 6),  -- En Panda i Afrika -> Johan Carlsson
+(7, 7),  -- The Apprentice -> Anya Taylor-Joy
+(8, 8),  -- Deadpool -> Ryan Reynolds
+(9, 9),  -- It Ends with Us -> Blake Lively
+(10, 10),  -- Robot -> Shia LaBeouf
+(11, 11),  -- Joker -> Joaquin Phoenix
+(12, 12),  -- Føreren og Forføreren -> Ulrich Thomsen
+(13, 12),  -- Minions -> Pierre Coffin
+(14, 13),  -- Star Wars: Episode V -> Mark Hamill
+(15, 13),  -- Star Wars: Episode VI -> Mark Hamill
+(16, 14),  -- Guardians of the Multiverse -> Chris Pratt
+(17, 15),  -- Space Explorers: The Next Journey -> Zendaya
+(18, 16),  -- The Time Jumper -> Jake Gyllenhaal
+(19, 17),  -- AI: Awakening -> Oscar Isaac
+(20, 18);  -- Rise of the Phoenix -> Henry Cavill
+
 
 INSERT INTO VenueShowing (venueId, showingId) VALUES
 (1, 1),  -- Gotham Cinema -> Showing of The Dark Knight
