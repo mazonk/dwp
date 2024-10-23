@@ -236,8 +236,6 @@ INSERT INTO MovieDirector (movieId, directorId) VALUES
 (20, 17);  -- Rise of the Phoenix -> Zack Snyder
 
 INSERT INTO MovieActor (movieId, actorId) VALUES
-
-INSERT INTO MovieActor (movieId, actorId) VALUES
 (1, 1),  -- The Dark Knight -> Christian Bale
 (2, 2),  -- Spider-Man: No Way Home -> Tom Holland
 (3, 3),  -- Iron Man -> Robert Downey Jr.
@@ -258,7 +256,6 @@ INSERT INTO MovieActor (movieId, actorId) VALUES
 (18, 16),  -- The Time Jumper -> Jake Gyllenhaal
 (19, 17),  -- AI: Awakening -> Oscar Isaac
 (20, 18);  -- Rise of the Phoenix -> Henry Cavill
-
 
 INSERT INTO VenueShowing (venueId, showingId) VALUES
 (1, 1),  -- Gotham Cinema -> Showing of The Dark Knight
