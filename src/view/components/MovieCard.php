@@ -6,12 +6,8 @@ class MovieCard {
     public static function render(Movie $movie, $showReleaseDate) {
 
         ?>
-        <html>
-          <head>
-            <script src="https://cdn.tailwindcss.com"></script>
-          </head>
           <body>
-        <div class="w-[12.5rem] text-center m-[0.625rem]">
+        <div class="w-[12.5rem] text-center m-[0.625rem] movie-card">
          <form action="<?php echo $_SESSION['baseRoute'] ?>movies/<?php echo $movie->getMovieId(); ?>" method="GET">
                 <!-- Hidden input to pass the movie ID -->
                 <input type="hidden" name="id" value="<?php echo $movie->getMovieId(); ?>">
@@ -28,8 +24,6 @@ class MovieCard {
           <?php endif; ?>
 
         </div>
-        </body>
-        </html>
         <?php
     }
 }

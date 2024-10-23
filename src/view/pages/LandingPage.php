@@ -11,7 +11,28 @@ $newsController = new NewsController();
 $showingController = new ShowingController();
 
 $tab = 'news'; // Default to 'news'
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Set default page number
+$page = 1; // Set default page number
+$moviesPerPage = 5;
+
+ //Fetch and render movies playing today based on pagination.
+function renderMovies($showingController, $page, $moviesPerPage) {
+    $moviesPlayingToday = $showingController->getMoviesPlayingToday($_SESSION['selectedVenueId']);
+    $totalMovies = count($moviesPlayingToday);
+    $startIndex = ($page - 1) * $moviesPerPage;
+
+    // Ensure the start index doesn't exceed the total number of movies
+    $startIndex = min($startIndex, max(0, $totalMovies - $moviesPerPage));
+
+    $moviesToDisplay = array_slice($moviesPlayingToday, $startIndex, $moviesPerPage);
+
+    // Render movie cards
+    foreach ($moviesToDisplay as $movie) {
+        MovieCard::render($movie, false);
+    }
+    echo "<script>const totalMovies = $totalMovies; const moviesPerPage = $moviesPerPage;</script>"; // adding js variables here so the script tag can use them
+
+    return $totalMovies;
+}
 
 // Handle AJAX requests
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -31,33 +52,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo '<h2 class="text-2xl font-bold text-white">Ticket Prices</h2>';
             echo '<p class="text-lg text-gray-300 mt-4">Space reserved for ticket prices.</p>';
         }
-        exit; // End script after handling tab content
+        exit;
     }
-
-}
-
-$moviesPerPage = 5;
-
-// Get the total number of movies playing today
-$moviesPlayingToday = $showingController->getMoviesPlayingToday($_SESSION['selectedVenueId']); //TODO: change to get venueid from session
-$totalMovies = count($moviesPlayingToday);
-
-// Calculate the starting index
-$startIndex = ($page - 1) * $moviesPerPage;
-
-// Check if we have enough movies for the current page
-if ($startIndex + $moviesPerPage > $totalMovies) {
-    $startIndex = max(0, $totalMovies - $moviesPerPage); // Adjust startIndex if we exceed total movies
-}
-
-// Fetch the subset of movies for the current page
-$moviesToDisplay = array_slice($moviesPlayingToday, $startIndex, $moviesPerPage);
-
-// Ensure the display logic is correct for the last page
-if ($page > 1 && $startIndex === 0) {
-    // On the first page and there are more than 5 movies
-    // Show the last 5 movies if available
-    $moviesToDisplay = array_slice($moviesPlayingToday, -$moviesPerPage);
+    if (isset($_POST['page'])) {
+        renderMovies($showingController, (int)$_POST['page'], $moviesPerPage);
+        exit;
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -72,8 +72,8 @@ if ($page > 1 && $startIndex === 0) {
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             //get html elements
-            const prevPageButton = document.getElementById('prevPage');
-            const nextPageButton = document.getElementById('nextPage');
+            const prevPageButton = document.querySelector('#prev-page');
+            const nextPageButton = document.querySelector('#next-page');
             const tabs = document.querySelectorAll('.tab');
 
             //init values
@@ -87,6 +87,36 @@ if ($page > 1 && $startIndex === 0) {
                     fetchTabContent(selectedTab);
                 });
             });
+
+            // Handle pagination for daily showings
+            prevPageButton?.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    fetchMovies();
+                }
+            });
+
+            nextPageButton?.addEventListener('click', () => {
+                currentPage++;
+                fetchMovies();
+            });
+
+            function fetchMovies() {
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', '', true); //new post request to fulfil 
+                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        document.getElementById('dailyShowingsList').innerHTML = xhr.responseText;
+                        console.log(currentPage);
+                        prevPageButton.disabled = currentPage === 1;
+                        const totalPages = Math.ceil(totalMovies / moviesPerPage);
+                        nextPageButton.disabled = currentPage >= totalPages;
+                        
+                    }
+                };
+                xhr.send(`page=${currentPage}`); // Send current page to the server
+            }
 
             function fetchTabContent(tab) {
                 const xhr = new XMLHttpRequest();
@@ -113,37 +143,26 @@ if ($page > 1 && $startIndex === 0) {
 <body class="max-w-[1440px] w-[100%] mx-auto px-[100px] bg-bgDark text-textLight overflow-hidden">
     <!-- Navbar -->
     <?php include_once("src/view/components/Navbar.php"); ?>
-    
+
     <main class="mt-16 p-4">
         <div class="flex items-center justify-between">
-            <!-- Left Arrow - Previous -->
-            <?php if ($page > 1): ?>
-                <butto id="prevPage" class="text-white p-2">
-                    <i class="ri-arrow-left-s-line text-4xl"></i>
-                </button>
-            <?php else: ?>
-                <!-- Empty space when no previous page -->
-                <div class="w-[48px]"></div>
-            <?php endif; ?>
+            <!-- Left Arrow - Previous -->  
+            <!-- Set button to disable, so they can't navigate to page < 1 -->
+            <button disabled id="prev-page" class="text-white p-2">
+                <i class="ri-arrow-left-s-line text-4xl"></i>
+            </button>
 
             <!-- Daily showings -->
             <div id="dailyShowingsList" class="grid grid-cols-5 gap-4 w-full">
                 <?php
-                        foreach ($moviesToDisplay as $movie) {
-                            MovieCard::render($movie, false);
-                        }
+                renderMovies($showingController, $page, $moviesPerPage);
                 ?>
             </div>
 
             <!-- Right Arrow - Next -->
-            <?php if ($startIndex + $moviesPerPage < $totalMovies): ?>
-                <button id="nextPage" class="text-white p-2">
-                    <i class="ri-arrow-right-s-line text-4xl ml-8"></i>
-                </button>
-            <?php else: ?>
-                <!-- Empty space when no next page -->
-                <div class="w-[48px]"></div>
-            <?php endif; ?>
+            <button id="next-page" class="text-white p-2">
+                <i class="ri-arrow-right-s-line text-4xl ml-8"></i>
+            </button>
         </div>
 
         <!-- News/companyinfo/prices -->
