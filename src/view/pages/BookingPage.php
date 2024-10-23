@@ -1,4 +1,6 @@
 <?php
+require_once 'session_config.php';
+
 if (isset($_GET['id']) && isset($_GET['showing_time']) && isset($_GET['showing_date'])) {
     $movieId = $_GET['id'];
     $showingDate = $_GET['showing_date'];

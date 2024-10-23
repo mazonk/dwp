@@ -14,6 +14,8 @@ $currentDate = new DateTime();
   <title>Upcoming Movies</title>
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet"/>
   <script src="https://cdn.tailwindcss.com"></script>
+  <?php include_once("src/assets/tailwindConfig.php"); ?>
+
 </head>
 <body class="max-w-[1440px] w-[100%] mx-auto px-[100px] bg-[#0d0101] text-white p-8">
 <?php include_once("src/view/components/Navbar.php"); ?>
@@ -36,5 +38,6 @@ $currentDate = new DateTime();
     ?>
   </div>
 </main>
+<?php include_once("src/view/components/Footer.php"); ?>
 </body>
 </html>

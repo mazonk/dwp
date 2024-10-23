@@ -78,13 +78,48 @@ INSERT INTO Genre (name) VALUES
 INSERT INTO Director (firstName, lastName) VALUES
 ('Christopher', 'Nolan'),
 ('Jon', 'Watts'),
-('Jon', 'Favreau');
-
+('Jon', 'Favreau'),
+('Christopher', 'Nolan'),
+('Jon', 'Watts'),
+('Jon', 'Favreau'),
+('Michael', 'Williams'),
+('Emil', 'Johnsen'),
+('Alex', 'Garland'),
+('Tim', 'Miller'),
+('Justin', 'Baldoni'),
+('Michael', 'Bay'),
+('Todd', 'Phillips'),
+('Søren', 'Kragh-Jacobsen'),
+('Pierre', 'Coffin'),
+('Irvin', 'Kershner'),
+('Richard', 'Marquand'),
+('James', 'Gunn'),
+('Denis', 'Villeneuve'),
+('Zack', 'Snyder');
 
 INSERT INTO Actor (firstName, lastName, `character`) VALUES
 ('Christian', 'Bale', 'Bruce Wayne/Batman'),
 ('Tom', 'Holland', 'Peter Parker/Spider-Man'),
-('Robert', 'Downey Jr.', 'Tony Stark/Iron Man');
+('Robert', 'Downey Jr.', 'Tony Stark/Iron Man'),
+('Christian', 'Bale', 'Bruce Wayne/Batman'),
+('Tom', 'Holland', 'Peter Parker/Spider-Man'),
+('Robert', 'Downey Jr.', 'Tony Stark/Iron Man'),
+('Matthew', 'McConaughey', 'Joseph Cooper'),
+('Andre', 'Rieu', 'Andre Rieu'),
+('Johan', 'Carlsson', 'Panda'),
+('Anya', 'Taylor-Joy', 'Emily Smith'),
+('Ryan', 'Reynolds', 'Wade Wilson/Deadpool'),
+('Blake', 'Lively', 'Lily Bloom'),
+('Shia', 'LaBeouf', 'Sam Witwicky'),
+('Joaquin', 'Phoenix', 'Arthur Fleck/Joker'),
+('Ulrich', 'Thomsen', 'Mads'),
+('Pierre', 'Coffin', 'Minions'),
+('Mark', 'Hamill', 'Luke Skywalker'),
+('Chris', 'Pratt', 'Peter Quill/Star-Lord'),
+('Zendaya', 'Mary', 'Jane Watson'),
+('Jake', 'Gyllenhaal', 'David Rhodes'),
+('Oscar', 'Isaac', 'Nathan Bateman'),
+('Henry', 'Cavill', 'John Wick');
 
 INSERT INTO Showing (showingDate, showingTime, movieId, roomId) VALUES
 ('2024-10-15', '19:00:00', 1, 1),
