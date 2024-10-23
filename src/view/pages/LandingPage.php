@@ -85,7 +85,6 @@ if ($page > 1 && $startIndex === 0) {
 
         <!-- News -->
         <!-- Tab Navigation -->
-        <?php echo $_SESSION['selectedVenueId']?>
         <div class="flex space-x-4 justify-center mt-8 mb-8">
             <a href="?tab=news" class="text-white <?php echo $tab === 'news' ? 'underline font-semibold' : 'b'; ?>">News & Articles</a>
             <a href="?tab=company" class="text-white <?php echo $tab === 'company' ? 'underline font-semibold' : ''; ?>">Company Information</a>

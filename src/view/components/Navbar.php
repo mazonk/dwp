@@ -15,22 +15,24 @@
   $isVenueDropdownOpen = $_SESSION['isVenueDropdownOpen'];
   $isProfileDropdownOpen = $_SESSION['isProfileDropdownOpen'];
 
+  //retrive venues
+  $venueController = new VenueController();
+  $allVenues = $venueController->getAllVenues();
+
+
   // Handle AJAX request for toggleDropdowns
-  if (isset($_POST['action'])) { //action is what we request at line 61: xhr.send(`action=${action}`);
+  if (isset($_POST['action'])) { //action is what we request at line 63: xhr.send(`action=${action}`);
     if ($_POST['action'] === 'toggleVenueDropdown') {
         $_SESSION['isVenueDropdownOpen'] = !$_SESSION['isVenueDropdownOpen'];
         $_SESSION['isProfileDropdownOpen'] = false; // Close profile dropdown if open
     } elseif ($_POST['action'] === 'toggleProfileDropdown') {
         $_SESSION['isProfileDropdownOpen'] = !$_SESSION['isProfileDropdownOpen'];
         $_SESSION['isVenueDropdownOpen'] = false; // Close venue dropdown if open
+    } elseif ($_POST['action'] === 'selectVenue') {
+      $venueController = new VenueController();
+      $selectedVenue = $venueController->selectVenue($venueController->getVenue($_POST['venueId'])); // Setting selected venue in session
     }
     exit();
-  }
-
-  /* Select venue */
-  if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['selectVenue'])) {
-    $venueController = new VenueController();
-    $selectedVenue = $venueController->selectVenue($venueController->getVenue($_POST['venueId'])); // Setting the selected venue in the session
   }
 ?>
 
@@ -60,7 +62,26 @@
           };
           xhr.send(`action=${action}`);
       }
+
+      document.querySelectorAll('.venueSelectButton').forEach(button => { //get button class
+      button.addEventListener('click', (e) => {
+        e.preventDefault(); // Prevent form submission
+        
+        const venueId = button.dataset.venueId; // Get venue id from data attribute
+        
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '', true);
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            // Reload page or update the selected venue dynamically
+            window.location.reload();
+          }
+        };
+        xhr.send(`action=selectVenue&venueId=${venueId}`); // Send venue selection to the server
+      });
     });
+  });
   </script>
   <nav class="max-w-[1440px] w-[100%] flex justify-between items-center gap-[4rem] mx-auto py-[1rem] px-[100px] z-[10]">
     <!-- Logo -->
@@ -98,21 +119,13 @@
         <!-- Dropdown -->
         <?php if ($isVenueDropdownOpen): ?>
         <div class="absolute min-w-[150px] top-[40px] right-[0] py-[.75rem] bg-bgDark border-[1px] border-bgLight rounded-[10px]">
-          <?php
-          // Create a new instance of VenueController and fetch all venues
-          $venueController = new VenueController();
-          $allVenues = $venueController->getAllVenues();
-
-          // Loop through each venue and render its name (when clicked, the venue is selected and stored in the session)
-          foreach ($allVenues as $venue) {
-            echo '<form action="" method="post">';
-            echo '<input type="hidden" name="venueId" value="' . htmlspecialchars($venue->getVenueId()) . '">';
-            echo '<button type="submit" name="selectVenue" class="w-full py-[.5rem] px-[.625rem] text-[.875rem] text-left leading-tight bg-bgDark ease-in-out duration-[.15s] hover:bg-bgSemiDark">';
-            echo htmlspecialchars($venue->getName());
-            echo '</button>';
-            echo '</form>';
-          }
-          ?>
+          <!-- Iterate through all venues and display them as buttons so user can select -->
+        <?php foreach ($allVenues as $venue): ?>
+          <button type="button" data-venue-id="<?php echo htmlspecialchars($venue->getVenueId()); ?>" 
+          class="venueSelectButton w-full py-[.5rem] px-[.625rem] text-[.875rem] text-left leading-tight bg-bgDark ease-in-out duration-[.15s] hover:bg-bgSemiDark">
+            <?php echo htmlspecialchars($venue->getName()); ?>
+          </button>
+        <?php endforeach; ?>
         </div>
         <?php endif; ?>
       </div>
