@@ -12,9 +12,10 @@ $showingController = new ShowingController();
 $movieController = new MovieController();
 $movie = $movieController->getMovieById($id);
 
-if (!$movie) {
-  echo "No movie found with the given ID.";
-  exit;
+
+if (is_array($movie) && isset($movie['error']) && $movie['error'] === true) {
+    // Display the error message
+    echo $movie['message'];
 } else {
   $showingsForMovie = $showingController->getAllShowingsForMovie($movie->getMovieId());
 }
