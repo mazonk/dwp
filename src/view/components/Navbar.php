@@ -21,13 +21,11 @@
 
 
   // Handle AJAX request for toggleDropdowns
-  if (isset($_POST['action'])) { //action is what we request at line 63: xhr.send(`action=${action}`);
+  if (isset($_POST['action'])) { //request by xhr
     if ($_POST['action'] === 'toggleVenueDropdown') {
         $_SESSION['isVenueDropdownOpen'] = !$_SESSION['isVenueDropdownOpen'];
-        $_SESSION['isProfileDropdownOpen'] = false; // Close profile dropdown if open
     } elseif ($_POST['action'] === 'toggleProfileDropdown') {
         $_SESSION['isProfileDropdownOpen'] = !$_SESSION['isProfileDropdownOpen'];
-        $_SESSION['isVenueDropdownOpen'] = false; // Close venue dropdown if open
     } elseif ($_POST['action'] === 'selectVenue') {
       $venueController = new VenueController();
       $selectedVenue = $venueController->selectVenue($venueController->getVenue($_POST['venueId'])); // Setting selected venue in session
@@ -49,6 +47,15 @@
       profileDropdownToggler?.addEventListener('click', () => {
           toggleDropdown('toggleProfileDropdown');
       });
+
+      // Close dropdowns when clicked outside
+      document.addEventListener('click', e => {
+        if (e.target !== venueDropdownToggler && venueDropdownToggler.dataset.isOpen === '1') {
+          toggleDropdown('toggleVenueDropdown');
+        } else if (e.target !== profileDropdownToggler && profileDropdownToggler.dataset.isOpen === '1') {
+          toggleDropdown('toggleProfileDropdown');
+        }
+      })
 
       function toggleDropdown(action) {
           const xhr = new XMLHttpRequest();
@@ -112,7 +119,7 @@
     <div class="flex items-center gap-[2rem]">
       <!-- Venue -->
       <div class="relative">
-        <button id="venueDropdownToggler" type="button" class="flex gap-[.375rem]">
+        <button data-is-open="<?php echo htmlspecialchars($isVenueDropdownOpen) ?>" id="venueDropdownToggler" type="button" class="flex gap-[.375rem]">
           <i class="ri-map-pin-2-fill h-[18px] text-[18px]"></i>
           <span class="translate-y-[.5px]"><?= $_SESSION['selectedVenueName'] ?></span>
         </button>
@@ -136,7 +143,7 @@
       </a>
       <?php else: ?>
       <div class="relative">
-      <button id="profileDropdownToggler" type="button" class="h-[40px] w-[40px] bg-primary text-textDark font-medium leading-tight rounded-full ease-in-out duration-[.15s] hover:bg-primaryHover">
+      <button data-is-open="<?php echo htmlspecialchars($isProfileDropdownOpen) ?>" id="profileDropdownToggler" type="button" class="h-[40px] w-[40px] bg-primary text-textDark font-medium leading-tight rounded-full ease-in-out duration-[.15s] hover:bg-primaryHover">
         P
       </button>
         <!-- Dropdown -->

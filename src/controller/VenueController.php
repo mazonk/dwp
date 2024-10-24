@@ -35,9 +35,10 @@ class VenueController {
   }
 
   /* Store the selected venue's venueId and name in the session */
-  public function selectVenue(Venue $venue): void {
+  public function selectVenue(Venue $venue): Venue {
     $_SESSION['selectedVenueId'] = $venue->getVenueId();
     $_SESSION['selectedVenueName'] = $venue->getName();
+    return $venue;
   }
 }
 ?>
