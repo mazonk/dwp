@@ -1,27 +1,28 @@
 <?php
-include_once "src/model/repositories/AddressRepository.php";
+include_once "src/model/services/AddressService.php";
 
 class AddressController {
-  private AddressRepository $addressRepository;
+  private AddressService $addressService;
 
   public function __construct() {
     $this->addressRepository = new AddressRepository();
   }
 
   /* Get all addresses */
-  public function getAllAddresses(): array {
+  /* public function getAllAddresses(): array {
     try {
       return $this->addressRepository->getAllAddresses();
     } catch (Exception $e) {
       return [];
     }
-  }
+  } */
 
-  public function getAddressById(int $addressId) {
+  /* Get address by id */
+  public function getAddressById(int $addressId): Address {
     try {
       return $this->addressRepository->getAddressById($addressId);
     } catch (Exception $e) {
-      return [];
+      throw new Exception("Address not found");
     }
   }
 }
