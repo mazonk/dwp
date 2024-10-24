@@ -10,12 +10,12 @@ class AddressService {
     $this->addressRepository = new AddressRepository();
   }
 
+  /* Get all addresses */
   public function getAllAddresses(): array {
     $result = $this->addressRepository->getAllAddresses();
-
     if ($result) {
       $addressArray = [];
-
+      // Create an array of Address objects with the corresponding PostalCode object
       foreach($result['addressResult'] as $addressRow) {
         foreach($result['postalCodeResult'] as $postalCodeRow) {
           if ($addressRow['postalCode'] == $postalCodeRow['postalCode']) {
@@ -31,10 +31,11 @@ class AddressService {
     }
   }
 
+  /* Get address by id */
   public function getAdrressById(int $addressId): Address {
     $result = $this->addressRepository->getAddressById($addressId);
-
-    if ($result) {      
+    if ($result) {     
+      // Create and return an Address object with the corresponding PostalCode object
       return new Address($result['addressResult']['addressId'], $result['addressResult']['street'], $result['addressResult']['streetNr'], new PostalCode($result['postalCodeResult']['postalCode'], $result['postalCodeResult']['city']));
     }
     else {
