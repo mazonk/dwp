@@ -5,22 +5,22 @@ class AddressController {
   private AddressService $addressService;
 
   public function __construct() {
-    $this->addressRepository = new AddressRepository();
+    $this->addressService = new AddressService();
   }
 
   /* Get all addresses */
-  /* public function getAllAddresses(): array {
+  public function getAllAddresses(): array {
     try {
-      return $this->addressRepository->getAllAddresses();
+      return $this->addressService->getAllAddresses();
     } catch (Exception $e) {
-      return [];
+      throw new Exception("No addresses found");
     }
-  } */
+  }
 
   /* Get address by id */
   public function getAddressById(int $addressId): Address {
     try {
-      return $this->addressRepository->getAddressById($addressId);
+      return $this->addressService->getAddressById($addressId);
     } catch (Exception $e) {
       throw new Exception("Address not found");
     }
