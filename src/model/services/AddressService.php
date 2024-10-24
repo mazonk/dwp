@@ -32,7 +32,7 @@ class AddressService {
   }
 
   /* Get address by id */
-  public function getAdrressById(int $addressId): Address {
+  public function getAddressById(int $addressId): Address {
     $result = $this->addressRepository->getAddressById($addressId);
     if (!empty($result)) {     
       // Create and return an Address object with the corresponding PostalCode object
