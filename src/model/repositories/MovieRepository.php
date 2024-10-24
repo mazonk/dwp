@@ -25,12 +25,12 @@ class MovieRepository {
 
     public function getActorsByMovieId(int $movieId): array {
         $db = $this->getdb();
-        $query = $db->prepare("SELECT a.* FROM Actor as a JOIN MovieActor as ma ON a.actorId = ma.actorId WHERE ma.movieId = ?");
+        $query = $db->prepare("SELECT a.* FROM Actor as a JOIN MovieActor as ma ON a.actorId = ma.actorId WHERE ma.movieId = :movieId");
         try {
-            $query->execute([$movieId]);
+            $query->execute(array(":movieId" => $movieId)  );
             $result = $query->fetchAll(PDO::FETCH_ASSOC);
             if (empty($result)) {
-                throw new Exception("No actors found for this movie");
+                return []; // No actors found for this movie
             }
         }
         catch (PDOException $e) {
@@ -42,12 +42,12 @@ class MovieRepository {
 
     public function getDirectorsByMovieId(int $movieId): array {
         $db = $this->getdb();
-        $query = $db->prepare("SELECT d.* FROM Director as d JOIN MovieDirector as md ON d.directorId = md.directorId WHERE md.movieId = ?");
+        $query = $db->prepare("SELECT d.* FROM Director as d JOIN MovieDirector as md ON d.directorId = md.directorId WHERE md.movieId = :movieId");
         try {
-            $query->execute([$movieId]);
+            $query->execute(array(":movieId" => $movieId));
             $result = $query->fetchAll(PDO::FETCH_ASSOC);
             if (empty($result)) {
-                throw new Exception("No directors found for this movie");
+                return []; // No directors found for this movie
             }
         } catch (PDOException $e) {
             throw new Exception("Unable to fetch directors: ". $e->getMessage());
@@ -56,11 +56,11 @@ class MovieRepository {
         return $result;
     }
 
-    public function getMovieById(int $movieId) {
+    public function getMovieById(int $movieId): array {
         $db = $this->getdb();
-        $query = $db->prepare("SELECT * FROM Movie as m WHERE m.movieId = ?");
+        $query = $db->prepare("SELECT * FROM Movie as m WHERE m.movieId = :movieId");
         try{
-            $query->execute([$movieId]);
+            $query->execute(array(":movieId" => $movieId));
             $result = $query->fetch(PDO::FETCH_ASSOC);
             if (empty($result)) {
                 throw new Exception("No movie found with id: ". $movieId);
