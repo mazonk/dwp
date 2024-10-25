@@ -7,7 +7,9 @@ include_once "src/controller/ShowingController.php";
 include_once "src/view/components/ShowingCard.php";
 include_once "src/model/entity/Showing.php";
 
-$id = $_GET['id'];
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+}
 $showingController = new ShowingController();
 $movieController = new MovieController();
 $movie = $movieController->getMovieById($id);
