@@ -17,8 +17,6 @@
 
   //retrive venues
   $venueController = new VenueController();
-  $allVenues = $venueController->getAllVenues();
-
 
   // Handle AJAX request for toggleDropdowns
   if (isset($_POST['action'])) { //request by xhr
@@ -27,7 +25,6 @@
     } elseif ($_POST['action'] === 'toggleProfileDropdown') {
         $_SESSION['isProfileDropdownOpen'] = !$_SESSION['isProfileDropdownOpen'];
     } elseif ($_POST['action'] === 'selectVenue') {
-      $venueController = new VenueController();
       $selectedVenue = $venueController->selectVenue($venueController->getVenue($_POST['venueId'])); // Setting selected venue in session
     }
     exit();
@@ -127,12 +124,19 @@
         <?php if ($isVenueDropdownOpen): ?>
         <div class="absolute min-w-[150px] top-[40px] right-[0] py-[.75rem] bg-bgDark border-[1px] border-bgLight rounded-[10px]">
           <!-- Iterate through all venues and display them as buttons so user can select -->
-        <?php foreach ($allVenues as $venue): ?>
-          <button type="button" data-venue-id="<?php echo htmlspecialchars($venue->getVenueId()); ?>" 
-          class="venueSelectButton w-full py-[.5rem] px-[.625rem] text-[.875rem] text-left leading-tight bg-bgDark ease-in-out duration-[.15s] hover:bg-bgSemiDark">
-            <?php echo htmlspecialchars($venue->getName()); ?>
-          </button>
-        <?php endforeach; ?>
+          
+          <?php 
+            $allVenues = $venueController->getAllVenues();
+            if (isset($allVenues['errorMessage'])) {
+              echo "<div class='text-[.875rem] text-textNormal leading-snug'>" . htmlspecialchars($allVenues['errorMessage']) . "</div>";
+            }
+            
+            foreach ($allVenues as $venue): ?>
+            <button type="button" data-venue-id="<?php echo htmlspecialchars($venue->getVenueId()); ?>" 
+            class="venueSelectButton w-full py-[.5rem] px-[.625rem] text-[.875rem] text-left leading-tight bg-bgDark ease-in-out duration-[.15s] hover:bg-bgSemiDark">
+              <?php echo htmlspecialchars($venue->getName()); ?>
+            </button>
+          <?php endforeach; ?>
         </div>
         <?php endif; ?>
       </div>

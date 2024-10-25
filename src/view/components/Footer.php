@@ -29,7 +29,9 @@ include_once "src/controller/OpeningHourController.php";
         $venueController = new VenueController();
         $selectedVenue = $venueController->getVenue($_SESSION['selectedVenueId']);
 
-        
+        if(is_array($selectedVenue) && isset($selectedVenue['errorMessage'])) {
+          echo "<div class='text-[.875rem] text-textNormal leading-snug'>" . htmlspecialchars($selectedVenue['errorMessage']) . "</div>";
+        }
 
         ?>
         <a href="mailto:<?= htmlspecialchars($selectedVenue->getContactEmail()) ?>" class="w-fit text-[.875rem] text-textNormal leading-snug ease-in-out duration-[.15s] hover:text-textLight">
