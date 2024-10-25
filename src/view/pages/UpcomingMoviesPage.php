@@ -24,8 +24,8 @@ $currentDate = new DateTime();
     $movieController = new MovieController();
     $allMovies = $movieController->getAllMovies();
 
-    if (isset($allMovies['error']) && $allMovies['error'] === true) {
-      echo $allMovies['message'];
+    if (isset($allMovies['errorMessage'])) {
+      echo $allMovies['errorMessage'];
     } else {
 
       // Loop through each movie and render its movie card if the release date is in the future

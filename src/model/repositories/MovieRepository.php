@@ -1,7 +1,4 @@
 <?php
-include_once "src/model/entity/Movie.php";
-include_once "src/model/entity/Actor.php";
-include_once "src/model/entity/Director.php";
 class MovieRepository {
     private function getdb(): PDO {
         require_once 'src/model/database/dbcon/DatabaseConnection.php';
@@ -14,10 +11,10 @@ class MovieRepository {
             $query->execute();
             $result = $query->fetchAll(PDO::FETCH_ASSOC);
             if (empty($result)) {
-                throw new Exception("No movies found");
+                throw new Exception("No movies found!");
             }
         } catch (PDOException $e) {
-            throw new PDOException("Unable to fetch movies: ". $e->getMessage());
+            throw new PDOException("Unable to fetch movies!");
         }
 
         return $result;
@@ -34,7 +31,7 @@ class MovieRepository {
             }
         }
         catch (PDOException $e) {
-            throw new PDOException("Unable to fetch actors" . $e->getMessage());
+            throw new PDOException("Unable to fetch actors!");
         }
 
         return $result;
@@ -50,7 +47,7 @@ class MovieRepository {
                 return []; // No directors found for this movie
             }
         } catch (PDOException $e) {
-            throw new Exception("Unable to fetch directors: ". $e->getMessage());
+            throw new PDOException("Unable to fetch directors!");
         }
 
         return $result;
@@ -67,7 +64,7 @@ class MovieRepository {
             }
         }
         catch (PDOException $e) {
-            echo "Couldn't fetch movie: " . $e->getMessage();
+            throw new PDOException("Unable to fetch movie!");
         }
         
         return $result;
