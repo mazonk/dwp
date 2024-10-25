@@ -1,13 +1,15 @@
 <?php
 include "src/model/entity/OpeningHour.php";
 include_once "src/model/repositories/OpeningHourRepository.php";
-include_once "src/model/repositories/VenueRepository.php";
+include_once "src/model/services/VenueService.php";
 
 class OpeningHourService {
   private OpeningHourRepository $openingHourRepository;
+  private VenueService $venueService;
 
   public function __construct() {
     $this->openingHourRepository = new OpeningHourRepository();
+    $this->venueService = new VenueService();
   }
 
   public function getOpeningHoursById(int $venueId): array {
@@ -17,8 +19,7 @@ class OpeningHourService {
       $result = $this->openingHourRepository->getOpeningHoursById($venueId);
 
       if ($result) {
-        $venueRepository = new VenueRepository();
-        $venue = $venueRepository->getVenue($venueId);
+        $venue = $this->venueService->getVenue($venueId);
         
         foreach($result as $row) {
           if ($row['isCurrent'] == 1) {
