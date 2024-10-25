@@ -7,11 +7,11 @@ class NewsRepository {
         return DatabaseConnection::getInstance();
     }
 
-    public function get($id) {
+    public function getNewsById($id): array {
         $db = $this->getdb();
+        $query = $db->prepare("SELECT * FROM News n WHERE n.newsId = :id");
         try {
-            $query = $db->prepare("SELECT * FROM News n WHERE n.newsId = :id");
-            $query->execute(array(":id" => htmlspecialchars($id)));
+            $query->execute(array(":id" => $id));
             $result = $query->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             echo 'Failed to fetch news: '. $e;
@@ -22,7 +22,7 @@ class NewsRepository {
     public function getAll() {
         $db = $this->getdb();
         try {
-            $query = $db->prepare("SELECT * FROM News");
+            $query = $db->prepare("SELECT * FROM  s");
             $query->execute();
             $result = $query->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
