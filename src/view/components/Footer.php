@@ -29,6 +29,8 @@ include_once "src/controller/OpeningHourController.php";
         $venueController = new VenueController();
         $selectedVenue = $venueController->getVenue($_SESSION['selectedVenueId']);
 
+        
+
         ?>
         <a href="mailto:<?= htmlspecialchars($selectedVenue->getContactEmail()) ?>" class="w-fit text-[.875rem] text-textNormal leading-snug ease-in-out duration-[.15s] hover:text-textLight">
           <?= htmlspecialchars($selectedVenue->getContactEmail())?>
