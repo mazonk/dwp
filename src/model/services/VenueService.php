@@ -14,8 +14,8 @@ class VenueService {
 
   /* Get all venues */
   public function getAllVenues(): array {
-    $result = $this->venueRepository->getAllVenues();
     try {
+      $result = $this->venueRepository->getAllVenues();
       $retArray = [];
       try {
         $allAddresses = $this->addressService->getAllAddresses();
@@ -39,8 +39,8 @@ class VenueService {
 
   /* Get venue by id */
   public function getVenue(int $venueId): array|Venue {
-    $result = $this->venueRepository->getVenue($venueId);
     try {
+      $result = $this->venueRepository->getVenue($venueId);
       try {
         $address = $this->addressService->getAddressById($result['addressId']);
         // Create and return a Venue object with the corresponding Address object

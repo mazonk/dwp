@@ -12,8 +12,8 @@ class AddressService {
 
   /* Get all addresses */
   public function getAllAddresses(): array {
-    $result = $this->addressRepository->getAllAddresses();
     try {
+      $result = $this->addressRepository->getAllAddresses();
       $addressArray = [];
       // Create an array of Address objects with the corresponding PostalCode object
       foreach($result['addressResult'] as $addressRow) {
@@ -32,8 +32,8 @@ class AddressService {
 
   /* Get address by id */
   public function getAddressById(int $addressId): array|Address {
-    $result = $this->addressRepository->getAddressById($addressId);
     try {
+      $result = $this->addressRepository->getAddressById($addressId);
       // Create and return an Address object with the corresponding PostalCode object
       return new Address($result['addressResult']['addressId'], $result['addressResult']['street'], $result['addressResult']['streetNr'], new PostalCode($result['postalCodeResult']['postalCode'], $result['postalCodeResult']['city']));
     } catch (Exception $e) {
