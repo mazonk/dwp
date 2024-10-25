@@ -8,7 +8,7 @@ class AddressRepository {
   /* Get all addresses */
   public function getAllAddresses(): array {
     $db = $this->getdb();
-    $addressQuery = $db->prepare("SELECT *  FROM `Addresss`");
+    $addressQuery = $db->prepare("SELECT *  FROM `Address`");
     // Get all addresses
     try {
       $addressQuery->execute();
