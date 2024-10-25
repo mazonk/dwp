@@ -71,7 +71,7 @@ class AddressRepository {
         }
       }
     } catch (PDOException $e) {
-      throw new Exception("Unable to fetch address by id: ". $e);
+      throw new Exception("Unable to fetch address: ". $e);
     }
   }
 }
