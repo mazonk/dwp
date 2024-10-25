@@ -13,7 +13,7 @@ class AddressController {
     try {
       return $this->addressService->getAllAddresses();
     } catch (Exception $e) {
-      throw new Exception("No addresses found");
+      throw new Exception(e->getMessage());
     }
   }
 
@@ -22,7 +22,7 @@ class AddressController {
     try {
       return $this->addressService->getAddressById($addressId);
     } catch (Exception $e) {
-      throw new Exception("Address not found");
+      throw new Exception(e->getMessage());
     }
   }
 }
