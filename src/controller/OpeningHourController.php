@@ -9,12 +9,11 @@ class OpeningHourController {
   }
 
   /* Get opening hours by venueId */
-  public function getOpeningHoursById(int $venueId): ?array {
-    try {
-      return $this->openingHourService->getOpeningHoursById($venueId);
-    } catch (Exception $e) {
-        echo $e->getMessage();
-        return null;
+  public function getOpeningHoursById(int $venueId): array {
+    $openingHours = $this->openingHourService->getOpeningHoursById($venueId);
+    if (isset($openingHours['error']) && $openingHours['error']) {
+      return ['errorMessage'=> $openingHours['message']];
     }
+    return $openingHours;
   }
 }
