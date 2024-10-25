@@ -60,7 +60,7 @@ class MovieRepository {
             $query->execute(array(":movieId" => $movieId));
             $result = $query->fetch(PDO::FETCH_ASSOC);
             if (empty($result)) {
-                throw new Exception("No movie found with id: ". $movieId);
+                throw new Exception("No movie found!");
             }
         }
         catch (PDOException $e) {

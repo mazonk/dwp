@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['tab'])) {
         // Render content based on the selected tab
         if ($_POST['tab'] === 'news') {
-            $allNews = $newsController->getNews();
+            $allNews = $newsController->getAllNews();
             echo '<div class="grid grid-cols-3 gap-4 flex flex-row items-center">';
             foreach ($allNews as $news) {
                 NewsCard::render($news->getNewsId(), $news->getHeader(), $news->getImageURL(), $news->getContent());
@@ -177,14 +177,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php
             // Render news (rest is rendered above at the top of the file)
             if ($tab === 'news') {
-                $allNews = $newsController->getNews();
+                $allNews = $newsController->getAllNews();
 
-                // Loop through each news item and render it using NewsCard
-                echo '<div class="grid grid-cols-3 gap-4 flex flex-row items-center">';
-                foreach ($allNews as $news) {
-                    NewsCard::render($news->getNewsId(), $news->getHeader(), $news->getImageURL(), $news->getContent());
+                if (isset($allNews['errorMessage'])) {
+                    echo $allNews['errorMessage'];
+                } else {
+                    // Loop through each news item and render it using NewsCard
+                    echo '<div class="grid grid-cols-3 gap-4 flex flex-row items-center">';
+                    foreach ($allNews as $news) {
+                        NewsCard::render($news->getNewsId(), $news->getHeader(), $news->getImageURL(), $news->getContent());
+                    }
+                    echo '</div>';
                 }
-                echo '</div>';
             }
             ?>
         </div>

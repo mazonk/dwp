@@ -10,10 +10,9 @@ if ($id === null) { // this is from the query string
 
 $newsController = new NewsController();
 $newsArticle = $newsController->getNewsById($id);
-if (!$newsArticle) {
-    // Handle case where the article is not found
-    echo "<p>News article not found.</p>";
-    exit;
+if (is_array($newsArticle) && isset($newsArticle['errorMessage'])) {
+    // Display the error message
+    echo $newsArticle['errorMessage'] . ' ' . '<a class="underline text-blue-300" href="javascript:window.history.back()"><-Go back!</a>';
 }
 ?>
 <!DOCTYPE html>

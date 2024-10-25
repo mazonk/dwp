@@ -13,9 +13,9 @@ class MovieService {
 
     public function getAllMovies(): array {
         try {
-            $rawMovies = $this->movieRepository->getAllMovies();
+            $result = $this->movieRepository->getAllMovies();
             $movies = [];
-            foreach ($rawMovies as $row) {
+            foreach ($result as $row) {
                 $movies[] = $this->createMovieMap($row);
             }
         } catch (Exception $e) {
@@ -26,8 +26,8 @@ class MovieService {
 
     public function getMovieById(int $movieId): array|Movie {
         try {
-            $rawMovie = $this->movieRepository->getMovieById($movieId);
-            return $this->createMovieMap($rawMovie);
+            $result = $this->movieRepository->getMovieById($movieId);
+            return $this->createMovieMap($result);
         } catch (Exception $e) {
             return ['error' => true, 'message' => $e->getMessage()];
         }

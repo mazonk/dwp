@@ -8,12 +8,23 @@ class NewsController {
         $this->newsService = new NewsService();
     }
 
-    public function getNews($id = null): array {
-        return $this->newsService->getNews();
+    public function getAllNews(): array {
+        $news = $this->newsService->getAllNews();
+
+        if (isset($news['error']) && $news['error']) {
+            return ['errorMessage' => $news['message']];
+        }
+
+        return $news;
     }
 
-    public function getNewsById($id): News {
-        return $this->newsService->getNewsById($id);
+    public function getNewsById($id): array|News {
+        $news = $this->newsService->getNewsById($id);
+
+        if (is_array($news) && isset($news['error']) && $news['error']) {
+            return ['errorMessage' => $news['message']];
+        }
+
+        return $news;
     }
 }
-?>
