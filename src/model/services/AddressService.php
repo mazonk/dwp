@@ -13,7 +13,7 @@ class AddressService {
   /* Get all addresses */
   public function getAllAddresses(): array {
     $result = $this->addressRepository->getAllAddresses();
-    if (!empty($result)) {
+    try {
       $addressArray = [];
       // Create an array of Address objects with the corresponding PostalCode object
       foreach($result['addressResult'] as $addressRow) {
@@ -25,21 +25,19 @@ class AddressService {
         }
       }
       return $addressArray;
-    }
-    else {
-      throw new Exception("No addresses found");
+    } catch (Exception $e) {
+      throw new Exception($e->getMessage());
     }
   }
 
   /* Get address by id */
   public function getAddressById(int $addressId): Address {
     $result = $this->addressRepository->getAddressById($addressId);
-    if (!empty($result)) {     
+    try {
       // Create and return an Address object with the corresponding PostalCode object
       return new Address($result['addressResult']['addressId'], $result['addressResult']['street'], $result['addressResult']['streetNr'], new PostalCode($result['postalCodeResult']['postalCode'], $result['postalCodeResult']['city']));
-    }
-    else {
-      throw new Exception("Address not found");
+    } catch (Exception $e) {
+      throw new Exception($e->getMessage());
     }
   }
 }
