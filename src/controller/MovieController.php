@@ -13,7 +13,7 @@ class MovieController {
 
         // If the service returns an error, pass it to the frontend
         if (isset($movies['error']) && $movies['error']) {
-            return ['error' => true,'message' => $movies['message']];
+            return ['errorMessage' => $movies['message']];
         }
         
         return $movies;
@@ -24,7 +24,7 @@ class MovieController {
         
         // If the service returns an error, pass it to the frontend
         if (is_array($movie) && isset($movie['error']) && $movie['error']) {
-            return ['error' => true, 'message' => $movie['message']];
+            return ['errorMessage' => $movie['message']];
         }
         
         return $movie;

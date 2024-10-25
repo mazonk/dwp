@@ -15,9 +15,9 @@ $movieController = new MovieController();
 $movie = $movieController->getMovieById($id);
 
 
-if (is_array($movie) && isset($movie['error']) && $movie['error'] === true) {
+if (is_array($movie) && isset($movie['errorMessage'])) {
     // Display the error message
-    echo $movie['message'];
+    echo $movie['errorMessage'] . ' ' . '<a class="underline text-blue-300" href="javascript:window.history.back()"><-Go back!</a>';
 } else {
   $showingsForMovie = $showingController->getAllShowingsForMovie($movie->getMovieId());
 }
@@ -82,6 +82,24 @@ if (is_array($movie) && isset($movie['error']) && $movie['error'] === true) {
             </div>
             <div class="movie-info mb-2">
                 <span class="font-bold">Rating: </span> <?php echo $movie->getRating(); ?>
+            </div>
+            <div>
+                <span>Actors: <?php
+                if (empty($movie-> getActors())) {
+                    echo "No actors found for this movie.";
+                }
+                foreach ($movie-> getActors() as $actor) {
+                    echo htmlspecialchars($actor->getFirstName()). ' ' .$actor->getLastName(). ", ";
+                } ?></span>
+            </div>
+            <div>
+                <span>Directors: <?php 
+                if (empty($movie-> getDirectors())) {
+                    echo "No director(s) found for this movie.";
+                }
+                foreach ($movie->getDirectors() as $director) {
+                    echo htmlspecialchars($director->getFirstName()).''. $director->getLastName(). ", ";
+                }?></span>
             </div>
         </div>
     <div class="trailer-video mt-10">
