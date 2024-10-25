@@ -8,7 +8,7 @@ class AddressRepository {
   /* Get all addresses */
   public function getAllAddresses(): array {
     $db = $this->getdb();
-    $addressQuery = $db->prepare("SELECT *  FROM `Address`");
+    $addressQuery = $db->prepare("SELECT *  FROM `Addresss`");
     // Get all addresses
     try {
       $addressQuery->execute();
@@ -32,11 +32,11 @@ class AddressRepository {
           ];
         }
         catch (PDOException $e) {
-          throw new Exception("Unable to fetch postal codes: ". $e);
+          throw new Exception("Unable to fetch postal codes");
         }
       }
     } catch (PDOException $e) {
-        throw new Exception("Unable to fetch addresses: ". $e);
+        throw new Exception("Unable to fetch addresses");
     }
   }
 
@@ -67,11 +67,11 @@ class AddressRepository {
           ];
         }
         catch (PDOException $e) {
-          throw new Exception("Unable to fetch postal code: ". $e);
+          throw new Exception("Unable to fetch postal code");
         }
       }
     } catch (PDOException $e) {
-      throw new Exception("Unable to fetch address: ". $e);
+      throw new Exception("Unable to fetch address");
     }
   }
 }
