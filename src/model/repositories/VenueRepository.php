@@ -18,7 +18,7 @@ class VenueRepository {
       } 
       return $result;
     } catch (PDOException $e) {
-      throw new Exception("Unable to fetch venues: ". $e);
+      throw new Exception("Unable to fetch venues");
     }
   }
 
@@ -35,7 +35,7 @@ class VenueRepository {
       }
       return $result;
     } catch (PDOException $e) {
-      throw new Exception("Unable to fetch venue: ". $e);
+      throw new Exception("Unable to fetch venue");
     }
   }
 }
