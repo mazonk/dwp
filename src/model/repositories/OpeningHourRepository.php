@@ -6,17 +6,18 @@ class OpeningHourRepository {
   }
 
   /* Get opening hours by venueId */
-  public function getOpeningHoursById(int $venueId): ?array {
+  public function getOpeningHoursById(int $venueId): array {
     $db = $this->getdb();
     $query = $db->prepare("SELECT * FROM OpeningHour WHERE venueId = :venueId");
-    $query->bindParam(':venueId', $venueId);
-
     try {
-      $query->execute();
-      return $result = $query->fetchAll(PDO::FETCH_ASSOC);
+      $query->execute(['venueId' => htmlspecialchars($venueId)]);
+      $result = $query->fetchAll(PDO::FETCH_ASSOC);
+      if (empty($result)) {
+        throw new Exception("No opening hours found");
+      }
+      return $result;
     } catch (PDOException $e) {
-      echo "Error: " . $e->getMessage();
-      return null;
+      throw new Exception("Unable to fetch opening hours");
     }
   }
 }
