@@ -13,17 +13,13 @@ class OpeningHourService {
   }
 
   public function getOpeningHoursById(int $venueId): array {
-    $retArray = [];
-
     try {
       $result = $this->openingHourRepository->getOpeningHoursById($venueId);
-
-      if ($result) {
+      $retArray = [];
+      try {
         $venue = $this->venueService->getVenue($venueId);
-        
         foreach($result as $row) {
           if ($row['isCurrent'] == 1) {
-            // Map string from DB to Day enum
             $day = match ($row['day']) {
               'Monday' => Day::Monday,
               'Tuesday' => Day::Tuesday,
@@ -34,7 +30,6 @@ class OpeningHourService {
               'Sunday' => Day::Sunday,
               default => throw new InvalidArgumentException("Invalid day: " . $row['day'])
             };
-
             // Convert strings to DateTime objects
             $openingTime = new DateTime($row['openingTime']);
             $closingTime = new DateTime($row['closingTime']);
@@ -43,13 +38,11 @@ class OpeningHourService {
           }
         }
         return $retArray;
-      }
-      else {
-        return $retArray;
+      } catch (Exception $e) {
+        return ["error"=> true, "message"=> $e->getMessage()];
       }
     } catch (Exception $e) {
-        echo $e->getMessage();
-        return $retArray;
+      return ["error"=> true, "message"=> $e->getMessage()];
     }
   }
 }
