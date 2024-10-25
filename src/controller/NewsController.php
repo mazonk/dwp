@@ -19,7 +19,7 @@ class NewsController {
     }
 
     public function getNewsById($id): array|News {
-        $news = $this->newsService->getNewsById($id);
+        $news = $this->newsService->getNewsById(htmlspecialchars($id));
 
         if (is_array($news) && isset($news['error']) && $news['error']) {
             return ['errorMessage' => $news['message']];
