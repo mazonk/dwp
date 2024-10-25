@@ -32,7 +32,6 @@ include_once "src/controller/OpeningHourController.php";
         if(is_array($selectedVenue) && isset($selectedVenue['errorMessage'])) {
           echo "<div class='text-[.875rem] text-textNormal leading-snug'>" . htmlspecialchars($selectedVenue['errorMessage']) . "</div>";
         }
-
         ?>
         <a href="mailto:<?= htmlspecialchars($selectedVenue->getContactEmail()) ?>" class="w-fit text-[.875rem] text-textNormal leading-snug ease-in-out duration-[.15s] hover:text-textLight">
           <?= htmlspecialchars($selectedVenue->getContactEmail())?>
@@ -53,6 +52,10 @@ include_once "src/controller/OpeningHourController.php";
         <?php
         $openingHourController = new OpeningHourController();
         $openingHours = $openingHourController->getOpeningHoursById($_SESSION['selectedVenueId']);
+
+        if(isset($openingHours['errorMessage'])) {
+          echo "<div class='text-[.875rem] text-textNormal leading-snug'>" . htmlspecialchars($openingHours['errorMessage']) . "</div>";
+        }
 
         foreach ($openingHours as $openingHour) {
           echo 
