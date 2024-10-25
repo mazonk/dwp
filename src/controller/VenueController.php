@@ -1,36 +1,28 @@
 <?php
-include_once "src/model/repositories/VenueRepository.php";
+include_once "src/model/services/VenueService.php";
 
 class VenueController {
-  private VenueRepository $venueRepository;
+  private VenueService $venueService;
 
   public function __construct() {
-    $this->venueRepository = new VenueRepository();
+    $this->venueService = new VenueService();
   }
 
-  public function getVenueById(int $venueId): ?Venue {
-    try {
-      return $this->venueRepository->getVenue($venueId);
-    } catch (Exception $e) {
-      return null;
-    }
-  }
   /* Get all venues */
   public function getAllVenues(): array {
     try {
-      return $this->venueRepository->getAllVenues();
+      return $this->venueService->getAllVenues();
     } catch (Exception $e) {
-      return [];
+      throw new Exception($e->getMessage());
     }
   }
 
-  /* Get a specific venue by venueId */
-  public function getVenue(int $venueId): ?Venue {
+  /* Get a venue by venueId */
+  public function getVenue(int $venueId): Venue {
     try {
-      return $this->venueRepository->getVenue($venueId);
+      return $this->venueService->getVenue($venueId);
     } catch (Exception $e) {
-        echo $e->getMessage();
-        return null;
+      throw new Exception($e->getMessage());
     }
   }
 
