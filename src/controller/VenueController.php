@@ -10,20 +10,20 @@ class VenueController {
 
   /* Get all venues */
   public function getAllVenues(): array {
-    try {
-      return $this->venueService->getAllVenues();
-    } catch (Exception $e) {
-      throw new Exception($e->getMessage());
+    $venues = $this->venueService->getAllVenues();
+    if (isset($venues['error']) && $venues['error']) {
+      return ['errorMessage'=> $venues['message']];
     }
+    return $venues;
   }
 
   /* Get a venue by venueId */
-  public function getVenue(int $venueId): Venue {
-    try {
-      return $this->venueService->getVenue($venueId);
-    } catch (Exception $e) {
-      throw new Exception($e->getMessage());
+  public function getVenue(int $venueId): array|Venue {
+    $venue = $this->venueService->getVenue($venueId);
+    if (is_array($venue) && isset($venue['error']) && $venue['error']) {
+      return ['errorMessage'=> $venue['message']];
     }
+    return $venue;
   }
 
   /* Store the selected venue's venueId and name in the session */

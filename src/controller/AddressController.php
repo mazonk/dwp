@@ -10,19 +10,19 @@ class AddressController {
 
   /* Get all addresses */
   public function getAllAddresses(): array {
-    try {
-      return $this->addressService->getAllAddresses();
-    } catch (Exception $e) {
-      throw new Exception(e->getMessage());
+    $addresses = $this->addressService->getAllAddresses();
+    if (isset($addresses['error']) && $addresses['error']) {
+      return ['errorMessage'=> $addresses['message']];
     }
+    return $addresses;
   }
 
   /* Get address by id */
-  public function getAddressById(int $addressId): Address {
-    try {
-      return $this->addressService->getAddressById($addressId);
-    } catch (Exception $e) {
-      throw new Exception(e->getMessage());
+  public function getAddressById(int $addressId): array|Address {
+    $address = $this->addressService->getAddressById($addressId);
+    if (is_array($address) && isset($address['error']) && $address['error']) {
+      return ['errorMessage'=> $address['message']];
     }
+    return $address;
   }
 }
