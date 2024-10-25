@@ -26,18 +26,18 @@ class AddressService {
       }
       return $addressArray;
     } catch (Exception $e) {
-      throw new Exception($e->getMessage());
+      return ["error"=> true, "message"=> $e->getMessage()];
     }
   }
 
   /* Get address by id */
-  public function getAddressById(int $addressId): Address {
+  public function getAddressById(int $addressId): array|Address {
     $result = $this->addressRepository->getAddressById($addressId);
     try {
       // Create and return an Address object with the corresponding PostalCode object
       return new Address($result['addressResult']['addressId'], $result['addressResult']['street'], $result['addressResult']['streetNr'], new PostalCode($result['postalCodeResult']['postalCode'], $result['postalCodeResult']['city']));
     } catch (Exception $e) {
-      throw new Exception($e->getMessage());
+      return ["error"=> true, "message"=> $e->getMessage()];
     }
   }
 }

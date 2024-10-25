@@ -30,15 +30,15 @@ class VenueService {
         }
         return $retArray;
       } catch (Exception $e) {
-        throw new Exception(e->getMessage());
+        return ["error"=> true, "message"=> $e->getMessage()];
       }
     } catch (Exception $e) {
-      throw new Exception(e->getMessage());
+      return ["error"=> true, "message"=> $e->getMessage()];
     }
   }
 
   /* Get venue by id */
-  public function getVenue(int $venueId): Venue {
+  public function getVenue(int $venueId): array|Venue {
     $result = $this->venueRepository->getVenue($venueId);
     try {
       try {
@@ -46,10 +46,10 @@ class VenueService {
         // Create and return a Venue object with the corresponding Address object
         return new Venue($result['venueId'], $result['name'], $result['phoneNr'], $result['contactEmail'], $address);
       } catch (Exception $e) {
-        throw new Exception(e->getMessage());
+        return ["error"=> true, "message"=> $e->getMessage()];
       }
     } catch (Exception $e) {
-      throw new Exception(e->getMessage());
+      return ["error"=> true, "message"=> $e->getMessage()];
     }
   }
 }
