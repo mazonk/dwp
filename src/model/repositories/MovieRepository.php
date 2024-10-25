@@ -3,7 +3,7 @@ include_once "src/model/entity/Movie.php";
 include_once "src/model/entity/Actor.php";
 include_once "src/model/entity/Director.php";
 class MovieRepository {
-    private function getdb() {
+    private function getdb(): PDO {
         require_once 'src/model/database/dbcon/DatabaseConnection.php';
         return DatabaseConnection::getInstance(); // singleton
     }
@@ -17,7 +17,7 @@ class MovieRepository {
                 throw new Exception("No movies found");
             }
         } catch (PDOException $e) {
-            throw new Exception("Unable to fetch movies: ". $e->getMessage());
+            throw new PDOException("Unable to fetch movies: ". $e->getMessage());
         }
 
         return $result;
@@ -34,7 +34,7 @@ class MovieRepository {
             }
         }
         catch (PDOException $e) {
-            throw new Exception("Unable to fetch actors" . $e->getMessage());
+            throw new PDOException("Unable to fetch actors" . $e->getMessage());
         }
 
         return $result;
