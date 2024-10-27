@@ -6,7 +6,7 @@ class UserRoleRepository {
         return DatabaseConnection::getInstance(); // singleton
     }
 
-    public function getAll(): array {
+    public function getAllUserRoles(): array {
         $db = $this->getdb();
         $query = $db->prepare("SELECT * FROM UserRole");
         try {
@@ -21,7 +21,7 @@ class UserRoleRepository {
         }
     }
 
-    public function getUserRole(string $roleType): array {
+    public function getUserRoleById(string $roleType): array {
         $db = $this->getdb();
         $query = $db->prepare("SELECT * FROM UserRole ur WHERE ur.type = :type");
         try {
