@@ -117,6 +117,7 @@ class AuthService {
 
     public function logout(): void {
         // Unset session and destroy it
+        session_start();
         session_unset();
         session_destroy();
     }
@@ -130,6 +131,9 @@ class AuthService {
         $containsNumber = "/[0-9]/";
 
         // Perform checks
+        if (empty($formData['firstName']) || empty($formData['lastName']) || empty($formData['dob']) || empty($formData['email']) || empty($formData['password']) || empty($formData['confirmPassword'])) {
+            $errors['general'] = "All fields are required.";
+        }
         if (!preg_match($nameRegex, $formData['firstName'])) {
             $errors['firstName'] = "Name must only contain letters and spaces.";
         }
@@ -155,9 +159,6 @@ class AuthService {
         }
         if (!preg_match($emailRegex, $formData['email'])) {
             $errors['email'] = "Invalid email format.";
-        }
-        if (empty($formData['firstName']) || empty($formData['lastName']) || empty($formData['dob']) || empty($formData['email']) || empty($formData['password']) || empty($formData['confirmPassword'])) {
-            $errors['general'] = "All fields are required.";
         }
         if (strlen($formData['password']) < 8) {
             $errors['password'] = "Password must be at least 8 characters long.";

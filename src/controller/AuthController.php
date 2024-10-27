@@ -23,7 +23,7 @@ class AuthController {
 
             // Validate form data (e.g., check for empty fields before proceeding)
             if (empty($formData['firstName']) || empty($formData['lastName']) || empty($formData['email']) || empty($formData['password'])) {
-                $errors[] = "All fields are required.";
+                $errors['general'] = "All fields are required.";
             } else {
                 $errors = $this->authService->register($formData);
             }
@@ -84,7 +84,7 @@ class AuthController {
 
     public function logout(): void {
         $this->authService->logout();
-
+        
         header("Location: " . $_SESSION['baseRoute'] . "login");
         exit;
     }

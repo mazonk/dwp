@@ -17,7 +17,7 @@ class UserRoleController {
     }
 
     public function getUserRoleByType(string $roleType): array|UserRole {
-        $userRole = $this->userRoleService->getUserRoleByType($roleType);
+        $userRole = $this->userRoleService->getUserRoleByType(htmlspecialchars($roleType));
         if (is_array($userRole) && isset($userRole['error']) && $userRole['error']) {
             return ['errorMessage' => $userRole['message']];
         }

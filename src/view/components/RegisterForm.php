@@ -64,6 +64,9 @@ class RegisterForm {
                         <p class="text-red-500 text-xs"><?= $errors['password'] ?></p>
                     <?php endif; ?>
                 </div>
+                <?php if (isset($errors['general'])): ?>
+                        <p class="text-red-500 text-xs"><?= $errors['general'] ?></p>
+                    <?php endif; ?>
 
                 <div class="flex flex-col items-center w-full">
                     <input class="text-white font-bold py-2 px-4 rounded text-center w-full mt-4 cursor-pointer" 

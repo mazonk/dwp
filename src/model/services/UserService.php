@@ -20,7 +20,7 @@ class UserService {
                 return ["error"=> true, "message"=> $userRole['message']];
             }
             return new User($user['userId'], $user['firstName'], $user['lastName'], 
-                            $user['DoB'], $user['email'], $user['passwordHash'], $userRole);
+                            new Datetime($user['DoB']), $user['email'], $user['passwordHash'], $userRole);
         } catch (Exception $e) {
             return ["error"=> true, "message"=> $e->getMessage()];
         }

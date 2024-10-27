@@ -16,6 +16,7 @@ $errors = isset($_SESSION['errors']) ? $_SESSION['errors'] : [];
 
 unset($_SESSION['formData']);
 unset($_SESSION['errors']);
+
 ?>
 <html lang="en">
 <head>
