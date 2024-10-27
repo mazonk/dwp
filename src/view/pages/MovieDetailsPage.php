@@ -112,6 +112,10 @@ if (is_array($movie) && isset($movie['errorMessage'])) {
         <div class="flex gap-4">
             <?php
             $today = new DateTime();
+            if (isset($showingsForMovie['errorMessage'])) {
+                // Display the error message
+                echo $showingsForMovie['errorMessage'];
+            } else {
             for ($i = 0; $i < 7; $i++) {
                 $currentDay = clone $today;
                 $currentDay->modify("+$i day");
@@ -119,14 +123,16 @@ if (is_array($movie) && isset($movie['errorMessage'])) {
                 echo '<div class="bg-bgLight text-white py-2 px-4 my-2 rounded-md w-full text-center">';
                 echo "$formatedDay";
                 echo '<div class="flex flex-col items-center">';
-                foreach ($showingsForMovie as $showing) {
-                    if ($showing->getShowingDate()->format('l d, M') == $formatedDay) {
-                        ShowingCard::render($showing);
-                    }
+                    foreach ($showingsForMovie as $showing) {
+                        if ($showing->getShowingDate()->format('l d, M') == $formatedDay) {
+                            ShowingCard::render($showing);
+                        }
+                    
                 }
                 echo '</div>';
                 echo "</div>";
             }
+        }
             ?>
         </div>
     </div>

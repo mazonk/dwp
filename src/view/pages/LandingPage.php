@@ -17,6 +17,10 @@ $moviesPerPage = 5;
  //Fetch and render movies playing today based on pagination.
 function renderMovies($showingController, $page, $moviesPerPage) {
     $moviesPlayingToday = $showingController->getMoviesPlayingToday($_SESSION['selectedVenueId']);
+    if (isset($moviesPlayingToday['errorMessage'])) {
+        echo "<div class='text-sm text-textNormal text-center leading-snug'>". htmlspecialchars($moviesPlayingToday['errorMessage']). "</div>";
+        return;
+    }
     $totalMovies = count($moviesPlayingToday);
     $startIndex = ($page - 1) * $moviesPerPage;
 
@@ -40,11 +44,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Render content based on the selected tab
         if ($_POST['tab'] === 'news') {
             $allNews = $newsController->getAllNews();
-            echo '<div class="grid grid-cols-3 gap-4 flex flex-row items-center">';
-            foreach ($allNews as $news) {
-                NewsCard::render($news->getNewsId(), $news->getHeader(), $news->getImageURL(), $news->getContent());
+            
+            if (isset($allNews['errorMessage'])) {
+                echo $allNews['errorMessage'];
+            } else {
+                // Loop through each news item and render it using NewsCard
+                echo '<div class="grid grid-cols-3 gap-4 flex flex-row items-center">';
+                foreach ($allNews as $news) {
+                    NewsCard::render($news->getNewsId(), $news->getHeader(), $news->getImageURL(), $news->getContent());
+                }
+                echo '</div>';
             }
-            echo '</div>';
         } elseif ($_POST['tab'] === 'company') {
             echo '<h2 class="text-2xl font-bold text-white">Company Information</h2>';
             echo '<p class="text-lg text-gray-300 mt-4">Space reserved for company info.</p>';

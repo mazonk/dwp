@@ -25,7 +25,7 @@
     } elseif ($_POST['action'] === 'toggleProfileDropdown') {
         $_SESSION['isProfileDropdownOpen'] = !$_SESSION['isProfileDropdownOpen'];
     } elseif ($_POST['action'] === 'selectVenue') {
-      $selectedVenue = $venueController->selectVenue($venueController->getVenue($_POST['venueId'])); // Setting selected venue in session
+      $selectedVenue = $venueController->selectVenue($venueController->getVenueById($_POST['venueId'])); // Setting selected venue in session
     }
     exit();
   }
