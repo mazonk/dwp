@@ -17,7 +17,7 @@ class OpeningHourService {
       $result = $this->openingHourRepository->getOpeningHoursById($venueId);
       $retArray = [];
       try {
-        $venue = $this->venueService->getVenue($venueId);
+        $venue = $this->venueService->getVenueById($venueId);
         foreach($result as $row) {
           if ($row['isCurrent'] == 1) {
             $day = match ($row['day']) {

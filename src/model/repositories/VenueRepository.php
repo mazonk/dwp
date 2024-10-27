@@ -23,7 +23,7 @@ class VenueRepository {
   }
 
   /* Get the venue by venueId */
-  public function getVenue(int $venueId): array {
+  public function getVenueById(int $venueId): array {
     $db = $this->getdb();
     $query = $db->prepare("SELECT * FROM Venue WHERE venueId = :venueId");
     // Get venue by venueId

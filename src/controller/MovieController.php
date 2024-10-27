@@ -20,7 +20,7 @@ class MovieController {
     }
 
     public function getMovieById(int $movieId): array|Movie {
-        $movie = $this->movieService->getMovieById($movieId);
+        $movie = $this->movieService->getMovieById(htmlspecialchars($movieId));
         
         // If the service returns an error, pass it to the frontend
         if (is_array($movie) && isset($movie['error']) && $movie['error']) {

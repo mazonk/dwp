@@ -18,8 +18,8 @@ class VenueController {
   }
 
   /* Get a venue by venueId */
-  public function getVenue(int $venueId): array|Venue {
-    $venue = $this->venueService->getVenue($venueId);
+  public function getVenueById(int $venueId): array|Venue {
+    $venue = $this->venueService->getVenueById($venueId);
     if (is_array($venue) && isset($venue['error']) && $venue['error']) {
       return ['errorMessage'=> $venue['message']];
     }
