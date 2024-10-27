@@ -17,7 +17,7 @@ class OpeningHourRepository {
       }
       return $result;
     } catch (PDOException $e) {
-      throw new Exception("Unable to fetch opening hours");
+      throw new PDOException("Unable to fetch opening hours");
     }
   }
 }
