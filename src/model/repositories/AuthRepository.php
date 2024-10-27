@@ -20,7 +20,7 @@ class AuthRepository {
         $db = $this->getdb();
         $query = $db->prepare("INSERT INTO User (firstName, lastName, DoB, email, passwordHash, roleId) VALUES (:firstName, :lastName, :DoB, :email, :passwordHash, :roleId)");
         try {
-            $query->execute(array(
+            $result = $query->execute(array(
                 ":firstName" => $user->getFirstName(),
                 ":lastName" => $user->getLastName(),
                 ":DoB" => $user->getDoB()->format('Y-m-d'), // Convert DateTime to string
@@ -28,10 +28,13 @@ class AuthRepository {
                 ":passwordHash" => $user->getPasswordHash(),
                 ":roleId" => $user->getUserRole()->getRoleId()
             ));
+            if ($result === 0) { //bool - false indicates no rows were affected
+                throw new Exception("Error creating user!");
+            }
 
             return $this->getdb()->lastInsertId();
         } catch (PDOException $e) {
-            throw new Exception("Error creating user: ". $e->getMessage());
+            throw new PDOException("Couldn't insert user!");
         }
     }
 
@@ -50,7 +53,7 @@ class AuthRepository {
     
         try {
     
-            $query->execute([
+            $result = $query->execute([
                 ":firstName" => $user->getFirstName(),
                 ":lastName" => $user->getLastName(),
                 ":DoB" => $user->getDoB()->format('Y-m-d'),
@@ -58,10 +61,14 @@ class AuthRepository {
                 ":roleId" => $user->getUserRole()->getRoleId(),
                 ":email" => $user->getEmail()
             ]);
+
+            if ($result === 0) { // bool - false indicates no rows were affected
+                throw new Exception("Couldn't create user to this email!");
+            }
     
             return $this->getdb()->lastInsertId();
         } catch (PDOException $e) {
-            throw new Exception("Error creating user: ". $e->getMessage());
+            throw new PDOException("Couldn't insert user!");
         }
     }
 
@@ -79,7 +86,7 @@ class AuthRepository {
             $result = $query->fetch(PDO::FETCH_ASSOC);
             return !empty($result); // Return true if the result is not empty (MEANING EMAIL EXISTS)
         } catch (PDOException $e) {
-            throw new Exception(message: "Error checking email existence: ". $e->getMessage());
+            throw new PDOException(message: "Error checking email existence!");
         }
     }
     
@@ -98,7 +105,7 @@ class AuthRepository {
             $result = $query->fetch(PDO::FETCH_ASSOC);
             return !empty($result); // Return true if the result is not empty (MEANING USER EXISTS)
         } catch (PDOException $e) {
-            throw new Exception(message: "Error checking user existence: ". $e->getMessage());
+            throw new PDOException("Error checking user existence!");
         }
     }
 }
