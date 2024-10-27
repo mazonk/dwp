@@ -1,19 +1,19 @@
 <?php
 require_once 'session_config.php';
 require_once 'src/model/entity/User.php';
-require_once 'src/model/repositories/UserRepository.php';
 include_once 'src/model/repositories/AuthRepository.php';
-require_once 'src/controller/UserRoleController.php';
+require_once 'src/model/services/UserService.php';
+require_once 'src/model/services/UserRoleService.php';
 
 class AuthService {
-    private UserRepository $userRepository;
     private AuthRepository $authRepository;
-    private UserRoleRepository $userRoleRepository;
+    private UserService $userService;
+    private UserRoleService $userRoleService;
 
     public function __construct(){
-        $this->userRepository = new UserRepository();
+        $this->userRoleService = new UserRoleService();
+        $this->userService = new UserService();
         $this->authRepository = new AuthRepository();
-        $this->userRoleRepository = new UserRoleRepository();
     }
 
     public function register(array $formData): array {
@@ -34,11 +34,11 @@ class AuthService {
                 }
     
                 // Fetch the 'Customer' user role
-                $result = $this->userRoleRepository->getUserRole('Customer');
-                if (!$result) {
-                    throw new Exception("User role not found.");
+                $userRole = $this->userRoleService->getUserRoleByType('Customer');
+                if (is_array($userRole) && isset($userRole['error']) && $userRole['error']) {
+                    $errors['general'] = "Registration failed. Couldn't register you as a customer.";
+                    return $errors;
                 }
-                $userRole = new UserRole($result['roleId'], $result['type']);
     
                 $userToBeInserted = new User(
                     null,
@@ -92,20 +92,11 @@ class AuthService {
             }
     
             // Fetch user by email
-            $result = $this->userRepository->getUserByEmail($formData['email']);
-            if (!$result) {
-                throw new Exception("User not found.");
+            $user = $this->userService->getUserByEmail($formData['email']);
+            if (is_array($user) && isset($user['error']) && $user['error']) {
+                $errors['email'] = "Couldn't find user!";
+                return ['errors' => $errors];
             }
-    
-            $user = new User(
-                $result['userId'],
-                $result['firstName'],
-                $result['lastName'],
-                new DateTime($result['DoB']),
-                $result['email'],
-                $result['passwordHash'],
-                new UserRole($result['roleId'], $result['type'])
-            );
     
             // Verify password
             if (!password_verify($formData['password'], $user->getPasswordHash())) {

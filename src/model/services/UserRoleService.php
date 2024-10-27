@@ -1,5 +1,6 @@
 <?php 
 include_once "src/model/repositories/UserRoleRepository.php";
+include_once "src/model/entity/UserRole.php";
 
 class UserRoleService {
     private UserRoleRepository $userRoleRepository;
@@ -21,9 +22,9 @@ class UserRoleService {
         }
     }
 
-    public function getUserRoleById(int $roleId): array|UserRole {
+    public function getUserRoleByType(string $roleType): array|UserRole {
         try {
-            $result = $this->userRoleRepository->getUserRoleById($roleId);
+            $result = $this->userRoleRepository->getUserRoleByType($roleType);
             return new UserRole($result['roleId'], $result['type']);
         } catch (Exception $e) {
             return ['error' => true, 'message' => $e->getMessage()];

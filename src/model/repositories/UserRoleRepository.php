@@ -21,7 +21,7 @@ class UserRoleRepository {
         }
     }
 
-    public function getUserRoleById(string $roleType): array {
+    public function getUserRoleByType(string $roleType): array {
         $db = $this->getdb();
         $query = $db->prepare("SELECT * FROM UserRole ur WHERE ur.type = :type");
         try {
