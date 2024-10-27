@@ -37,19 +37,20 @@
       const venueDropdownToggler = document.querySelector('#venueDropdownToggler');
       const profileDropdownToggler = document.querySelector('#profileDropdownToggler');
 
-      venueDropdownToggler?.addEventListener('click', () => {
+      venueDropdownToggler?.addEventListener('click', (e) => {
           toggleDropdown('toggleVenueDropdown');
       });
 
-      profileDropdownToggler?.addEventListener('click', () => {
+      profileDropdownToggler?.addEventListener('click', (e) => {
           toggleDropdown('toggleProfileDropdown');
       });
 
       // Close dropdowns when clicked outside
       document.addEventListener('click', e => {
-        if (e.target !== venueDropdownToggler && venueDropdownToggler.dataset.isOpen === '1') {
+        if (!venueDropdownToggler.contains(e.target) && venueDropdownToggler.dataset.isOpen === '1') {
+          console.log(e.target);
           toggleDropdown('toggleVenueDropdown');
-        } else if (e.target !== profileDropdownToggler && profileDropdownToggler.dataset.isOpen === '1') {
+        } else if (!profileDropdownToggler.contains(e.target) && profileDropdownToggler.dataset.isOpen === '1') {
           toggleDropdown('toggleProfileDropdown');
         }
       })
