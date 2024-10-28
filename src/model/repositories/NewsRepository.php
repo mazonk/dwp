@@ -7,7 +7,7 @@ class NewsRepository {
         return DatabaseConnection::getInstance();
     }
 
-    public function getAllNews() {
+    public function getAllNews(): array {
         $db = $this->getdb();
         $query = $db->prepare("SELECT * FROM News");
         try {
@@ -22,7 +22,7 @@ class NewsRepository {
         return $result;
     }
 
-    public function getNewsById($id): array {
+    public function getNewsById(int $id): array {
         $db = $this->getdb();
         $query = $db->prepare("SELECT * FROM News n WHERE n.newsId = :id");
         try {

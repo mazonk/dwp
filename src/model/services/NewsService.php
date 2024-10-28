@@ -21,7 +21,7 @@ class NewsService {
         return $news;
     }
 
-    public function getNewsById($id): array|News {
+    public function getNewsById(int $id): array|News {
         try {
             $result = $this->newsRepository->getNewsById($id);
             return new News($result['newsId'], $result['imageURL'], $result['header'], $result['content']);
