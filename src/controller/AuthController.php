@@ -65,10 +65,11 @@ class AuthController {
             session_start();
 
             // Set session variables
-            $_SESSION['userId'] = $user->getId();
-            $_SESSION['userEmail'] = htmlspecialchars($user->getEmail());
-            $_SESSION['firstName'] = htmlspecialchars($user->getFirstName());
-            $_SESSION['lastName'] = htmlspecialchars($user->getLastName());
+            $_SESSION['loggedInUser']['userId'] = $user->getId();
+            $_SESSION['loggedInUser']['userEmail'] = htmlspecialchars($user->getEmail());
+            $_SESSION['loggedInUser']['firstName'] = htmlspecialchars($user->getFirstName());
+            $_SESSION['loggedInUser']['lastName'] = htmlspecialchars($user->getLastName());
+            $_SESSION['loggedInUser']['roleType'] = htmlspecialchars($user->getUserRole()->getType());
             $_SESSION['lastGeneration'] = time();
 
             // Redirect to homepage after successful login
