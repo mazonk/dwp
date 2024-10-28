@@ -34,9 +34,7 @@ INSERT INTO UserRole (type) VALUES
 ('Staff');
 
 INSERT INTO User (firstName, lastName, DoB, email, passwordHash, roleId) VALUES
-('Bruce', 'Wayne', '1972-02-19', 'bruce@gotham.com', 'hashedpassword1', 1),
-('Peter', 'Parker', '1995-08-10', 'peter@spiderman.com', 'hashedpassword2', 2),
-('Tony', 'Stark', '1970-05-29', 'tony@starkindustries.com', 'hashedpassword3', 3);
+('Admin', 'Admin', '2000-01-01', 'admin@admin.com', '$2y$10$Xt53U6KwhZ34mwbsdgVNjetv998rgpvqQ9xMAa4EzwTfH9X2zElK2', 1),
 
 INSERT INTO Movie (title, description, duration, language, releaseDate, posterURL, promoURL, trailerURL, rating) VALUES
 ('The Dark Knight', 'Batman faces the Joker in Gotham City.', 152, 'English', '2008-07-18', 'poster_dark_knight.jpg', 'promo_dark_knight.mp4', 'trailer_dark_knight.mp4', 9.00),
