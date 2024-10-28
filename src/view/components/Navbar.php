@@ -48,7 +48,6 @@
       // Close dropdowns when clicked outside
       document.addEventListener('click', e => {
         if (!venueDropdownToggler.contains(e.target) && venueDropdownToggler.dataset.isOpen === '1') {
-          console.log(e.target);
           toggleDropdown('toggleVenueDropdown');
         } else if (!profileDropdownToggler.contains(e.target) && profileDropdownToggler.dataset.isOpen === '1') {
           toggleDropdown('toggleProfileDropdown');
