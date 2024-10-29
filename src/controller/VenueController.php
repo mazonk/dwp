@@ -1,43 +1,36 @@
 <?php
-include_once "src/model/repositories/VenueRepository.php";
+include_once "src/model/services/VenueService.php";
 
 class VenueController {
-  private VenueRepository $venueRepository;
+  private VenueService $venueService;
 
   public function __construct() {
-    $this->venueRepository = new VenueRepository();
+    $this->venueService = new VenueService();
   }
 
-  public function getVenueById(int $venueId): ?Venue {
-    try {
-      return $this->venueRepository->getVenue($venueId);
-    } catch (Exception $e) {
-      return null;
-    }
-  }
   /* Get all venues */
   public function getAllVenues(): array {
-    try {
-      return $this->venueRepository->getAllVenues();
-    } catch (Exception $e) {
-      return [];
+    $venues = $this->venueService->getAllVenues();
+    if (isset($venues['error']) && $venues['error']) {
+      return ['errorMessage'=> $venues['message']];
     }
+    return $venues;
   }
 
-  /* Get a specific venue by venueId */
-  public function getVenue(int $venueId): ?Venue {
-    try {
-      return $this->venueRepository->getVenue($venueId);
-    } catch (Exception $e) {
-        echo $e->getMessage();
-        return null;
+  /* Get a venue by venueId */
+  public function getVenueById(int $venueId): array|Venue {
+    $venue = $this->venueService->getVenueById($venueId);
+    if (is_array($venue) && isset($venue['error']) && $venue['error']) {
+      return ['errorMessage'=> $venue['message']];
     }
+    return $venue;
   }
 
   /* Store the selected venue's venueId and name in the session */
-  public function selectVenue(Venue $venue): void {
+  public function selectVenue(Venue $venue): Venue {
     $_SESSION['selectedVenueId'] = $venue->getVenueId();
     $_SESSION['selectedVenueName'] = $venue->getName();
+    return $venue;
   }
 }
 ?>

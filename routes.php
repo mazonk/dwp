@@ -2,6 +2,8 @@
 
 require_once __DIR__.'/router.php';
 
+$baseRoute = $_SERVER['HTTP_HOST'] == 'localhost' ? '/dwp/' : '/';
+
 // To be extended later with additional simple getter routes
 // As well as post, put, and delete routes.
 // TODO: Admin routes
@@ -14,47 +16,48 @@ require_once __DIR__.'/router.php';
 
 // In the URL -> http://localhost/dwp
 // The output -> index.php (from pages folder)
-get('/dwp/home', 'src/view/pages/LandingPage.php');
+get($baseRoute.'home', 'src/view/pages/LandingPage.php');
+get($baseRoute, 'src/view/pages/LandingPage.php');
 
 // In the URL -> http://localhost/dwp/about
 // The output -> AboutPage.php (from pages folder)
-get('/dwp/about', 'src/view/pages/AboutPage.php');
+get($baseRoute.'about', 'src/view/pages/AboutPage.php');
 
 // In the URL -> http://localhost/dwp/admin
 // The output -> AdminPage.php (from pages folder)
-get('/dwp/admin', 'src/view/pages/AdminPage.php');
+get($baseRoute.'admin', 'src/view/pages/AdminPage.php');
 
 // In the URL -> http://localhost/dwp/movies
 // The output -> AllMoviesPage.php (from pages folder)
-get('/dwp/movies', 'src/view/pages/AllMoviesPage.php');
+get($baseRoute.'movies', 'src/view/pages/AllMoviesPage.php');
 
 // In the URL -> http://localhost/dwp/booking
 // The output -> BookingPage.php (from pages folder)
-get('/dwp/booking', 'src/view/pages/BookingPage.php');
+get($baseRoute.'booking', 'src/view/pages/BookingPage.php');
 
 // In the URL -> http://localhost/dwp/booking/checkout
 // The output -> CheckoutPage.php (from pages folder)
-get('/dwp/booking/checkout', 'src/view/pages/CheckoutPage.php');
+get($baseRoute.'booking/checkout', 'src/view/pages/CheckoutPage.php');
 
 // In the URL -> http://localhost/dwp/login
 // The output -> LoginPage.php (from pages folder)
-get('/dwp/login', 'src/view/pages/LoginPage.php');
+get($baseRoute.'login', 'src/view/pages/LoginPage.php');
 
 // In the URL -> http://localhost/dwp/register
 // The output -> RegisterPage.php (from pages folder)
-get('/dwp/register', 'src/view/pages/RegisterPage.php');
+get($baseRoute.'register', 'src/view/pages/RegisterPage.php');
 
 // In the URL -> http://localhost/dwp/profile
 // The output -> ProfilePage.php (from pages folder)
-get('/dwp/profile', 'src/view/pages/ProfilePage.php');
+get($baseRoute.'profile', 'src/view/pages/ProfilePage.php');
 
 // In the URL -> http://localhost/dwp/schedule
 // The output -> SchedulePage.php (from pages folder)
-get('/dwp/schedule', 'src/view/pages/SchedulePage.php');
+get($baseRoute.'schedule', 'src/view/pages/SchedulePage.php');
 
 // In the URL -> http://localhost/dwp/upcoming
 // The output -> UpcomingMoviesPage.php (from pages folder)
-get('/dwp/upcoming', 'src/view/pages/UpcomingMoviesPage.php');
+get($baseRoute.'upcoming', 'src/view/pages/UpcomingMoviesPage.php');
 
 // This could be 404 not found page
 // any('/404','views/404.php');
@@ -63,11 +66,11 @@ get('/dwp/upcoming', 'src/view/pages/UpcomingMoviesPage.php');
 
 // POST ROUTES
 
-post('/dwp/movies', 'src/view/pages/AllMoviesPage.php'); // used at toggle dropdown
-post('/dwp/home', 'src/view/pages/LandingPage.php'); // used at toggle dropdown
+post($baseRoute.'movies', 'src/view/pages/AllMoviesPage.php'); // used at toggle dropdown
+post($baseRoute.'home', 'src/view/pages/LandingPage.php'); // used at toggle dropdown
 
 // Post route for register
-post('/dwp/register', function() {
+post($baseRoute.'register', function() {
     require_once 'src/controller/AuthController.php';
     $authController = new AuthController();
     
@@ -78,7 +81,7 @@ post('/dwp/register', function() {
 });
 
 // Post route for login
-post('/dwp/login', function() {
+post($baseRoute.'login', function() {
     require_once 'src/controller/AuthController.php';
     $authController = new AuthController();
     
@@ -88,7 +91,7 @@ post('/dwp/login', function() {
     }
 });
 
-post('/dwp/logout', function() {
+post($baseRoute.'logout', function() {
     require_once 'src/controller/AuthController.php';
     $authController = new AuthController();
     $authController->logout();
@@ -96,5 +99,5 @@ post('/dwp/logout', function() {
 
 // Query string routes
 
-get('/dwp/movies/$id', 'src/view/pages/MovieDetailsPage.php');
-get('/dwp/news/$id', 'src/view/pages/NewsPage.php');
+get($baseRoute.'movies/$id', 'src/view/pages/MovieDetailsPage.php');
+get($baseRoute.'news/$id', 'src/view/pages/NewsPage.php');

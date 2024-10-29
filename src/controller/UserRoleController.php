@@ -1,35 +1,28 @@
 <?php
-require_once 'src/model/repositories/UserRoleRepository.php';
+require_once 'src/model/services/UserRoleService.php';
 
 class UserRoleController {
-    private $userRoleRepository;
-    private $message;
+    private $userRoleService;
 
     public function __construct() {
-        $this->userRoleRepository = new UserRoleRepository();
-        $this->message = '';
+        $this->userRoleService = new UserRoleService();
     }
 
     public function getUserRoles(): array {
-        try {
-            return $this->userRoleRepository->getAll();
-        } catch (Exception $e) {
-            $this->message = $e->getMessage();
-            return [];
+        $userRoles = $this->userRoleService->getAllUserRoles();
+        if (isset($userRoles['error']) && $userRoles['error']) {
+            return ['errorMessage' => $userRoles['message']];
         }
+        return $userRoles;
     }
 
-    public function getUserRole(string $roleType): ?UserRole {
-        try {
-            return $this->userRoleRepository->getUserRole($roleType);
-        } catch (Exception $e) {
-            $this->message = $e->getMessage();
-            return null;
+    public function getUserRoleByType(string $roleType): array|UserRole {
+        $userRole = $this->userRoleService->getUserRoleByType(htmlspecialchars($roleType));
+        if (is_array($userRole) && isset($userRole['error']) && $userRole['error']) {
+            return ['errorMessage' => $userRole['message']];
         }
+        return $userRole;
     }
 
-    public function getMessage(): string {
-        return $this->message;
-    }
 }
 ?>

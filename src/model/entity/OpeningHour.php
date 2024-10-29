@@ -29,7 +29,7 @@ class OpeningHour {
   }
 
   public function getOpeningHourId():int {
-    return $this->getOpeningHourId;
+    return $this->openingHourId;
   }
 
   public function getDay(): string {
@@ -53,7 +53,7 @@ class OpeningHour {
   }
 
   public function setOpeningHourId(int $openingHourId): void {
-    $this->getOpeningHourId = $openingHourId;
+    $this->openingHourId = $openingHourId;
   }
 
   public function setDay(Day $day): void {

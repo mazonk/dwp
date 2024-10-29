@@ -9,7 +9,7 @@ class ShowingCard {
         // Make sure the movie object is available
         if ($movie) {
             ?>
-            <form action="/dwp/booking" method="GET">
+            <form action="<?php echo $_SESSION['baseRoute'] ?>booking" method="GET">
                 <!-- Hidden input to pass the movie ID -->
                 <input type="hidden" name="id" value="<?php echo $movie->getMovieId(); ?>">
                 <!-- Hidden input to pass the showing date -->
