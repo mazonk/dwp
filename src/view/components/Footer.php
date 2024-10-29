@@ -27,7 +27,7 @@ include_once "src/controller/OpeningHourController.php";
         <?php
         // Create a new instance of VenueController and fetch all venues
         $venueController = new VenueController();
-        $selectedVenue = $venueController->getVenue($_SESSION['selectedVenueId']);
+        $selectedVenue = $venueController->getVenueById($_SESSION['selectedVenueId']);
 
         if(is_array($selectedVenue) && isset($selectedVenue['errorMessage'])) {
           echo "<div class='text-[.875rem] text-textNormal leading-snug'>" . htmlspecialchars($selectedVenue['errorMessage']) . "</div>";
