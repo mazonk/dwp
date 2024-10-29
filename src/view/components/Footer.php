@@ -3,6 +3,19 @@
 include_once "src/controller/VenueController.php";
 /* Get the opening hours */
 include_once "src/controller/OpeningHourController.php";
+
+if (isset($_POST['submit'])) {
+  $name = $_POST['name'];
+  $subject = "Contact Form Submission";
+  $mailFrom = $_POST['email'];
+  $message = $_POST['message'];
+
+  $mailTo = "dwp@spicypisces.eu";
+  $headers = "From: " . $mailFrom;
+  $txt = "You have received an email from " . $name . ".\n\n" . $message;
+
+  mail($mailTo, $subject, $txt, $headers);
+}
 ?>
 
 <footer class="flex flex-col gap-[4rem] mt-[8rem]">
@@ -70,37 +83,12 @@ include_once "src/controller/OpeningHourController.php";
     <!-- Contact Form -->
     <div class="min-w-[250px] flex flex-col gap-[1.5rem]">
       <h4 class="text-[1.125rem] font-bold leading-tight">Contact Us</h4>
-      <?php
-      // if "email" variable is filled out and submit has been clicked, send email
-      if (isset($_POST['email']) && isset($_POST['submit'])) {
-
-      //Email information
-      $to = "dwp@spicypisces.eu"; // Email of the recipient
-      $subject = "Message from contact form";
-
-      $message = "From: " . $_POST['name'] . "\r\n" .
-      "Email: " . $_POST['email'] . "\r\n" .
-      "Message:" . $_POST['message'];
-
-      $headers = 'From: ' . $to . "\r\n" .
-      'Reply-To: ' . $to . "\r\n" .
-      'X-Mailer: PHP/' . phpversion();
-
-      //Send email
-      mail($to, $subject, $message, $headers);
-
-      //Email response
-      echo "Thank you for contacting us!"; }
-
-      //if "email" variable is not filled out or the submit has not been clicked, display the form
-      else { ?>
       <form method="post" class="flex flex-col gap-[.75rem] text-textDark">
         <input type="text" name="name" id="emailInput" placeholder="Your name" required="true" class="h-[36px] py-[.5rem] px-[.875rem] bg-bgSemiDark text-[.875rem] text-textNormal leading-snug border-[1px] border-borderDark rounded-[6px] outline-none ease-in-out duration-[.15s] focus:border-textNormal">
         <input type="text" name="email" id="emailInput" placeholder="Your email" required="true" class="h-[36px] py-[.5rem] px-[.875rem] bg-bgSemiDark text-[.875rem] text-textNormal leading-snug border-[1px] border-borderDark rounded-[6px] outline-none ease-in-out duration-[.15s] focus:border-textNormal">
         <textarea name="message" id="messageInput" placeholder="Message" required="true" class="min-h-[100px] py-[.5rem] px-[.875rem] bg-bgSemiDark text-[.875rem] text-textNormal leading-snug border-[1px] border-borderDark rounded-[6px] outline-none ease-in-out duration-[.15s] focus:border-textNormal"></textarea>
-        <button type="submit" class="h-[36px] py-[.5rem] px-[1.25rem] bg-primary text-[.875rem] text-textDark font-medium leading-tight rounded-[6px] ease-in-out duration-[.15s] hover:bg-primaryHover">Send</button>
+        <button type="submit" name="submit" class="h-[36px] py-[.5rem] px-[1.25rem] bg-primary text-[.875rem] text-textDark font-medium leading-tight rounded-[6px] ease-in-out duration-[.15s] hover:bg-primaryHover">Send</button>
       </form>
-      <?php } ?>
     </div>
   </div>
   <!-- TODO: Company name display -->
