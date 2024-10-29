@@ -28,7 +28,7 @@ class AuthRepository {
                 ":passwordHash" => $user->getPasswordHash(),
                 ":roleId" => $user->getUserRole()->getRoleId()
             ));
-            if ($result === 0) { //bool - false indicates no rows were affected
+            if ($result == 0) { //bool - false indicates no rows were affected
                 throw new Exception("Error creating user!");
             }
 
@@ -62,10 +62,10 @@ class AuthRepository {
                 ":email" => $user->getEmail()
             ]);
 
-            if ($result === 0) { // bool - false indicates no rows were affected
+            if ($result == 0) { // bool - false indicates no rows were affected
                 throw new Exception("Couldn't create user to this email!");
             }
-    
+
             return $this->getdb()->lastInsertId();
         } catch (PDOException $e) {
             throw new PDOException("Couldn't insert user!");
