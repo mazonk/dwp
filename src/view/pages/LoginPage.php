@@ -2,7 +2,7 @@
 require_once 'session_config.php';
 
 if (isLoggedIn()) {
-    header("Location: " . $_SESSION['baseRoute'] . "/home");
+    header("Location: " . $_SESSION['baseRoute'] . "home");
 }
 
 // Get input values from the session if available

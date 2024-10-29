@@ -11,9 +11,9 @@ include_once "src/controller/OpeningHourController.php";
     <div class="min-w-[250px] flex flex-col gap-[1.5rem]">
       <h4 class="text-[1.125rem] font-bold leading-tight">Useful Links</h4>
       <div class="flex flex-col gap-[.75rem]">
-        <a href="<?php echo $_SESSION['baseRoute'] ?>/home" class="w-fit text-[.875rem] text-textNormal leading-snug ease-in-out duration-[.15s] hover:text-textLight">Home</a>
-        <a href="<?php echo $_SESSION['baseRoute'] ?>/movies" class="w-fit text-[.875rem] text-textNormal leading-snug ease-in-out duration-[.15s] hover:text-textLight">All Movies</a>
-        <a href="<?php echo $_SESSION['baseRoute'] ?>/upcoming" class="w-fit text-[.875rem] text-textNormal leading-snug ease-in-out duration-[.15s] hover:text-textLight">Upcoming Movies</a>
+        <a href="<?php echo $_SESSION['baseRoute'] ?>home" class="w-fit text-[.875rem] text-textNormal leading-snug ease-in-out duration-[.15s] hover:text-textLight">Home</a>
+        <a href="<?php echo $_SESSION['baseRoute'] ?>movies" class="w-fit text-[.875rem] text-textNormal leading-snug ease-in-out duration-[.15s] hover:text-textLight">All Movies</a>
+        <a href="<?php echo $_SESSION['baseRoute'] ?>upcoming" class="w-fit text-[.875rem] text-textNormal leading-snug ease-in-out duration-[.15s] hover:text-textLight">Upcoming Movies</a>
         <!-- TODO: Scroll down to ticket section -->
         <a href="" class="w-fit text-[.875rem] text-textNormal leading-snug ease-in-out duration-[.15s] hover:text-textLight">Tickets</a>
         <!-- TODO: Scroll down to contact section it is in the footer -->

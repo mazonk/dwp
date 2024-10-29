@@ -4,7 +4,7 @@ include_once "session_config.php";
 
 if ($id === null) { // this is from the query string
     // Redirect back if id not found
-    header("Location: " . $_SESSION['baseRoute'] . "/home");
+    header("Location: " . $_SESSION['baseRoute'] . "home");
     exit;
 }
 
@@ -31,7 +31,7 @@ if (is_array($newsArticle) && isset($newsArticle['errorMessage'])) {
             <div class="max-w-4xl mx-auto py-8 px-4 translate-y-[80px]">
                             <!-- Back to News List Icon -->
             <div class="absolute top-0 -left-16">
-                <a href="<?php echo $_SESSION['baseRoute'] ?>/home" class="text-white flex items-center hover:text-gray-400">
+                <a href="<?php echo $_SESSION['baseRoute'] ?>home" class="text-white flex items-center hover:text-gray-400">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                     </svg>
