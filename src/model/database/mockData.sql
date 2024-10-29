@@ -34,7 +34,7 @@ INSERT INTO UserRole (type) VALUES
 ('Staff');
 
 INSERT INTO User (firstName, lastName, DoB, email, passwordHash, roleId) VALUES
-('Admin', 'Admin', '2000-01-01', 'admin@admin.com', '$2y$10$Xt53U6KwhZ34mwbsdgVNjetv998rgpvqQ9xMAa4EzwTfH9X2zElK2', 1),
+('Admin', 'Admin', '2000-01-01', 'admin@admin.com', '$2y$10$Xt53U6KwhZ34mwbsdgVNjetv998rgpvqQ9xMAa4EzwTfH9X2zElK2', 1);
 
 INSERT INTO Movie (title, description, duration, language, releaseDate, posterURL, promoURL, trailerURL, rating) VALUES
 ('The Dark Knight', 'Batman faces the Joker in Gotham City.', 152, 'English', '2008-07-18', 'poster_dark_knight.jpg', 'promo_dark_knight.mp4', 'trailer_dark_knight.mp4', 9.00),
@@ -243,7 +243,7 @@ INSERT INTO MovieGenre (movieId, genreId) VALUES
 (19, 3),  -- AI: Awakening -> Sci-Fi
 (19, 10),  -- AI: Awakening -> Thriller
 (20, 1),  -- Rise of the Phoenix -> Action
-(20, 14);  -- Rise of the Phoenix -> Fantasy
+(20, 13);  -- Rise of the Phoenix -> Fantasy
 
 
 INSERT INTO MovieDirector (movieId, directorId) VALUES
