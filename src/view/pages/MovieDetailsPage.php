@@ -1,5 +1,5 @@
 <!-- In the URL -> http://localhost/dwp/movies/1 - this is how you send query string with req. URL -->
-<?php 
+<?php
 require_once 'session_config.php';
 include_once "src/controller/MovieController.php";
 include_once "src/view/components/MovieCard.php";
@@ -25,65 +25,64 @@ if (is_array($movie) && isset($movie['errorMessage'])) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet"/>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <?php include_once("src/assets/tailwindConfig.php"); ?>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movie Details</title>
-    <style>
-        .movie-header {
-            display: flex;
-            align-items: flex-start;
-            gap: 20px;
-        }
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <?php include_once("src/assets/tailwindConfig.php"); ?>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movie Details</title>
+  <style>
+    .movie-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+    }
 
-        .movie-actions {
-            margin-top: 30px;
-        }
+    .movie-actions {
+      margin-top: 30px;
+    }
 
-        .movie-actions a {
-            text-decoration: none;
-            background-color: #fabb2c;
-            color: black;
-            font-weight: bold;
-            padding: 10px 20px;
-            border-radius: 5vw;
-            margin-right: 10px;
-        }
+    .movie-actions a {
+      text-decoration: none;
+      background-color: #fabb2c;
+      color: black;
+      font-weight: bold;
+      padding: 10px 20px;
+      border-radius: 5vw;
+      margin-right: 10px;
+    }
 
-        .movie-actions a:hover {
-            background-color: #123A6B;
-        }
-    </style>
+    .movie-actions a:hover {
+      background-color: #123A6B;
+    }
+  </style>
 </head>
-<body class="font-sans bg-[#0d0101] text-white m-0 p-[2vw]">
-  <div class="flex flex-row justify-between">
-  <div class="movie-header">
-            <img class="w-[300px] h-auto rounded-[0.625rem] m-[0.625rem] bg-center bg-cover border-2 border-yellow-900" src="../src/assets/<?php echo $movie->getPosterURL(); ?>" alt="Movie Poster">   
-        </div>
-    <div class="container w-1/2 justify-start">
-        <div class="text-[2.5rem] font-bold mb-2.5">
-                <?php echo htmlspecialchars($movie->getTitle()); ?>
-            </div>
-            
-            <div class="text-[1.2rem] mb-5"> 
-                <?php echo $movie->getDescription(); ?>
-            </div>
-            <div class="movie-info mb-2">
-                <span class="font-bold">Duration: </span> <?php echo $movie->getDuration(); ?>
-            </div>
-            <div class="movie-info mb-2">
-                <span class="font-bold">Language: </span> <?php echo $movie->getLanguage(); ?>
-            </div>
-            <div class="movie-info mb-2">
-                <span class="font-bold">Release Date: </span> <?php echo $movie->getReleaseDate()->format('Y-m-d'); ?>
-            </div>
-            <div class="movie-info mb-2">
-                <span class="font-bold">Rating: </span> <?php echo $movie->getRating(); ?>
-            </div>
-            <div>
+<body class="max-w-[90rem] w-[100%] mx-auto mt-[4.5rem] px-[6.25rem] font-sans bg-[#0d0101] text-white m-0 p-[2vw]">
+  <?php include_once("src/view/components/Navbar.php"); ?>
+  <div class="flex flex-row justify-start movie-header">
+    <img class="w-[300px] h-auto rounded-[0.625rem] m-[0.625rem] bg-center bg-cover" src="../src/assets/<?php echo $movie->getPosterURL(); ?>" alt="Movie Poster">
+    <div class="ml-[20px]">
+      <div class="text-[2.5rem] font-bold mb-2.5">
+        <?php echo htmlspecialchars($movie->getTitle()); ?>
+      </div>
+      <div class="text-[1.2rem] mb-5">
+        <?php echo $movie->getDescription(); ?>
+      </div>
+      <div class="movie-info mb-2">
+        <span class="font-bold">Duration: </span> <?php echo $movie->getDuration(); ?> minutes
+      </div>
+      <div class="movie-info mb-2">
+        <span class="font-bold">Language: </span> <?php echo $movie->getLanguage(); ?>
+      </div>
+      <div class="movie-info mb-2">
+        <span class="font-bold">Release Date: </span> <?php echo $movie->getReleaseDate()->format('Y-m-d'); ?>
+      </div>
+      <div class="movie-info mb-2">
+        <span class="font-bold">Rating: </span> <?php echo $movie->getRating(); ?>
+      </div>
+      <div>
                 <span>Actors: <?php
                 if (empty($movie-> getActors())) {
                     echo "No actors found for this movie.";
@@ -136,5 +135,7 @@ if (is_array($movie) && isset($movie['errorMessage'])) {
             ?>
         </div>
     </div>
+  </div>
+  
+  <?php include_once("src/view/components/Footer.php"); ?>
 </body>
-</html>

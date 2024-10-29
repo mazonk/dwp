@@ -33,14 +33,20 @@ include_once "src/view/components/ShowingCard.php";
         // Loop through each movie and render its movie card
         foreach ($allMovies as $movie) {
           MovieCard::render($movie, false);
-        }
       }
-      ?>
-    </div>
-    </div>
-  </main>
-  <!-- Navbar -->
-  <?php include_once("src/view/components/Footer.php"); ?>
-</body>
-
+    }
+        ?>
+      </div>
+      <div>
+        <?php
+        $showingController = new ShowingController();
+        $showings = $showingController->getAllShowingsForVenue(1);
+        
+        ?>
+      </div>
+        </div>
+    </main>
+    <!-- Footer -->
+    <?php include_once("src/view/components/Footer.php"); ?>
+  </body>
 </html>

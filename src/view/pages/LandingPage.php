@@ -3,9 +3,14 @@ require_once 'session_config.php';
 
 include_once "src/controller/NewsController.php";
 include_once "src/controller/ShowingController.php";
+include_once 'src/controller/VenueController.php';
 
 include_once "src/view/components/NewsCard.php";
 include_once "src/view/components/MovieCard.php";
+
+$venueController = new VenueController();
+$selectedVenue = $_SESSION['selectedVenueName'] ?? $venueController->getVenueById(1)->getName();
+$_SESSION['selectedVenueName'] = $selectedVenue;
 
 $newsController = new NewsController();
 $showingController = new ShowingController();
