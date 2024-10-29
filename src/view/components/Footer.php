@@ -68,7 +68,7 @@ include_once "src/controller/OpeningHourController.php";
       if (isset($_POST['email']) && $_POST['submit']) {
 
       //Email information
-      $to = "email@example.com"; // Email of the recipient
+      $to = "dwp@spicypisces.eu"; // Email of the recipient
       $subject = "Message from contact form";
 
       $message = "From: " . $_POST['name'] . "\r\n" .
