@@ -95,13 +95,13 @@
     <!-- (the ml-[] is for balancing the different width of the elements on either siede of the navbar thus it is in the center of the page) -->
     <div class="flex justify-center items-center gap-[2.5rem] ml-[195px]">
       <div>
-        <a href="<?php echo $_SESSION['baseRoute']?>home" class="font-medium">Home</a>
+        <a href="<?php echo $_SESSION['baseRoute']?>/home" class="font-medium">Home</a>
       </div>
       <div>
-        <a href="<?php echo $_SESSION['baseRoute']?>movies" class="font-medium">All Movies</a>
+        <a href="<?php echo $_SESSION['baseRoute']?>/movies" class="font-medium">All Movies</a>
       </div>
       <div>
-        <a href="<?php echo $_SESSION['baseRoute']?>upcoming" class="font-medium">Upcoming Movies</a>
+        <a href="<?php echo $_SESSION['baseRoute']?>/upcoming" class="font-medium">Upcoming Movies</a>
       </div>
       <!-- TODO: Scroll down to ticket section -->
       <div>
@@ -142,7 +142,7 @@
       </div>
       <!-- Login -->
       <?php if (!isLoggedIn()): ?>
-      <a href="<?php echo $_SESSION['baseRoute']?>login" class="py-[.625rem] px-[1.25rem] bg-primary text-textDark font-medium leading-tight rounded-[8px] ease-in-out duration-[.15s] hover:bg-primaryHover ">
+      <a href="<?php echo $_SESSION['baseRoute']?>/login" class="py-[.625rem] px-[1.25rem] bg-primary text-textDark font-medium leading-tight rounded-[8px] ease-in-out duration-[.15s] hover:bg-primaryHover ">
         Login
       </a>
       <?php else: ?>
@@ -161,7 +161,7 @@
             <i class="ri-calendar-check-line h-[18px] text-[18px]"></i>
             <span class="translate-y-[1px]">Reservations</span>
           </button>
-          <form action="<?php echo $_SESSION['baseRoute']?>logout" method="post">
+          <form action="<?php echo $_SESSION['baseRoute']?>/logout" method="post">
             <button type="submit" class="w-full flex gap-[.375rem] py-[.5rem] px-[.625rem] text-[.875rem] text-left leading-tight bg-bgDark ease-in-out duration-[.15s] hover:bg-bgSemiDark">
               <i class="ri-logout-box-line h-[18px] text-[18px]"></i>
               <span class="translate-y-[1px]">Logout</span>

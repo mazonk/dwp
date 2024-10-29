@@ -6,16 +6,16 @@ class NewsCard {
         ?>
         <div class="max-w-sm bg-gray-800 rounded-lg shadow-lg overflow-hidden m-auto">
           <!-- Clickable link wrapping the image -->
-          <a href="<?php echo $_SESSION['baseRoute'] ?>news/<?php echo htmlspecialchars($id); ?>">
+          <a href="<?php echo $_SESSION['baseRoute'] ?>/news/<?php echo htmlspecialchars($id); ?>">
             <img class="h-[260px] object-cover object-center" src="src/assets/<?php echo htmlspecialchars($imageURL); ?>" alt="Movie Poster">
           </a>
           <!-- Content -->
           <div class="p-4">
-            <a href="<?php echo $_SESSION['baseRoute'] ?>news/<?php echo htmlspecialchars($id)?>" class="text-xl font-semibold text-white mb-2"><?php echo htmlspecialchars($header); ?></a>
+            <a href="<?php echo $_SESSION['baseRoute'] ?>/news/<?php echo htmlspecialchars($id)?>" class="text-xl font-semibold text-white mb-2"><?php echo htmlspecialchars($header); ?></a>
 
             <p class="text-gray-400 text-sm leading-6">
               <?php echo htmlspecialchars($shortenedContent); ?>
-              <a href="<?php echo $_SESSION['baseRoute'] ?>news/<?php echo htmlspecialchars($id); ?>" class="text-blue-500 hover:underline">Read more</a>
+              <a href="<?php echo $_SESSION['baseRoute'] ?>/news/<?php echo htmlspecialchars($id); ?>" class="text-blue-500 hover:underline">Read more</a>
             </p>
           </div>
         </div>

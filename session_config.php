@@ -4,7 +4,7 @@ require_once "src/controller/VenueController.php";
 session_start();
 
 $venueController = new VenueController();
-$_SESSION['baseRoute'] = $_SERVER['HTTP_HOST'] == 'localhost' ? '/dwp/' : '/';
+$_SESSION['baseRoute'] = $_SERVER['HTTP_HOST'] == 'localhost' ? '/dwp' : '/';
 $initialVenue = $venueController->getVenueById(1);
 $_SESSION['selectedVenueId'] ? '' : $venueController->selectVenue($initialVenue);
 
@@ -31,7 +31,7 @@ function isLoggedIn() {
 
 function confirm_logged_in() {
     if (!isLoggedIn()) {
-        header("Location: " . $_SESSION['baseRoute'] . "login");
+        header("Location: " . $_SESSION['baseRoute'] . "/login");
         exit;
     }
 }
