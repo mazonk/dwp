@@ -2,6 +2,6 @@
 require_once 'session_config.php';
 
 if (!isLoggedIn()) {
-    header("Location: /dwp/login");
+    header("Location: " . $_SESSION['baseRoute'] . "login");
     exit;
 }

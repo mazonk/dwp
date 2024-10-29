@@ -2,7 +2,7 @@
 require_once 'session_config.php';
 
 if (isLoggedIn()) {
-    header("Location: /dwp/home");
+    header("Location: " . $_SESSION['baseRoute'] . "home");
 }
 
 // Get input values from the session if available
@@ -16,6 +16,7 @@ $errors = isset($_SESSION['errors']) ? $_SESSION['errors'] : [];
 
 unset($_SESSION['formData']);
 unset($_SESSION['errors']);
+
 ?>
 <html lang="en">
 <head>

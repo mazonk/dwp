@@ -24,14 +24,19 @@ $currentDate = new DateTime();
     $movieController = new MovieController();
     $allMovies = $movieController->getAllMovies();
 
-    // Loop through each movie and render its movie card if the release date is in the future
-    foreach ($allMovies as $movie) {
-        $releaseDate = $movie->getReleaseDate();
-        
-        // Check if the release date is in the future
-        if ($releaseDate > $currentDate) {
-            MovieCard::render($movie, true);
-        }
+    if (isset($allMovies['errorMessage'])) {
+      echo $allMovies['errorMessage'];
+    } else {
+
+      // Loop through each movie and render its movie card if the release date is in the future
+      foreach ($allMovies as $movie) {
+          $releaseDate = $movie->getReleaseDate();
+          
+          // Check if the release date is in the future
+          if ($releaseDate > $currentDate) {
+              MovieCard::render($movie, true);
+          }
+      }
     }
     ?>
   </div>

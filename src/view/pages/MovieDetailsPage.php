@@ -7,14 +7,17 @@ include_once "src/controller/ShowingController.php";
 include_once "src/view/components/ShowingCard.php";
 include_once "src/model/entity/Showing.php";
 
-$id = $_GET['id'];
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+}
 $showingController = new ShowingController();
 $movieController = new MovieController();
 $movie = $movieController->getMovieById($id);
 
-if (!$movie) {
-  echo "No movie found with the given ID.";
-  exit;
+
+if (is_array($movie) && isset($movie['errorMessage'])) {
+    // Display the error message
+    echo $movie['errorMessage'] . ' ' . '<a class="underline text-blue-300" href="javascript:window.history.back()"><-Go back!</a>';
 } else {
   $showingsForMovie = $showingController->getAllShowingsForMovie($movie->getMovieId());
 }
@@ -80,6 +83,24 @@ if (!$movie) {
             <div class="movie-info mb-2">
                 <span class="font-bold">Rating: </span> <?php echo $movie->getRating(); ?>
             </div>
+            <div>
+                <span>Actors: <?php
+                if (empty($movie-> getActors())) {
+                    echo "No actors found for this movie.";
+                }
+                foreach ($movie-> getActors() as $actor) {
+                    echo htmlspecialchars($actor->getFirstName()). ' ' .$actor->getLastName(). ", ";
+                } ?></span>
+            </div>
+            <div>
+                <span>Directors: <?php 
+                if (empty($movie-> getDirectors())) {
+                    echo "No director(s) found for this movie.";
+                }
+                foreach ($movie->getDirectors() as $director) {
+                    echo htmlspecialchars($director->getFirstName()).''. $director->getLastName(). ", ";
+                }?></span>
+            </div>
         </div>
     <div class="trailer-video mt-10">
         <iframe class="w-full h-[300px] m-[0.625rem] rounded-[1.5rem]" src="https://www.youtube.com/embed/<?php echo $movie->getTrailerURL(); ?>" frameborder="0" allowfullscreen></iframe>
@@ -91,6 +112,10 @@ if (!$movie) {
         <div class="flex gap-4">
             <?php
             $today = new DateTime();
+            if (isset($showingsForMovie['errorMessage'])) {
+                // Display the error message
+                echo $showingsForMovie['errorMessage'];
+            } else {
             for ($i = 0; $i < 7; $i++) {
                 $currentDay = clone $today;
                 $currentDay->modify("+$i day");
@@ -98,14 +123,16 @@ if (!$movie) {
                 echo '<div class="bg-bgLight text-white py-2 px-4 my-2 rounded-md w-full text-center">';
                 echo "$formatedDay";
                 echo '<div class="flex flex-col items-center">';
-                foreach ($showingsForMovie as $showing) {
-                    if ($showing->getShowingDate()->format('l d, M') == $formatedDay) {
-                        ShowingCard::render($showing);
-                    }
+                    foreach ($showingsForMovie as $showing) {
+                        if ($showing->getShowingDate()->format('l d, M') == $formatedDay) {
+                            ShowingCard::render($showing);
+                        }
+                    
                 }
                 echo '</div>';
                 echo "</div>";
             }
+        }
             ?>
         </div>
     </div>

@@ -7,22 +7,27 @@ class NewsService {
         $this->newsRepository = new NewsRepository();
     }
 
-    public function getNews($id = null): array {
-        $result = $this->newsRepository->getAll();
-        $news = [];
-
-        foreach ($result as $row) {
-            $news[] = new News($row['newsId'], $row['imageURL'], $row['header'], $row['content']);
+    public function getAllNews(): array {
+        try {
+            $result = $this->newsRepository->getAllNews();
+            $news = [];
+            foreach ($result as $row) {
+                $news[] = new News($row['newsId'], $row['imageURL'], $row['header'], $row['content']);
+            }
+        } catch (Exception $e) {
+            return ["error" => true, 'message' => $e->getMessage()];
         }
+        
         return $news;
     }
 
-    public function getNewsById($id): ?News {
-        $result = $this->newsRepository->get($id);
-        if ($result) {
+    public function getNewsById(int $id): array|News {
+        try {
+            $result = $this->newsRepository->getNewsById($id);
             return new News($result['newsId'], $result['imageURL'], $result['header'], $result['content']);
-        } else {
-            return null;
+        } catch (Exception $e) {
+            return ["error" => true, 'message' => $e->getMessage()];
         }
+        
     }
 }
