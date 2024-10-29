@@ -210,7 +210,7 @@ INSERT INTO MovieGenre (movieId, genreId) VALUES
 (2, 1),  -- Spider-Man: No Way Home -> Action
 (2, 3),  -- Spider-Man: No Way Home -> Sci-Fi
 (3, 1),  -- Iron Man -> Action
-(3, 3);  -- Iron Man -> Sci-Fi
+(3, 3),  -- Iron Man -> Sci-Fi
 (4, 3),  -- Interstellar -> Sci-Fi
 (4, 2),  -- Interstellar -> Drama
 (5, 5),  -- Andre Rieu -> Music
