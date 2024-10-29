@@ -17,6 +17,7 @@ $baseRoute = $_SERVER['HTTP_HOST'] == 'localhost' ? '/dwp/' : '/';
 // In the URL -> http://localhost/dwp
 // The output -> index.php (from pages folder)
 get($baseRoute.'home', 'src/view/pages/LandingPage.php');
+get($baseRoute, 'src/view/pages/LandingPage.php');
 
 // In the URL -> http://localhost/dwp/about
 // The output -> AboutPage.php (from pages folder)
