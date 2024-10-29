@@ -11,44 +11,40 @@ class AuthRepository {
     }
 
     /**
-     * Creates a new user and inserts it into the database
+     * Creates a new user in the database
      * @param User $user The user to create
-     * @return User|null The created user, or null if something went wrong
+     * @return int The ID of the newly created user
+     * @throws Exception If there was a problem creating the user
      */
-    public function createUser(User $user): ?User {
+    public function createUser(User $user): int {
         $db = $this->getdb();
         $query = $db->prepare("INSERT INTO User (firstName, lastName, DoB, email, passwordHash, roleId) VALUES (:firstName, :lastName, :DoB, :email, :passwordHash, :roleId)");
         try {
-            $wasInserted = $query->execute(array(
-                ":firstName" => htmlspecialchars($user->getFirstName()),
-                ":lastName" => htmlspecialchars($user->getLastName()),
-                ":DoB" => htmlspecialchars($user->getDoB()->format('Y-m-d')), // Convert DateTime to string
-                ":email" => htmlspecialchars($user->getEmail()),
-                ":passwordHash" => htmlspecialchars($user->getPasswordHash()),
-                ":roleId" => htmlspecialchars($user->getUserRole()->getRoleId())
+            $result = $query->execute(array(
+                ":firstName" => $user->getFirstName(),
+                ":lastName" => $user->getLastName(),
+                ":DoB" => $user->getDoB()->format('Y-m-d'), // Convert DateTime to string
+                ":email" => $user->getEmail(),
+                ":passwordHash" => $user->getPasswordHash(),
+                ":roleId" => $user->getUserRole()->getRoleId()
             ));
-
-            if (!$wasInserted) {
-                return null;
-            } else {
-                $user->setId($this->getdb()->lastInsertId());
+            if ($result == 0) { //bool - false indicates no rows were affected
+                throw new Exception("Error creating user!");
             }
 
-            return $user;
+            return $this->getdb()->lastInsertId();
         } catch (PDOException $e) {
-            return null;
+            throw new PDOException("Couldn't insert user!");
         }
     }
 
     /**
-     * Creates a new user if there is already an existing user with the email
-     * address, but the passwordHash is null (i.e. the user was inserted into the db
-     * during ticket purchase, as an anonyumous user). Updates the existing user with
-     * the given information.
-     * @param User $user The user to create
-     * @return User|null The created user, or null if something went wrong
+     * Updates an existing user in the database to have a password hash
+     * @param User $user The user to update
+     * @return int The ID of the newly created user
+     * @throws Exception If there was a problem creating the user
      */
-    public function createUserToExistingEmail(User $user): ?User {
+    public function createUserToExistingEmail(User $user): int {
         $db = $this->getdb();
         $query = $db->prepare("UPDATE User 
             SET firstName = :firstName, lastName = :lastName, DoB = :DoB, passwordHash = :passwordHash, roleId = :roleId 
@@ -57,57 +53,59 @@ class AuthRepository {
     
         try {
     
-            $wasUpdated = $query->execute([
-                ":firstName" => htmlspecialchars($user->getFirstName()),
-                ":lastName" => htmlspecialchars($user->getLastName()),
-                ":DoB" => htmlspecialchars($user->getDoB()->format('Y-m-d')),
-                ":passwordHash" => htmlspecialchars($user->getPasswordHash()),
-                ":roleId" => htmlspecialchars($user->getUserRole()->getRoleId()),
-                ":email" => htmlspecialchars($user->getEmail())
+            $result = $query->execute([
+                ":firstName" => $user->getFirstName(),
+                ":lastName" => $user->getLastName(),
+                ":DoB" => $user->getDoB()->format('Y-m-d'),
+                ":passwordHash" => $user->getPasswordHash(),
+                ":roleId" => $user->getUserRole()->getRoleId(),
+                ":email" => $user->getEmail()
             ]);
-    
-            if (!$wasUpdated) {
-                return null;
+
+            if ($result == 0) { // bool - false indicates no rows were affected
+                throw new Exception("Couldn't create user to this email!");
             }
-    
-            return $user;
-    
+
+            return $this->getdb()->lastInsertId();
         } catch (PDOException $e) {
-            return null;
+            throw new PDOException("Couldn't insert user!");
         }
     }
 
     /**
-     * Checks if the given email exists in the database
+     * Checks if the given email exists in the database.
      * @param string $email the email to check
      * @return bool true if the email exists, false otherwise
+     * @throws Exception If there was a problem checking for email
      */
     public function emailExists(string $email): bool {
         $db = $this->getdb();
         $query = $db->prepare("SELECT * FROM User WHERE email = :email");
         try {
-            $query->execute(array(":email" => htmlspecialchars($email)));
+            $query->execute(array(":email" => $email));
             $result = $query->fetch(PDO::FETCH_ASSOC);
             return !empty($result); // Return true if the result is not empty (MEANING EMAIL EXISTS)
         } catch (PDOException $e) {
-            return false;
+            throw new PDOException(message: "Error checking email existence!");
         }
     }
     
+
     /**
-     * Checks if the given email exists in the database and the password is not null (meaning there's an account with the given email)
+     * Checks if the given email exists in the database for a user with a set password.
      * @param string $email the email to check
-     * @return bool true if the email exists and the password is not null, false otherwise
+     * @return bool true if the email exists for a user with a password, false otherwise
+     * @throws Exception If there was a problem checking for user
      */
     public function userExists(string $email): bool {
         $db = $this->getdb();
         $query = $db->prepare("SELECT * FROM User WHERE email = :email AND passwordHash IS NOT NULL");
         try {
-            $query->execute(array(":email" => htmlspecialchars($email)));
+            $query->execute(array(":email" => $email));
             $result = $query->fetch(PDO::FETCH_ASSOC);
             return !empty($result); // Return true if the result is not empty (MEANING USER EXISTS)
         } catch (PDOException $e) {
-            return false;
+            throw new PDOException("Error checking user existence!");
         }
     }
 }

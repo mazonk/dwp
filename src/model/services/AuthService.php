@@ -1,123 +1,123 @@
 <?php
 require_once 'session_config.php';
 require_once 'src/model/entity/User.php';
-require_once 'src/model/repositories/UserRepository.php';
 include_once 'src/model/repositories/AuthRepository.php';
-require_once 'src/controller/UserRoleController.php';
+require_once 'src/model/services/UserService.php';
+require_once 'src/model/services/UserRoleService.php';
 
 class AuthService {
-    private UserRepository $userRepository;
     private AuthRepository $authRepository;
-    private UserRoleRepository $userRoleRepository;
+    private UserService $userService;
+    private UserRoleService $userRoleService;
 
     public function __construct(){
-        $this->userRepository = new UserRepository();
+        $this->userRoleService = new UserRoleService();
+        $this->userService = new UserService();
         $this->authRepository = new AuthRepository();
-        $this->userRoleRepository = new UserRoleRepository();
     }
 
     public function register(array $formData): array {
         $errors = [];
-
-        // Validations
+    
+        // Validate inputs
         $this->validateRegisterInputs($formData, $errors);
-
+    
         if (count($errors) == 0) {
-            // Hash password
-            $iterations = ['cost' => 10];
-            $hashedPassword = password_hash($formData['password'], PASSWORD_BCRYPT, $iterations);
-            
-            // Check if user with this email exists already
-            if ($this->authRepository->userExists($formData['email'])) {
-                $errors['email'] = "User with this email already exists.";
-                return $errors;
-            }
-
-            // Get UserRole: customer
             try {
-                $result = $this->userRoleRepository->getUserRole('Customer');
-                if ($result) {
-                    $userRole = new UserRole($result['roleId'], $result['type']);
-                }
-            } catch (Exception $e) {
-                $errors[] = "Registration failed. Please try again.";
-                return $errors;
-            }
-            
-            $userToBeInserted = new User(
-                null,
-                $formData['firstName'],
-                $formData['lastName'], 
-                new DateTime($formData['dob']), 
-                $formData['email'], 
-                $hashedPassword, 
-                $userRole
-            );
-
-            // Try to insert the new user into the database
-            try {
-                if ($this->authRepository->emailExists($formData['email'])) {
-                    $newUser = $this->authRepository->createUserToExistingEmail($userToBeInserted);
-                }  else {
-                    $newUser = $this->authRepository->createUser($userToBeInserted);
-                }
-                if (!$newUser) {
-                    // If registration was noy successful
-                    $errors['general'] = "Registration failed. Please try again.";
+                // Hash the password
+                $hashedPassword = password_hash($formData['password'], PASSWORD_BCRYPT, ['cost' => 10]);
+    
+                // Check if a user with this email already exists
+                if ($this->authRepository->userExists($formData['email'])) {
+                    $errors['email'] = "User with this email already exists.";
                     return $errors;
                 }
+    
+                // Fetch the 'Customer' user role
+                $userRole = $this->userRoleService->getUserRoleByType('Customer');
+                if (is_array($userRole) && isset($userRole['error']) && $userRole['error']) {
+                    $errors['general'] = "Registration failed. Couldn't register you as a customer.";
+                    return $errors;
+                }
+    
+                $userToBeInserted = new User(
+                    null,
+                    $formData['firstName'],
+                    $formData['lastName'],
+                    new DateTime($formData['dob']),
+                    $formData['email'],
+                    $hashedPassword,
+                    $userRole
+                );
+    
+                // Insert the new user into the database
+                if ($this->authRepository->emailExists($formData['email'])) {
+                    $newUserId = $this->authRepository->createUserToExistingEmail($userToBeInserted); //update the existing user
+                } else {
+                    $newUserId = $this->authRepository->createUser($userToBeInserted); //new user
+                }
+    
+                if (!$newUserId) {
+                    throw new Exception("Failed to register the user.");
+                }
+    
             } catch (Exception $e) {
+                // Log the actual exception for internal tracking
+                error_log($e->getMessage());
+    
+                // Provide a generic error message to the user
                 $errors['general'] = "Registration failed. Please try again.";
             }
-        } 
+        }
+    
         return $errors;
     }
+    
 
     public function login(array $formData): array {
         $errors = [];
-
-        // Validate login inputs
+    
+        // Validate inputs
         $this->validateLoginInputs($formData, $errors);
-
+    
         if (!empty($errors)) {
             return ['errors' => $errors];
         }
-
-        // Check if the user with this email exists
-        if (!$this->authRepository->userExists($formData['email'])) {
-            $errors['email'] = "User with this email does not exist.";
-            return ['errors' => $errors];
+    
+        try {
+            // Check if the user exists
+            if (!$this->authRepository->userExists($formData['email'])) {
+                $errors['email'] = "User with this email does not exist.";
+                return ['errors' => $errors];
+            }
+    
+            // Fetch user by email
+            $user = $this->userService->getUserByEmail($formData['email']);
+            if (is_array($user) && isset($user['error']) && $user['error']) {
+                $errors['email'] = "Couldn't find user!";
+                return ['errors' => $errors];
+            }
+    
+            // Verify password
+            if (!password_verify($formData['password'], $user->getPasswordHash())) {
+                $errors['password'] = "Incorrect password.";
+                return ['errors' => $errors];
+            }
+    
+            return ['user' => $user];
+    
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+            $errors['general'] = "Login failed. Please try again.";
         }
-
-        // Fetch user from repository
-        $result = $this->userRepository->getUserByEmail($formData['email']);
-
-        if ($result) {
-            $user = new User(
-                $result['userId'],
-                $result['firstName'],
-                $result['lastName'],
-                new DateTime($result['DoB']),
-                $result['email'],
-                $result['passwordHash'],
-                new UserRole($result['roleId'], $result['type'])
-            );
-        }
-
-        // TODO: Handle admin login here if needed
-
-        // Verify the password
-        if (!password_verify($formData['password'], $user->getPasswordHash())) {
-            $errors['password'] = "Incorrect password.";
-            return ['errors' => $errors];
-        }
-
-        // Return the user object on successful login
-        return ['user' => $user];
+    
+        return ['errors' => $errors];
     }
+    
 
     public function logout(): void {
         // Unset session and destroy it
+        session_start();
         session_unset();
         session_destroy();
     }
@@ -131,6 +131,9 @@ class AuthService {
         $containsNumber = "/[0-9]/";
 
         // Perform checks
+        if (empty($formData['firstName']) || empty($formData['lastName']) || empty($formData['dob']) || empty($formData['email']) || empty($formData['password']) || empty($formData['confirmPassword'])) {
+            $errors['general'] = "All fields are required.";
+        }
         if (!preg_match($nameRegex, $formData['firstName'])) {
             $errors['firstName'] = "Name must only contain letters and spaces.";
         }
@@ -156,9 +159,6 @@ class AuthService {
         }
         if (!preg_match($emailRegex, $formData['email'])) {
             $errors['email'] = "Invalid email format.";
-        }
-        if (empty($formData['firstName']) || empty($formData['lastName']) || empty($formData['dob']) || empty($formData['email']) || empty($formData['password']) || empty($formData['confirmPassword'])) {
-            $errors['general'] = "All fields are required.";
         }
         if (strlen($formData['password']) < 8) {
             $errors['password'] = "Password must be at least 8 characters long.";

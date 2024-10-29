@@ -1,7 +1,4 @@
 <?php
-include_once "src/model/entity/Address.php";
-include_once "src/model/entity/PostalCode.php";
-
 class AddressRepository {
   private function getdb() {
     require_once 'src/model/database/dbcon/DatabaseConnection.php';
@@ -11,67 +8,70 @@ class AddressRepository {
   /* Get all addresses */
   public function getAllAddresses(): array {
     $db = $this->getdb();
-    /* Get postal codes */
-    $postalCodeQuery = $db->prepare("SELECT * FROM PostalCode");
-    /* Get addresses */
     $addressQuery = $db->prepare("SELECT *  FROM `Address`");
+    // Get all addresses
     try {
-      $postalCodeQuery->execute();
-      $postalCodeResult = $postalCodeQuery->fetchAll(PDO::FETCH_ASSOC);
       $addressQuery->execute();
       $addressResult = $addressQuery->fetchAll(PDO::FETCH_ASSOC);
-
-      if (empty($postalCodeResult) || empty($addressResult)) {
-        return null;
+      if (empty($addressResult)) {
+        throw new Exception("No addresses found");
       }
       else {
-        $postalCodeArray = [];
-        $addressArray = [];
-
-        foreach($postalCodeResult as $row) {
-          $postalCodeArray[] = new PostalCode($row['postalCode'], $row['city']);
-        }
-    
-        foreach($addressResult as $addressRow) {
-          /* Find the postal code object that matches the postal code of the address */
-          foreach($postalCodeArray as $postalCodeRow) {
-            if ($addressRow['postalCode'] == $postalCodeRow->getPostalCode()) {
-              $addressArray[] = new Address($addressRow['addressId'], $addressRow['street'], $addressRow['streetNr'], $postalCodeRow);
-
-              break;
-            }
+        $postalCodeQuery = $db->prepare("SELECT * FROM PostalCode");
+        // Get all postal codes
+        try {
+          $postalCodeQuery->execute();
+          $postalCodeResult = $postalCodeQuery->fetchAll(PDO::FETCH_ASSOC);
+          if (empty($postalCodeResult)) {
+            throw new Exception("No postal codes found");
           }
+          // Return both address and postal code results in an associative array
+          return [
+            'addressResult' => $addressResult,
+            'postalCodeResult' => $postalCodeResult
+          ];
         }
-        return $addressArray;
+        catch (PDOException $e) {
+          throw new Exception("Unable to fetch postal codes");
+        }
       }
     } catch (PDOException $e) {
-      return null;
+        throw new Exception("Unable to fetch addresses");
     }
   }
 
-  
-  public function getAddressById(int $addressId): ?Address {
+  /* Get address by id */
+  public function getAddressById(int $addressId): array { 
     $db = $this->getdb();
     $query = $db->prepare("SELECT * FROM `Address` WHERE addressId = :addressId");
+    // Get address by id
     try {
       $query->execute(['addressId' => htmlspecialchars($addressId)]);
-      $result = $query->fetch(PDO::FETCH_ASSOC);
-      if ($result === false) {
-        return null;
+      $addressResult = $query->fetch(PDO::FETCH_ASSOC);
+      if (empty($addressResult)) {
+        throw new Exception("Address not found");
       }
       else {
         $postalCodeQuery = $db->prepare("SELECT * FROM PostalCode WHERE postalCode = :postalCode");
-        $postalCodeQuery->execute(['postalCode' => $result['postalCode']]);
-        $postalCodeResult = $postalCodeQuery->fetch(PDO::FETCH_ASSOC);
-        if ($postalCodeResult === false) {
-          return null;
+        // Get postal code by postal code
+        try {
+          $postalCodeQuery->execute(['postalCode' => htmlspecialchars($addressResult['postalCode'])]);
+          $postalCodeResult = $postalCodeQuery->fetch(PDO::FETCH_ASSOC);
+          if (empty($postalCodeResult)) {
+            throw new Exception("Postal code not found");
+          }
+          // Return both address and postal code results in an associative array
+          return [
+            'addressResult' => $addressResult,
+            'postalCodeResult' => $postalCodeResult
+          ];
         }
-        else {
-          return new Address($result['addressId'], $result['street'], $result['streetNr'], new PostalCode($postalCodeResult['postalCode'], $postalCodeResult['city']));
+        catch (PDOException $e) {
+          throw new Exception("Unable to fetch postal code");
         }
       }
     } catch (PDOException $e) {
-      return null;
+      throw new Exception("Unable to fetch address");
     }
   }
 }
