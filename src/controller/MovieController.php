@@ -9,11 +9,24 @@ class MovieController {
     }
 
     public function getAllMovies(): array {
-        return $this->movieService->getAllMovies();
+        $movies = $this->movieService->getAllMovies();
+
+        // If the service returns an error, pass it to the frontend
+        if (isset($movies['error']) && $movies['error']) {
+            return ['errorMessage' => $movies['message']];
+        }
+        
+        return $movies;
     }
 
-    public function getMovieById(int $movieId): Movie {
-        return $this->movieService->getMovieById($movieId);
+    public function getMovieById(int $movieId): array|Movie {
+        $movie = $this->movieService->getMovieById(htmlspecialchars($movieId));
+        
+        // If the service returns an error, pass it to the frontend
+        if (is_array($movie) && isset($movie['error']) && $movie['error']) {
+            return ['errorMessage' => $movie['message']];
+        }
+        
+        return $movie;
     }
 }
-?>

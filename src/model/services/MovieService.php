@@ -12,38 +12,51 @@ class MovieService {
     }
 
     public function getAllMovies(): array {
-        $rawMovies = $this->movieRepository->getAllMovies();
-        $movies = [];
-        foreach ($rawMovies as $row) {
-            $movies[] = $this->createMovieMap($row);
+        try {
+            $result = $this->movieRepository->getAllMovies();
+            $movies = [];
+            foreach ($result as $row) {
+                $movies[] = $this->createMovieMap($row);
+            }
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
         }
         return $movies;
     }
 
-    public function getMovieById(int $movieId): ?Movie {
-        $result = $this->movieRepository->getMovieById($movieId);
-        if ($result === null) {
-            return null;
+    public function getMovieById(int $movieId): array|Movie {
+        try {
+            $result = $this->movieRepository->getMovieById($movieId);
+            return $this->createMovieMap($result);
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
         }
-        return $this->createMovieMap($result);
     }
 
-    public function getActorsByMovieId(int $movieId) {
-        $result = $this->movieRepository->getActorsByMovieId($movieId);
-        $actors = [];
-        foreach ($result as $row) {
-            $actors[] = new Actor($row['actorId'], $row['firstName'], $row['lastName'], $row['character']);
+    public function getActorsByMovieId(int $movieId): array {
+        try {
+            $result = $this->movieRepository->getActorsByMovieId($movieId);
+            $actors = [];
+            foreach ($result as $row) {
+                $actors[] = new Actor($row['actorId'], $row['firstName'], $row['lastName'], $row['character']);
+            }
+            return $actors;
+        } catch (Exception $e) {
+            return [];
         }
-        return $actors;
     }
 
-    public function getDirectorsByMovieId(int $movieId) {
-        $result = $this->movieRepository->getDirectorsByMovieId($movieId);
-        $directors = [];
-        foreach ($result as $row) {
-            $directors[] = new Director($row['directorId'], $row['firstName'], $row['lastName']);
+    public function getDirectorsByMovieId(int $movieId): array {
+        try {
+            $result = $this->movieRepository->getDirectorsByMovieId($movieId);
+            $directors = [];
+            foreach ($result as $row) {
+                $directors[] = new Director($row['directorId'], $row['firstName'], $row['lastName']);
+            }
+            return $directors;
+        } catch (Exception $e) {
+            return [];
         }
-        return $directors;
     }
 
     public function createMovieMap($row): Movie {

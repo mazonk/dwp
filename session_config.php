@@ -1,5 +1,12 @@
 <?php
+require_once "src/controller/VenueController.php";
+
 session_start();
+
+$venueController = new VenueController();
+$_SESSION['baseRoute'] = $_SERVER['HTTP_HOST'] == 'localhost' ? '/dwp/' : '/';
+$initialVenue = $venueController->getVenueById(1);
+$_SESSION['selectedVenueId'] ? '' : $venueController->selectVenue($initialVenue);
 
 // Time interval for id regeneration
 $interval = 30 * 60; 
@@ -24,7 +31,7 @@ function isLoggedIn() {
 
 function confirm_logged_in() {
     if (!isLoggedIn()) {
-        header("Location: /dwp/login");
+        header("Location: " . $_SESSION['baseRoute'] . "login");
         exit;
     }
 }

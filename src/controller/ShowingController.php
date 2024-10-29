@@ -14,17 +14,25 @@ class ShowingController {
         $this->showingService = new ShowingService();
     }
 
-    public function getAllShowingsForVenue(int $venueId): array {
-        return $this->showingService->getAllShowingsForVenue($venueId);
-    }
-
     public function getAllShowingsForMovie(int $movieId): array {
-        //return $this->showingService->getAllShowingsForMovie($movieId,$_SESSION["selectedVenueId"] );
-        return $this->showingService->getAllShowingsForMovie($movieId,1); //$_SESSION["1"] );
+        $showings = $this->showingService->getAllShowingsForMovie($movieId, $_SESSION['selectedVenueId']);
+        // If the service returns an error, pass it to the frontend
+        if (isset($showings['error']) && $showings['error']) {
+            return ['errorMessage' => $showings['message']];
+        }
+        
+        return $showings;
     }
 
-    public function getMoviesPlayingToday(int $venueId){
-        return $this->showingService->getMoviesPlayingToday($venueId);
+    public function getMoviesPlayingToday(int $venueId): array{
+        $showing = $this->showingService->getMoviesPlayingToday(htmlspecialchars($venueId));
+
+        // If the service returns an error, pass it to the frontend
+        if (isset($showing['error']) && $showing['error']) {
+            return ['errorMessage' => $showing['message']];
+        }
+        
+        return $showing;
     }
     
 }
