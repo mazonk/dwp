@@ -57,65 +57,60 @@ if (!$movie) {
   </style>
 </head>
 
-<body class="max-w-[1440px] w-[100%] mx-auto mt-[72px] px-[100px] font-sans bg-[#0d0101] text-white m-0 p-[2vw]">
+<body class="max-w-[90rem] w-[100%] mx-auto mt-[4.5rem] px-[6.25rem] font-sans bg-[#0d0101] text-white m-0 p-[2vw]">
   <?php include_once("src/view/components/Navbar.php"); ?>
-  <div class="flex flex-row justify-between">
-    <div class="movie-header">
-      <img class="w-[300px] h-auto rounded-[0.625rem] m-[0.625rem] bg-center bg-cover" src="../src/assets/<?php echo $movie->getPosterURL(); ?>" alt="Movie Poster">
-    </div>
-    <div class="container w-1/2 justify-start">
+  <div class="flex flex-row justify-start movie-header">
+    <img class="w-[300px] h-auto rounded-[0.625rem] m-[0.625rem] bg-center bg-cover" src="../src/assets/<?php echo $movie->getPosterURL(); ?>" alt="Movie Poster">
+    <div class="ml-[20px]">
       <div class="text-[2.5rem] font-bold mb-2.5">
         <?php echo htmlspecialchars($movie->getTitle()); ?>
       </div>
-      <div class="text-[1.2rem] ml-5 mb-5">
+      <div class="text-[1.2rem] mb-5">
         <?php echo $movie->getDescription(); ?>
       </div>
-      <div class="movie-info ml-5 mb-2">
-        <span class="font-bold">Duration: </span> <?php echo $movie->getDuration(); ?>
+      <div class="movie-info mb-2">
+        <span class="font-bold">Duration: </span> <?php echo $movie->getDuration(); ?> minutes
       </div>
-      <div class="movie-info ml-5 mb-2">
+      <div class="movie-info mb-2">
         <span class="font-bold">Language: </span> <?php echo $movie->getLanguage(); ?>
       </div>
-      <div class="movie-info ml-5 mb-2">
+      <div class="movie-info mb-2">
         <span class="font-bold">Release Date: </span> <?php echo $movie->getReleaseDate()->format('Y-m-d'); ?>
       </div>
-      <div class="movie-info ml-5 mb-2">
+      <div class="movie-info mb-2">
         <span class="font-bold">Rating: </span> <?php echo $movie->getRating(); ?>
       </div>
     </div>
   </div>
-  <div class="flex flex-row justify-center items-center">
-  <div class="trailer-video mr-10 mt-10">
-    <iframe class="w-auto h-[200px] m-[0.625rem] rounded-[1.5rem]" src="https://www.youtube.com/embed/<?php echo $movie->getTrailerURL(); ?>" frameborder="0" allowfullscreen></iframe>
-  </div>
-  <div class="bg-yellow-900 text-white p-4 ml-10 mt-6 rounded-md">
-    <h2 class="text-2xl text-center font-bold mb-4">Showing Times</h2>
-    <div class="flex">
-      <?php
-      $today = new DateTime();
-      for ($i = 0; $i < 7; $i++) {
-        $currentDay = clone $today;
-        $currentDay->modify("+$i day");
-        $formatedDay = $currentDay->format('l d, M');
-        echo '<div class="bg-bgLight text-white py-2 px-4 my-2 rounded-md w-full text-center">';
-        echo "$formatedDay";
-        echo '<div class="flex flex-col items-center">';
-        foreach ($showingsForMovie as $showing) {
-          if ($showing->getShowingDate()->format('l d, M') == $formatedDay) {
-            ShowingCard::render($showing);
+  
+  <div class="flex flex-row justify-center items-center mt-10">
+    <div class="trailer-video mr-10">
+      <iframe class="w-auto h-[200px] m-[0.625rem] rounded-[1.5rem]" src="https://www.youtube.com/embed/<?php echo $movie->getTrailerURL(); ?>" frameborder="0" allowfullscreen></iframe>
+    </div>
+    <div class="bg-yellow-900 text-white p-4 rounded-md">
+      <h2 class="text-2xl text-center font-bold mb-4">Showing Times</h2>
+      <div class="flex">
+        <?php
+        $today = new DateTime();
+        for ($i = 0; $i < 7; $i++) {
+          $currentDay = clone $today;
+          $currentDay->modify("+$i day");
+          $formatedDay = $currentDay->format('l d, M');
+          echo '<div class="bg-bgLight text-white py-2 px-4 my-2 rounded-md w-full text-center">';
+          echo "$formatedDay";
+          echo '<div class="flex flex-col items-center">';
+          foreach ($showingsForMovie as $showing) {
+            if ($showing->getShowingDate()->format('l d, M') == $formatedDay) {
+              ShowingCard::render($showing);
+            }
           }
+          echo '</div>';
+          echo "</div>";
         }
-        echo '</div>';
-        echo "</div>";
-      }
-      ?>
+        ?>
+      </div>
     </div>
   </div>
-</div>
-
-
-  </div>
+  
   <?php include_once("src/view/components/Footer.php"); ?>
 </body>
-
-</html>
