@@ -23,7 +23,7 @@
                     echo '<div class="text-4xl font-bold text-red-600">Nice try, but forbidden!</div>';
                     exit;
                 } else {
-                    echo '<div class="text-2xl font-bold text-green-600 flex justify-center">Welcome, '. $_SESSION['loggedInUser']['firstName'] . ' ' . $_SESSION['loggedInUser']['lastName'].'!</div>';
+//                    echo '<div class="text-2xl font-bold text-green-600 flex justify-center">Welcome, '. $_SESSION['loggedInUser']['firstName'] . ' ' . $_SESSION['loggedInUser']['lastName'].'!</div>';
                 }
             ?>
             <?php
