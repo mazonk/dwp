@@ -181,8 +181,8 @@ INSERT INTO TicketType (name, price, description) VALUES
 
 INSERT INTO Reservation (userId, status) VALUES
 (1, 'confirmed'),
-(2, 'pending'),
-(3, 'cancelled');
+(1, 'pending'),
+(1, 'cancelled');
 
 INSERT INTO Ticket (seatId, ticketTypeId, showingId, reservationId) VALUES
 (1, 1, 1, 1),
@@ -196,8 +196,8 @@ INSERT INTO PaymentMethod (name) VALUES
 
 INSERT INTO Payment (paymentDate, paymentTime, totalPrice, userId, addressId, reservationId, methodId) VALUES
 ('2024-10-15', '18:30:00', 10.00, 1, 1, 1, 1),
-('2024-10-16', '19:45:00', 20.00, 2, 2, 2, 2),
-('2024-10-17', '20:30:00', 8.00, 3, 3, 3, 3);
+('2024-10-16', '19:45:00', 20.00, 1, 2, 2, 2),
+('2024-10-17', '20:30:00', 8.00, 1, 3, 3, 3);
 
 INSERT INTO News (imageURL, header, content) VALUES
 ('gotham_news.jpg', 'New Batman Movie Showing', 'Join us for the latest Batman movie screening at Gotham Cinema!'),
