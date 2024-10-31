@@ -3,19 +3,6 @@
 include_once "src/controller/VenueController.php";
 /* Get the opening hours */
 include_once "src/controller/OpeningHourController.php";
-
-if (isset($_POST['submit'])) {
-  $name = $_POST['name'];
-  $subject = "Contact Form Submission";
-  $mailFrom = $_POST['email'];
-  $message = $_POST['message'];
-
-  $mailTo = "dwp@spicypisces.eu";
-  $headers = "From: " . $mailFrom;
-  $txt = "You have received an email from " . $name . ".\n\n" . $message;
-
-  mail($mailTo, $subject, $txt, $headers);
-}
 ?>
 
 <footer class="flex flex-col gap-[4rem] mt-[8rem]">
@@ -83,7 +70,8 @@ if (isset($_POST['submit'])) {
     <!-- Contact Form -->
     <div class="min-w-[250px] flex flex-col gap-[1.5rem]">
       <h4 class="text-[1.125rem] font-bold leading-tight">Contact Us</h4>
-      <form method="post" class="flex flex-col gap-[.75rem] text-textDark">
+      <form action="<?php echo $_SESSION['baseRoute'] ?>?action=contact" method="post" class="flex flex-col gap-[.75rem] text-textDark">
+        <input type="hidden" name="route" value="<?php echo $_SERVER['REQUEST_URI']; ?>">
         <input type="text" name="name" id="emailInput" placeholder="Your name" required="true" class="h-[36px] py-[.5rem] px-[.875rem] bg-bgSemiDark text-[.875rem] text-textNormal leading-snug border-[1px] border-borderDark rounded-[6px] outline-none ease-in-out duration-[.15s] focus:border-textNormal">
         <input type="text" name="email" id="emailInput" placeholder="Your email" required="true" class="h-[36px] py-[.5rem] px-[.875rem] bg-bgSemiDark text-[.875rem] text-textNormal leading-snug border-[1px] border-borderDark rounded-[6px] outline-none ease-in-out duration-[.15s] focus:border-textNormal">
         <textarea name="message" id="messageInput" placeholder="Message" required="true" class="min-h-[100px] py-[.5rem] px-[.875rem] bg-bgSemiDark text-[.875rem] text-textNormal leading-snug border-[1px] border-borderDark rounded-[6px] outline-none ease-in-out duration-[.15s] focus:border-textNormal"></textarea>
