@@ -45,14 +45,18 @@
           toggleDropdown('toggleProfileDropdown');
       });
 
-      // Close dropdowns when clicked outside
-      document.addEventListener('click', e => {
-        if (!venueDropdownToggler.contains(e.target) && venueDropdownToggler.dataset.isOpen === '1') {
-          toggleDropdown('toggleVenueDropdown');
-        } else if (!profileDropdownToggler.contains(e.target) && profileDropdownToggler.dataset.isOpen === '1') {
-          toggleDropdown('toggleProfileDropdown');
+      // Close dropdowns when clicking outside (but ignore internal links)
+      document.addEventListener('click', (e) => {
+        if (
+          !venueDropdownToggler.contains(e.target) &&
+          !profileDropdownToggler.contains(e.target) &&
+          !e.target.closest('[data-close-on-click="false"]')
+        ) {
+          // Close dropdowns if clicked outside and not on an internal link
+          if (venueDropdownToggler.dataset.isOpen === '1') toggleDropdown('toggleVenueDropdown');
+          if (profileDropdownToggler.dataset.isOpen === '1') toggleDropdown('toggleProfileDropdown');
         }
-      })
+      });
 
       function toggleDropdown(action) {
           const xhr = new XMLHttpRequest();
@@ -154,7 +158,7 @@
         <?php if ($isProfileDropdownOpen): ?>
         <div class="absolute min-w-[150px] top-[48px] right-[0] py-[.75rem] bg-bgDark border-[1px] border-bgLight rounded-[10px]">  
           <?php if ($_SESSION['loggedInUser']['roleType'] === "Admin"): ?>
-            <a href="<?php echo $_SESSION['baseRoute']?>admin" class="w-full flex gap-[.375rem] py-[.5rem] px-[.625rem] text-[.875rem] text-left leading-tight bg-bgDark ease-in-out duration-[.15s] hover:bg-bgSemiDark">
+            <a data-close-on-click="false" href="<?php echo $_SESSION['baseRoute']?>admin" class="w-full flex gap-[.375rem] py-[.5rem] px-[.625rem] text-[.875rem] text-left leading-tight bg-bgDark ease-in-out duration-[.15s] hover:bg-bgSemiDark">
               <i class="ri-user-line h-[18px] text-[18px]"></i>
               <span class="translate-y-[1px]">Admin page</span>
             </a>
