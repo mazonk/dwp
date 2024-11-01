@@ -14,7 +14,7 @@
         <?php include 'src/view/components/AdminSidebar.php'; ?>
 
         <!-- Main Content Area -->
-        <main class="flex-1 p-8 bg-gray-900 text-gray-100">
+        <main class="flex-1 p-8 bg-bgDark text-gray-100">
             <?php
                 require_once 'session_config.php';
 
@@ -28,7 +28,7 @@
             ?>
             <?php
                 $validSections = ['company-venues', 'content-management', 'scheduling', 'bookings-invoices'];
-                $section = in_array($_GET['section'] ?? 'company-venues', $validSections) ? $_GET['section'] : 'company-venues';                
+                $section = isset($_GET['section']) ? (in_array($_GET['section'] ?? 'company-venues', $validSections) ? $_GET['section'] : 'company-venues') : 'company-venues';    
 
                 switch ($section) {
                     case 'company-venues':
