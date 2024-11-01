@@ -67,6 +67,7 @@ get($baseRoute.'upcoming', 'src/view/pages/UpcomingMoviesPage.php');
 // POST ROUTES
 
 post($baseRoute.'movies', 'src/view/pages/AllMoviesPage.php'); // used at toggle dropdown
+post($baseRoute.'upcoming', 'src/view/pages/AllMoviesPage.php'); // used at toggle dropdown
 post($baseRoute.'home', 'src/view/pages/LandingPage.php'); // used at toggle dropdown
 
 // Post route for register
