@@ -51,6 +51,7 @@ parse_str(file_get_contents("php://input"), $_PUT);
             </div>
 
             <button id="editButton" class="mt-4 bg-blue-500 text-white rounded-md px-4 py-2">Edit</button>
+            <div id="error-message" style="color: red; display: none;"></div>
         </div>
 
 
@@ -94,6 +95,8 @@ parse_str(file_get_contents("php://input"), $_PUT);
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const venueDetails = document.getElementById('venueDetails');
+    const errorMessageElement = document.getElementById('error-message');
+
     const venueId = document.getElementById('venueId');
     const addressId = document.getElementById('addressId');
     const postalCodeId = document.getElementById('postalCodeId');
@@ -106,7 +109,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const venueCity = document.getElementById('venueCity');
     const editButton = document.getElementById('editButton');
 
-    // Event listeners for all venue cards
     document.querySelectorAll('.venueCard').forEach(card => {
         card.addEventListener('click', () => {
             // Parse the venue data from the card's data attribute
@@ -129,11 +131,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Event listener for the edit/save button
     editButton.addEventListener('click', () => {
         const isReadOnly = venueName.readOnly;
 
-        // Toggle read-only state for input fields
+        // Toggle read-only state for input fields when in edit mode
         venueName.readOnly = !isReadOnly;
         venuePhone.readOnly = !isReadOnly;
         venueEmail.readOnly = !isReadOnly;
@@ -147,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
         editButton.classList.toggle('bg-blue-500', !isReadOnly);
         editButton.classList.toggle('bg-green-500', isReadOnly);
 
-        // Handle save action if not in read-only mode
+        // Handle save action if in edit mode
         if (!isReadOnly) {
             const updatedVenue = {
                 id: venueId.value,
@@ -163,13 +164,30 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             const xhr = new XMLHttpRequest();
-            xhr.open('PUT', '/dwp/venue/edit', true);
+            const baseRoute ='<?php echo $_SESSION['baseRoute'];?>';
+            xhr.open('PUT', `${baseRoute}venue/edit`, true);
             xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
             xhr.onreadystatechange = () => {
                 if (xhr.readyState === 4 && xhr.status === 200) {
-                    // Optionally handle the response here
-                    console.log(xhr.response);
-                    // window.location.reload(); // Reload the page to see updated details
+                    let response;
+                    try {
+                        response = JSON.parse(xhr.response); // Parse the JSON response
+                    } catch (e) {
+                        console.error('Could not parse response as JSON:', e);
+                        errorMessageElement.textContent = 'An unexpected error occurred. Please try again.';
+                        errorMessageElement.style.display = 'block';
+                        return;
+                    }
+
+                    if (response.success) {
+                        alert('Success! Venue edited successfully.');
+                        window.location.reload();
+                        errorMessageElement.style.display = 'none'; // Hide the error message if there's success
+                    } else {
+                        errorMessageElement.textContent = response.errorMessage;
+                        errorMessageElement.style.display = 'block';
+                        console.error('Error:', response.errorMessage);
+                    }
                 }
             };
             xhr.send(`action=editVenue&venueId=${encodeURIComponent(updatedVenue.id)}&name=${encodeURIComponent(updatedVenue.name)}&phoneNr=${encodeURIComponent(updatedVenue.phone)}
@@ -180,5 +198,3 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 </script>
-
-

@@ -104,7 +104,6 @@ get($baseRoute.'movies/$id', 'src/view/pages/MovieDetailsPage.php');
 get($baseRoute.'news/$id', 'src/view/pages/NewsPage.php');
 
 //put routes
-// Assuming you have a router function for PUT requests
 put($baseRoute.'venue/edit', function() {
     require_once 'src/controller/VenueController.php';
     $venueController = new VenueController();
@@ -125,15 +124,16 @@ put($baseRoute.'venue/edit', function() {
         ];
 
         $result = $venueController->editVenue($venueId, $venueData);
+
         if ($result && !is_array($result)) {
-            // Return a success response (you might want to send a JSON response)
+            // Return a success response
             echo json_encode(['success' => true]);
         } else {
             // Return an error response
-            echo json_encode(['success' => false, 'message' => $result['errorMessage']]);
+            echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
         }
     } else {
         // Invalid action response
-        echo json_encode(['success' => false, 'message' => 'Invalid action.']);
+        echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
     }
 });
