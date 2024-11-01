@@ -27,7 +27,8 @@
                 }
             ?>
             <?php
-                $section = $_GET['section'] ?? 'company-venues'; // Default to 'company-venues' if no section is specified
+                $validSections = ['company-venues', 'content-management', 'scheduling', 'bookings-invoices'];
+                $section = in_array($_GET['section'] ?? 'company-venues', $validSections) ? $_GET['section'] : 'company-venues';                
 
                 switch ($section) {
                     case 'company-venues':
