@@ -97,7 +97,7 @@ if (is_array($movie) && isset($movie['errorMessage'])) {
                     echo "No director(s) found for this movie.";
                 }
                 foreach ($movie->getDirectors() as $director) {
-                    echo htmlspecialchars($director->getFirstName()).''. $director->getLastName(). ", ";
+                    echo htmlspecialchars($director->getFirstName()).' '. $director->getLastName(). ", ";
                 }?></span>
             </div>
         </div>
