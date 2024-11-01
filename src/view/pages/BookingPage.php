@@ -8,7 +8,7 @@ include_once "src/controller/SeatController.php";
 
 $selectedShowing = unserialize($_SESSION['selectedShowing']);
 $selectedVenueId = $_SESSION['selectedVenueId'] ?? 1; // Get the selected venue name and ID
-
+echo "<h1>Booking Page</h1>";
 echo "<h2>Select seating for: " . htmlspecialchars($selectedShowing->getShowingDate()->format('d-m-Y')) . "</h2>"; // Display the selected showing date
 
 $seatController = new SeatController();
