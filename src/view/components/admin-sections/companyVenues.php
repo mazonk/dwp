@@ -1,21 +1,24 @@
 <?php
     $venueController = new VenueController();
 
-    if (isset($_POST['action'])) {
-        if ($_POST['action'] === 'editVenue') {
-            $venueId = htmlspecialchars($_POST['venueId']);
+    if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+        parse_str(file_get_contents("php://input"), $_PUT);
+        if (isset($_PUT['action']) && $_PUT['action'] === 'editVenue') {
+            $venueId = htmlspecialchars($PUT['venueId']);
             $venueData = [
-                'name' => htmlspecialchars($_POST['name']),
-                'phone' => htmlspecialchars($_POST['phone']),
-                'email' => htmlspecialchars($_POST['email']),
-                'street' => htmlspecialchars($_POST['street']),
-                'streetNr' => htmlspecialchars($_POST['streetNr']),
-                'postalCode' => htmlspecialchars($_POST['postalCode']),
-                'city' => htmlspecialchars($_POST['city']),
+                'name' => htmlspecialchars($_PUT['name']),
+                'phone' => htmlspecialchars($_PUT['phone']),
+                'email' => htmlspecialchars($_PUT['email']),
+                'street' => htmlspecialchars($_PUT['street']),
+                'streetNr' => htmlspecialchars($_PUT['streetNr']),
+                'postalCode' => htmlspecialchars($_PUT['postalCode']),
+                'city' => htmlspecialchars($_PUT['city']),
+                'addressId' => htmlspecialchars($_PUT['addressId']),
+                'postalCodeId' => htmlspecialchars($_PUT['postalCodeId']),
             ];
 
-            $venueController = new VenueController();
-            $venueController->editVenue($venueId, $venueData);
+            $result = $venueController->editVenue($venueId, $venueData);
+            header('Location: /dwp/home');
         }
     }
 ?>
@@ -32,6 +35,8 @@
                     <div class="grid grid-cols-2">
                         <label for="venueId" class="text-white">Venue ID:</label>
                         <input type="text" id="venueId" class="text-black mb-4 rounded-sm" readonly>
+                        <input type="hidden" id="addressId">
+                        <input type="hidden" id="postalCodeId">
                     </div>
                     <div class="grid grid-cols-2">
                         <label for="venueName" class="text-white">Venue Name:</label>
@@ -89,6 +94,7 @@
                             'street' => $venue->getAddress()->getStreet(),
                             'streetNr' => $venue->getAddress()->getStreetNr(),
                             'postalCode' => [
+                                'postalCodeId' => $venue->getAddress()->getPostalCode()->getPostalCodeId(),
                                 'postalCode' => $venue->getAddress()->getPostalCode()->getPostalCode(),
                                 'city' => $venue->getAddress()->getPostalCode()->getCity()
                             ]
@@ -109,6 +115,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     const venueDetails = document.getElementById('venueDetails');
     const venueId = document.getElementById('venueId');
+    const addressId = document.getElementById('addressId');
+    const postalCodeId = document.getElementById('postalCodeId');
     const venueName = document.getElementById('venueName');
     const venuePhone = document.getElementById('venuePhone');
     const venueEmail = document.getElementById('venueEmail');
@@ -126,6 +134,8 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Update the input fields with the venue data
             venueId.value = venue.id;
+            addressId.value = venue.address.addressId;
+            postalCodeId.value = venue.address.postalCode.postalCodeId;
             venueName.value = venue.name;
             venuePhone.value = venue.phone;
             venueEmail.value = venue.email;
@@ -167,11 +177,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 street: venueStreet.value,
                 streetNr: venueStreetNr.value,
                 postalCode: venuePostalCode.value,
-                city: venueCity.value
+                city: venueCity.value,
+                addressId: addressId.value,
+                postalCodeId: postalCodeId.value 
             };
 
             const xhr = new XMLHttpRequest();
-            xhr.open('POST', '', true);
+            xhr.open('PUT', '', true);
             xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
             xhr.onreadystatechange = () => {
                 if (xhr.readyState === 4 && xhr.status === 200) {
@@ -179,7 +191,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     // window.location.reload(); // Reload the page to see updated details
                 }
             };
-            xhr.send(`action=editVenue&id=${encodeURIComponent(updatedVenue.id)}&name=${encodeURIComponent(updatedVenue.name)}&phone=${encodeURIComponent(updatedVenue.phone)}&email=${encodeURIComponent(updatedVenue.email)}&street=${encodeURIComponent(updatedVenue.street)}&streetNr=${encodeURIComponent(updatedVenue.streetNr)}&postalCode=${encodeURIComponent(updatedVenue.postalCode)}&city=${encodeURIComponent(updatedVenue.city)}`);
+            xhr.send(`action=editVenue&venueId=${encodeURIComponent(updatedVenue.id)}&name=${encodeURIComponent(updatedVenue.name)}&phone=${encodeURIComponent(updatedVenue.phone)}
+            &email=${encodeURIComponent(updatedVenue.email)}&street=${encodeURIComponent(updatedVenue.street)}&streetNr=${encodeURIComponent(updatedVenue.streetNr)}
+            &postalCode=${encodeURIComponent(updatedVenue.postalCode)}&city=${encodeURIComponent(updatedVenue.city)}&addressId=${encodeURIComponent(updatedVenue.addressId)}
+            &postalCodeId=${encodeURIComponent(updatedVenue.postalCodeId)}`);
         }
     });
 });
