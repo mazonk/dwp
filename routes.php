@@ -113,15 +113,15 @@ put($baseRoute.'venue/edit', function() {
     if (isset($_PUT['action']) && $_PUT['action'] === 'editVenue') {
         $venueId = htmlspecialchars($_PUT['venueId']);
         $venueData = [
-            'name' => htmlspecialchars($_PUT['name']),
-            'phoneNr' => htmlspecialchars($_PUT['phoneNr']),
-            'email' => htmlspecialchars($_PUT['email']),
-            'street' => htmlspecialchars($_PUT['street']),
-            'streetNr' => htmlspecialchars($_PUT['streetNr']),
-            'postalCode' => htmlspecialchars($_PUT['postalCode']),
-            'city' => htmlspecialchars($_PUT['city']),
-            'addressId' => htmlspecialchars($_PUT['addressId']),
-            'postalCodeId' => htmlspecialchars($_PUT['postalCodeId']),
+            'name' => htmlspecialchars(trim($_PUT['name'])),
+            'phoneNr' => htmlspecialchars(trim($_PUT['phoneNr'])),
+            'email' => htmlspecialchars(trim($_PUT['email'])),
+            'street' => htmlspecialchars(trim($_PUT['street'])),
+            'streetNr' => htmlspecialchars(trim($_PUT['streetNr'])),
+            'postalCode' => htmlspecialchars(trim($_PUT['postalCode'])),
+            'city' => htmlspecialchars(trim($_PUT['city'])),
+            'addressId' => htmlspecialchars(trim($_PUT['addressId'])),
+            'postalCodeId' => htmlspecialchars(trim($_PUT['postalCodeId'])),
         ];
 
         $result = $venueController->editVenue($venueId, $venueData);
