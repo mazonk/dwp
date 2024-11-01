@@ -45,9 +45,6 @@ class VenueRepository {
         'contactEmail' => htmlspecialchars($contactEmail),
         'venueId' => $venueId,
       ]);
-      if ($query->rowCount() === 0) {
-        throw new Exception("Venue update failed or no changes made");
-      }
     } catch (PDOException $e) {
       throw new Exception("Unable to update venue");
     }

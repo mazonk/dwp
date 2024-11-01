@@ -125,15 +125,12 @@ put($baseRoute.'venue/edit', function() {
         ];
 
         $result = $venueController->editVenue($venueId, $venueData);
-
-        echo serialize($result);
-
-        if ($result) {
+        if ($result && !is_array($result)) {
             // Return a success response (you might want to send a JSON response)
             echo json_encode(['success' => true]);
         } else {
             // Return an error response
-            echo json_encode(['success' => false, 'message' => 'Error updating venue.']);
+            echo json_encode(['success' => false, 'message' => $result['errorMessage']]);
         }
     } else {
         // Invalid action response

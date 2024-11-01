@@ -61,8 +61,8 @@ class VenueService {
   }
 
   public function editVenue(int $venueId, array $newVenueData): array|Venue {
+    $this->db->beginTransaction();
     try {
-      $this->db->beginTransaction();
         $newAddress = new Address($newVenueData['addressId'], $newVenueData['street'], $newVenueData['streetNr'], 
         new PostalCode($newVenueData['postalCodeId'], $newVenueData['postalCode'], $newVenueData['city']));
         $this->addressService->editAddress($newVenueData['addressId'], $newAddress);

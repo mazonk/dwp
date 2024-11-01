@@ -55,6 +55,31 @@ class VenueController {
       $errors[] = 'All fields are required.';
     }
 
+    
+    if (strlen($data['name']) > 100) {
+        $errors[] = 'Venue name must not be longer than 100 characters.';
+    }
+
+    if (strlen($data['phoneNr']) > 20) {
+        $errors[] = 'Phone number must not be longer than 20 characters.';
+    }
+
+    if (strlen($data['email']) > 100) {
+        $errors[] = 'Contact email must not be longer than 100 characters.';
+    }
+
+    if (strlen($data['street']) > 100) {
+        $errors[] = 'Street must not be longer than 100 characters.';
+    }
+
+    if (strlen($data['streetNr']) > 10) {
+        $errors[] = 'Street number must not be longer than 10 characters.';
+    }
+    
+    if (strlen($data['city']) > 50) {
+        $errors[] = 'City must not be longer than 50 characters.';
+    }
+
     if (empty($data['name']) || strlen($data['name']) < 2) {
         $errors[] = 'Venue name must be at least 2 characters long.';
     }

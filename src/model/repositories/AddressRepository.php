@@ -76,29 +76,20 @@ class AddressRepository {
 
   /* Update address */
 public function updateAddress(int $addressId, string $street, string $streetNr, int $postalCodeId, int $postalCode, string $city): void {
-  $this->db->beginTransaction();
   try {
     $addressQuery = $this->db->prepare("UPDATE `Address` SET street = :street, streetNr = :streetNr WHERE addressId = :addressId");
     $addressQuery->execute([
       'street' => htmlspecialchars($street),
       'streetNr' => htmlspecialchars($streetNr),
-      'addressId' => $addressId,
+      'addressId' => htmlspecialchars($addressId),
     ]);
-    if ($addressQuery->rowCount() === 0) {
-      throw new Exception("Address update failed or no changes made");
-    }
     $postalCodeQuery = $this->db->prepare("UPDATE `PostalCode` SET postalCode = :postalCode, city = :city WHERE postalCodeId = :postalCodeId");
     $postalCodeQuery->execute([
       'postalCode' => htmlspecialchars($postalCode),
       'city' => htmlspecialchars($city),
       'postalCodeId' => htmlspecialchars($postalCodeId)
     ]);
-    if ($postalCodeQuery->rowCount() === 0) {
-      throw new Exception("Postal code update failed or no changes made");
-    }
-    $this->db->commit();
   } catch (PDOException $e) {
-    $this->db->rollBack();
     throw new PDOException("Unable to update address and postal code!");
   }
 }
