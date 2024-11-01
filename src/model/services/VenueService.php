@@ -63,11 +63,13 @@ class VenueService {
   public function editVenue(int $venueId, array $newVenueData): array|Venue {
     try {
       $this->db->beginTransaction();
-        $newAddress = new Address($newVenueData['addressId'], $newVenueData['street'], $newVenueData['streetNr'], $newVenueData['postalCode']);
+        $newAddress = new Address($newVenueData['addressId'], $newVenueData['street'], $newVenueData['streetNr'], $newVenueData['postalCodeId']);
         $this->addressService->editAddress($newVenueData['addressId'], $newAddress);
-      
+        $this->venueRepository->editVenue($venueId, $newVenueData['name'], $newVenueData['phoneNr'], $newVenueData['contactEmail']);
+      $this->db->commit();
       return $this->getVenueById($venueId);
     } catch (Exception $e) {
+      $this->db->rollBack();
       return ["error"=> true, "message"=> $e->getMessage()];
     }
   }

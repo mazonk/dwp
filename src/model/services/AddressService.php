@@ -25,7 +25,7 @@ class AddressService {
       // Create an array of Address objects with the corresponding PostalCode object
       foreach($result['addressResult'] as $addressRow) {
         foreach($result['postalCodeResult'] as $postalCodeRow) {
-          if ($addressRow['postalCode'] == $postalCodeRow['postalCode']) {
+          if ($addressRow['postalCodeId'] == $postalCodeRow['postalCodeId']) {
             $addressArray[] = new Address($addressRow['addressId'], $addressRow['street'], $addressRow['streetNr'], new PostalCode($postalCodeRow['postalCodeId'], $postalCodeRow['postalCode'], $postalCodeRow['city']));
             break;
           }
