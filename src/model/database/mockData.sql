@@ -181,12 +181,12 @@ INSERT INTO TicketType (name, price, description) VALUES
 ('VIP', 20.00, 'Access to premium seating'),
 ('Student', 8.00, 'Discount for students');
 
-INSERT INTO Reservation (userId, status) VALUES
+INSERT INTO Booking (userId, status) VALUES
 (1, 'confirmed'),
 (2, 'pending'),
 (3, 'cancelled');
 
-INSERT INTO Ticket (seatId, ticketTypeId, showingId, reservationId) VALUES
+INSERT INTO Ticket (seatId, ticketTypeId, showingId, bookingId) VALUES
 (1, 1, 1, 1),
 (2, 2, 2, 2),
 (3, 3, 3, 3);
@@ -196,7 +196,7 @@ INSERT INTO PaymentMethod (name) VALUES
 ('PayPal'),
 ('Cash');
 
-INSERT INTO Payment (paymentDate, paymentTime, totalPrice, userId, addressId, reservationId, methodId) VALUES
+INSERT INTO Payment (paymentDate, paymentTime, totalPrice, userId, addressId, bookingId, methodId) VALUES
 ('2024-10-15', '18:30:00', 10.00, 1, 1, 1, 1),
 ('2024-10-16', '19:45:00', 20.00, 2, 2, 2, 2),
 ('2024-10-17', '20:30:00', 8.00, 3, 3, 3, 3);

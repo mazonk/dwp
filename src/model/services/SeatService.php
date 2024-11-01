@@ -21,6 +21,8 @@ class SeatService {
     }
 
     //TODO: public function getSeatById
-
+    public function getSeatsForShowing(int $showingId, int $selectedVenueId): array {
+        return $this->seatRepository->getSeatsForShowing($showingId, $selectedVenueId);
+    }
     //TODO: public function getAllSeatsForShowing
 }

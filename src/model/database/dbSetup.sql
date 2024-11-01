@@ -14,7 +14,7 @@ DROP TABLE IF EXISTS MovieGenre;
 DROP TABLE IF EXISTS News;
 DROP TABLE IF EXISTS Payment;
 DROP TABLE IF EXISTS Ticket;
-DROP TABLE IF EXISTS Reservation;
+DROP TABLE IF EXISTS Booking;
 DROP TABLE IF EXISTS TicketType;
 DROP TABLE IF EXISTS Showing;
 DROP TABLE IF EXISTS Actor;
@@ -143,8 +143,8 @@ CREATE TABLE TicketType (
     description TEXT NULL
 );
 
-CREATE TABLE Reservation (
-    reservationId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+CREATE TABLE Booking (
+    bookingId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     userId INT NOT NULL,
     status ENUM('pending', 'confirmed', 'cancelled') NOT NULL, -- enum?
     FOREIGN KEY (userId) REFERENCES User(userId)
@@ -155,11 +155,11 @@ CREATE TABLE Ticket (
     seatId INT NOT NULL,
     ticketTypeId INT NOT NULL,
     showingId INT NOT NULL,
-    reservationId INT NOT NULL,
+    bookingId INT NOT NULL,
     FOREIGN KEY (seatId) REFERENCES Seat(seatId),
     FOREIGN KEY (ticketTypeId) REFERENCES TicketType(ticketTypeId),
     FOREIGN KEY (showingId) REFERENCES Showing(showingId),
-    FOREIGN KEY (reservationId) REFERENCES Reservation(reservationId)
+    FOREIGN KEY (bookingId) REFERENCES Booking(bookingId)
 );
 
 CREATE TABLE PaymentMethod (
@@ -174,12 +174,12 @@ CREATE TABLE Payment (
     totalPrice DECIMAL(8, 2) NOT NULL, -- 8 digits and 2 digits after the decimal point 0.00 - 999999.99
     userId INT NOT NULL,
     addressId INT NOT NULL,
-    reservationId INT NOT NULL,
+    bookingId INT NOT NULL,
     methodId INT NOT NULL,
     FOREIGN KEY (methodId) REFERENCES PaymentMethod(methodId),
     FOREIGN KEY (userId) REFERENCES User(userId),
     FOREIGN KEY (addressId) REFERENCES Address(addressId),
-    FOREIGN KEY (reservationId) REFERENCES Reservation(reservationId)
+    FOREIGN KEY (bookingId) REFERENCES Booking(bookingId)
 );
 
 CREATE TABLE News (
