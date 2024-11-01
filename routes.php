@@ -67,6 +67,7 @@ get($baseRoute.'upcoming', 'src/view/pages/UpcomingMoviesPage.php');
 
 post($baseRoute.'movies', 'src/view/pages/AllMoviesPage.php'); // used at toggle dropdown
 post($baseRoute.'home', 'src/view/pages/LandingPage.php'); // used at toggle dropdown
+post($baseRoute.'booking', 'src/view/pages/BookingPage.php');
 
 // Post route for register
 post($baseRoute.'register', function() {
@@ -94,7 +95,7 @@ post($baseRoute.'logout', function() {
     require_once 'src/controller/AuthController.php';
     $authController = new AuthController();
     $authController->logout();
-});
+});    
 
 // Query string routes
 

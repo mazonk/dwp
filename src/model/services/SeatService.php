@@ -21,8 +21,28 @@ class SeatService {
     }
 
     //TODO: public function getSeatById
-    public function getSeatsForShowing(int $showingId, int $selectedVenueId): array {
-        return $this->seatRepository->getSeatsForShowing($showingId, $selectedVenueId);
+    
+    public function getAllSeatsForShowing(int $showingId, int $selectedVenueId): array {
+        try {
+            $result = $this->seatRepository->getAllSeatsForShowing($showingId, $selectedVenueId);
+            $seats = [];
+            foreach ($result as $seat) {
+                $seats[] = $this->seatRepository->getAllSeatsForShowing($showingId, $selectedVenueId);
+            }
+            return $result; 
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+        return $seats;
     }
-    //TODO: public function getAllSeatsForShowing
+    public function getAvailableSeatsForShowing(int $showingId, int $selectedVenueId): array {
+        try {
+            $result = $this->seatRepository->getAvailableSeatsForShowing($showingId, $selectedVenueId);
+            return $result;
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+    }
+
+    // TODO: public function getSeatById
 }
