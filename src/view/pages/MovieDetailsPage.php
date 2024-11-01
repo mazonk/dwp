@@ -1,4 +1,3 @@
-<!-- In the URL -> http://localhost/dwp/movies/1 - this is how you send query string with req. URL -->
 <?php
 require_once 'session_config.php';
 include_once "src/controller/MovieController.php";
@@ -128,6 +127,7 @@ if (is_array($movie) && isset($movie['errorMessage'])) {
                         }
                     
                 }
+                echo $showing->getShowingId();
                 echo '</div>';
                 echo "</div>";
             }

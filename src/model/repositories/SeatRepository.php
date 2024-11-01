@@ -9,7 +9,13 @@ class SeatRepository {
 
     public function getAllSeatsForShowing(int $showingId, int $selectedVenueId): array {
         $db = $this->getdb();
-        $query = $db->prepare("SELECT s.* FROM Seat s JOIN Room r ON s.roomId = r.roomId JOIN VenueShowing vs ON r.venueId = vs.venueId JOIN Showing sh ON vs.showingId = sh.showingId WHERE sh.showingId = :showingId AND vs.venueId = :venueId");
+        $query = $db->prepare("SELECT s.*
+        FROM Seat s, Room r, Showing sh, venueshowing vs
+        WHERE s.roomId = r.roomId
+        AND sh.roomId = r.roomId
+        AND vs.showingId = sh.showingId
+        AND sh.showingId = :showingId
+        AND vs.venueId = :venueId");
         try {
             $query->execute(array(":showingId" => $showingId, ":venueId" => $selectedVenueId));
             $result = $query->fetchAll(PDO::FETCH_ASSOC);
