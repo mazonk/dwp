@@ -6,10 +6,11 @@ include_once "src/model/entity/Venue.php";
 class VenueService {
   private VenueRepository $venueRepository;
   private AddressService $addressService;
+  private PDO $db;
 
   public function __construct() {
-    $dbCon = $this->getdb();
-    $this->venueRepository = new VenueRepository($dbCon);
+    $this->db = $this->getdb();
+    $this->venueRepository = new VenueRepository($this->db);
     $this->addressService = new AddressService();
   }
 
@@ -61,8 +62,10 @@ class VenueService {
 
   public function editVenue(int $venueId, array $newVenueData): array|Venue {
     try {
+      $this->db->beginTransaction();
+        $newAddress = new Address($newVenueData['addressId'], $newVenueData['street'], $newVenueData['streetNr'], $newVenueData['postalCode']);
+        $this->addressService->editAddress($newVenueData['addressId'], $newAddress);
       
-      $this->venueRepository->editVenue($venueId, $venueData);
       return $this->getVenueById($venueId);
     } catch (Exception $e) {
       return ["error"=> true, "message"=> $e->getMessage()];
