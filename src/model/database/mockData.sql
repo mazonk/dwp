@@ -3,10 +3,10 @@ INSERT INTO PostalCode (postalCode, city) VALUES
 (90210, 'Beverly Hills'),
 (10001, 'New York');
 
-INSERT INTO Address (street, streetNr, postalCode) VALUES
-('Wayne Tower', '100', 60606),
-('Rodeo Drive', '222', 90210),
-('Queens Blvd', '15', 10001);
+INSERT INTO Address (street, streetNr, postalCodeId) VALUES
+('Wayne Tower', '100', 1),
+('Rodeo Drive', '222', 2),
+('Queens Blvd', '15', 3);
 
 INSERT INTO Venue (name, phoneNr, contactEmail, addressId) VALUES
 ('Gotham Cinema', '312-555-1234', 'info@gothamcinema.com', 1),

@@ -31,7 +31,8 @@ DROP TABLE IF EXISTS Address;
 SET FOREIGN_KEY_CHECKS = 1;
 
 CREATE TABLE PostalCode (
-    postalCode int PRIMARY KEY NOT NULL,
+    postalCodeId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    postalCode int NOT NULL,
     city VARCHAR(50) NOT NULL
 );
 
@@ -39,8 +40,8 @@ CREATE TABLE Address (
     addressId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     street VARCHAR(100) NOT NULL,
     streetNr VARCHAR(10) NOT NULL,
-    postalCode INT NOT NULL,
-    FOREIGN KEY (postalCode) REFERENCES PostalCode(postalCode)
+    postalCodeId INT NOT NULL,
+    FOREIGN KEY (postalCodeId) REFERENCES PostalCode(postalCodeId)
 );
 
 CREATE TABLE Venue (
