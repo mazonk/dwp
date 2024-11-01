@@ -102,3 +102,41 @@ post($baseRoute.'logout', function() {
 
 get($baseRoute.'movies/$id', 'src/view/pages/MovieDetailsPage.php');
 get($baseRoute.'news/$id', 'src/view/pages/NewsPage.php');
+
+//put routes
+// Assuming you have a router function for PUT requests
+put($baseRoute.'venue/edit', function() {
+    require_once 'src/controller/VenueController.php';
+    $venueController = new VenueController();
+    parse_str(file_get_contents("php://input"), $_PUT);
+
+    if (isset($_PUT['action']) && $_PUT['action'] === 'editVenue') {
+        $venueId = htmlspecialchars($_PUT['venueId']);
+        $venueData = [
+            'name' => htmlspecialchars($_PUT['name']),
+            'phoneNr' => htmlspecialchars($_PUT['phoneNr']),
+            'email' => htmlspecialchars($_PUT['email']),
+            'street' => htmlspecialchars($_PUT['street']),
+            'streetNr' => htmlspecialchars($_PUT['streetNr']),
+            'postalCode' => htmlspecialchars($_PUT['postalCode']),
+            'city' => htmlspecialchars($_PUT['city']),
+            'addressId' => htmlspecialchars($_PUT['addressId']),
+            'postalCodeId' => htmlspecialchars($_PUT['postalCodeId']),
+        ];
+
+        $result = $venueController->editVenue($venueId, $venueData);
+
+        echo serialize($result);
+
+        if ($result) {
+            // Return a success response (you might want to send a JSON response)
+            echo json_encode(['success' => true]);
+        } else {
+            // Return an error response
+            echo json_encode(['success' => false, 'message' => 'Error updating venue.']);
+        }
+    } else {
+        // Invalid action response
+        echo json_encode(['success' => false, 'message' => 'Invalid action.']);
+    }
+});

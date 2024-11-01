@@ -59,7 +59,7 @@ class VenueController {
         $errors[] = 'Venue name must be at least 2 characters long.';
     }
 
-    if (empty($data['phone']) || !preg_match('/^\+?[0-9\s\-]+$/', $data['phone'])) {
+    if (empty($data['phoneNr']) || !preg_match('/^\+?[0-9\s\-]+$/', $data['phoneNr'])) {
         $errors[] = 'Invalid phone number format.';
     }
 

@@ -1,28 +1,6 @@
-<?php
-    $venueController = new VenueController();
-
-    if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
-        parse_str(file_get_contents("php://input"), $_PUT);
-        if (isset($_PUT['action']) && $_PUT['action'] === 'editVenue') {
-            $venueId = htmlspecialchars($PUT['venueId']);
-            $venueData = [
-                'name' => htmlspecialchars($_PUT['name']),
-                'phone' => htmlspecialchars($_PUT['phone']),
-                'email' => htmlspecialchars($_PUT['email']),
-                'street' => htmlspecialchars($_PUT['street']),
-                'streetNr' => htmlspecialchars($_PUT['streetNr']),
-                'postalCode' => htmlspecialchars($_PUT['postalCode']),
-                'city' => htmlspecialchars($_PUT['city']),
-                'addressId' => htmlspecialchars($_PUT['addressId']),
-                'postalCodeId' => htmlspecialchars($_PUT['postalCodeId']),
-            ];
-
-            $result = $venueController->editVenue($venueId, $venueData);
-            header('Location: /dwp/home');
-        }
-    }
+<?php 
+parse_str(file_get_contents("php://input"), $_PUT);
 ?>
-
 <section>
     <h2 class="text-3xl font-semibold mb-4 text-center">Company & Venues</h2>
     <div class="flex flex-col">
@@ -78,6 +56,8 @@
 
         <div class="grid grid-cols-5 gap-6 w-full px-4">
             <?php
+            require_once "src/controller/VenueController.php";
+            $venueController = new VenueController();
             $allVenues = $venueController->getAllVenues();
 
             if (isset($allVenues['errorMessage'])) {
@@ -183,15 +163,16 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             const xhr = new XMLHttpRequest();
-            xhr.open('PUT', '', true);
+            xhr.open('PUT', '/dwp/venue/edit', true);
             xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
             xhr.onreadystatechange = () => {
                 if (xhr.readyState === 4 && xhr.status === 200) {
                     // Optionally handle the response here
+                    console.log(xhr.response);
                     // window.location.reload(); // Reload the page to see updated details
                 }
             };
-            xhr.send(`action=editVenue&venueId=${encodeURIComponent(updatedVenue.id)}&name=${encodeURIComponent(updatedVenue.name)}&phone=${encodeURIComponent(updatedVenue.phone)}
+            xhr.send(`action=editVenue&venueId=${encodeURIComponent(updatedVenue.id)}&name=${encodeURIComponent(updatedVenue.name)}&phoneNr=${encodeURIComponent(updatedVenue.phone)}
             &email=${encodeURIComponent(updatedVenue.email)}&street=${encodeURIComponent(updatedVenue.street)}&streetNr=${encodeURIComponent(updatedVenue.streetNr)}
             &postalCode=${encodeURIComponent(updatedVenue.postalCode)}&city=${encodeURIComponent(updatedVenue.city)}&addressId=${encodeURIComponent(updatedVenue.addressId)}
             &postalCodeId=${encodeURIComponent(updatedVenue.postalCodeId)}`);
