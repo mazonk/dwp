@@ -34,62 +34,48 @@
 <header class="w-[100%] fixed top-0 left-0 right-0 bg-bgDark z-[10]">
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      const toggleDropdown = (action) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '', true);
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.onreadystatechange = () => {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            window.location.reload();
+          }
+        };
+        xhr.send(`action=${action}`);
+      };
+
       const venueDropdownToggler = document.querySelector('#venueDropdownToggler');
       const profileDropdownToggler = document.querySelector('#profileDropdownToggler');
 
-      venueDropdownToggler?.addEventListener('click', (e) => {
-          toggleDropdown('toggleVenueDropdown');
+      venueDropdownToggler?.addEventListener('click', () => {
+        toggleDropdown('toggleVenueDropdown');
       });
 
-      profileDropdownToggler?.addEventListener('click', (e) => {
-          toggleDropdown('toggleProfileDropdown');
+      profileDropdownToggler?.addEventListener('click', () => {
+        toggleDropdown('toggleProfileDropdown');
       });
 
-      // Close dropdowns when clicking outside (but ignore internal links)
       document.addEventListener('click', (e) => {
         if (
           !venueDropdownToggler.contains(e.target) &&
           !profileDropdownToggler.contains(e.target) &&
           !e.target.closest('[data-close-on-click="false"]')
         ) {
-          // Close dropdowns if clicked outside and not on an internal link
           if (venueDropdownToggler.dataset.isOpen === '1') toggleDropdown('toggleVenueDropdown');
           if (profileDropdownToggler.dataset.isOpen === '1') toggleDropdown('toggleProfileDropdown');
         }
       });
 
-      function toggleDropdown(action) {
-          const xhr = new XMLHttpRequest();
-          xhr.open('POST', '', true); // @params (method, url, async)
-          xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-          xhr.onreadystatechange = function() { //event handler to check when the request is done
-              if (xhr.readyState === 4 && xhr.status === 200) { // if http response 200 (ok)
-                  // Reload the page to reflect the updated dropdown state
-                  window.location.reload();
-              }
-          };
-          xhr.send(`action=${action}`);
-      }
-
-      document.querySelectorAll('.venueSelectButton').forEach(button => { //get button class
-      button.addEventListener('click', (e) => {
-        e.preventDefault(); // Prevent form submission
-        
-        const venueId = button.dataset.venueId; // Get venue id from data attribute
-        
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', '', true);
-        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        xhr.onreadystatechange = function() {
-          if (xhr.readyState === 4 && xhr.status === 200) {
-            // Reload page or update the selected venue dynamically
-            window.location.reload();
-          }
-        };
-        xhr.send(`action=selectVenue&venueId=${venueId}`); // Send venue selection to the server
+      document.querySelectorAll('.venueSelectButton').forEach(button => {
+        button.addEventListener('click', (e) => {
+          e.preventDefault();
+          const venueId = button.dataset.venueId;
+          toggleDropdown(`selectVenue&venueId=${venueId}`);
+        });
       });
     });
-  });
   </script>
   <nav class="max-w-[1440px] w-[100%] flex justify-between items-center gap-[4rem] mx-auto py-[1rem] px-[100px] z-[10]">
     <!-- Logo -->
