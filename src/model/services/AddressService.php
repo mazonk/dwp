@@ -7,7 +7,13 @@ class AddressService {
   private AddressRepository $addressRepository;
 
   public function __construct() {
-    $this->addressRepository = new AddressRepository();
+    $dbCon = $this->getdb();
+    $this->addressRepository = new AddressRepository($dbCon);
+  }
+
+  private function getdb() {
+    require_once 'src/model/database/dbcon/DatabaseConnection.php';
+    return DatabaseConnection::getInstance(); // singleton
   }
 
   /* Get all addresses */

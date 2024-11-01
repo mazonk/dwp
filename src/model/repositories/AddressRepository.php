@@ -1,14 +1,14 @@
 <?php
 class AddressRepository {
-  private function getdb() {
-    require_once 'src/model/database/dbcon/DatabaseConnection.php';
-    return DatabaseConnection::getInstance(); // singleton
+  private PDO $db;
+
+  public function __construct($dbCon) {
+    $this->db = $dbCon;
   }
 
   /* Get all addresses */
   public function getAllAddresses(): array {
-    $db = $this->getdb();
-    $addressQuery = $db->prepare("SELECT *  FROM `Address`");
+    $addressQuery = $this->db->prepare("SELECT *  FROM `Address`");
     // Get all addresses
     try {
       $addressQuery->execute();
@@ -17,7 +17,7 @@ class AddressRepository {
         throw new Exception("No addresses found");
       }
       else {
-        $postalCodeQuery = $db->prepare("SELECT * FROM PostalCode");
+        $postalCodeQuery = $this->db->prepare("SELECT * FROM PostalCode");
         // Get all postal codes
         try {
           $postalCodeQuery->execute();
@@ -42,8 +42,7 @@ class AddressRepository {
 
   /* Get address by id */
   public function getAddressById(int $addressId): array { 
-    $db = $this->getdb();
-    $query = $db->prepare("SELECT * FROM `Address` WHERE addressId = :addressId");
+    $query = $this->db->prepare("SELECT * FROM `Address` WHERE addressId = :addressId");
     // Get address by id
     try {
       $query->execute(['addressId' => htmlspecialchars($addressId)]);
@@ -52,7 +51,7 @@ class AddressRepository {
         throw new Exception("Address not found");
       }
       else {
-        $postalCodeQuery = $db->prepare("SELECT * FROM PostalCode WHERE postalCode = :postalCode");
+        $postalCodeQuery = $this->db->prepare("SELECT * FROM PostalCode WHERE postalCode = :postalCode");
         // Get postal code by postal code
         try {
           $postalCodeQuery->execute(['postalCode' => htmlspecialchars($addressResult['postalCode'])]);

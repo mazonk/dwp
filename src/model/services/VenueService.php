@@ -8,8 +8,14 @@ class VenueService {
   private AddressService $addressService;
 
   public function __construct() {
-    $this->venueRepository = new VenueRepository();
+    $dbCon = $this->getdb();
+    $this->venueRepository = new VenueRepository($dbCon);
     $this->addressService = new AddressService();
+  }
+
+  private function getdb(): PDO {
+    require_once 'src/model/database/dbcon/DatabaseConnection.php';
+    return DatabaseConnection::getInstance(); // singleton
   }
 
   /* Get all venues */
@@ -48,6 +54,16 @@ class VenueService {
       } catch (Exception $e) {
         return ["error"=> true, "message"=> $e->getMessage()];
       }
+    } catch (Exception $e) {
+      return ["error"=> true, "message"=> $e->getMessage()];
+    }
+  }
+
+  public function editVenue(int $venueId, array $newVenueData): array|Venue {
+    try {
+      
+      $this->venueRepository->editVenue($venueId, $venueData);
+      return $this->getVenueById($venueId);
     } catch (Exception $e) {
       return ["error"=> true, "message"=> $e->getMessage()];
     }
