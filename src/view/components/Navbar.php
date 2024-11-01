@@ -34,48 +34,63 @@
 <header class="w-[100%] fixed top-0 left-0 right-0 bg-bgDark z-[10]">
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const toggleDropdown = (action) => {
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', '', true);
-        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        xhr.onreadystatechange = () => {
-          if (xhr.readyState === 4 && xhr.status === 200) {
-            window.location.reload();
-          }
-        };
-        xhr.send(`action=${action}`);
-      };
+    const venueDropdownToggler = document.querySelector('#venueDropdownToggler');
+    const profileDropdownToggler = document.querySelector('#profileDropdownToggler');
 
-      const venueDropdownToggler = document.querySelector('#venueDropdownToggler');
-      const profileDropdownToggler = document.querySelector('#profileDropdownToggler');
+    //add event listeners
+    venueDropdownToggler?.addEventListener('click', () => {
+      toggleDropdown('toggleVenueDropdown', venueDropdownToggler, profileDropdownToggler);
+    });
 
-      venueDropdownToggler?.addEventListener('click', () => {
-        toggleDropdown('toggleVenueDropdown');
-      });
+    profileDropdownToggler?.addEventListener('click', () => {
+      toggleDropdown('toggleProfileDropdown', profileDropdownToggler, venueDropdownToggler);
+    });
 
-      profileDropdownToggler?.addEventListener('click', () => {
-        toggleDropdown('toggleProfileDropdown');
-      });
+    document.addEventListener('click', (e) => {
+      if (
+        !venueDropdownToggler.contains(e.target) &&
+        !profileDropdownToggler.contains(e.target) &&
+        !e.target.closest('[data-close-on-click="false"]')
+      ) {
+        if (venueDropdownToggler.dataset.isOpen === '1') toggleDropdown('toggleVenueDropdown', venueDropdownToggler);
+        if (profileDropdownToggler.dataset.isOpen === '1') toggleDropdown('toggleProfileDropdown', profileDropdownToggler);
+      }
+    });
 
-      document.addEventListener('click', (e) => {
-        if (
-          !venueDropdownToggler.contains(e.target) &&
-          !profileDropdownToggler.contains(e.target) &&
-          !e.target.closest('[data-close-on-click="false"]')
-        ) {
-          if (venueDropdownToggler.dataset.isOpen === '1') toggleDropdown('toggleVenueDropdown');
-          if (profileDropdownToggler.dataset.isOpen === '1') toggleDropdown('toggleProfileDropdown');
-        }
-      });
-
-      document.querySelectorAll('.venueSelectButton').forEach(button => {
-        button.addEventListener('click', (e) => {
-          e.preventDefault();
-          const venueId = button.dataset.venueId;
-          toggleDropdown(`selectVenue&venueId=${venueId}`);
-        });
+    document.querySelectorAll('.venueSelectButton').forEach(button => {
+      button.addEventListener('click', (e) => {
+        e.preventDefault();
+        const venueId = button.dataset.venueId;
+        sendToggleRequest(`selectVenue&venueId=${venueId}`);
       });
     });
+
+    //funcs
+    const toggleDropdown = (action, togglerToOpen, togglerToClose) => {
+      // Close the other dropdown if it's open
+      if (togglerToClose && togglerToClose.dataset.isOpen === '1') {
+        togglerToClose.dataset.isOpen = '0';
+        const closeAction = togglerToClose.id === 'venueDropdownToggler' ? 'toggleVenueDropdown' : 'toggleProfileDropdown';
+        sendToggleRequest(closeAction);
+      }
+
+      // Toggle the requested dropdown
+      togglerToOpen.dataset.isOpen = togglerToOpen.dataset.isOpen === '1' ? '0' : '1';
+      sendToggleRequest(action);
+    };
+
+    const sendToggleRequest = (action) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', '', true);
+      xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          window.location.reload();
+        }
+      };
+      xhr.send(`action=${action}`);
+    };
+  });
   </script>
   <nav class="max-w-[1440px] w-[100%] flex justify-between items-center gap-[4rem] mx-auto py-[1rem] px-[100px] z-[10]">
     <!-- Logo -->
