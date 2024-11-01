@@ -154,12 +154,10 @@
         <?php if ($isProfileDropdownOpen): ?>
         <div class="absolute min-w-[150px] top-[48px] right-[0] py-[.75rem] bg-bgDark border-[1px] border-bgLight rounded-[10px]">  
           <?php if ($_SESSION['loggedInUser']['roleType'] === "Admin"): ?>
-            <form action="/dwp/admin" method="get">
-              <button class="w-full flex gap-[.375rem] py-[.5rem] px-[.625rem] text-[.875rem] text-left leading-tight bg-bgDark ease-in-out duration-[.15s] hover:bg-bgSemiDark">
-                <i class="ri-user-line h-[18px] text-[18px]"></i>
-                <span class="translate-y-[1px]">Admin page</span>
-              </button>
-            </form>
+            <a href="<?php echo $_SESSION['baseRoute']?>admin" class="w-full flex gap-[.375rem] py-[.5rem] px-[.625rem] text-[.875rem] text-left leading-tight bg-bgDark ease-in-out duration-[.15s] hover:bg-bgSemiDark">
+              <i class="ri-user-line h-[18px] text-[18px]"></i>
+              <span class="translate-y-[1px]">Admin page</span>
+            </a>
           <?php endif;?>
           <button class="w-full flex gap-[.375rem] py-[.5rem] px-[.625rem] text-[.875rem] text-left leading-tight bg-bgDark ease-in-out duration-[.15s] hover:bg-bgSemiDark">
             <i class="ri-user-line h-[18px] text-[18px]"></i>

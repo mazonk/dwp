@@ -1,7 +1,9 @@
 <?php
 require_once "src/controller/VenueController.php";
 
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 $venueController = new VenueController();
 $_SESSION['baseRoute'] = $_SERVER['HTTP_HOST'] == 'localhost' ? '/dwp/' : '/';

@@ -64,10 +64,6 @@ class AuthController {
             // Session handling and redirection logic
             $user = $result['user'];
             require_once "session_config.php";
-            $newSessionId = session_create_id();
-            $sessionId = $newSessionId . "_" . $user->getId(); // append session id with user id
-            session_id($sessionId);
-            session_start();
 
             // Set session variables
             $_SESSION['loggedInUser']['userId'] = $user->getId();
