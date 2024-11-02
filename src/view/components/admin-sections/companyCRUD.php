@@ -40,6 +40,7 @@
     <div id="editForm" class="bg-white shadow-md rounded-lg p-6 mx-4 mb-12 hidden">
         <h2 class="text-xl font-semibold mb-4 text-black">Edit Company Information</h2>
         <form id="companyInfoForm" class="text-black">
+            <input type="hidden" id="companyId" name="companyId" value="<?php echo htmlspecialchars($companyInfo->getCompanyInfoId())?>">
             <div class="mb-4">
                 <label for="companyName" class="block text-sm font-medium text-gray-700">Company Name</label>
                 <input type="text" id="companyName" name="companyName" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" required>
@@ -101,6 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
         //prepare data
         const formData = new FormData(this);
         formData.append('action', 'editVenue');
+        formData.append('companyId', document.getElementById('companyId').value);
 
         const baseRoute ='<?php echo $_SESSION['baseRoute'];?>';
         xhr.open('PUT', `${baseRoute}companyInfo/edit`, true);
