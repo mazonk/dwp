@@ -23,12 +23,12 @@
             <?php echo htmlspecialchars($companyAddress->getStreetNr() . ' ' . 
             $companyAddress->getStreet() . ', ' . $companyAddress->getPostalCode()->getPostalCode() . ' ' . $companyAddress->getPostalCode()->getCity()) ?>
         </p>
-        <button id="editButton" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Edit</button>
+        <button id="editCompanyInfoButton" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Edit</button>
     </div>
 
     <!-- Company Info Edit Form -->
-    <div id="editForm" class="bg-white shadow-md rounded-lg p-6 hidden">
-        <h2 class="text-xl font-semibold mb-4">Edit Company Information</h2>
+    <div id="editForm" class="bg-white shadow-md rounded-lg p-6 mx-4 hidden">
+        <h2 class="text-xl font-semibold mb-4 text-black">Edit Company Information</h2>
         <form id="companyInfoForm">
             <div class="mb-4">
                 <label for="companyName" class="block text-sm font-medium text-gray-700">Company Name</label>
@@ -37,10 +37,6 @@
             <div class="mb-4">
                 <label for="companyDescription" class="block text-sm font-medium text-gray-700">Company Description</label>
                 <textarea id="companyDescription" name="companyDescription" rows="4" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" required></textarea>
-            </div>
-            <div class="mb-4">
-                <label for="logoUrl" class="block text-sm font-medium text-gray-700">Logo URL</label>
-                <input type="url" id="logoUrl" name="logoUrl" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" required>
             </div>
             <div class="mb-4">
                 <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
@@ -54,3 +50,18 @@
     </div>
 </div>
 <?php }?>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const editButton = document.getElementById('editCompanyInfoButton');
+    const editForm = document.getElementById('editForm');
+
+    editButton.addEventListener('click', (event) => {
+        editForm.classList.remove('hidden');
+        
+    });
+
+    
+});
+
+</script>

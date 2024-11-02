@@ -42,7 +42,7 @@
         </div>
     </div>
 
-    <button id="editButton" class="mt-4 bg-blue-500 text-white rounded-md px-4 py-2">Edit</button>
+    <button id="editVenueButton" class="mt-4 bg-blue-500 text-white rounded-md px-4 py-2">Edit</button>
     <div id="error-message" style="color: red; display: none;"></div>
 </div>
 
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const venueStreetNr = document.getElementById('venueStreetNr');
     const venuePostalCode = document.getElementById('venuePostalCode');
     const venueCity = document.getElementById('venueCity');
-    const editButton = document.getElementById('editButton');
+    const editVenueButton = document.getElementById('editVenueButton');
 
     document.querySelectorAll('.venueCard').forEach(card => {
         card.addEventListener('click', () => {
@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    editButton.addEventListener('click', () => {
+    editVenueButton.addEventListener('click', () => {
         const isReadOnly = venueName.readOnly;
 
         // Toggle read-only state for input fields when in edit mode
@@ -135,9 +135,9 @@ document.addEventListener('DOMContentLoaded', () => {
         venueCity.readOnly = !isReadOnly;
 
         // Change button text and styling based on the state
-        editButton.textContent = isReadOnly ? 'Save' : 'Edit';
-        editButton.classList.toggle('bg-blue-500', !isReadOnly);
-        editButton.classList.toggle('bg-green-500', isReadOnly);
+        editVenueButton.textContent = isReadOnly ? 'Save' : 'Edit';
+        editVenueButton.classList.toggle('bg-blue-500', !isReadOnly);
+        editVenueButton.classList.toggle('bg-green-500', isReadOnly);
 
         // Handle save action if in edit mode
         if (!isReadOnly) {
