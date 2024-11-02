@@ -20,4 +20,17 @@ class CompanyInfoRepository {
             throw new PDOException("Error fetching company info!");
         }
     }
+
+    public function editCompanyInfo(int $companyInfoId, string $companyName, string $companyDescription): void {
+        $query = $this->db->prepare("UPDATE CompanyInfo SET companyName = :companyName, companyDescription = :companyDescription WHERE companyInfoId = :companyInfoId");
+        try {
+          $query->execute([
+            'companyName' => htmlspecialchars($companyName),
+            'companyDescription' => htmlspecialchars($companyDescription),
+            'companyInfoId' => $companyInfoId,
+          ]);
+        } catch (PDOException $e) {
+          throw new Exception("Unable to update company info!");
+        }
+      }
 }
