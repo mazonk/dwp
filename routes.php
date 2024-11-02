@@ -143,15 +143,17 @@ put($baseRoute.'companyInfo/edit', function() {
     $companyController = new CompanyInfoController();
     parse_str(file_get_contents("php://input"), $_PUT);
 
-    if (isset($_PUT['action']) && $_PUT['action'] === 'editCompany') {
+    if (isset($_PUT['action']) && $_PUT['action'] === 'editCompanyInfo') {
         $companyId = htmlspecialchars($_PUT['companyId']);
         $companyData = [
-            'name' => htmlspecialchars(trim($_PUT['companyName'])),
-            'description' => htmlspecialchars(trim($_PUT['companyDescription'])),
+            'companyName' => htmlspecialchars(trim($_PUT['companyName'])),
+            'companyDescription' => htmlspecialchars(trim($_PUT['companyDescription'])),
             'streetNr' => htmlspecialchars(trim($_PUT['streetNr'])),
             'street' => htmlspecialchars(trim($_PUT['street'])),
             'postalCode' => htmlspecialchars(trim($_PUT['postalCode'])),
             'city' => htmlspecialchars(trim($_PUT['city'])),
+            'addressId' => htmlspecialchars(trim($_PUT['addressId'])),
+            'postalCodeId' => htmlspecialchars(trim($_PUT['postalCodeId']))
         ];        
 
         $result = $companyController->editCompanyInfo($companyId, $companyData);

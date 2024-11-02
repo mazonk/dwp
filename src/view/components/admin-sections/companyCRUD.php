@@ -20,18 +20,10 @@
         </div>
         <?php $companyAddress = $companyInfo->getAddress() ?>
         <div class="flex flex-row space-x-1.5 text-gray-900 mb-2">
-            <p id="companyStreetNrDisplay">
-                <?php echo htmlspecialchars($companyAddress->getStreetNr()) ?>
-            </p>
-            <p id="companyStreetDisplay">
-                <?php echo htmlspecialchars($companyAddress->getStreet()) ?>,
-            </p>
-            <p id="companyPostalCodeDisplay">
-                <?php echo htmlspecialchars($companyAddress->getPostalCode()->getPostalCode()) ?>
-            </p>
-            <p id="companyCityDisplay">
-                <?php echo htmlspecialchars($companyAddress->getPostalCode()->getCity()) ?>
-            </p>
+            <p id="companyStreetNrDisplay"><?php echo htmlspecialchars($companyAddress->getStreetNr()) ?></p>
+            <p id="companyStreetDisplay"><?php echo htmlspecialchars($companyAddress->getStreet()) ?>,</p>
+            <p id="companyPostalCodeDisplay"><?php echo htmlspecialchars($companyAddress->getPostalCode()->getPostalCode()) ?></p>
+            <p id="companyCityDisplay"><?php echo htmlspecialchars($companyAddress->getPostalCode()->getCity()) ?></p>
         </div>
         <button id="editCompanyInfoButton" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Edit</button>
     </div>
@@ -41,6 +33,8 @@
         <h2 class="text-xl font-semibold mb-4 text-black">Edit Company Information</h2>
         <form id="companyInfoForm" class="text-black">
             <input type="hidden" id="companyId" name="companyId" value="<?php echo htmlspecialchars($companyInfo->getCompanyInfoId())?>">
+            <input type="hidden" id="addressIdCI" name="addressIdCI" value="<?php echo htmlspecialchars($companyAddress->getAddressId())?>">
+            <input type="hidden" id="postalCodeIdCI" name="postalCodeIdCI" value="<?php echo htmlspecialchars($companyAddress->getPostalCode()->getPostalCodeId())?>">
             <div class="mb-4">
                 <label for="companyName" class="block text-sm font-medium text-gray-700">Company Name</label>
                 <input type="text" id="companyName" name="companyName" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" required>
@@ -52,16 +46,14 @@
             <div class="mb-4">
                 <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
                 <div class="flex items-center">
-                    <input type="hidden" id="addressId" name="addressId" value="<?php echo htmlspecialchars($companyAddress->getAddressId())?>">
                     <input type="text" id="streetNr" name="streetNr" class="mt-1 block w-1/6 p-2 border border-gray-300 rounded-md mr-2" required>
                     <input type="text" id="street" name="street" class="mt-1 block w-2/6 p-2 border border-gray-300 rounded-md mr-2" required>
-                    <input type="hidden" id="postalCodeId" name="postalCodeId" value="<?php echo htmlspecialchars($companyAddress->getPostalCode()->getPostalCodeId())?>">
                     <input type="text" id="postalCode" name="postalCode" class="mt-1 block w-1/6 p-2 border border-gray-300 rounded-md mr-2" required>
                     <input type="text" id="city" name="city" class="mt-1 block w-2/6 p-2 border border-gray-300 rounded-md" required>
                 </div>
             </div>
             <div class="flex justify-end">
-                <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">Save</button>
+                <button type="submit" id="saveButtonCI" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">Save</button>
                 <button type="button" id="cancelButton" class="bg-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-400 ml-2">Cancel</button>
             </div>
         </form>
@@ -73,12 +65,14 @@
 document.addEventListener('DOMContentLoaded', () => {
     const editButton = document.getElementById('editCompanyInfoButton');
     const editForm = document.getElementById('editForm');
+    const companyInfoForm = document.getElementById('companyInfoForm');
+    const errorMessageElement = document.createElement('p');
+    errorMessageElement.classList.add('text-red-500', 'text-center', 'font-medium');
+    companyInfoForm.prepend(errorMessageElement);
 
-    editButton.addEventListener('click', (event) => {
-        //show the edit form
+    // Toggle visibility and populate form fields on edit button click
+    editButton.addEventListener('click', () => {
         editForm.classList.remove('hidden');
-
-        //populate form fields
         const companyName = document.getElementById('companyNameDisplay').textContent.trim();
         const companyDescription = document.getElementById('companyDescriptionDisplay').textContent.trim();
         const streetNr = document.getElementById('companyStreetNrDisplay').textContent.trim();
@@ -86,7 +80,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const postalCode = document.getElementById('companyPostalCodeDisplay').textContent.trim();
         const city = document.getElementById('companyCityDisplay').textContent.trim();
 
-        //set the form input values
         document.getElementById('companyName').value = companyName;
         document.getElementById('companyDescription').value = companyDescription;
         document.getElementById('streetNr').value = streetNr;
@@ -95,44 +88,59 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('city').value = city;
     });
 
-    //handle form submission
+    // Handle form submission
     companyInfoForm.addEventListener('submit', function(event) {
-        event.preventDefault(); //prevent default form submission
-
+        event.preventDefault(); // Prevent default form submission
         const xhr = new XMLHttpRequest();
-
-        //prepare data
-        const formData = new FormData(this);
-        formData.append('action', 'editVenue');
-        formData.append('companyId', document.getElementById('companyId').value);
-        formData.append('addressId', document.getElementById('addressId').value);
-        formData.append('postalCodeId', document.getElementById('postalCodeId').value);
-
-        const baseRoute ='<?php echo $_SESSION['baseRoute'];?>';
+        const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
         xhr.open('PUT', `${baseRoute}companyInfo/edit`, true);
+
+        // Gather form data
+        const updatedCompanyInfo = {
+            action: 'editCompanyInfo',
+            companyId: document.getElementById('companyId').value,
+            companyName: document.getElementById('companyName').value,
+            companyDescription: document.getElementById('companyDescription').value,
+            addressId: document.getElementById('addressIdCI').value,
+            streetNr: document.getElementById('streetNr').value,
+            street: document.getElementById('street').value,
+            postalCodeId: document.getElementById('postalCodeIdCI').value,
+            postalCode: document.getElementById('postalCode').value,
+            city: document.getElementById('city').value,
+        };
+
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE) {
                 if (xhr.status === 200) {
-                    const response = JSON.parse(xhr.responseText);
-                    if (response.success) {
-                        alert('Company information updated successfully!');
-                        window.location.reload(); //reload to fetch updated data
-                    } else {
-                        alert('Error: ' + response.errorMessage);
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        if (response.success) {
+                            alert('Company information updated successfully!');
+                            window.location.reload(); // Reload to fetch updated data
+                        } else {
+                            alert('Error: ' + response.errorMessage);
+                        }
+                    } catch (e) {
+                        console.error('Could not parse JSON response:', xhr.responseText);
+                        alert('An error occurred while processing the request. Please check the console for details.');
                     }
                 } else {
                     alert('An error occurred while processing the request.');
                 }
             }
         };
-        xhr.send(formData);
+
+        // Send data as URL-encoded string
+        const params = Object.keys(updatedCompanyInfo)
+            .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(updatedCompanyInfo[key])}`)
+            .join('&');
+        xhr.send(params);
     });
 
-    //cancel
-    const cancelButton = document.getElementById('cancelButton');
-    cancelButton.addEventListener('click', () => {
+    // Cancel button hides the form without submitting
+    document.getElementById('cancelButton').addEventListener('click', () => {
         editForm.classList.add('hidden');
     });
-
 });
 </script>
