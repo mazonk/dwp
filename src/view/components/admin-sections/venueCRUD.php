@@ -1,5 +1,5 @@
 <!-- Venue details container -->
-<div id="venueDetails" class="flex flex-col items-start hidden my-8">
+<div id="venueDetails" class="flex flex-col items-start hidden my-8 mx-4">
     <div class="grid grid-cols-2 w-full gap-4">
         <div class="grid grid-cols-1">
             <div class="grid grid-cols-2">
@@ -41,7 +41,7 @@
             </div>
         </div>
     </div>
-
+    <button id="closeVenueDetails" class="text-white bg-red-500 rounded-md px-4 py-2 absolute top-20 right-8">X</button>
     <button id="editVenueButton" class="mt-4 bg-blue-500 text-white rounded-md px-4 py-2">Edit</button>
     <div id="error-message" style="color: red; display: none;"></div>
 </div>
@@ -86,6 +86,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const venueDetails = document.getElementById('venueDetails');
+    const closeVenueDetails = document.getElementById('closeVenueDetails');
     const errorMessageElement = document.getElementById('error-message');
 
     const venueId = document.getElementById('venueId');
@@ -120,6 +121,10 @@ document.addEventListener('DOMContentLoaded', () => {
             // Show the venue details section
             venueDetails.classList.remove('hidden');
         });
+    });
+
+    closeVenueDetails.addEventListener('click', () => {
+        venueDetails.classList.add('hidden');
     });
 
     editVenueButton.addEventListener('click', () => {
