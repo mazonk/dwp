@@ -28,7 +28,7 @@ class VenueController {
 
   public function editVenue(int $venueId, array $newVenueData): array|Venue {
     // Validate input data
-    $validationErrors = $this->validateEditVenue($newVenueData);
+    $validationErrors = $this->validateInputs($newVenueData);
     if (!empty($validationErrors)) {
         return ['errorMessage' => implode(', ', $validationErrors)];
     }
@@ -48,7 +48,7 @@ class VenueController {
     return $venue;
   }
 
-  private function validateEditVenue(array $data): array {
+  private function validateInputs(array $data): array {
     $errors = [];
 
     if (empty($data['name'] || empty($data['phone']) || empty($data['email']) || empty($data['street']) || empty($data['streetNr']) || empty($data['postalCode']) || empty($data['city']))) {
