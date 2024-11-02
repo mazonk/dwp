@@ -55,6 +55,7 @@
                     <input type="hidden" id="addressId" name="addressId" value="<?php echo htmlspecialchars($companyAddress->getAddressId())?>">
                     <input type="text" id="streetNr" name="streetNr" class="mt-1 block w-1/6 p-2 border border-gray-300 rounded-md mr-2" required>
                     <input type="text" id="street" name="street" class="mt-1 block w-2/6 p-2 border border-gray-300 rounded-md mr-2" required>
+                    <input type="hidden" id="postalCodeId" name="postalCodeId" value="<?php echo htmlspecialchars($companyAddress->getPostalCode()->getPostalCodeId())?>">
                     <input type="text" id="postalCode" name="postalCode" class="mt-1 block w-1/6 p-2 border border-gray-300 rounded-md mr-2" required>
                     <input type="text" id="city" name="city" class="mt-1 block w-2/6 p-2 border border-gray-300 rounded-md" required>
                 </div>
