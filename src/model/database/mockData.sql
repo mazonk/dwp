@@ -6,7 +6,13 @@ INSERT INTO PostalCode (postalCode, city) VALUES
 INSERT INTO Address (street, streetNr, postalCodeId) VALUES
 ('Wayne Tower', '100', 1),
 ('Rodeo Drive', '222', 2),
-('Queens Blvd', '15', 3);
+('Queens Blvd', '15', 3),
+('Elizabeth Tower', '200', 1);
+
+INSERT INTO CompanyInfo (companyName, companyDescription, logoUrl, addressId) VALUES
+('Spicy Pisces', 'Spicy Pisces is a renowned movie theater chain in Chicago, offering an exceptional cinematic experience with state-of-the-art technology. 
+Our theaters feature comfortable seating, top-notch sound systems, and a diverse range of film screenings, catering to audiences of all ages and preferences, 
+ensuring an unforgettable entertainment journey for every visitor.', 'logo.jpg', 4);
 
 INSERT INTO Venue (name, phoneNr, contactEmail, addressId) VALUES
 ('Gotham Cinema', '312-555-1234', 'info@gothamcinema.com', 1),

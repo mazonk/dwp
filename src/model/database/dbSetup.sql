@@ -25,6 +25,7 @@ DROP TABLE IF EXISTS Seat;
 DROP TABLE IF EXISTS Room;
 DROP TABLE IF EXISTS OpeningHour;
 DROP TABLE IF EXISTS Venue;
+DROP TABLE IF EXISTS CompanyInfo;
 DROP TABLE IF EXISTS Address;
 
 -- Enable foreign key checks
@@ -42,6 +43,15 @@ CREATE TABLE Address (
     streetNr VARCHAR(10) NOT NULL,
     postalCodeId INT NOT NULL,
     FOREIGN KEY (postalCodeId) REFERENCES PostalCode(postalCodeId)
+);
+
+CREATE TABLE CompanyInfo (
+    companyInfoId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    companyName VARCHAR(100) NOT NULL,
+    companyDescription TEXT NOT NULL,
+    logoUrl VARCHAR(255) NOT NULL,
+    addressId INT NOT NULL,
+    FOREIGN KEY (addressId) REFERENCES Address(addressId)
 );
 
 CREATE TABLE Venue (
