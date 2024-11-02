@@ -91,5 +91,42 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('postalCode').value = postalCode;
         document.getElementById('city').value = city;
     });
+
+    //handle form submission
+    companyInfoForm.addEventListener('submit', function(event) {
+        event.preventDefault(); //prevent default form submission
+
+        const xhr = new XMLHttpRequest();
+
+        //prepare data
+        const formData = new FormData(this);
+        formData.append('action', 'editVenue');
+
+        const baseRoute ='<?php echo $_SESSION['baseRoute'];?>';
+        xhr.open('PUT', `${baseRoute}companyInfo/edit`, true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    if (response.success) {
+                        alert('Company information updated successfully!');
+                        window.location.reload(); //reload to fetch updated data
+                    } else {
+                        alert('Error: ' + response.errorMessage);
+                    }
+                } else {
+                    alert('An error occurred while processing the request.');
+                }
+            }
+        };
+        xhr.send(formData);
+    });
+
+    //cancel
+    const cancelButton = document.getElementById('cancelButton');
+    cancelButton.addEventListener('click', () => {
+        editForm.classList.add('hidden');
+    });
+
 });
 </script>
