@@ -8,15 +8,15 @@ class CompanyInfo
     private string $companyName;
     private string $companyDescription;
     private string $logoUrl;
-    private Address $addressId;
+    private Address $address;
 
-    public function __construct(int $companyInfoId, string $companyName, string $companyDescription, string $logoUrl, Address $addressId)
+    public function __construct(int $companyInfoId, string $companyName, string $companyDescription, string $logoUrl, Address $address)
     {
         $this->companyInfoId = $companyInfoId;
         $this->companyName = $companyName;
         $this->companyDescription = $companyDescription;
         $this->logoUrl = $logoUrl;
-        $this->addressId = $addressId;
+        $this->address = $address;
     }
 
     public function getCompanyInfoId(): int
@@ -59,14 +59,14 @@ class CompanyInfo
         $this->logoUrl = $logoUrl;
     }
 
-    public function getAddressId(): Address
+    public function getAddress(): Address
     {
-        return $this->addressId;
+        return $this->address;
     }
 
-    public function setAddressId(Address $addressId): void
+    public function setAddress(Address $address): void
     {
-        $this->addressId = $addressId;
+        $this->address = $address;
     }
 }
 

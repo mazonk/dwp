@@ -10,7 +10,7 @@ class CompanyInfoController {
     /* Get company info */
     public function getCompanyInfo(): array|CompanyInfo {
         $companyInfo = $this->companyInfoService->getCompanyInfo();
-        if (isset($companyInfo['error']) && $companyInfo['error']) {
+        if (is_array($companyInfo) && isset($companyInfo['error']) && $companyInfo['error']) {
             return ['errorMessage'=> $companyInfo['message']];
         }
         return $companyInfo;
