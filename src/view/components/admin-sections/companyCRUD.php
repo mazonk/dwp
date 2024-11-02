@@ -110,26 +110,29 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                if (xhr.status === 200) {
+        xhr.onreadystatechange = () => {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    let response;
                     try {
-                        const response = JSON.parse(xhr.responseText);
-                        if (response.success) {
-                            alert('Company information updated successfully!');
-                            window.location.reload(); // Reload to fetch updated data
-                        } else {
-                            alert('Error: ' + response.errorMessage);
-                        }
+                        response = JSON.parse(xhr.response); // Parse the JSON response
                     } catch (e) {
-                        console.error('Could not parse JSON response:', xhr.responseText);
-                        alert('An error occurred while processing the request. Please check the console for details.');
+                        console.error('Could not parse response as JSON:', e);
+                        errorMessageElement.textContent = 'An unexpected error occurred. Please try again.';
+                        errorMessageElement.style.display = 'block';
+                        return;
                     }
-                } else {
-                    alert('An error occurred while processing the request.');
+
+                    if (response.success) {
+                        alert('Success! Company information edited successfully.');
+                        window.location.reload();
+                        errorMessageElement.style.display = 'none'; // Hide the error message if there's success
+                    } else {
+                        errorMessageElement.textContent = response.errorMessage;
+                        errorMessageElement.style.display = 'block';
+                        console.error('Error:', response.errorMessage);
+                    }
                 }
-            }
-        };
+            };
 
         // Send data as URL-encoded string
         const params = Object.keys(updatedCompanyInfo)
