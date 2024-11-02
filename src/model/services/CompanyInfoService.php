@@ -32,4 +32,19 @@ class CompanyInfoService {
             return ["error"=> true, "message"=> $e->getMessage()];
         }
     }
+
+    public function editCompanyInfo(int $companyInfoId, array $newCompanyInfoData): array|CompanyInfo {
+        $this->db->beginTransaction();
+        try {
+            $newAddress = new Address($newCompanyInfoData['addressId'], $newCompanyInfoData['street'], $newCompanyInfoData['streetNr'], 
+            new PostalCode($newCompanyInfoData['postalCodeId'], $newCompanyInfoData['postalCode'], $newCompanyInfoData['city']));
+            $this->addressService->editAddress($newCompanyInfoData['addressId'], $newAddress);
+            $this->companyInfoRepository->editCompanyInfo($companyInfoId, $newCompanyInfoData['companyName'], $newCompanyInfoData['companyDescription']);
+          $this->db->commit();
+          return $this->getCompanyInfo();
+        } catch (Exception $e) {
+          $this->db->rollBack();
+          return ["error"=> true, "message"=> $e->getMessage()];
+        }
+      }
 }

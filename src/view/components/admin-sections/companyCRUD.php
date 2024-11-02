@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
         formData.append('action', 'editVenue');
         formData.append('companyId', document.getElementById('companyId').value);
         formData.append('addressId', document.getElementById('addressId').value);
-        formData.append('postalCodeId', document.getElementById('postalCodeId').value);)
+        formData.append('postalCodeId', document.getElementById('postalCodeId').value);
 
         const baseRoute ='<?php echo $_SESSION['baseRoute'];?>';
         xhr.open('PUT', `${baseRoute}companyInfo/edit`, true);
