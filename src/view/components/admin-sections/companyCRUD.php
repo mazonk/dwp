@@ -52,6 +52,7 @@
             <div class="mb-4">
                 <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
                 <div class="flex items-center">
+                    <input type="hidden" id="addressId" name="addressId" value="<?php echo htmlspecialchars($companyAddress->getAddressId())?>">
                     <input type="text" id="streetNr" name="streetNr" class="mt-1 block w-1/6 p-2 border border-gray-300 rounded-md mr-2" required>
                     <input type="text" id="street" name="street" class="mt-1 block w-2/6 p-2 border border-gray-300 rounded-md mr-2" required>
                     <input type="text" id="postalCode" name="postalCode" class="mt-1 block w-1/6 p-2 border border-gray-300 rounded-md mr-2" required>
@@ -103,6 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const formData = new FormData(this);
         formData.append('action', 'editVenue');
         formData.append('companyId', document.getElementById('companyId').value);
+        formData.append('addressId', document.getElementById('addressId').value);
 
         const baseRoute ='<?php echo $_SESSION['baseRoute'];?>';
         xhr.open('PUT', `${baseRoute}companyInfo/edit`, true);
