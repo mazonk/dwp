@@ -19,17 +19,27 @@
             </div>
         </div>
         <?php $companyAddress = $companyInfo->getAddress() ?>
-        <p class="text-gray-900 mb-2" id="companyAddressDisplay">
-            <?php echo htmlspecialchars($companyAddress->getStreetNr() . ' ' . 
-            $companyAddress->getStreet() . ', ' . $companyAddress->getPostalCode()->getPostalCode() . ' ' . $companyAddress->getPostalCode()->getCity()) ?>
-        </p>
+        <div class="flex flex-row space-x-1.5 text-gray-900 mb-2">
+            <p id="companyStreetNrDisplay">
+                <?php echo htmlspecialchars($companyAddress->getStreetNr()) ?>
+            </p>
+            <p id="companyStreetDisplay">
+                <?php echo htmlspecialchars($companyAddress->getStreet()) ?>,
+            </p>
+            <p id="companyPostalCodeDisplay">
+                <?php echo htmlspecialchars($companyAddress->getPostalCode()->getPostalCode()) ?>
+            </p>
+            <p id="companyCityDisplay">
+                <?php echo htmlspecialchars($companyAddress->getPostalCode()->getCity()) ?>
+            </p>
+        </div>
         <button id="editCompanyInfoButton" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Edit</button>
     </div>
 
     <!-- Company Info Edit Form -->
-    <div id="editForm" class="bg-white shadow-md rounded-lg p-6 mx-4 hidden">
+    <div id="editForm" class="bg-white shadow-md rounded-lg p-6 mx-4 mb-12 hidden">
         <h2 class="text-xl font-semibold mb-4 text-black">Edit Company Information</h2>
-        <form id="companyInfoForm">
+        <form id="companyInfoForm" class="text-black">
             <div class="mb-4">
                 <label for="companyName" class="block text-sm font-medium text-gray-700">Company Name</label>
                 <input type="text" id="companyName" name="companyName" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" required>
@@ -40,7 +50,12 @@
             </div>
             <div class="mb-4">
                 <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
-                <input type="text" id="address" name="address" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" required>
+                <div class="flex items-center">
+                    <input type="text" id="streetNr" name="streetNr" class="mt-1 block w-1/6 p-2 border border-gray-300 rounded-md mr-2" required>
+                    <input type="text" id="street" name="street" class="mt-1 block w-2/6 p-2 border border-gray-300 rounded-md mr-2" required>
+                    <input type="text" id="postalCode" name="postalCode" class="mt-1 block w-1/6 p-2 border border-gray-300 rounded-md mr-2" required>
+                    <input type="text" id="city" name="city" class="mt-1 block w-2/6 p-2 border border-gray-300 rounded-md" required>
+                </div>
             </div>
             <div class="flex justify-end">
                 <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">Save</button>
@@ -57,11 +72,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const editForm = document.getElementById('editForm');
 
     editButton.addEventListener('click', (event) => {
+        //show the edit form
         editForm.classList.remove('hidden');
-        
+
+        //populate form fields
+        const companyName = document.getElementById('companyNameDisplay').textContent.trim();
+        const companyDescription = document.getElementById('companyDescriptionDisplay').textContent.trim();
+        const streetNr = document.getElementById('companyStreetNrDisplay').textContent.trim();
+        const street = document.getElementById('companyStreetDisplay').textContent.trim().slice(0, -1); // remove trailing comma
+        const postalCode = document.getElementById('companyPostalCodeDisplay').textContent.trim();
+        const city = document.getElementById('companyCityDisplay').textContent.trim();
+
+        //set the form input values
+        document.getElementById('companyName').value = companyName;
+        document.getElementById('companyDescription').value = companyDescription;
+        document.getElementById('streetNr').value = streetNr;
+        document.getElementById('street').value = street;
+        document.getElementById('postalCode').value = postalCode;
+        document.getElementById('city').value = city;
     });
-
-    
 });
-
 </script>
