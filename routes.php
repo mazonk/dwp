@@ -137,3 +137,34 @@ put($baseRoute.'venue/edit', function() {
         echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
     }
 });
+
+put($baseRoute.'companyInfo/edit', function() {
+    require_once 'src/controller/CompanyInfoController.php';
+    $companyController = new CompanyInfoController();
+    parse_str(file_get_contents("php://input"), $_PUT);
+
+    if (isset($_PUT['action']) && $_PUT['action'] === 'editCompany') {
+        $companyId = htmlspecialchars($_PUT['companyId']);
+        $companyData = [
+            'name' => htmlspecialchars(trim($_PUT['companyName'])),
+            'description' => htmlspecialchars(trim($_PUT['companyDescription'])),
+            'streetNr' => htmlspecialchars(trim($_PUT['streetNr'])),
+            'street' => htmlspecialchars(trim($_PUT['street'])),
+            'postalCode' => htmlspecialchars(trim($_PUT['postalCode'])),
+            'city' => htmlspecialchars(trim($_PUT['city'])),
+        ];        
+
+        $result = $companyController->editCompanyInfo($companyId, $companyData);
+
+        if ($result && !is_array($result)) {
+            // Return a success response
+            echo json_encode(['success' => true]);
+        } else {
+            // Return an error response
+            echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
+        }
+    } else {
+        // Invalid action response
+        echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
+    }
+});
