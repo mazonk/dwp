@@ -67,6 +67,7 @@ get($baseRoute.'upcoming', 'src/view/pages/UpcomingMoviesPage.php');
 // POST ROUTES
 
 post($baseRoute.'movies', 'src/view/pages/AllMoviesPage.php'); // used at toggle dropdown
+post($baseRoute.'upcoming', 'src/view/pages/AllMoviesPage.php'); // used at toggle dropdown
 post($baseRoute.'home', 'src/view/pages/LandingPage.php'); // used at toggle dropdown
 
 // Post route for register
@@ -101,3 +102,71 @@ post($baseRoute.'logout', function() {
 
 get($baseRoute.'movies/$id', 'src/view/pages/MovieDetailsPage.php');
 get($baseRoute.'news/$id', 'src/view/pages/NewsPage.php');
+
+//put routes
+put($baseRoute.'venue/edit', function() {
+    require_once 'src/controller/VenueController.php';
+    $venueController = new VenueController();
+    parse_str(file_get_contents("php://input"), $_PUT);
+
+    if (isset($_PUT['action']) && $_PUT['action'] === 'editVenue') {
+        $venueId = htmlspecialchars($_PUT['venueId']);
+        $venueData = [
+            'name' => htmlspecialchars(trim($_PUT['name'])),
+            'phoneNr' => htmlspecialchars(trim($_PUT['phoneNr'])),
+            'email' => htmlspecialchars(trim($_PUT['email'])),
+            'street' => htmlspecialchars(trim($_PUT['street'])),
+            'streetNr' => htmlspecialchars(trim($_PUT['streetNr'])),
+            'postalCode' => htmlspecialchars(trim($_PUT['postalCode'])),
+            'city' => htmlspecialchars(trim($_PUT['city'])),
+            'addressId' => htmlspecialchars(trim($_PUT['addressId'])),
+            'postalCodeId' => htmlspecialchars(trim($_PUT['postalCodeId'])),
+        ];
+
+        $result = $venueController->editVenue($venueId, $venueData);
+
+        if ($result && !is_array($result)) {
+            // Return a success response
+            echo json_encode(['success' => true]);
+        } else {
+            // Return an error response
+            echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
+        }
+    } else {
+        // Invalid action response
+        echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
+    }
+});
+
+put($baseRoute.'companyInfo/edit', function() {
+    require_once 'src/controller/CompanyInfoController.php';
+    $companyController = new CompanyInfoController();
+    parse_str(file_get_contents("php://input"), $_PUT);
+
+    if (isset($_PUT['action']) && $_PUT['action'] === 'editCompanyInfo') {
+        $companyId = htmlspecialchars($_PUT['companyId']);
+        $companyData = [
+            'companyName' => htmlspecialchars(trim($_PUT['companyName'])),
+            'companyDescription' => htmlspecialchars(trim($_PUT['companyDescription'])),
+            'streetNr' => htmlspecialchars(trim($_PUT['streetNr'])),
+            'street' => htmlspecialchars(trim($_PUT['street'])),
+            'postalCode' => htmlspecialchars(trim($_PUT['postalCode'])),
+            'city' => htmlspecialchars(trim($_PUT['city'])),
+            'addressId' => htmlspecialchars(trim($_PUT['addressId'])),
+            'postalCodeId' => htmlspecialchars(trim($_PUT['postalCodeId']))
+        ];        
+
+        $result = $companyController->editCompanyInfo($companyId, $companyData);
+
+        if ($result && !is_array($result)) {
+            // Return a success response
+            echo json_encode(['success' => true]);
+        } else {
+            // Return an error response
+            echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
+        }
+    } else {
+        // Invalid action response
+        echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
+    }
+});

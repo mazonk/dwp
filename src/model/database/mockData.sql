@@ -3,10 +3,16 @@ INSERT INTO PostalCode (postalCode, city) VALUES
 (90210, 'Beverly Hills'),
 (10001, 'New York');
 
-INSERT INTO Address (street, streetNr, postalCode) VALUES
-('Wayne Tower', '100', 60606),
-('Rodeo Drive', '222', 90210),
-('Queens Blvd', '15', 10001);
+INSERT INTO Address (street, streetNr, postalCodeId) VALUES
+('Wayne Tower', '100', 1),
+('Rodeo Drive', '222', 2),
+('Queens Blvd', '15', 3),
+('Elizabeth Tower', '200', 1);
+
+INSERT INTO CompanyInfo (companyName, companyDescription, logoUrl, addressId) VALUES
+('Spicy Pisces', 'Spicy Pisces is a renowned movie theater chain in Chicago, offering an exceptional cinematic experience with state-of-the-art technology. 
+Our theaters feature comfortable seating, top-notch sound systems, and a diverse range of film screenings, catering to audiences of all ages and preferences, 
+ensuring an unforgettable entertainment journey for every visitor.', 'logo.jpg', 4);
 
 INSERT INTO Venue (name, phoneNr, contactEmail, addressId) VALUES
 ('Gotham Cinema', '312-555-1234', 'info@gothamcinema.com', 1),
@@ -34,9 +40,7 @@ INSERT INTO UserRole (type) VALUES
 ('Staff');
 
 INSERT INTO User (firstName, lastName, DoB, email, passwordHash, roleId) VALUES
-('Bruce', 'Wayne', '1972-02-19', 'bruce@gotham.com', 'hashedpassword1', 1),
-('Peter', 'Parker', '1995-08-10', 'peter@spiderman.com', 'hashedpassword2', 2),
-('Tony', 'Stark', '1970-05-29', 'tony@starkindustries.com', 'hashedpassword3', 3);
+('Admin', 'Admin', '2000-01-01', 'admin@admin.com', '$2y$10$Xt53U6KwhZ34mwbsdgVNjetv998rgpvqQ9xMAa4EzwTfH9X2zElK2', 1);
 
 INSERT INTO Movie (title, description, duration, language, releaseDate, posterURL, promoURL, trailerURL, rating) VALUES
 ('The Dark Knight', 'Batman faces the Joker in Gotham City.', 152, 'English', '2008-07-18', 'poster_dark_knight.jpg', 'promo_dark_knight.mp4', 'trailer_dark_knight.mp4', 9.00),
@@ -183,8 +187,8 @@ INSERT INTO TicketType (name, price, description) VALUES
 
 INSERT INTO Reservation (userId, status) VALUES
 (1, 'confirmed'),
-(2, 'pending'),
-(3, 'cancelled');
+(1, 'pending'),
+(1, 'cancelled');
 
 INSERT INTO Ticket (seatId, ticketTypeId, showingId, reservationId) VALUES
 (1, 1, 1, 1),
@@ -198,8 +202,8 @@ INSERT INTO PaymentMethod (name) VALUES
 
 INSERT INTO Payment (paymentDate, paymentTime, totalPrice, userId, addressId, reservationId, methodId) VALUES
 ('2024-10-15', '18:30:00', 10.00, 1, 1, 1, 1),
-('2024-10-16', '19:45:00', 20.00, 2, 2, 2, 2),
-('2024-10-17', '20:30:00', 8.00, 3, 3, 3, 3);
+('2024-10-16', '19:45:00', 20.00, 1, 2, 2, 2),
+('2024-10-17', '20:30:00', 8.00, 1, 3, 3, 3);
 
 INSERT INTO News (imageURL, header, content) VALUES
 ('gotham_news.jpg', 'New Batman Movie Showing', 'Join us for the latest Batman movie screening at Gotham Cinema!'),
@@ -212,7 +216,7 @@ INSERT INTO MovieGenre (movieId, genreId) VALUES
 (2, 1),  -- Spider-Man: No Way Home -> Action
 (2, 3),  -- Spider-Man: No Way Home -> Sci-Fi
 (3, 1),  -- Iron Man -> Action
-(3, 3);  -- Iron Man -> Sci-Fi
+(3, 3),  -- Iron Man -> Sci-Fi
 (4, 3),  -- Interstellar -> Sci-Fi
 (4, 2),  -- Interstellar -> Drama
 (5, 5),  -- Andre Rieu -> Music
@@ -245,7 +249,7 @@ INSERT INTO MovieGenre (movieId, genreId) VALUES
 (19, 3),  -- AI: Awakening -> Sci-Fi
 (19, 10),  -- AI: Awakening -> Thriller
 (20, 1),  -- Rise of the Phoenix -> Action
-(20, 14);  -- Rise of the Phoenix -> Fantasy
+(20, 13);  -- Rise of the Phoenix -> Fantasy
 
 
 INSERT INTO MovieDirector (movieId, directorId) VALUES
