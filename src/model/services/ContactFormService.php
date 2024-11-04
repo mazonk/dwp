@@ -29,17 +29,16 @@ class ContactFormService {
       $currentRoute = filter_var(trim($_POST['route']), FILTER_SANITIZE_URL);
 
       if(count($errors) == 0) {
-        try {
-          mail($mailTo, $subject, $txt, $headers); // Send email
-          header("Location: " . $currentRoute . "?status=success"); // Redirect with success
-          exit();
-        } catch (Exception $e) {
-          $errors['general'] = "Failed to send email.";
-          header("Location: " . $currentRoute . "?status=failed" . json_encode($errors)); // Redirect with faliure error
-          exit();
-        }       
+         // Send email and handle success/failure
+         if (mail($mailTo, $subject, $txt, $headers)) {
+          header("Location: " . $currentRoute . "?status=success");
+        } else {
+            $errors['general'] = "Failed to send email.";
+            header("Location: " . $currentRoute . "?status=failed&" . http_build_query($errors));
+        }      
       } else {
-        header("Location: " . $_POST['route'] . "?status=failed&errors=" . json_encode($errors)); // Redirect with errors
+        // Redirect with validation errors
+        header("Location: " . $currentRoute . "?status=failed&" . http_build_query($errors));
         exit();
       }
     }
