@@ -1,4 +1,9 @@
 <?php
+include_once "src/model/entity/User.php";
+include_once "src/model/entity/Address.php";
+include_once "src/model/entity/Reservation.php";
+include_once "src/model/entity/PaymentMethod.php";
+
 class Payment {
   private int $paymentId;
   private float $totalPrice;

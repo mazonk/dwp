@@ -7,7 +7,7 @@ enum Status
     case cancelled;
 }
 
-class Resevation {
+class Reservation {
     private int $reservationId;
     private User $user;
     private Status $status;

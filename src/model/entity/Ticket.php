@@ -1,4 +1,8 @@
 <?php
+include_once "src/model/entity/Seat.php";
+include_once "src/model/entity/TicketType.php";
+include_once "src/model/entity/Showing.php";
+include_once "src/model/entity/Reservation.php";
 class Ticket {
   private int $ticketId;
   private Seat $seat;
