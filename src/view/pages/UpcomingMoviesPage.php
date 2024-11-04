@@ -17,7 +17,7 @@ $currentDate = new DateTime();
   <?php include_once("src/assets/tailwindConfig.php"); ?>
 
 </head>
-<body class="max-w-[1440px] w-[100%] mx-auto px-[100px] bg-[#0d0101] text-white p-8">
+<body class="max-w-[1440px] w-[100%] mx-auto mt-[72px] mb-[2rem] px-[100px] bg-bgDark text-textLight">
 <?php include_once("src/view/components/Navbar.php"); ?>
 <main class="mt-[56px] p-4">
   <h1 class="text-[1.875rem] font-bold mb-6">Upcoming Movies</h1>
