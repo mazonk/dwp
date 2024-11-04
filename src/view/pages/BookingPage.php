@@ -1,6 +1,8 @@
 <?php
 require_once 'session_config.php';
 require_once 'src/controller/SeatController.php';
+include_once "src/controller/TicketController.php";
+include_once "src/model/repositories/TicketRepository.php";
 
 $selectedVenueId = $_SESSION['selectedVenueId']; // Get the selected venue name and ID
 
@@ -11,7 +13,9 @@ if ($selectedShowing) {
     echo "<h1>Showing Id: " . htmlspecialchars($selectedShowing->getShowingId()) . "</h1>";
 
     $seatController = new SeatController();
+    $ticketController = new TicketController(); 
     $showingId = $selectedShowing->getShowingId(); // Get the showing ID
+    $unavailableTickets = $ticketController->getAllTicketsForShowing($selectedShowing, $selectedVenueId);
 
     // Get available seats for the showing and venue
     $availableSeats = $seatController->getAvailableSeatsForShowing($showingId, $selectedVenueId); 
@@ -23,7 +27,12 @@ if ($selectedShowing) {
     // Display total number of seats available
     echo "<p>Total Seats: " . count($totalSeats) . "</p>"; // Total seats
     echo "<p>Total Seats Available: " . $totalAvailableSeats . "</p>";
-    
+    $actualAvailableSeats = count($totalSeats) - $totalUnavailableSeats;
+    echo "<p>AVAILABLE SEATS: " . $actualAvailableSeats . "</p>";     // Calculate unavailable seats
+     $totalUnavailableSeats = count($unavailableTickets);
+    echo "<p>Unavailable Seats: " . $totalUnavailableSeats . "</p>";
+
+
     if ($totalAvailableSeats === 0) {
         echo "<p class='text-red-500'>No seats are available for this showing. Please check back later or select a different showing time.</p>";
     } 
