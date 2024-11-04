@@ -31,7 +31,7 @@ class ContactFormService {
       if(count($errors) == 0) {
          // Send email and handle success/failure
          if (mail($mailTo, $subject, $txt, $headers)) {
-          unset($_SESSION['contactErrors']);
+          $_SESSION['contactSuccess'] = "Email sent successfully.";
           header("Location: " . $currentRoute . "?status=success");
         } else {
           $_SESSION['contactErrors']['general'] = "Failed to send email.";
