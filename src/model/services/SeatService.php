@@ -26,14 +26,17 @@ class SeatService {
         try {
             $result = $this->seatRepository->getAllSeatsForShowing($showingId, $selectedVenueId);
             $seats = [];
-            foreach ($result as $seat) {
-                $seats[] = $this->seatRepository->getAllSeatsForShowing($showingId, $selectedVenueId);
+            $room = $this->roomService->getRoomById($result["roomId"]);
+            if(isset($room["error"]) && $room["error"]) {
+                return $room;
             }
-            return $result; 
+            foreach ($result as $seat) {
+                $seats[] = new Seat($result["seatId"], $result["row"], $result["seatNr"], $room);
+            }
+            return $seats; 
         } catch (Exception $e) {
             return ['error' => true, 'message' => $e->getMessage()];
         }
-        return $seats;
     }
     public function getAvailableSeatsForShowing(int $showingId, int $selectedVenueId): array {
         try {
@@ -43,6 +46,16 @@ class SeatService {
             return ['error' => true, 'message' => $e->getMessage()];
         }
     }
-
-    // TODO: public function getSeatById
+    public function getSeatById(int $seatId): array|Seat {
+        try {
+            $result = $this->seatRepository->getSeatById($seatId);
+            $room = $this->roomService->getRoomById($result["roomId"]);
+            if(isset($room["error"]) && $room["error"]) {
+                return $room;
+            }
+            return new Seat($result["seatId"], $result["row"], $result["seatNr"], $room);
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+    }
 }
