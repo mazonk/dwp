@@ -6,12 +6,12 @@ class ContactFormService {
   public function sendMail() {
     $errors = [];
 
-    if (isset($_POST['submit'])) {
-      $formData = {
+    if (isset($_POST['submit'])) 
+      $formData = [
         'name' => $_POST['name'],
         'email' => $_POST['email'],
         'message' => $_POST['message'],
-      };
+      ];
 
       // Validate the form data inputs
       $this->validateContactForm($formData, $errors);
@@ -23,10 +23,10 @@ class ContactFormService {
 
       $subject = "Contact Form Submission";
       $mailTo = "dwp@spicypisces.eu";
-      $headers = "From: " . $formsData['email'];
-      $txt = "You have received an email from " . $formsData['name'] . ".\n\n" . $formsData['message'];
+      $headers = "From: " . $formData['email'];
+      $txt = "You have received an email from " . $formData['name'] . ".\n\n" . $formData['message'];
       // Current route where the form was submitted
-      $currentRoute = htmlspecialchars(trim($_POST['route']));
+      $currentRoute = filter_var(trim($_POST['route']), FILTER_SANITIZE_URL);
 
       if(count($errors) == 0) {
         try {
