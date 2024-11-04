@@ -107,9 +107,9 @@ get($baseRoute.'news/$id', 'src/view/pages/NewsPage.php');
 post($baseRoute.'mail', function() {
     // Checking for contact action in the URL
     if (isset($_GET['action']) && $_GET['action'] === 'contact') {
-        require_once 'src/model/services/ContactFormService.php';
-        $contactFormService = new ContactFormService();
+        require_once 'src/controller/ContactFormController.php';
+        $contactFormController = new ContactFormController();
 
-        $contactFormService->sendMail();
+        $contactFormController->sendMail();
     }
 });
