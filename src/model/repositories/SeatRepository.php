@@ -30,13 +30,22 @@ class SeatRepository {
 
 public function getAvailableSeatsForShowing(int $showingId, int $selectedVenueId): array {
         $db = $this->getdb();
-        $query = $db->prepare("SELECT s.* 
-            FROM Seat s
-            JOIN Room r ON s.roomId = r.roomId
-            JOIN VenueShowing vs ON r.venueId = vs.venueId
-            JOIN Showing sh ON vs.showingId = sh.showingId
-            LEFT JOIN Ticket t ON s.seatId = t.seatId AND t.showingId = sh.showingId
-            WHERE sh.showingId = :showingId AND vs.venueId = :venueId AND t.ticketId IS NULL
+        $query = $db->prepare("SELECT 
+    ( 
+        SELECT COUNT(s.seatId)
+        FROM Seat s
+        JOIN Room r ON s.roomId = r.roomId
+        JOIN Showing sh ON sh.roomId = r.roomId
+        JOIN VenueShowing vs ON vs.showingId = sh.showingId
+        WHERE sh.showingId =  :showingId
+        AND vs.venueId = :venueId
+    ) 
+    - 
+    (
+        SELECT COUNT(*)
+        FROM Ticket t
+        WHERE t.showingId =  :showingId
+    ) AS available_seats;
         ");
         try {
             $query->execute(array(":showingId" => $showingId, ":venueId" => $selectedVenueId));

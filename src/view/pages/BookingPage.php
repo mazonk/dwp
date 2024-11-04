@@ -18,12 +18,12 @@ if ($selectedShowing) {
     // Fetch all seats
     $totalSeats = $seatController->getAllSeatsForShowing($showingId, $selectedVenueId); 
 
-    $totalAvailableSeats = count($availableSeats); // Count of available seats
+    $totalAvailableSeats = serialize($availableSeats); // Count of available seats
 
     // Display total number of seats available
     echo "<p>Total Seats: " . count($totalSeats) . "</p>"; // Total seats
-    echo "<p>Total Seats Available: " . $totalAvailableSeats . "</p>"; // Available seats
-
+    echo "<p>Total Seats Available: " . $totalAvailableSeats . "</p>";
+    
     if ($totalAvailableSeats === 0) {
         echo "<p class='text-red-500'>No seats are available for this showing. Please check back later or select a different showing time.</p>";
     } 
