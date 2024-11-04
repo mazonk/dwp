@@ -58,4 +58,19 @@ public function getAvailableSeatsForShowing(int $showingId, int $selectedVenueId
         }
         return $result;
     }
+
+    public function getSeatById(int $seatId): array {
+        $db = $this->getdb();
+        $query = $db->prepare("SELECT * FROM Seat WHERE seatId = :seatId");
+        try {
+            $query->execute(array(":seatId" => $seatId));
+            $result = $query->fetch(PDO::FETCH_ASSOC);
+            if (empty($result)) {
+                throw new Exception("No seat found. ");
+            }
+        } catch (PDOException $e) {
+            throw new Exception("Unable to fetch seat with ID.");
+        }
+        return $result;
+    }
 }
