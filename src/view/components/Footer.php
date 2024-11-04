@@ -3,6 +3,9 @@
 include_once "src/controller/VenueController.php";
 /* Get the opening hours */
 include_once "src/controller/OpeningHourController.php";
+
+$errors = isset($_SESSION['contactErrors']) ? $_SESSION['contactErrors'] : [];
+unset($_SESSION['contactErrors']);
 ?>
 
 <footer class="flex flex-col gap-[4rem] mt-[8rem]">
@@ -73,8 +76,20 @@ include_once "src/controller/OpeningHourController.php";
       <form action="<?php echo $_SESSION['baseRoute'] ?>mail?action=contact" method="post" class="flex flex-col gap-[.75rem] text-textDark">
         <input type="hidden" name="route" value="<?php echo $_SERVER['REQUEST_URI']; ?>">
         <input type="text" name="name" id="emailInput" placeholder="Your name" required="true" class="h-[36px] py-[.5rem] px-[.875rem] bg-bgSemiDark text-[.875rem] text-textNormal leading-snug border-[1px] border-borderDark rounded-[6px] outline-none ease-in-out duration-[.15s] focus:border-textNormal">
+        <?php if (isset($errors['name'])): ?>
+            <p class="text-red-500 text-xs mt-[-.25rem] mb-[.25rem]"><?= htmlspecialchars($errors['name']) ?></p>
+        <?php endif; ?>
         <input type="text" name="email" id="emailInput" placeholder="Your email" required="true" class="h-[36px] py-[.5rem] px-[.875rem] bg-bgSemiDark text-[.875rem] text-textNormal leading-snug border-[1px] border-borderDark rounded-[6px] outline-none ease-in-out duration-[.15s] focus:border-textNormal">
+        <?php if (isset($errors['email'])): ?>
+            <p class="text-red-500 text-xs mb-[.5rem]"><?= htmlspecialchars($errors['email']) ?></p>
+        <?php endif; ?>
         <textarea name="message" id="messageInput" placeholder="Message" required="true" class="min-h-[100px] py-[.5rem] px-[.875rem] bg-bgSemiDark text-[.875rem] text-textNormal leading-snug border-[1px] border-borderDark rounded-[6px] outline-none ease-in-out duration-[.15s] focus:border-textNormal"></textarea>
+        <?php if (isset($errors['message'])): ?>
+            <p class="text-red-500 text-xs mb-[.5rem]"><?= htmlspecialchars($errors['message']) ?></p>
+        <?php endif; ?>
+        <?php if (isset($errors['general'])): ?>
+            <p class="text-red-500 text-xs mb-[.5rem]"><?= htmlspecialchars($errors['general']) ?></p>
+        <?php endif; ?>
         <button type="submit" name="submit" class="h-[36px] py-[.5rem] px-[1.25rem] bg-primary text-[.875rem] text-textDark font-medium leading-tight rounded-[6px] ease-in-out duration-[.15s] hover:bg-primaryHover">Send</button>
       </form>
     </div>
