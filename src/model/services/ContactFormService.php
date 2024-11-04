@@ -31,14 +31,16 @@ class ContactFormService {
       if(count($errors) == 0) {
          // Send email and handle success/failure
          if (mail($mailTo, $subject, $txt, $headers)) {
+          unset($_SESSION['contactErrors']);
           header("Location: " . $currentRoute . "?status=success");
         } else {
-            $errors['general'] = "Failed to send email.";
-            header("Location: " . $currentRoute . "?status=failed&" . http_build_query($errors));
+          $_SESSION['contactErrors']['general'] = "Failed to send email.";
+          header("Location: " . $currentRoute . "?status=failed");
         }      
       } else {
         // Redirect with validation errors
-        header("Location: " . $currentRoute . "?status=failed&" . http_build_query($errors));
+        $_SESSION['contactErrors'] = $errors;
+        header("Location: " . $currentRoute . "?status=failed");
         exit();
       }
     }
@@ -58,7 +60,7 @@ class ContactFormService {
         $errors['name'] = "Name must only contain letters and spaces.";
     }
     if (strlen($formData['name']) < 2) {
-        $errors['firstName'] = "Name must be at least 2 characters long.";
+        $errors['name'] = "Name must be at least 2 characters long.";
     }
     if (!preg_match($emailRegex, $formData['email'])) {
         $errors['email'] = "Invalid email format.";
