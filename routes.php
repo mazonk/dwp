@@ -103,10 +103,13 @@ post($baseRoute.'logout', function() {
 get($baseRoute.'movies/$id', 'src/view/pages/MovieDetailsPage.php');
 get($baseRoute.'news/$id', 'src/view/pages/NewsPage.php');
 
-// Checking for contact action in the URL
-if (isset($_GET['action']) && $_GET['action'] === 'contact') {
-    require_once 'src/model/services/ContactFormService.php';
-    $contactFormService = new ContactFormService();
+// Post route for mail contact
+post($baseRoute.'mail', function() {
+    // Checking for contact action in the URL
+    if (isset($_GET['action']) && $_GET['action'] === 'contact') {
+        require_once 'src/model/services/ContactFormService.php';
+        $contactFormService = new ContactFormService();
 
-    $contactFormService->sendMail();
-}
+        $contactFormService->sendMail();
+    }
+});
