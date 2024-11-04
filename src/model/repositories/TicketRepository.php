@@ -8,25 +8,52 @@ class TicketRepository {
         return DatabaseConnection::getInstance(); // singleton
     }
 
-    public function createTicket(Ticket $ticket) {
-        $pdo = $this->getdb();
-        $statement = $pdo->prepare("INSERT INTO tickets (bookingId, seatId) VALUES (:bookingId, :seatId)");
-        $statement->bindValue(':bookingId', $ticket->getBookingId());
+//     public function createTicket(Ticket $ticket) {
+//         $pdo = $this->getdb();
+//         $statement = $pdo->prepare("INSERT INTO tickets (bookingId, seatId) VALUES (:bookingId, :seatId)");
+//         $statement->bindValue(':bookingId', $ticket->getBookingId());
 
+// }
+public function getAllTicketsForShowing(int $showingId, int $venueId): array {
+    $pdo = $this->getdb();
+    $statement = $pdo->prepare("SELECT * FROM tickets WHERE showingId = :showingId");
+    try {
+        $statement->execute([':showingId' => $showingId]);
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $result ?: []; // Return empty array if no tickets found
+    } catch (PDOException $e) {
+        throw new PDOException("Unable to fetch tickets: " . $e->getMessage());
+    }
 }
 
-    public function getAllTicketsForShowing(Ticket $ticket, Showing $showing) {
-        $pdo = $this->getdb();
-        $statement = $pdo->prepare("SELECT * FROM tickets WHERE showingId = :showingId");
-        try {
-            $statement->execute(array(":showingId" => $showing->getShowingId()));
-            $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-            if (empty($result)) {
-                return [];
-            }
-        } catch (PDOException $e) {
-            throw new PDOException("Unable to fetch tickets");
+public function getTicketTypeById(int $ticketTypeId): array {
+    $pdo = $this->getdb();
+    $statement = $pdo->prepare("SELECT * FROM TicketType WHERE ticketTypeId = :ticketTypeId");
+    try {
+        $statement->execute([":ticketTypeId"=> $ticketTypeId]);
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        if (empty($result)) {
+            throw new Exception("No ticket type found.");
         }
         return $result;
+    } catch (PDOException $e) {
+        throw new PDOException("Unable to fetch ticket type.");
     }
+}
+
+// public function getAllTicketsForShowing(Ticket $ticket, Showing $showing) {
+//     $pdo = $this->getdb();
+//     $statement = $pdo->prepare("SELECT * FROM tickets WHERE showingId = :showingId");
+//     try {
+//         $statement->execute(array(":showingId" => $showing->getShowingId()));
+//         $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+//         if (empty($result)) {
+//             return [];
+//         }
+//     } catch (PDOException $e) {
+//         throw new PDOException("Unable to fetch tickets");
+//     }
+//     return $result;
+// }
+// }
 }
