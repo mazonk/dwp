@@ -16,6 +16,21 @@ class ContactFormService {
       // Validate the form data inputs
       $this->validateContactForm($formData, $errors);
 
+      //Sanitize the form data
+      $formData['name'] = htmlspecialchars(trim($formData['name']));
+      $formData['email'] = htmlspecialchars(trim($formData['email']));
+      $formData['message'] = htmlspecialchars(trim($formData['message']));
+
+      if(count($errors) == 0) {
+        // Redirect with errors
+        header("Location: " . $_POST['route'] . "?status=failed&errors=" . json_encode($errors));
+        exit();
+      } else {
+        // Failed to send email
+        header("Location: " . $currentRoute . "?status=failed"); // Redirect with failure
+        exit();
+      }
+
       $subject = "Contact Form Submission";
       $mailTo = "dwp@spicypisces.eu";
       $headers = "From: " . $formsData['email'];
