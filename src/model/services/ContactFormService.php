@@ -21,32 +21,26 @@ class ContactFormService {
       $formData['email'] = htmlspecialchars(trim($formData['email']));
       $formData['message'] = htmlspecialchars(trim($formData['message']));
 
-      if(count($errors) == 0) {
-        // Redirect with errors
-        header("Location: " . $_POST['route'] . "?status=failed&errors=" . json_encode($errors));
-        exit();
-      } else {
-        // Failed to send email
-        header("Location: " . $currentRoute . "?status=failed"); // Redirect with failure
-        exit();
-      }
-
       $subject = "Contact Form Submission";
       $mailTo = "dwp@spicypisces.eu";
       $headers = "From: " . $formsData['email'];
       $txt = "You have received an email from " . $formsData['name'] . ".\n\n" . $formsData['message'];
       // Current route where the form was submitted
-      $currentRoute = $_POST['route'];
-      
-      // Attempt to send the email
-      if (mail($mailTo, $subject, $txt, $headers)) {
-        // Email sent successfully
-        header("Location: " . $currentRoute . "?status=success"); // Redirect with success
-        exit();
-      } else {
-          // Failed to send email
-          header("Location: " . $currentRoute . "?status=failed"); // Redirect with failure
+      $currentRoute = htmlspecialchars(trim($_POST['route']));
+
+      if(count($errors) == 0) {
+        try {
+          mail($mailTo, $subject, $txt, $headers); // Send email
+          header("Location: " . $currentRoute . "?status=success"); // Redirect with success
           exit();
+        } catch (Exception $e) {
+          $errors['general'] = "Failed to send email.";
+          header("Location: " . $currentRoute . "?status=failed" . json_encode($errors)); // Redirect with faliure error
+          exit();
+        }       
+      } else {
+        header("Location: " . $_POST['route'] . "?status=failed&errors=" . json_encode($errors)); // Redirect with errors
+        exit();
       }
     }
   }
