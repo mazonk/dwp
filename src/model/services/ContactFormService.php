@@ -6,7 +6,7 @@ class ContactFormService {
   public function sendMail() {
     $errors = [];
 
-    if (isset($_POST['submit'])) 
+    if (isset($_POST['submit'])) {
       $formData = [
         'name' => $_POST['name'],
         'email' => $_POST['email'],
@@ -14,7 +14,7 @@ class ContactFormService {
       ];
 
       // Validate the form data inputs
-      $this->validateContactForm($formData, $errors);
+      $this->validateFormInputs($formData, $errors);
 
       //Sanitize the form data
       $formData['name'] = htmlspecialchars(trim($formData['name']));
