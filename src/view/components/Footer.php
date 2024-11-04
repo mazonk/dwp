@@ -70,7 +70,7 @@ include_once "src/controller/OpeningHourController.php";
     <!-- Contact Form -->
     <div class="min-w-[250px] flex flex-col gap-[1.5rem]">
       <h4 class="text-[1.125rem] font-bold leading-tight">Contact Us</h4>
-      <form action="<?php echo $_SESSION['baseRoute'] ?>?action=contact" method="post" class="flex flex-col gap-[.75rem] text-textDark">
+      <form action="<?php echo $_SESSION['baseRoute'] ?>mail?action=contact" method="post" class="flex flex-col gap-[.75rem] text-textDark">
         <input type="hidden" name="route" value="<?php echo $_SERVER['REQUEST_URI']; ?>">
         <input type="text" name="name" id="emailInput" placeholder="Your name" required="true" class="h-[36px] py-[.5rem] px-[.875rem] bg-bgSemiDark text-[.875rem] text-textNormal leading-snug border-[1px] border-borderDark rounded-[6px] outline-none ease-in-out duration-[.15s] focus:border-textNormal">
         <input type="text" name="email" id="emailInput" placeholder="Your email" required="true" class="h-[36px] py-[.5rem] px-[.875rem] bg-bgSemiDark text-[.875rem] text-textNormal leading-snug border-[1px] border-borderDark rounded-[6px] outline-none ease-in-out duration-[.15s] focus:border-textNormal">
