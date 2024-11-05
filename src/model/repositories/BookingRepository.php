@@ -17,4 +17,11 @@ class BookingRepository {
         $stmt = $db->prepare("INSERT INTO Ticket (seatId, showingId, userId) VALUES (:seatId, :showingId, :userId)");
         return $stmt->execute(['seatId' => $seatId, 'showingId' => $showingId, 'userId' => $userId]);
     }
+    public function getBookingById(int $bookingId): array {
+        $db = $this->getdb();
+        $stmt = $db->prepare("SELECT * FROM Booking WHERE bookingId = :bookingId");
+        $stmt->execute(['bookingId' => $bookingId]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result;
+    }
 }
