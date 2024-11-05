@@ -9,7 +9,7 @@ $companyInfo = $companyInfoController->getCompanyInfo();
 $venueController = new VenueController();
 $allVenues = $venueController->getAllVenues();
 
-
+$selectedVenue = $venueController->getSelectedVenue();
 ?>
 
 <!DOCTYPE html>
@@ -48,7 +48,10 @@ $allVenues = $venueController->getAllVenues();
             <?php foreach ($allVenues as $venue) {?>
                 <div class="flex items-center mb-4">
                     <div>
-                        <h3 class="text-lg text-textNormal leading-snug"><?php echo htmlspecialchars($venue->getName())?></h3>
+                        <h3 data-venue-id="<?php echo htmlspecialchars($venue->getVenueId()) ?>"
+                            class="venueSelectButton text-lg leading-snug <?php echo $venue->getVenueId() === $selectedVenue->getVenueId() ? 'font-bold text-primary' : 'text-gray-300 hover:underline cursor-pointer' ?>">
+                            <?php echo htmlspecialchars($venue->getName())?>
+                        </h3>
                     </div>
                 </div>
             <?php }?>
@@ -59,3 +62,21 @@ $allVenues = $venueController->getAllVenues();
     <?php include_once("src/view/components/Footer.php"); ?>
 </body>
 </html>
+
+<script>
+    document.querySelectorAll('.venueSelectButton').forEach(button => {
+    button.addEventListener('click', () => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '', true);
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+            window.location.reload();
+            }
+        };
+        const venueId = button.dataset.venueId;
+        xhr.send(`action=${`selectVenue&venueId=${venueId}`}`);
+    });
+});
+
+</script>
