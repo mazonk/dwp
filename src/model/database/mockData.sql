@@ -219,7 +219,53 @@ INSERT INTO Showing (showingDate, showingTime, movieId, roomId) VALUES
 ('2024-11-02', '17:00:00', 7, 3),
 ('2024-10-23', '19:00:00', 8, 1),
 ('2024-10-27', '20:30:00', 9, 2),
-('2024-10-29', '22:00:00', 10, 3);
+('2024-10-29', '22:00:00', 10, 3),
+('2024-11-05', '10:00:00', 1, 1),
+('2024-11-05', '13:00:00', 1, 2),
+('2024-11-05', '16:00:00', 1, 3),
+('2024-11-05', '19:00:00', 1, 4),
+('2024-11-05', '21:30:00', 1, 5),
+('2024-11-05', '10:00:00', 2, 1),
+('2024-11-05', '13:00:00', 2, 2),
+('2024-11-05', '16:00:00', 2, 3),
+('2024-11-05', '19:00:00', 2, 4),
+('2024-11-05', '21:30:00', 2, 5),
+('2024-11-06', '10:00:00', 1, 1),
+('2024-11-06', '13:00:00', 1, 2),
+('2024-11-06', '16:00:00', 1, 3),
+('2024-11-06', '19:00:00', 1, 4),
+('2024-11-06', '21:30:00', 1, 5),
+('2024-11-06', '10:00:00', 2, 1),
+('2024-11-06', '13:00:00', 2, 2),
+('2024-11-06', '16:00:00', 2, 3),
+('2024-11-06', '19:00:00', 2, 4),
+('2024-11-06', '21:30:00', 2, 5),
+('2024-11-07', '10:00:00', 1, 1),
+('2024-11-07', '13:00:00', 1, 2),
+('2024-11-07', '16:00:00', 1, 3),
+('2024-11-07', '19:00:00', 1, 4),
+('2024-11-07', '21:30:00', 1, 5),
+('2024-11-07', '10:00:00', 2, 1),
+('2024-11-07', '13:00:00', 2, 2),
+('2024-11-07', '16:00:00', 2, 3),
+('2024-11-07', '19:00:00', 2, 4),
+('2024-11-07', '21:30:00', 2, 5),
+('2024-11-08', '10:00:00', 1, 1),
+('2024-11-08', '13:00:00', 1, 2),
+('2024-11-08', '16:00:00', 1, 3),
+('2024-11-08', '19:00:00', 1, 4),
+('2024-11-08', '21:30:00', 1, 5),
+('2024-11-09', '10:00:00', 1, 1),
+('2024-11-09', '13:00:00', 1, 2),
+('2024-11-09', '16:00:00', 1, 3),
+('2024-11-09', '19:00:00', 1, 4),
+('2024-11-09', '21:30:00', 1, 5),
+('2024-11-10', '10:00:00', 1, 1),
+('2024-11-10', '13:00:00', 1, 2),
+('2024-11-10', '16:00:00', 1, 3),
+('2024-11-10', '19:00:00', 1, 4),
+('2024-11-10', '21:30:00', 1, 5);
+
 
 INSERT INTO TicketType (name, price, description) VALUES
 ('Standard', 10.00, 'Regular seating ticket'),
@@ -442,7 +488,57 @@ INSERT INTO VenueShowing (venueId, showingId) VALUES
 (1, 47),  -- IMAX Theatre -> Showing of Blade Runner 2049
 (1, 48),  -- Odeon -> Showing of The Fifth Element
 (2, 49),  -- AMC Cinemas -> Showing of The Prestige
-(2, 50); -- Alamo Drafthouse -> Showing of The Departed
+(2, 50), -- Alamo Drafthouse -> Showing of The Departed
+(1, 84),  -- Venue ID 1 -> Showing ID 84
+(1, 85),  -- Venue ID 1 -> Showing ID 85
+(2, 86),  -- Venue ID 2 -> Showing ID 86
+(2, 87),  -- Venue ID 2 -> Showing ID 87
+(1, 88),  -- Venue ID 1 -> Showing ID 88
+(2, 89),  -- Venue ID 2 -> Showing ID 89
+(1, 90),  -- Venue ID 1 -> Showing ID 90
+(2, 91),  -- Venue ID 2 -> Showing ID 91
+(1, 92),  -- Venue ID 1 -> Showing ID 92
+(2, 93),  -- Venue ID 2 -> Showing ID 93
+
+(1, 94),  -- Venue ID 1 -> Showing ID 94
+(1, 95),  -- Venue ID 1 -> Showing ID 95
+(2, 96),  -- Venue ID 2 -> Showing ID 96
+(2, 97),  -- Venue ID 2 -> Showing ID 97
+(1, 98),  -- Venue ID 1 -> Showing ID 98
+(2, 99),  -- Venue ID 2 -> Showing ID 99
+(1, 100), -- Venue ID 1 -> Showing ID 100
+(2, 101), -- Venue ID 2 -> Showing ID 101
+(1, 102), -- Venue ID 1 -> Showing ID 102
+(2, 103), -- Venue ID 2 -> Showing ID 103
+
+(1, 104), -- Venue ID 1 -> Showing ID 104
+(1, 105), -- Venue ID 1 -> Showing ID 105
+(2, 106), -- Venue ID 2 -> Showing ID 106
+(2, 107), -- Venue ID 2 -> Showing ID 107
+(1, 108), -- Venue ID 1 -> Showing ID 108
+(2, 109), -- Venue ID 2 -> Showing ID 109
+(1, 110), -- Venue ID 1 -> Showing ID 110
+(2, 111), -- Venue ID 2 -> Showing ID 111
+(1, 112), -- Venue ID 1 -> Showing ID 112
+(2, 113), -- Venue ID 2 -> Showing ID 113
+
+(1, 114), -- Venue ID 1 -> Showing ID 114
+(1, 115), -- Venue ID 1 -> Showing ID 115
+(2, 116), -- Venue ID 2 -> Showing ID 116
+(2, 117), -- Venue ID 2 -> Showing ID 117
+(1, 118), -- Venue ID 1 -> Showing ID 118
+(2, 119), -- Venue ID 2 -> Showing ID 119
+(3, 120), -- Venue ID 3 -> Showing ID 120
+(3, 121), -- Venue ID 3 -> Showing ID 121
+(3, 122), -- Venue ID 3 -> Showing ID 122
+(3, 123), -- Venue ID 3 -> Showing ID 123
+
+(3, 124), -- Venue ID 3 -> Showing ID 124
+(3, 125), -- Venue ID 3 -> Showing ID 125
+(3, 126), -- Venue ID 3 -> Showing ID 126
+(3, 127), -- Venue ID 3 -> Showing ID 127
+(3, 128); -- Venue ID 3 -> Showing ID 128
+
 
 INSERT INTO VenueOpeningHour (venueId, openingHourId) VALUES
 (1, 1),  -- Gotham Cinema -> Monday's opening hours
