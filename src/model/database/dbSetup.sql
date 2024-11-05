@@ -1,6 +1,5 @@
 -- Disable foreign key checks (so tables can be dropped)
 SET FOREIGN_KEY_CHECKS = 0;
-USE cinema;
 
 -- Drop all tables
 DROP TABLE IF EXISTS PostalCode;
@@ -26,13 +25,15 @@ DROP TABLE IF EXISTS Seat;
 DROP TABLE IF EXISTS Room;
 DROP TABLE IF EXISTS OpeningHour;
 DROP TABLE IF EXISTS Venue;
+DROP TABLE IF EXISTS CompanyInfo;
 DROP TABLE IF EXISTS Address;
 
 -- Enable foreign key checks
 SET FOREIGN_KEY_CHECKS = 1;
 
 CREATE TABLE PostalCode (
-    postalCode int PRIMARY KEY NOT NULL,
+    postalCodeId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    postalCode int NOT NULL,
     city VARCHAR(50) NOT NULL
 );
 
@@ -40,8 +41,17 @@ CREATE TABLE Address (
     addressId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     street VARCHAR(100) NOT NULL,
     streetNr VARCHAR(10) NOT NULL,
-    postalCode INT NOT NULL,
-    FOREIGN KEY (postalCode) REFERENCES PostalCode(postalCode)
+    postalCodeId INT NOT NULL,
+    FOREIGN KEY (postalCodeId) REFERENCES PostalCode(postalCodeId)
+);
+
+CREATE TABLE CompanyInfo (
+    companyInfoId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    companyName VARCHAR(100) NOT NULL,
+    companyDescription TEXT NOT NULL,
+    logoUrl VARCHAR(255) NOT NULL,
+    addressId INT NOT NULL,
+    FOREIGN KEY (addressId) REFERENCES Address(addressId)
 );
 
 CREATE TABLE Venue (
