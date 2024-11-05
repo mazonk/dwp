@@ -12,6 +12,8 @@ $baseRoute = $_SERVER['HTTP_HOST'] == 'localhost' ? '/dwp/' : '/';
 
 #############################################################################
 
+// Global middleware to check for 'contact' action
+
 // GET ROUTES
 
 // In the URL -> http://localhost/dwp
@@ -92,14 +94,25 @@ post($baseRoute.'login', function() {
     }
 });
 
+// Post route for logout
 post($baseRoute.'logout', function() {
     require_once 'src/controller/AuthController.php';
     $authController = new AuthController();
     $authController->logout();
 });
 
-// Query string routes
+// Post route for mail contact
+post($baseRoute.'mail', function() {
+    // Checking for contact action in the URL
+    if (isset($_GET['action']) && $_GET['action'] === 'contact') {
+        require_once 'src/controller/ContactFormController.php';
+        $contactFormController = new ContactFormController();
 
+        $contactFormController->sendMail();
+    }
+});
+
+// Query string routes
 get($baseRoute.'movies/$id', 'src/view/pages/MovieDetailsPage.php');
 get($baseRoute.'news/$id', 'src/view/pages/NewsPage.php');
 
