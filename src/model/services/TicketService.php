@@ -7,13 +7,12 @@ include_once "src/model/entity/Ticket.php";
 class TicketService {
     private TicketRepository $ticketRepository;
     private SeatService $seatService;
-    private BookingService $bookingService;
     private ShowingService $showingService;
+    private BookingService $bookingService;
 
     public function __construct() {
         $this->ticketRepository = new TicketRepository();
         $this->seatService = new SeatService();
-        $this->bookingService = new BookingService();
         $this->showingService = new ShowingService();
     }
 
@@ -31,7 +30,7 @@ class TicketService {
             // Fetch all booked tickets for the given showing
             $tickets = $this->getAllTicketsForShowing($showingId, $venueId);
             // Extract booked seat IDs
-            $bookedSeatIds = array_map(function($ticket); {
+            $bookedSeatIds = array_map(function($ticket) {
                 return $ticket['seatId']; // Adjust based on your Ticket structure
             }, $tickets);
 
@@ -50,7 +49,7 @@ class TicketService {
         try {
             $result = $this->ticketRepository->getAllTicketsForShowing($showingId, $venueId);
             $tickets = [];
-            $seat = $seatService->getSeatById($result["seatId"]);
+            $seat = $this->seatService->getSeatById($result["seatId"]);
             if (isset($seat["error"]) && $seat["error"]) {
                 return $seat;
             }
@@ -63,7 +62,9 @@ class TicketService {
                 return $showing;
             }
             foreach ($result as $ticket) {
-                $tickets[] = new Ticket($result["ticketId"], ]);
+                $tickets[] = new Ticket($result["ticketId"], $seat, $ticketType, $showing, $this->bookingService->getBookingById($result["bookingId"]));
+            }
+            return $tickets;
         } catch (PDOException $e) {
             throw new Exception("Database error: " . $e->getMessage());
         }

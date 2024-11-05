@@ -22,12 +22,11 @@ class TicketController {
             // Fetch all seats for the given showing and venue
             $seats = $this->seatRepository->getAllSeatsForShowing($showingId, $venueId);
             if (empty($seats)) {
-                throw new Exception("No seats found for this showing!");
+                return [];
             }
     
             // Fetch all booked tickets for the given showing
-            $tickets = $this->ticketRepository->getAllTicketsForShowing($showingId, $venueId); // Ensure you pass the correct parameters
-    
+            $tickets = $this->ticketRepository->getAllTicketsForShowing($showingId, $venueId);
             // Extract booked seat IDs from tickets
             $bookedSeatIds = array_map(function($ticket) {
                 return $ticket['seatId']; // Adjust based on your Ticket structure
@@ -35,7 +34,7 @@ class TicketController {
     
             // Filter out the available seats
             $availableSeats = array_filter($seats, function($seat) use ($bookedSeatIds) {
-                return !in_array($seat['id'], $bookedSeatIds); // Assuming 'id' is the key for seat ID in the seats array
+                return !in_array($seat['id'], $bookedSeatIds);
             });
     
             if (empty($availableSeats)) {
@@ -43,10 +42,7 @@ class TicketController {
             }
         } catch (PDOException $e) {
             throw new Exception("Database error: " . $e->getMessage());
-        } catch (Exception $e) {
-            return
         }
-    
         return $availableSeats;
     }
 
