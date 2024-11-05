@@ -7,12 +7,9 @@ $companyInfoController = new CompanyInfoController();
 $companyInfo = $companyInfoController->getCompanyInfo();
 
 $venueController = new VenueController();
-$selectedVenue = $venueController->getVenueById($_SESSION['selectedVenueId']);
+$allVenues = $venueController->getAllVenues();
 
-if (is_array($selectedVenue) && isset($selectedVenue['errorMessage'])) {
-    echo $selectedVenue['errorMessage'];
-    exit;
-}
+
 ?>
 
 <!DOCTYPE html>
@@ -41,8 +38,22 @@ if (is_array($selectedVenue) && isset($selectedVenue['errorMessage'])) {
                 <p class="text-lg text-textLight"><?php echo htmlspecialchars($companyInfo->getCompanyDescription())?></p>
             </div>
         </div>
-        </div>
         <?php }?>
+        <?php
+            if (isset($allVenues['errorMessage'])) {
+                echo $allVenues['errorMessage'];
+                exit;
+            } else {?>
+            <h2 class="text-[1.875rem] text-textNormal leading-snug my-8">Our Venues</h2>
+            <?php foreach ($allVenues as $venue) {?>
+                <div class="flex items-center mb-4">
+                    <div>
+                        <h3 class="text-lg text-textNormal leading-snug"><?php echo htmlspecialchars($venue->getName())?></h3>
+                    </div>
+                </div>
+            <?php }?>
+        <?php }?>
+        
     </main>
 
     <?php include_once("src/view/components/Footer.php"); ?>
