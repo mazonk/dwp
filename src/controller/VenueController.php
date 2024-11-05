@@ -41,6 +41,13 @@ class VenueController {
     return $venue;
   }
 
+  public function getSelectedVenue(): Venue|array {
+    if (isset($_SESSION['selectedVenueId'])) {
+      return $this->venueService->getVenueById($_SESSION['selectedVenueId']);
+    }
+    return ['errorMessage' => 'No venue selected. Please select a venue from the list.'];
+  }
+
   /* Store the selected venue's venueId and name in the session */
   public function selectVenue(Venue $venue): Venue {
     $_SESSION['selectedVenueId'] = $venue->getVenueId();
