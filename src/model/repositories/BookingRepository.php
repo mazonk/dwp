@@ -24,4 +24,12 @@ class BookingRepository {
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result;
     }
+
+    public function getAllSeatsForBooking(int $bookingId): array {
+        $db = $this->getdb();
+        $stmt = $db->prepare("SELECT * FROM Ticket WHERE bookingId = :bookingId");
+        $stmt->execute(['bookingId' => $bookingId]);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
 }
