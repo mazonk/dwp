@@ -110,7 +110,7 @@
       </div>
       <!-- TODO: Scroll down to ticket section -->
       <div>
-        <a href="" class="font-medium">Tickets</a>
+        <a href="<?php echo $_SESSION['baseRoute']?>about" class="font-medium">About us</a>
       </div>
       <!-- TODO: Scroll down to contact section it is in the footer -->
       <div>
