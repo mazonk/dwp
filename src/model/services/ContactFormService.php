@@ -56,6 +56,9 @@ class ContactFormService {
     if (strlen($formData['name']) < 2) {
         $errors['name'] = "Name must be at least 2 characters long.";
     }
+    if(strlen($formData['name']) > 50) {
+      $errors['name'] = "Name can't be longer than 50 characters.";
+    }
     if (!preg_match($emailRegex, $formData['email'])) {
         $errors['email'] = "Invalid email format.";
     }
@@ -64,6 +67,9 @@ class ContactFormService {
     }
     if(strlen($formData['message']) < 10) {
         $errors['message'] = "Message must be at least 10 characters long.";
+    }
+    if(strlen($formData['message']) > 500) {
+        $errors['message'] = "Message can't be longer than 500 characters.";
     }
   }
 }
