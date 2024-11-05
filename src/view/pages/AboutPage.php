@@ -49,7 +49,7 @@ $selectedVenue = $venueController->getSelectedVenue();
             } else {?>
             <div class="flex flex-row justify-between my-8">
                 <div class="w-1/3">
-                    <h2 class="text-[1.875rem] text-textNormal leading-snug my-7">Our Venues</h2>
+                    <h2 class="text-[1.875rem] leading-snug my-7">Our Venues</h2>
                     <?php foreach ($allVenues as $venue) {?>
                         <div class="flex items-center mb-4">
                             <div>
@@ -92,9 +92,22 @@ $selectedVenue = $venueController->getSelectedVenue();
                                 <?php echo htmlspecialchars($selectedVenue->getAddress()->getStreetNr()) . ' ' . htmlspecialchars($selectedVenue->getAddress()->getStreet())
                                 . ', ' . htmlspecialchars($selectedVenue->getAddress()->getPostalCode()->getPostalCode()) . ' ' . htmlspecialchars($selectedVenue->getAddress()->getPostalCode()->getCity()) ?>
                             </div>
+                            <div class="mt-4 w-full flex flex-col gap-4">
+                                <h4 class="text-[1.125rem] font-bold leading-tight text-center mt-[4rem]">Reach out to us at:</h4>
+                                <div class="flex flex-col items-center justify-center">
+                                    <div class="flex flex-col w-fit text-[.875rem] text-textNormal leading-snug space-y-4">
+                                        <a href="mailto:<?= htmlspecialchars($selectedVenue->getContactEmail()) ?>" class="hover:text-textLight underline">
+                                            <?= htmlspecialchars($selectedVenue->getContactEmail())?>
+                                        </a>
+                                        <span class="text-center">OR</span>
+                                        <div class="text-center">
+                                            Call us: <?= htmlspecialchars($selectedVenue->getPhoneNr())?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    
                 </section>
             </div>
         <?php }?>
