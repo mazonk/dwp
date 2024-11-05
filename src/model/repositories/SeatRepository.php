@@ -73,4 +73,14 @@ public function getAvailableSeatsForShowing(int $showingId, int $selectedVenueId
         }
         return $result;
     }
+
+    public function selectSeat(int $seatId): void { //TRANSACTION
+        $db = $this->getdb();
+        $query = $db->prepare("UPDATE Seat SET selected = 1 WHERE seatId = :seatId");
+        try {
+            $query->execute(array(":seatId" => $seatId));
+        } catch (PDOException $e) {
+            throw new Exception("Unable to select seat. ");
+        }
+    }
 }

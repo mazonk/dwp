@@ -2,6 +2,7 @@
 include_once "src/model/repositories/TicketRepository.php";
 include_once "src/model/services/SeatService.php";
 include_once "src/model/services/BookingService.php";
+include_once "src/model/services/ShowingService.php";
 include_once "src/model/entity/Ticket.php";
 
 class TicketService {
@@ -14,6 +15,7 @@ class TicketService {
         $this->ticketRepository = new TicketRepository();
         $this->seatService = new SeatService();
         $this->showingService = new ShowingService();
+        $this->bookingService = new BookingService();
     }
 
     public function getAvailableSeats(int $showingId, int $venueId): array {

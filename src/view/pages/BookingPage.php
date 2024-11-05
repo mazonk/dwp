@@ -10,12 +10,10 @@ $selectedVenueId = $_SESSION['selectedVenueId']; // Get the selected venue name 
 $selectedShowing = isset($_SESSION['selectedShowing']) ? unserialize($_SESSION['selectedShowing']) : null;
 
 if ($selectedShowing) {
-    echo "<h1>Showing Id: " . htmlspecialchars($selectedShowing->getShowingId()) . "</h1>";
-
     $seatController = new SeatController();
     $ticketController = new TicketController(); 
     $showingId = $selectedShowing->getShowingId(); // Get the showing ID
-    $unavailableTickets = $ticketController->getAllTicketsForShowing($selectedShowing, $selectedVenueId);
+    $unavailableTickets = $ticketController->getAllTicketsForShowing($selectedShowing->getShowingId(), $selectedVenueId);
 
     // Get available seats for the showing and venue
     $availableSeats = $seatController->getAvailableSeatsForShowing($showingId, $selectedVenueId); 
@@ -25,11 +23,11 @@ if ($selectedShowing) {
     $totalAvailableSeats = serialize($availableSeats); // Count of available seats
 
     // Display total number of seats available
-    echo "<p>Total Seats: " . count($totalSeats) . "</p>"; // Total seats
+    echo "<p>Total Seats: " . serialize($totalSeats) . "</p>"; // Total seats
     echo "<p>Total Seats Available: " . $totalAvailableSeats . "</p>";
-    $actualAvailableSeats = count($totalSeats) - $totalUnavailableSeats;
+    $actualAvailableSeats = serialize($totalSeats) - $totalUnavailableSeats;
     echo "<p>AVAILABLE SEATS: " . $actualAvailableSeats . "</p>";     // Calculate unavailable seats
-     $totalUnavailableSeats = count($unavailableTickets);
+     $totalUnavailableSeats =serialize($unavailableTickets);
     echo "<p>Unavailable Seats: " . $totalUnavailableSeats . "</p>";
 
 
@@ -50,15 +48,14 @@ if ($selectedShowing) {
     <?php include_once("src/assets/tailwindConfig.php"); ?>
     <style>
         body {
-            background-color: #342217; /* Your dark blue background */
-            color: #192233; /* Your text color */
+            background-color: #342217;
+            color: #192233;
         }
     </style>
 </head>
 <body class="max-w-[1440px] w-[100%] mx-auto mt-[72px] mb-[2rem] px-[100px] text-textLight">
     <?php include_once("src/view/components/Navbar.php"); ?>
     <main class="mt-[56px] p-4">
-        <!-- Additional content can be added here -->
     </main>
     <?php include_once("src/view/components/Footer.php"); ?>
 </body>

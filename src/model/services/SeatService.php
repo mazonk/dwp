@@ -24,18 +24,28 @@ class SeatService {
         try {
             $result = $this->seatRepository->getAllSeatsForShowing($showingId, $selectedVenueId);
             $seats = [];
-            $room = $this->roomService->getRoomById($result["roomId"]);
-            if(isset($room["error"]) && $room["error"]) {
-                return $room;
-            }
-            foreach ($result as $seat) {
-                $seats[] = new Seat($result["seatId"], $result["row"], $result["seatNr"], $room);
+    
+            // Check if result is not empty and fetch room based on the first seat
+            if (!empty($result)) {
+                // Assuming getRoomById returns a Room object
+                $room = $this->roomService->getRoomById($result[0]["roomId"]);
+                if (isset($room["error"]) && $room["error"]) {
+                    return $room; // Return error if room fetching fails
+                }
+                
+                // Iterate through each seat
+                foreach ($result as $seatData) {
+                    // Ensure $seatData is being used properly
+                    $seats[] = new Seat($seatData["seatId"], $seatData["row"], $seatData["seatNr"], $room);
+                }
             }
             return $seats; 
         } catch (Exception $e) {
             return ['error' => true, 'message' => $e->getMessage()];
         }
     }
+    
+
     public function getAvailableSeatsForShowing(int $showingId, int $selectedVenueId): array {
         try {
             $result = $this->seatRepository->getAvailableSeatsForShowing($showingId, $selectedVenueId);
@@ -44,14 +54,30 @@ class SeatService {
             return ['error' => true, 'message' => $e->getMessage()];
         }
     }
-    public function getSeatById(int $seatId): array|Seat {
+
+    public function getSeatById(int $seatId): Seat|array {
         try {
             $result = $this->seatRepository->getSeatById($seatId);
-            $room = $this->roomService->getRoomById($result["roomId"]);
-            if(isset($room["error"]) && $room["error"]) {
-                return $room;
+            // If getSeatById returns an object
+            if ($result instanceof Seat) {
+                // Access the room information from the Seat object
+                $room = $this->roomService->getRoomById($result->getRoomId());
+                if (isset($room["error"]) && $room["error"]) {
+                    return $room;
+                }
+                return $result; // Return the Seat object if no error
+            } else {
+                return ['error' => true, 'message' => 'Seat not found.'];
             }
-            return new Seat($result["seatId"], $result["row"], $result["seatNr"], $room);
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+    }
+
+    public function selectSeat(int $seatId): array {
+        try {
+            $result = $this->seatRepository->selectSeat($seatId);
+            return $result;
         } catch (Exception $e) {
             return ['error' => true, 'message' => $e->getMessage()];
         }
