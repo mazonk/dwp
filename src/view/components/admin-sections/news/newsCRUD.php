@@ -15,7 +15,7 @@ include_once "src/view/components/admin-sections/news/NewsCardAdmin.php";
             echo $allNews['errorMessage'];
         } else {
             // Loop through each news item and render it using NewsCard
-            echo '<div class="flex flex-row items-center">';
+            echo '<div class="flex items-center gap-[1rem]">';
             foreach ($allNews as $news) {
                 NewsCardAdmin::render($news->getNewsId(), $news->getHeader(), $news->getImageURL(), $news->getContent());
             }

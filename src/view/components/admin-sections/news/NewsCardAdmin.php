@@ -4,10 +4,10 @@ class NewsCardAdmin {
         // Shorten the content to max 140 characters
         $shortenedContent = substr($content, 0, 140) . (strlen($content) > 140 ? '... ' : ''); 
         ?>
-        <div class="max-w-sm bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+        <div class="max-w-[400px] bg-gray-800 rounded-lg shadow-lg overflow-hidden">
           <!-- Clickable link wrapping the image -->
           <a href="<?php echo $_SESSION['baseRoute'] ?>news/<?php echo htmlspecialchars($id); ?>">
-            <img class="h-[260px] object-cover object-center" src="src/assets/<?php echo htmlspecialchars($imageURL); ?>" alt="Movie Poster">
+            <img class="h-[275px] max-h-[275px] object-cover object-center" src="src/assets/<?php echo htmlspecialchars($imageURL); ?>" alt="Movie Poster">
           </a>
           <!-- Content -->
           <div class="p-4">
