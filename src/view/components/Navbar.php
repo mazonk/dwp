@@ -164,10 +164,10 @@
               <span class="translate-y-[1px]">Admin page</span>
             </a>
           <?php endif;?>
-          <button class="w-full flex gap-[.375rem] py-[.5rem] px-[.625rem] text-[.875rem] text-left leading-tight bg-bgDark ease-in-out duration-[.15s] hover:bg-bgSemiDark">
+          <a data-close-on-click="false"  href="<?php echo $_SESSION['baseRoute']?>profile" class="w-full flex gap-[.375rem] py-[.5rem] px-[.625rem] text-[.875rem] text-left leading-tight bg-bgDark ease-in-out duration-[.15s] hover:bg-bgSemiDark">
             <i class="ri-user-line h-[18px] text-[18px]"></i>
             <span class="translate-y-[1px]">Edit profile</span>
-          </button>
+          </a>
           <button class="w-full flex gap-[.375rem] py-[.5rem] px-[.625rem] text-[.875rem] text-left leading-tight bg-bgDark ease-in-out duration-[.15s] hover:bg-bgSemiDark">
             <i class="ri-calendar-check-line h-[18px] text-[18px]"></i>
             <span class="translate-y-[1px]">Reservations</span>
