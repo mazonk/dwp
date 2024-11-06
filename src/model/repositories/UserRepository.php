@@ -33,5 +33,22 @@ class UserRepository {
             throw new PDOException("Unable to fetch user by email!");
         }
     }
-    
+
+    public function getUserById(int $id) {
+        $db = $this->getdb();
+        $query = $db->prepare("SELECT u.*, ur.*
+            FROM User u
+            JOIN UserRole ur ON u.roleId = ur.roleId
+            WHERE u.userId = :id");
+        try {
+            $query->execute(array(":id" => $id));
+            $result = $query->fetch(PDO::FETCH_ASSOC);
+            if (empty($result)) {
+                throw new Exception("User not found!");
+            } 
+            return $result;
+        } catch (PDOException $e) {
+            throw new PDOException("Unable to fetch user by ID!");
+        }
+    }
 }
