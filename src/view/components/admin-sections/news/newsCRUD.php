@@ -21,7 +21,7 @@ include_once "src/view/components/admin-sections/news/NewsCardAdmin.php";
             echo $allNews['errorMessage'];
         } else {
             // Loop through each news item and render it using NewsCard
-            echo '<div class="flex items-center gap-[1rem]">';
+            echo '<div class="flex items-start flex-wrap gap-[1rem]">';
             foreach ($allNews as $news) {
                 NewsCardAdmin::render($news->getNewsId(), $news->getHeader(), $news->getImageURL(), $news->getContent());
             }
@@ -68,9 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const addNewsButton = document.getElementById('addNewsButton');
     /* const imageInput = document.getElementById('imageURL'); */
 
-    const errorMessageElement = document.createElement('p');
-    errorMessageElement.classList.add('text-red-500', 'text-center', 'font-medium');
-
     // Display the modal
     addNewsButton.addEventListener('click', () => {
         addNewsModal.classList.remove('hidden');
@@ -85,13 +82,13 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault(); // Prevent default form submission
         const xhr = new XMLHttpRequest();
         const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
-        xhr.open('POST', `${baseRoute}news/add`, true);
+        xhr.open('PUT', `${baseRoute}news/add`, true);
         
-        const formData = {
+        const newsData = {
             action: 'addNews',
             header: document.getElementById('header').value,
             /* imageURL: imageInput.files[0], */ // TODO: Implement image upload
-            imageURL: 'src/assets/poster_joker.jpg',
+            imageURL: 'gotham_news.jpg',
             content: document.getElementById('content').value
         }
 
@@ -104,26 +101,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     response = JSON.parse(xhr.response); // Parse the JSON response
                 } catch (e) {
                     console.error('Could not parse response as JSON:', e);
-                    errorMessageElement.textContent = 'An unexpected error occurred. Please try again.';
-                    errorMessageElement.style.display = 'block';
                     return;
                 }
 
                 if (response.success) {
                     alert('Success! News added successfully.');
                     window.location.reload();
-                    errorMessageElement.style.display = 'none'; // Hide the error message if there's success
                 } else {
-                    errorMessageElement.textContent = response.errorMessage;
-                    errorMessageElement.style.display = 'block';
                     console.error('Error:', response.errorMessage);
                 }
             }
         };
 
         // Send data as URL-encoded string
-        const params = Object.keys(formData)
-            .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(formData[key])}`)
+        const params = Object.keys(newsData)
+            .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(newsData[key])}`)
             .join('&');
         xhr.send(params);
 
