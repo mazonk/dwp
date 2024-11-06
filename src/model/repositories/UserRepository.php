@@ -48,7 +48,7 @@ class UserRepository {
             } 
             return $result;
         } catch (PDOException $e) {
-            throw new PDOException("Unable to fetch user by ID!");
+            throw new PDOException("Unable to fetch user!");
         }
     }
 }
