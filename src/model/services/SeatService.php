@@ -27,15 +27,16 @@ class SeatService {
     
             // Check if result is not empty and fetch room based on the first seat
             if (!empty($result)) {
-                // Assuming getRoomById returns a Room object
+                // Call getRoomById and check if it returned an error array
                 $room = $this->roomService->getRoomById($result[0]["roomId"]);
-                if (isset($room["error"]) && $room["error"]) {
-                    return $room; // Return error if room fetching fails
+                
+                // Verify if $room is an instance of Room, otherwise return the error
+                if (!$room instanceof Room) {
+                    return $room; // This will return the error array
                 }
                 
                 // Iterate through each seat
                 foreach ($result as $seatData) {
-                    // Ensure $seatData is being used properly
                     $seats[] = new Seat($seatData["seatId"], $seatData["row"], $seatData["seatNr"], $room);
                 }
             }
@@ -44,6 +45,7 @@ class SeatService {
             return ['error' => true, 'message' => $e->getMessage()];
         }
     }
+    
     
 
     public function getAvailableSeatsForShowing(int $showingId, int $selectedVenueId): array {
