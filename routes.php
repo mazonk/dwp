@@ -200,7 +200,7 @@ put($baseRoute.'news/add', function() {
 
         $result = $newsController->addNews($newsData);
 
-        if ($result && !is_array($result)) {
+        if ($result == $result['success']) {
             // Return a success response
             echo json_encode(['success' => true]);
         } else {
