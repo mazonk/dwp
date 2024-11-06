@@ -11,6 +11,7 @@
           textNormal: '#d8d8d8',
           textLight: '#FFFFFB',
           borderDark: '#404040',
+          borderLight: '#6a6a6a',
         }
       }
     }
