@@ -30,4 +30,13 @@ class NewsService {
         }
         
     }
+
+    public function addNews(array $newsData): array {
+        try {
+            $this->newsRepository->addNews($newsData);
+            return ['success' => true];
+        } catch (Exception $e) {
+            return ["error" => true, 'message' => $e->getMessage()];
+        }
+    }
 }
