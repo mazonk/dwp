@@ -11,6 +11,7 @@ include_once "src/view/components/admin-sections/news/NewsCardAdmin.php";
             Add News
         </button>
     </div>
+    <!-- Display all news in cards -->
     <div id="tab-content" class="grid grid-cols-1 gap-4">
         <?php
         $newsController = new NewsController();
@@ -27,5 +28,39 @@ include_once "src/view/components/admin-sections/news/NewsCardAdmin.php";
             echo '</div>';
         }
         ?>
+    </div>
+
+    <!-- Add News Form Modal -->
+    <div id="addNewsModal" class="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50">
+        <div class="flex items-center justify-center min-h-screen">
+            <!-- Modal -->
+            <div class="bg-bgSemiDark w-[600px] rounded-lg p-6 border-[1px] border-borderDark">
+                <h2 class="text-[1.5rem] text-center font-semibold mb-4">Add News</h2>
+                <form id="addNewsForm" class="text-textLight">
+                    <div class="mb-4">
+                        <label for="Title" class="block text-sm font-medium text-text-textLight">Title</label>
+                        <input type="text" id="title" name="title" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required>
+                    </div>
+                    <!-- <div class="mb-4">
+                        <label for="imageURL" class="block text-sm font-medium text-text-textLight">Image URL</label>
+                        <input type="text" id="imageURL" name="imageURL" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required>
+                    </div> -->
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-text-textLight">Image</label>
+                        <input type="file" id="imageURL" name="imageURL" class="hidden" required>
+                        <label for="imageURL" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">Choose a file</label>
+                        
+                    </div>
+                    <div class="mb-4">
+                        <label for="content" class="block text-sm font-medium text-text-textLight">Content</label>
+                        <textarea id="content" name="content" rows="4" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required></textarea>
+                    </div>
+                    <div class="flex justify-end">
+                        <button type="submit" id="saveButton" class="bg-primary text-textDark py-2 px-4 rounded border border-transparent hover:bg-primaryHover duration-[.2s] ease-in-out">Save</button>
+                        <button type="button" id="cancelButton" class="text-textLight py-2 px-4 border-[1px] border-white rounded hover:bg-borderDark ml-2 duration-[.2s] ease-in-out">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
