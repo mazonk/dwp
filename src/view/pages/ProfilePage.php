@@ -31,11 +31,13 @@ if (is_array($user) && isset($user['errorMessage']) && $user['errorMessage']) {
         <div>
             <div class="flex flex-col items-center mb-4 space-y-[2rem]">
                 <img src="src/assets/default-profile-picture.png" alt="Company Logo" class="w-[200px] h-[200px] object-cover rounded-full">
-                <div>
-                    <p class="text-lg text-textLight">
+                <div class="break-words max-w-[200px]">
+                    <p class="text-[1.75rem] text-textLight">
                         <?php echo htmlspecialchars($user->getFirstName()) . ' ' . htmlspecialchars($user->getLastName())?>
                     </p>
                 </div>
+                <a href="<?php echo $_SESSION['baseRoute']?>edit-profile" 
+                class="text-[1rem] font-semibold bg-bgSemiDark py-2 w-full text-center border border-borderDark text-textNormal rounded-[6px]">Edit profile</a>
             </div>
         </div>
         <div>
