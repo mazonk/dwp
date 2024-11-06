@@ -16,5 +16,11 @@ class UserController {
         return $user;
     }
 
-    
+    public function getUserByEmail($email) {
+        $user = $this->userService->getUserByEmail($email);
+        if (is_array($user) && isset($user['error']) && $user['error']) {
+            return ['errorMessage' => $user['message']];
+        }
+        return $user;
+    }
 }
