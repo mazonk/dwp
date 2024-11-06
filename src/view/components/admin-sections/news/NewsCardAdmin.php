@@ -17,8 +17,10 @@ class NewsCardAdmin {
               <?php echo htmlspecialchars($shortenedContent); ?>
             </p>
 
-            <button id="editCompanyInfoButton" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Edit</button>
-            <button id="deleteNewsButton" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">Delete</button>
+            <div class="flex gap-[.5rem]">
+              <button id="editCompanyInfoButton" class="text-white py-2 px-4 border-[1px] border-white rounded hover:bg-borderDark">Edit</button>
+              <button id="deleteNewsButton" class="bg-red-500 text-white py-2 px-4 border-[1px] border-transparent rounded hover:bg-red-600">Delete</button>
+            </div>
           </div>
         </div>
         <?php
