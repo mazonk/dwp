@@ -184,3 +184,31 @@ put($baseRoute.'companyInfo/edit', function() {
         echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
     }
 });
+
+// Add news put route
+put($baseRoute.'news/add', function() {
+    require_once 'src/controller/NewsController.php';
+    $newsController = new NewsController();
+    parse_str(file_get_contents("php://input"), $_PUT); // Parse the PUT request
+
+    if (isset($_PUT['action']) && $_PUT['action'] === 'addNews') {
+        $newsData = [
+            'header' => htmlspecialchars(trim($_PUT['header'])),
+            'imageURL' => htmlspecialchars(trim($_PUT['imageURL'])),
+            'content' => htmlspecialchars(trim($_PUT['content'])),
+        ];
+
+        $result = $newsController->addNews($newsData);
+
+        if ($result && !is_array($result)) {
+            // Return a success response
+            echo json_encode(['success' => true]);
+        } else {
+            // Return an error response
+            echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
+        }
+    } else {
+        // Invalid action response
+        echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
+    }
+});
