@@ -1,7 +1,7 @@
 <?php parse_str(file_get_contents("php://input"), $_PUT);
 include_once "src/controller/NewsController.php";
 
-include_once "src/view/components/admin-sections/news/NewsCard.php";
+include_once "src/view/components/admin-sections/news/NewsCardAdmin.php";
 ?>
 
 <div>
@@ -17,7 +17,7 @@ include_once "src/view/components/admin-sections/news/NewsCard.php";
             // Loop through each news item and render it using NewsCard
             echo '<div class="flex flex-row items-center">';
             foreach ($allNews as $news) {
-                NewsCard::render($news->getNewsId(), $news->getHeader(), $news->getImageURL(), $news->getContent());
+                NewsCardAdmin::render($news->getNewsId(), $news->getHeader(), $news->getImageURL(), $news->getContent());
             }
             echo '</div>';
         }
