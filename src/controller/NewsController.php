@@ -27,4 +27,14 @@ class NewsController {
 
         return $news;
     }
+
+    public function addNews(array $newsData): array {
+        $result = $this->newsService->addNews($newsData);
+
+        if (isset($result['error']) && $result['error']) {
+            return ['errorMessage' => $result['message']];
+        }
+
+        return ['success' => true];
+    }
 }
