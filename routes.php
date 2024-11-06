@@ -72,6 +72,7 @@ post($baseRoute.'movies', 'src/view/pages/AllMoviesPage.php'); // used at toggle
 post($baseRoute.'upcoming', 'src/view/pages/AllMoviesPage.php'); // used at toggle dropdown
 post($baseRoute.'home', 'src/view/pages/LandingPage.php'); // used at toggle dropdown
 post($baseRoute.'about', 'src/view/pages/AboutPage.php'); // used at toggle dropdown
+post($baseRoute.'profile', 'src/view/pages/ProfilePage.php'); // used at toggle dropdown
 
 // Post route for register
 post($baseRoute.'register', function() {

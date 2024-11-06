@@ -8,7 +8,7 @@ if (session_status() === PHP_SESSION_NONE) {
 $venueController = new VenueController();
 $_SESSION['baseRoute'] = $_SERVER['HTTP_HOST'] == 'localhost' ? '/dwp/' : '/';
 $initialVenue = $venueController->getVenueById(1);
-$_SESSION['selectedVenueId'] ? '' : $venueController->selectVenue($initialVenue);
+isset($_SESSION['selectedVenueId']) ? '' : $venueController->selectVenue($initialVenue);
 
 // Time interval for id regeneration
 $interval = 30 * 60; 

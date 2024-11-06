@@ -173,7 +173,7 @@
             <span class="translate-y-[1px]">Reservations</span>
           </button>
           <form action="<?php echo $_SESSION['baseRoute']?>logout" method="post">
-            <button type="submit" class="w-full flex gap-[.375rem] py-[.5rem] px-[.625rem] text-[.875rem] text-left leading-tight bg-bgDark ease-in-out duration-[.15s] hover:bg-bgSemiDark">
+            <button data-close-on-click="false" type="submit" class="w-full flex gap-[.375rem] py-[.5rem] px-[.625rem] text-[.875rem] text-left leading-tight bg-bgDark ease-in-out duration-[.15s] hover:bg-bgSemiDark">
               <i class="ri-logout-box-line h-[18px] text-[18px]"></i>
               <span class="translate-y-[1px]">Logout</span>
             </button>
