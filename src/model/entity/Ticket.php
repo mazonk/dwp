@@ -4,14 +4,12 @@ class Ticket {
   private Seat $seat;
   private TicketType $ticketType;
   private Showing $showing;
-  private Reservation $reservation;
 
-  public function __construct(int $ticketId, Seat $seat, TicketType $ticketType, Showing $showing, Reservation $reservation) {
+  public function __construct(int $ticketId, Seat $seat, TicketType $ticketType, Showing $showing) {
     $this->ticketId = $ticketId;
     $this->seat = $seat;
     $this->ticketType = $ticketType;
     $this->showing = $showing;
-    $this->reservation = $reservation;
   }
 
   public function getTicketId(): int {
@@ -30,10 +28,6 @@ class Ticket {
     return $this->showing;
   }
 
-  public function getReservation(): Reservation {
-    return $this->reservation;
-  }
-
   public function setTicketId(int $ticketId): void {
     $this->ticketId = $ticketId;
   }
@@ -48,10 +42,6 @@ class Ticket {
 
   public function setShowing(Showing $showing): void {
     $this->showing = $showing;
-  }
-
-  public function setReservation(Reservation $reservation): void {
-    $this->reservation = $reservation;
   }
 }
 ?>
