@@ -77,7 +77,10 @@ $booking9 = new Booking(5, $user, Status::pending, [$ticket2, $ticket4]);
 $booking10 = new Booking(6, $user, Status::cancelled, [$ticket3]);
 
 $bookings = [$booking1, $booking2, $booking3, $booking4, $booking5, $booking6, $booking7, $booking8, $booking9, $booking10];
+
 // ################################
+
+$initialBookings = count($bookings) > 8 ? array_slice($bookings, 0, 8) : $bookings;
 ?>
 
 <!DOCTYPE html>
@@ -97,7 +100,7 @@ $bookings = [$booking1, $booking2, $booking3, $booking4, $booking5, $booking6, $
             <div class="pr-8">
                 <div class="flex flex-col items-center mb-4 space-y-[2rem]">
                     <img src="src/assets/default-profile-picture.png" alt="Company Logo" class="w-[250px] h-[250px] object-cover rounded-full">
-                    <div class="break-words max-w-[250px] space-y-2">
+                    <div class="break-words w-[250px] space-y-2">
                         <p class="text-[2rem] text-textLight mb-4">
                             <?php echo htmlspecialchars($user->getFirstName()) . ' ' . htmlspecialchars($user->getLastName())?>
                         </p>
@@ -117,11 +120,16 @@ $bookings = [$booking1, $booking2, $booking3, $booking4, $booking5, $booking6, $
                 <h2 class="text-[2rem] leading-snug mb-7 mt-11">Purchase History</h2>
                 <div class="flex flex-wrap">
                     <?php
-                        foreach ($bookings as $booking) {
+                        foreach ($initialBookings as $booking) {
                             BookingCard::render($booking->getTickets(), $venue1);
                         }
                     ?>
-                </ul>
+                </div>
+                <?php if (count($bookings) > 8): ?>
+                    <div id="show-more-btn" class="text-center mt-4 cursor-pointer text-primary">
+                        <span>Show more...</span>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </main> 
