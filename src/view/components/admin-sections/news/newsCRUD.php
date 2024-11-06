@@ -41,12 +41,11 @@ include_once "src/view/components/admin-sections/news/NewsCardAdmin.php";
                         <label for="header" class="block text-sm font-medium text-text-textLight">Header</label>
                         <input type="text" id="header" name="header" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required>
                     </div>
-                    <div class="mb-4">
+                    <!-- <div class="mb-4">
                         <label for="imageURL" class="block text-sm font-medium text-text-textLight">Image</label>
                         <input type="file" id="imageURL" name="imageURL" class="hidden" required>
                         <label for="imageURL" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">Choose a file</label>
-                        
-                    </div>
+                    </div> -->
                     <div class="mb-4">
                         <label for="content" class="block text-sm font-medium text-text-textLight">Content</label>
                         <textarea id="content" name="content" rows="4" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required></textarea>
@@ -67,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const addNewsModal = document.getElementById('addNewsModal');
     const addNewsForm = document.getElementById('addNewsForm');
     const addNewsButton = document.getElementById('addNewsButton');
-    const imageInput = document.getElementById('imageURL');
+    /* const imageInput = document.getElementById('imageURL'); */
 
     const errorMessageElement = document.createElement('p');
     errorMessageElement.classList.add('text-red-500', 'text-center', 'font-medium');
