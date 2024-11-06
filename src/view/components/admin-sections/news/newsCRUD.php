@@ -7,7 +7,7 @@ include_once "src/view/components/admin-sections/news/NewsCardAdmin.php";
 <div>
     <div class="flex justify-between my-[2rem]">
         <h3 class="text-[1.5rem] font-semibold">News</h3>
-        <button id="deleteNewsButton" class="bg-primary text-textDark py-2 px-4 rounded hover:bg-primaryHover">
+        <button id="addNewsButton" class="bg-primary text-textDark py-2 px-4 rounded hover:bg-primaryHover">
             Add News
         </button>
     </div>
@@ -31,7 +31,7 @@ include_once "src/view/components/admin-sections/news/NewsCardAdmin.php";
     </div>
 
     <!-- Add News Form Modal -->
-    <div id="addNewsModal" class="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50">
+    <div id="addNewsModal" class="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 hidden">
         <div class="flex items-center justify-center min-h-screen">
             <!-- Modal -->
             <div class="bg-bgSemiDark w-[600px] rounded-lg p-6 border-[1px] border-borderDark">
@@ -41,10 +41,6 @@ include_once "src/view/components/admin-sections/news/NewsCardAdmin.php";
                         <label for="header" class="block text-sm font-medium text-text-textLight">Header</label>
                         <input type="text" id="header" name="header" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required>
                     </div>
-                    <!-- <div class="mb-4">
-                        <label for="imageURL" class="block text-sm font-medium text-text-textLight">Image URL</label>
-                        <input type="text" id="imageURL" name="imageURL" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required>
-                    </div> -->
                     <div class="mb-4">
                         <label for="imageURL" class="block text-sm font-medium text-text-textLight">Image</label>
                         <input type="file" id="imageURL" name="imageURL" class="hidden" required>
@@ -56,11 +52,37 @@ include_once "src/view/components/admin-sections/news/NewsCardAdmin.php";
                         <textarea id="content" name="content" rows="4" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required></textarea>
                     </div>
                     <div class="flex justify-end">
-                        <button type="submit" id="saveButton" class="bg-primary text-textDark py-2 px-4 rounded border border-transparent hover:bg-primaryHover duration-[.2s] ease-in-out">Add</button>
-                        <button type="button" id="cancelButton" class="text-textLight py-2 px-4 border-[1px] border-white rounded hover:bg-borderDark ml-2 duration-[.2s] ease-in-out">Cancel</button>
+                        <button type="submit" id="saveAddNewsButton" class="bg-primary text-textDark py-2 px-4 rounded border border-transparent hover:bg-primaryHover duration-[.2s] ease-in-out">Add</button>
+                        <button type="button" id="cancelAddNewsButton" class="text-textLight py-2 px-4 border-[1px] border-white rounded hover:bg-borderDark ml-2 duration-[.2s] ease-in-out">Cancel</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Add News Modal
+    const addNewsModal = document.getElementById('addNewsModal');
+    const addNewsForm = document.getElementById('addNewsForm');
+    const addNewsButton = document.getElementById('addNewsButton');
+    const saveAddNewsButton = document.getElementById('saveAddNewsButton');
+    const cancelAddNewsButton = document.getElementById('cancelAddNewsButton');
+    const imageInput = document.getElementById('imageURL');
+
+    // Display the modal
+    addNewsButton.addEventListener('click', () => {
+        addNewsModal.classList.remove('hidden');
+    });
+
+    // Hide the modal
+    cancelAddNewsButton.addEventListener('click', () => {
+        addNewsModal.classList.add('hidden');
+    });
+
+    saveButton.addEventListener('click', () => {
+        
+    });
+});
+</script>
