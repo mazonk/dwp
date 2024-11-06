@@ -67,9 +67,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const addNewsModal = document.getElementById('addNewsModal');
     const addNewsForm = document.getElementById('addNewsForm');
     const addNewsButton = document.getElementById('addNewsButton');
-    const saveAddNewsButton = document.getElementById('saveAddNewsButton');
-    const cancelAddNewsButton = document.getElementById('cancelAddNewsButton');
     const imageInput = document.getElementById('imageURL');
+
+    const errorMessageElement = document.createElement('p');
+    errorMessageElement.classList.add('text-red-500', 'text-center', 'font-medium');
 
     // Display the modal
     addNewsButton.addEventListener('click', () => {
@@ -77,12 +78,56 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Hide the modal
-    cancelAddNewsButton.addEventListener('click', () => {
+    document.getElementById('cancelAddNewsButton').addEventListener('click', () => {
         addNewsModal.classList.add('hidden');
     });
 
-    saveButton.addEventListener('click', () => {
+    addNewsForm.addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent default form submission
+        const xhr = new XMLHttpRequest();
+        const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
+        xhr.open('POST', `${baseRoute}news/add`, true);
         
+        const formData = {
+            action: 'addNews',
+            header: document.getElementById('header').value,
+            /* imageURL: imageInput.files[0], */ // TODO: Implement image upload
+            imageURL: 'src/assets/poster_joker.jpg',
+            content: document.getElementById('content').value
+        }
+
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.onreadystatechange = function() {
+            // If the request is done and successful
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                let response;
+                try {
+                    response = JSON.parse(xhr.response); // Parse the JSON response
+                } catch (e) {
+                    console.error('Could not parse response as JSON:', e);
+                    errorMessageElement.textContent = 'An unexpected error occurred. Please try again.';
+                    errorMessageElement.style.display = 'block';
+                    return;
+                }
+
+                if (response.success) {
+                    alert('Success! News added successfully.');
+                    window.location.reload();
+                    errorMessageElement.style.display = 'none'; // Hide the error message if there's success
+                } else {
+                    errorMessageElement.textContent = response.errorMessage;
+                    errorMessageElement.style.display = 'block';
+                    console.error('Error:', response.errorMessage);
+                }
+            }
+        };
+
+        // Send data as URL-encoded string
+        const params = Object.keys(formData)
+            .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(formData[key])}`)
+            .join('&');
+        xhr.send(params);
+
     });
 });
 </script>
