@@ -1,7 +1,7 @@
 <?php parse_str(file_get_contents("php://input"), $_PUT);
 include_once "src/controller/NewsController.php";
 
-include_once "src/view/components/NewsCard.php";
+include_once "src/view/components/admin-sections/news/NewsCard.php";
 ?>
 
 <div>
