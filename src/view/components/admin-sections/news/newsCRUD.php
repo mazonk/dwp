@@ -23,7 +23,7 @@ include_once "src/view/components/admin-sections/news/NewsCardAdmin.php";
             // Loop through each news item and render it using NewsCard
             echo '<div class="flex items-start flex-wrap gap-[1rem]">';
             foreach ($allNews as $news) {
-                NewsCardAdmin::render($news->getNewsId(), $news->getHeader(), $news->getImageURL(), $news->getContent());
+                NewsCardAdmin::render($news->getHeader(), $news->getImageURL(), $news->getContent());
             }
             echo '</div>';
         }
