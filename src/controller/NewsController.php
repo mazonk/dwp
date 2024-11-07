@@ -29,12 +29,17 @@ class NewsController {
     }
 
     public function addNews(array $newsData): array {
-        $result = $this->newsService->addNews($newsData);
+        $errors = $this->newsService->addNews($newsData);
 
-        if (isset($result['error']) && $result['error']) {
-            return ['errorMessage' => $result['message']];
+        // Check if there are any validation errors
+        if(count($errors) == 0) {
+            // Check if there are any errors from adding the news
+            if (isset($errors['error']) && $errors['error']) {
+                return ['errorMessage' => $errors['message']];
+            }
+            return ['success' => true];
+        } else {
+            return $errors;
         }
-
-        return ['success' => true];
     }
 }
