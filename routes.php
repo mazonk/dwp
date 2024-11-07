@@ -200,12 +200,15 @@ put($baseRoute.'news/add', function() {
 
         $result = $newsController->addNews($newsData);
 
-        if ($result == $result['success']) {
+        if (isset($result['success']) && $result['success'] === true) {
             // Return a success response
             echo json_encode(['success' => true]);
-        } else {
+        } else if (isset($result['errorMessage'])) {
             // Return an error response
             echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
+        } else {
+            // Return validation errors
+            echo json_encode(['success' => false, 'errors' => $result]);
         }
     } else {
         // Invalid action response
