@@ -185,3 +185,33 @@ put($baseRoute.'companyInfo/edit', function() {
         echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
     }
 });
+
+put($baseRoute.'profile/edit', function() {
+    require_once 'src/controller/UserController.php';
+    $userController = new UserController();
+    parse_str(file_get_contents("php://input"), $_PUT);
+
+    if (isset($_PUT['action']) && $_PUT['action'] === 'updateProfile') {
+        $userId = htmlspecialchars($_PUT['userId']);
+        $profileData = [
+            'firstName' => htmlspecialchars(trim($_PUT['firstName'])),
+            'lastName' => htmlspecialchars(trim($_PUT['lastName'])),
+            'dob' => htmlspecialchars(trim($_PUT['dob'])),
+            'email' => htmlspecialchars(trim($_PUT['email'])),
+        ];
+
+        $result = $userController->updateProfile($userId, $profileData);
+
+        if ($result && !is_array($result)) {
+            // Return a success response
+            echo json_encode(['success' => true]);
+        } else {
+            // Return an error response
+            echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
+        }
+    } else {
+        // Invalid action response
+        echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
+    }
+});
+
