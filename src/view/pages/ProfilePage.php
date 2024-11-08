@@ -104,7 +104,7 @@ $editMode = isset($_GET['edit']) && $_GET['edit'] == "true";
                     <img src="src/assets/default-profile-picture.png" alt="Profile Picture" class="w-[250px] h-[250px] object-cover rounded-full">
                     <div class="break-words w-[250px] space-y-4">
                         <?php if ($editMode): ?>
-                            <form method="POST" action="update-profile.php" class="flex flex-col space-y-6">
+                            <form id="editProfileInfoForm" class="flex flex-col space-y-6">
                                 <input type="text" required name="firstName" value="<?php echo htmlspecialchars($user->getFirstName()) ?>" 
                                     class="text-[1rem] bg-bgSemiDark border-[1px] border-borderDark text-textNormal focus:border-textNormal w-full rounded-md outline-none leading-snug py-[.5rem] px-[.875rem]" />
                                 <input type="text" required name="lastName" value="<?php echo htmlspecialchars($user->getLastName()) ?>"
@@ -113,10 +113,16 @@ $editMode = isset($_GET['edit']) && $_GET['edit'] == "true";
                                     class="text-[1rem] bg-bgSemiDark border-[1px] border-borderDark text-textNormal focus:border-textNormal w-full rounded-md outline-none leading-snug py-[.5rem] px-[.875rem]" />
                                 <input type="date" required name="dob" value="<?php echo htmlspecialchars($user->getDob()->format('Y-m-d')) ?>" 
                                     class="text-[1rem] bg-bgSemiDark border-[1px] border-borderDark text-textNormal focus:border-textNormal w-full rounded-md outline-none leading-snug py-[.5rem] px-[.875rem]" />
-                                <button type="submit" 
-                                    class="mt-4 text-[1rem] font-semibold bg-primary py-2 w-full text-center border border-borderDark text-textDark hover:bg-primaryHover rounded-[6px]">
-                                    Save Changes
-                                </button>
+                                <div class="flex space-x-0 mt-4 justify-between">
+                                    <button type="submit" 
+                                        class="text-[1rem] font-semibold bg-primary py-2 w-1/2 text-center border border-borderDark text-textDark hover:bg-primaryHover rounded-[6px]">
+                                        Save Changes
+                                    </button>
+                                    <button type="button" id="cancelButton" class="bg-gray-300 text-gray-700 py-2 w-1/3 text-center rounded hover:bg-gray-400">
+                                        Cancel
+                                    </button>
+                                </div>
+                                
                             </form>
                         <?php else: ?>
                             <p class="text-[2rem] text-textLight mb-4">
@@ -160,5 +166,9 @@ $editMode = isset($_GET['edit']) && $_GET['edit'] == "true";
 </html>
 <?php } ?>
 <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const editProfileInfoForm = document.getElementById('editProfileInfoForm');
+
+    });
     
 </script>
