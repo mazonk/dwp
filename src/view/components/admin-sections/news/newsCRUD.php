@@ -43,9 +43,9 @@ include_once "src/view/components/admin-sections/news/NewsCardAdmin.php";
                         <p id="error-add-header"  class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
                     </div>
                     <!-- <div class="mb-4">
-                        <label for="imageURL" class="block text-sm font-medium text-text-textLight">Image</label>
-                        <input type="file" id="imageURL" name="imageURL" class="hidden" required>
-                        <label for="imageURL" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">Choose a file</label>
+                        <label for="addImageURLInput" class="block text-sm font-medium text-text-textLight">Image</label>
+                        <input type="file" id="addImageURLInput" name="addImageURLInput" class="hidden" required>
+                        <label for="addImageURLInput" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">Choose a file</label>
                     </div> -->
                     <div class="mb-4">
                         <label for="addContentInput" class="block text-sm font-medium text-text-textLight">Content</label>
@@ -68,15 +68,16 @@ include_once "src/view/components/admin-sections/news/NewsCardAdmin.php";
             <div class="bg-bgSemiDark w-[600px] rounded-lg p-6 border-[1px] border-borderDark">
                 <h2 class="text-[1.5rem] text-center font-semibold mb-4">Edit News</h2>
                 <form id="editNewsForm" class="text-textLight">
+                   <input type="hidden" id="editNewsId" name="editNewsId">
                     <div class="mb-4">
                         <label for="editHeaderInput" class="block text-sm font-medium text-text-textLight">Header</label>
                         <input type="text" id="editHeaderInput" name="editHeaderInput" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required>
                         <p id="error-edit-header"  class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
                     </div>
                     <!-- <div class="mb-4">
-                        <label for="imageURL" class="block text-sm font-medium text-text-textLight">Image</label>
-                        <input type="file" id="imageURL" name="imageURL" class="hidden" required>
-                        <label for="imageURL" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">Choose a file</label>
+                        <label for="editImageURLInput" class="block text-sm font-medium text-text-textLight">Image</label>
+                        <input type="file" id="editImageURLInput" name="editImageURLInput" class="hidden" required>
+                        <label for="editImageURLInput" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">Choose a file</label>
                     </div> -->
                     <div class="mb-4">
                         <label for="editContentInput" class="block text-sm font-medium text-text-textLight">Content</label>
@@ -101,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const addNewsButton = document.getElementById('addNewsButton');
     const errorAddMessageHeader = document.getElementById('error-add-header');
     const errorAddMessageContent = document.getElementById('error-add-content');
-    /* const imageInput = document.getElementById('imageURL'); */
+    /* const addImageURLInput = document.getElementById('addImageURLInput'); */
 
     // Display the modal
     addNewsButton.addEventListener('click', () => {
@@ -111,15 +112,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Close the modal
     document.getElementById('cancelAddNewsButton').addEventListener('click', () => {
         addNewsModal.classList.add('hidden');
-        clearValues();
+        clearValues('add');
     });
-
-    // Clear error messages and input values
-    function clearValues() {
-        errorAddMessageHeader.classList.add('hidden');
-        errorAddMessageContent.classList.add('hidden');
-        addNewsForm.reset();
-    }
 
     // Add news form submission
     addNewsForm.addEventListener('submit', function(event) {
@@ -151,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (response.success) {
                     alert('Success! News added successfully.');
                     window.location.reload();
-                    clearValues();
+                    clearValues('add');
                 } else {
                     // Display error messages
                     if (response.errors['header']) {
@@ -178,15 +172,34 @@ document.addEventListener('DOMContentLoaded', () => {
     /*== Edit News ==*/
     const editNewsModal = document.getElementById('editNewsModal');
     const editNewsForm = document.getElementById('editNewsForm');
+    const editNewsId = document.getElementById('editNewsId');
+    /* const editImageURLInput = document.getElementById('editImageURLInput'); */
+    const editHeaderInput = document.getElementById('editHeaderInput');
+    const editContentInput = document.getElementById('editContentInput');
     const errorEditMessageHeader = document.getElementById('error-edit-header');
     const errorEditMessageContent = document.getElementById('error-edit-content');
 
     // Open the Edit Modal and populate it with data
-    window.openEditModal = function(newsId) {
-        console.error('Test', newsId);
-        
-
+    window.openEditModal = function(newsId, header, imageURL, content) {
+        editNewsId.value = newsId;
+        editHeaderInput.value = header;
+        /* editImageURLInput.value = imageURL; */
+        editContentInput.value = content;
         editNewsModal.classList.remove('hidden');
     };
+
+    // Clear error messages and input values
+    function clearValues(action) {
+        if (action === 'edit') {
+            errorEditMessageHeader.classList.add('hidden');
+            errorEditMessageContent.classList.add('hidden');
+            editNewsForm.reset();
+        }
+        else if (action === 'add') {
+            errorAddMessageHeader.classList.add('hidden');
+            errorAddMessageContent.classList.add('hidden');
+            addNewsForm.reset();
+        }
+    }
 });
 </script>
