@@ -38,8 +38,8 @@ include_once "src/view/components/admin-sections/news/NewsCardAdmin.php";
                 <h2 class="text-[1.5rem] text-center font-semibold mb-4">Add News</h2>
                 <form id="addNewsForm" class="text-textLight">
                     <div class="mb-4">
-                        <label for="header" class="block text-sm font-medium text-text-textLight">Header</label>
-                        <input type="text" id="header" name="header" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required>
+                        <label for="addHeaderInput" class="block text-sm font-medium text-text-textLight">Header</label>
+                        <input type="text" id="addHeaderInput" name="addHeaderInput" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required>
                         <p id="error-add-header"  class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
                     </div>
                     <!-- <div class="mb-4">
@@ -48,8 +48,8 @@ include_once "src/view/components/admin-sections/news/NewsCardAdmin.php";
                         <label for="imageURL" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">Choose a file</label>
                     </div> -->
                     <div class="mb-4">
-                        <label for="content" class="block text-sm font-medium text-text-textLight">Content</label>
-                        <textarea id="content" name="content" rows="4" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required></textarea>
+                        <label for="addContentInput" class="block text-sm font-medium text-text-textLight">Content</label>
+                        <textarea id="addContentInput" name="addContentInput" rows="4" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required></textarea>
                         <p id="error-add-content" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
                     </div>
                     <div class="flex justify-end">
@@ -69,8 +69,8 @@ include_once "src/view/components/admin-sections/news/NewsCardAdmin.php";
                 <h2 class="text-[1.5rem] text-center font-semibold mb-4">Edit News</h2>
                 <form id="editNewsForm" class="text-textLight">
                     <div class="mb-4">
-                        <label for="header" class="block text-sm font-medium text-text-textLight">Header</label>
-                        <input type="text" id="header" name="header" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required>
+                        <label for="editHeaderInput" class="block text-sm font-medium text-text-textLight">Header</label>
+                        <input type="text" id="editHeaderInput" name="editHeaderInput" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required>
                         <p id="error-edit-header"  class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
                     </div>
                     <!-- <div class="mb-4">
@@ -79,8 +79,8 @@ include_once "src/view/components/admin-sections/news/NewsCardAdmin.php";
                         <label for="imageURL" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">Choose a file</label>
                     </div> -->
                     <div class="mb-4">
-                        <label for="content" class="block text-sm font-medium text-text-textLight">Content</label>
-                        <textarea id="content" name="content" rows="4" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required></textarea>
+                        <label for="editContentInput" class="block text-sm font-medium text-text-textLight">Content</label>
+                        <textarea id="editContentInput" name="editContentInput" rows="4" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required></textarea>
                         <p id="error-edit-content" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
                     </div>
                     <div class="flex justify-end">
@@ -130,10 +130,10 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const newsData = {
             action: 'addNews',
-            header: document.getElementById('header').value,
+            header: document.getElementById('addHeaderInput').value,
             /* imageURL: imageInput.files[0], */ // TODO: Implement image upload
             imageURL: 'gotham_news.jpg',
-            content: document.getElementById('content').value
+            content: document.getElementById('addContentInput').value
         }
 
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -175,6 +175,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     });
 
-    
+    /*== Edit News ==*/
+    const editNewsModal = document.getElementById('editNewsModal');
+    const editNewsForm = document.getElementById('editNewsForm');
+    const errorEditMessageHeader = document.getElementById('error-edit-header');
+    const errorEditMessageContent = document.getElementById('error-edit-content');
+
+    // Open the Edit Modal and populate it with data
+    window.openEditModal = function(newsId) {
+        console.error('Test', newsId);
+        
+
+        editNewsModal.classList.remove('hidden');
+    };
 });
 </script>
