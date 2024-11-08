@@ -37,7 +37,7 @@ class NewsRepository {
         return $result;
     }
 
-    public function addNews(array $newsData): bool {
+    public function addNews(array $newsData): void {
         $db = $this->getdb();
         $query = $db->prepare("INSERT INTO News (imageURL, header, content) VALUES (:imageURL, :header, :content)");
         try {
@@ -45,6 +45,15 @@ class NewsRepository {
         } catch (PDOException $e) {
             throw new PDOException('Failed to add news!');
         }
-        return true;
+    }
+
+    public function editNews(array $newsData): void {
+        $db = $this->getdb();
+        $query = $db->prepare("UPDATE News SET imageURL = :imageURL, header = :header, content = :content WHERE newsId = :newsId");
+        try {
+            $query->execute(array(":imageURL" => $newsData['imageURL'], ":header" => $newsData['header'], ":content" => $newsData['content'], ":newsId" => $newsData['newsId']));
+        } catch (PDOException $e) {
+            throw new PDOException('Failed to edit news!');
+        }
     }
 }
