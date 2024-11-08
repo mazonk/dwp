@@ -23,4 +23,12 @@ class UserController {
         }
         return $user;
     }
+
+    public function updateProfileInfo($userId, $newProfileInfo) {
+        $user = $this->userService->updateProfileInfo($userId, $newProfileInfo);
+        if (is_array($user) && isset($user['error']) && $user['error']) {
+            return ['errorMessage'=> $user['message']];
+        }
+        return $user;
+    }
 }
