@@ -192,6 +192,7 @@ $editMode = isset($_GET['edit']) && $_GET['edit'] == "true";
             xhr.onreadystatechange = () => {
                     if (xhr.readyState === 4 && xhr.status === 200) {
                         let response;
+                        console.log(xhr.response);
                         try {
                             response = JSON.parse(xhr.response); // Parse the JSON response
                         } catch (e) {
@@ -202,7 +203,7 @@ $editMode = isset($_GET['edit']) && $_GET['edit'] == "true";
                         }
 
                         if (response.success) {
-                            window.location.reload();
+                            window.location.href = `${baseRoute}profile`; //route back to profile (edit false)
                             errorMessageElement.style.display = 'none'; // Hide the error message if there's success
                         } else {
                             errorMessageElement.textContent = response.errorMessage;
@@ -216,6 +217,7 @@ $editMode = isset($_GET['edit']) && $_GET['edit'] == "true";
             const params = Object.keys(updatedUserInfo)
                 .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(updatedUserInfo[key])}`)
                 .join('&');
+                console.log(params);
             xhr.send(params);
         });
         }

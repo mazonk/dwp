@@ -40,7 +40,7 @@ class UserService {
         }
     }
 
-    public function updateProfileInfo(int $userId, array $newProfileInfo): array {
+    public function updateProfileInfo(int $userId, array $newProfileInfo): array|User {
         try {
             $errors = [];
             $this->validateProfileInfoInputs($newProfileInfo, $errors);
