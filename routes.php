@@ -224,6 +224,7 @@ put($baseRoute.'news/edit', function() {
 
     if (isset($_PUT['action']) && $_PUT['action'] === 'editNews') {
         $newsData = [
+            'newsId' => htmlspecialchars(trim($_PUT['newsId'])),
             'header' => htmlspecialchars(trim($_PUT['header'])),
             'imageURL' => htmlspecialchars(trim($_PUT['imageURL'])),
             'content' => htmlspecialchars(trim($_PUT['content'])),
