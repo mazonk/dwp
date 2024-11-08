@@ -169,58 +169,73 @@ $editMode = isset($_GET['edit']) && $_GET['edit'] == "true";
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const editProfileInfoForm = document.getElementById('editProfileInfoForm');
+        const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
+
         if (editProfileInfoForm) {
-        const errorMessageElement = document.createElement('p');
-        errorMessageElement.classList.add('text-red-500', 'text-center', 'font-medium');
-        editProfileInfoForm.append(errorMessageElement);
+            const errorMessageElement = document.createElement('p');
+            errorMessageElement.classList.add('text-red-500', 'text-center', 'font-medium');
+            editProfileInfoForm.append(errorMessageElement);
 
-        editProfileInfoForm.addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent default form submission
-            const xhr = new XMLHttpRequest();
-            const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
-            xhr.open('PUT', `${baseRoute}profile/edit`, true);
-            const updatedUserInfo = {
-                action: 'updateProfileInfo',
-                userId: document.getElementById('userId').value,
-                firstName: document.getElementById('firstName').value,
-                lastName: document.getElementById('lastName').value,
-                dob: document.getElementById('dob').value,
-                email: document.getElementById('email').value,
-            };
-
-            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            xhr.onreadystatechange = () => {
-                    if (xhr.readyState === 4 && xhr.status === 200) {
-                        let response;
-                        console.log(xhr.response);
-                        try {
-                            response = JSON.parse(xhr.response); // Parse the JSON response
-                        } catch (e) {
-                            console.error('Could not parse response as JSON:', e);
-                            errorMessageElement.textContent = 'An unexpected error occurred. Please try again.';
-                            errorMessageElement.style.display = 'block';
-                            return;
-                        }
-
-                        if (response.success) {
-                            window.location.href = `${baseRoute}profile`; //route back to profile (edit false)
-                            errorMessageElement.style.display = 'none'; // Hide the error message if there's success
-                        } else {
-                            errorMessageElement.textContent = response.errorMessage;
-                            errorMessageElement.style.display = 'block';
-                            console.error('Error:', response.errorMessage);
-                        }
-                    }
+            editProfileInfoForm.addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent default form submission
+                const xhr = new XMLHttpRequest();
+                xhr.open('PUT', `${baseRoute}profile/edit`, true);
+                const updatedUserInfo = {
+                    action: 'updateProfileInfo',
+                    userId: document.getElementById('userId').value,
+                    firstName: document.getElementById('firstName').value,
+                    lastName: document.getElementById('lastName').value,
+                    dob: document.getElementById('dob').value,
+                    email: document.getElementById('email').value,
                 };
 
-            // Send data as URL-encoded string
-            const params = Object.keys(updatedUserInfo)
-                .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(updatedUserInfo[key])}`)
-                .join('&');
-                console.log(params);
-            xhr.send(params);
-        });
+                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                xhr.onreadystatechange = () => {
+                        if (xhr.readyState === 4 && xhr.status === 200) {
+                            let response;
+                            console.log(xhr.response);
+                            try {
+                                response = JSON.parse(xhr.response); // Parse the JSON response
+                            } catch (e) {
+                                console.error('Could not parse response as JSON:', e);
+                                errorMessageElement.textContent = 'An unexpected error occurred. Please try again.';
+                                errorMessageElement.style.display = 'block';
+                                return;
+                            }
+
+                            if (response.success) {
+                                window.location.href = `${baseRoute}profile`; //route back to profile (edit false)
+                                errorMessageElement.style.display = 'none'; // Hide the error message if there's success
+                            } else {
+                                // Extract all error messages from the response
+                                // The flat() method of Array instances creates a new array with all sub-array elements 
+                                // concatenated into it recursively up to the specified depth.
+                                // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flat
+                                const errorMessages = Object.values(response.errorMessage).flat();
+                                
+                                if (errorMessages.length > 0) {
+                                    // Display the first error message to the user
+                                    errorMessageElement.textContent = errorMessages[0];
+                                    errorMessageElement.style.display = 'block'; // Make the error message visible
+                                    console.error('Error:', errorMessages);
+                                }
+                            }
+                        }
+                    };
+
+                // Send data as URL-encoded string
+                const params = Object.keys(updatedUserInfo)
+                    .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(updatedUserInfo[key])}`)
+                    .join('&');
+                    console.log(params);
+                xhr.send(params);
+            });
         }
+        // Cancel button hides the form without submitting
+        document.getElementById('cancelButton').addEventListener('click', () => {
+            editProfileInfoForm.classList.add('hidden');
+            window.location.href = `${baseRoute}profile`; //route back to profile (edit false)
+        });
     });
     
 </script>
