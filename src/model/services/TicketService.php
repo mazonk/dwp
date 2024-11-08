@@ -11,11 +11,16 @@ class TicketService {
     private ShowingService $showingService;
     private BookingService $bookingService;
 
-    public function __construct() {
-        $this->ticketRepository = new TicketRepository();
-        $this->seatService = new SeatService();
-        $this->showingService = new ShowingService();
-        $this->bookingService = new BookingService();
+    public function __construct(
+        TicketRepository $ticketRepository,
+        SeatService $seatService,
+        ShowingService $showingService,
+        BookingService $bookingService
+    ) {
+        $this->ticketRepository = $ticketRepository;
+        $this->seatService = $seatService;
+        $this->showingService = $showingService;
+        $this->bookingService = $bookingService;
     }
 
     public function getAvailableSeats(int $showingId, int $venueId): array {
@@ -50,6 +55,9 @@ class TicketService {
     public function getAllTicketsForShowing(int $showingId, int $venueId): array {
         try {
             $result = $this->ticketRepository->getAllTicketsForShowing($showingId, $venueId);
+            if (isset($result['error']) && $result['error']) {
+                return $result;
+            }
             $tickets = [];
             $seat = $this->seatService->getSeatById($result["seatId"]);
             if (isset($seat["error"]) && $seat["error"]) {
@@ -63,13 +71,16 @@ class TicketService {
             if (isset($showing["error"]) && $showing["error"]) {
                 return $showing;
             }
+            $booking = $this->bookingService->getBookingById($result["bookingId"]);
+            if (isset($booking["error"]) && $booking["error"]) {
+                return $booking;
+            }
             foreach ($result as $ticket) {
-                $tickets[] = new Ticket($result["ticketId"], $seat, $ticketType, $showing, $this->bookingService->getBookingById($result["bookingId"]));
+                $tickets[] = new Ticket($result["ticketId"], $seat, $ticketType, $showing, $booking);
             }
             return $tickets;
-        } catch (PDOException $e) {
-            throw new Exception("Database error: " . $e->getMessage());
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
         }
-
     }
 }

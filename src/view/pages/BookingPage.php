@@ -2,8 +2,6 @@
 require_once 'session_config.php';
 include_once "src/view/components/SeatCard.php";
 require_once 'src/controller/SeatController.php';
-include_once "src/controller/TicketController.php";
-include_once "src/model/repositories/TicketRepository.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,15 +20,16 @@ include_once "src/model/repositories/TicketRepository.php";
         $selectedShowing = isset($_SESSION['selectedShowing']) ? unserialize($_SESSION['selectedShowing']) : null;
 
         if ($selectedShowing) {
+            echo 'salalalaal';
             $seatController = new SeatController();
-            $ticketController = new TicketController();
             $showingId = $selectedShowing->getShowingId();
-            $unavailableTickets = $ticketController->getAllTicketsForShowing($showingId, $selectedVenueId);
             $userId = $_SESSION['userId'] ?? null;
 
             $totalSeats = $seatController->getAllSeatsForShowing($showingId, $selectedVenueId);
-            $unavailableSeatIds = array_column($unavailableTickets, 'seatId');
+            echo serialize($totalSeats);
 
+            $availableSeats = $seatController->getAvailableSeatsForShowing($showingId, $selectedVenueId);
+            echo serialize($availableSeats);
             $seatsByRow = [];
             foreach ($totalSeats as $seat) {
                 $row = $seat->getRow();
@@ -39,12 +38,11 @@ include_once "src/model/repositories/TicketRepository.php";
                 }
                 $seatsByRow[$row][] = $seat;
             }
-
             echo '<div id="seat-selection">';
             foreach ($seatsByRow as $row => $seats) {
                 echo "<div class='seat-row flex justify-center space-x-4 mb-4'>";
                 foreach ($seats as $seat) {
-                    $isAvailable = !in_array($seat->getSeatId(), $unavailableSeatIds);
+                    $isAvailable = $seatController->getAvailableSeatsForShowing($seat->getSeatId(), $showingId);
                     echo SeatCard::render($seat, $isAvailable, $showingId, $userId);
                 }
                 echo "</div>";

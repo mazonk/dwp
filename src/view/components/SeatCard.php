@@ -11,7 +11,7 @@ class SeatCard {
         $availabilityAttribute = $isAvailable ? 'true' : 'false';
 
         $output = "<div class='seat-card $seatClass p-1 w-15 h-auto rounded text-center cursor-pointer' data-seat-id='$seatId' data-seat-nr='$seatNr' data-row='$row' data-is-available='$availabilityAttribute'>";
-        $output .= "<img src='src/assets/armchair.svg' alt='Seat Icon' class='w-8 h-8 mx-auto rotate-180'>";
+        $output .= "<img src='src/assets/armchair.svg' alt='Seat Icon' class='w-8 h-8 mx-auto rotate-180 '>";
         $output .= "</div>";
 
         return $output;

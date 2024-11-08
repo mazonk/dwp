@@ -16,7 +16,7 @@ class TicketRepository {
 // }
 public function getAllTicketsForShowing(int $showingId, int $venueId): array {
     $pdo = $this->getdb();
-    $statement = $pdo->prepare("SELECT * FROM tickets WHERE showingId = :showingId");
+    $statement = $pdo->prepare("SELECT * FROM Ticket WHERE showingId = :showingId");
     try {
         $statement->execute([':showingId' => $showingId]);
         $result = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -26,7 +26,8 @@ public function getAllTicketsForShowing(int $showingId, int $venueId): array {
     }
 }
 
-public function getTicketTypeById(int $ticketTypeId): array {
+
+public function getTicketTypeById(int $ticketTypeId): array | TicketType {
     $pdo = $this->getdb();
     $statement = $pdo->prepare("SELECT * FROM TicketType WHERE ticketTypeId = :ticketTypeId");
     try {
@@ -53,7 +54,7 @@ public function getAllTicketTypes(): array {
     }
 }
 
-public function getTicketById(int $ticketId): array {
+public function getTicketById(int $ticketId): array | Ticket {
     $pdo = $this->getdb();
     $statement = $pdo->prepare("SELECT * FROM tickets WHERE ticketId = :ticketId");
     try {
