@@ -17,7 +17,12 @@ class NewsCardAdmin {
             </p>
 
             <div class="flex gap-[.5rem]">
-              <button id="editNewsButton" onclick="openEditModal(<?= htmlspecialchars($newsId); ?>)" class="text-white py-2 px-4 border-[1px] border-white rounded hover:bg-borderDark duration-[.2s] ease-in-out">Edit</button>
+              <button id="editNewsButton" onclick="openEditModal(
+              '<?= htmlspecialchars($newsId); ?>',
+              '<?= htmlspecialchars($header); ?>',
+              '<?= htmlspecialchars($imageURL); ?>',
+              '<?= htmlspecialchars($content); ?>')"
+                class="text-white py-2 px-4 border-[1px] border-white rounded hover:bg-borderDark duration-[.2s] ease-in-out">Edit</button>
               <button id="deleteNewsButton" onclick="openDeleteModalopenDeleteModal(<?= htmlspecialchars($newsId); ?>)" class="bg-red-500 text-white py-2 px-4 border-[1px] border-transparent rounded hover:bg-red-600 duration-[.2s] ease-in-out">Delete</button>
             </div>
           </div>
