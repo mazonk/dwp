@@ -191,16 +191,16 @@ put($baseRoute.'profile/edit', function() {
     $userController = new UserController();
     parse_str(file_get_contents("php://input"), $_PUT);
 
-    if (isset($_PUT['action']) && $_PUT['action'] === 'updateProfile') {
+    if (isset($_PUT['action']) && $_PUT['action'] === 'updateProfileInfo') {
         $userId = htmlspecialchars($_PUT['userId']);
-        $profileData = [
+        $newProfileInfo = [
             'firstName' => htmlspecialchars(trim($_PUT['firstName'])),
             'lastName' => htmlspecialchars(trim($_PUT['lastName'])),
             'dob' => htmlspecialchars(trim($_PUT['dob'])),
             'email' => htmlspecialchars(trim($_PUT['email'])),
         ];
 
-        $result = $userController->updateProfile($userId, $profileData);
+        $result = $userController->updateProfileInfo($userId, $newProfileInfo);
 
         if ($result && !is_array($result)) {
             // Return a success response

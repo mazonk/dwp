@@ -105,13 +105,14 @@ $editMode = isset($_GET['edit']) && $_GET['edit'] == "true";
                     <div class="break-words w-[250px] space-y-4">
                         <?php if ($editMode): ?>
                             <form id="editProfileInfoForm" class="flex flex-col space-y-6">
-                                <input type="text" required name="firstName" value="<?php echo htmlspecialchars($user->getFirstName()) ?>" 
+                                <input type="hidden" name="userId" id="userId" value="<?php echo htmlspecialchars($user->getId()) ?>" />
+                                <input type="text" required name="firstName" id="firstName" value="<?php echo htmlspecialchars($user->getFirstName()) ?>" 
                                     class="text-[1rem] bg-bgSemiDark border-[1px] border-borderDark text-textNormal focus:border-textNormal w-full rounded-md outline-none leading-snug py-[.5rem] px-[.875rem]" />
-                                <input type="text" required name="lastName" value="<?php echo htmlspecialchars($user->getLastName()) ?>"
+                                <input type="text" required name="lastName" id="lastName" value="<?php echo htmlspecialchars($user->getLastName()) ?>"
                                     class="text-[1rem] bg-bgSemiDark border-[1px] border-borderDark text-textNormal focus:border-textNormal w-full rounded-md outline-none leading-snug py-[.5rem] px-[.875rem]" />
-                                <input type="email" required name="email" value="<?php echo htmlspecialchars($user->getEmail()) ?>" 
+                                <input type="email" required name="email" id="email" value="<?php echo htmlspecialchars($user->getEmail()) ?>" 
                                     class="text-[1rem] bg-bgSemiDark border-[1px] border-borderDark text-textNormal focus:border-textNormal w-full rounded-md outline-none leading-snug py-[.5rem] px-[.875rem]" />
-                                <input type="date" required name="dob" value="<?php echo htmlspecialchars($user->getDob()->format('Y-m-d')) ?>" 
+                                <input type="date" required name="dob" id="dob" value="<?php echo htmlspecialchars($user->getDob()->format('Y-m-d')) ?>" 
                                     class="text-[1rem] bg-bgSemiDark border-[1px] border-borderDark text-textNormal focus:border-textNormal w-full rounded-md outline-none leading-snug py-[.5rem] px-[.875rem]" />
                                 <div class="flex space-x-0 mt-4 justify-between">
                                     <button type="submit" 
@@ -135,7 +136,7 @@ $editMode = isset($_GET['edit']) && $_GET['edit'] == "true";
                                 <?php echo htmlspecialchars($user->getDob()->format('Y-m-d')) ?>
                             </p>
                             <div class="w-full flex">
-                                <a href="?edit=true" class="mt-4 text-[1rem] font-semibold bg-primary py-2 w-full text-center border border-borderDark text-textDark hover:bg-primaryHover rounded-[6px]">
+                                <a href="?edit=true" id="editButton" class="mt-4 text-[1rem] font-semibold bg-primary py-2 w-full text-center border border-borderDark text-textDark hover:bg-primaryHover rounded-[6px]">
                                     Edit profile
                                 </a>
                             </div>
@@ -168,7 +169,56 @@ $editMode = isset($_GET['edit']) && $_GET['edit'] == "true";
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const editProfileInfoForm = document.getElementById('editProfileInfoForm');
+        if (editProfileInfoForm) {
+        const errorMessageElement = document.createElement('p');
+        errorMessageElement.classList.add('text-red-500', 'text-center', 'font-medium');
+        editProfileInfoForm.prepend(errorMessageElement);
 
+        editProfileInfoForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+            const xhr = new XMLHttpRequest();
+            const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
+            xhr.open('PUT', `${baseRoute}profile/edit`, true);
+            const updatedUserInfo = {
+                action: 'updateProfileInfo',
+                userId: document.getElementById('userId').value,
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                dob: document.getElementById('dob').value,
+                email: document.getElementById('email').value,
+            };
+
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = () => {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        let response;
+                        try {
+                            response = JSON.parse(xhr.response); // Parse the JSON response
+                        } catch (e) {
+                            console.error('Could not parse response as JSON:', e);
+                            errorMessageElement.textContent = 'An unexpected error occurred. Please try again.';
+                            errorMessageElement.style.display = 'block';
+                            return;
+                        }
+
+                        if (response.success) {
+                            window.location.reload();
+                            errorMessageElement.style.display = 'none'; // Hide the error message if there's success
+                        } else {
+                            errorMessageElement.textContent = response.errorMessage;
+                            errorMessageElement.style.display = 'block';
+                            console.error('Error:', response.errorMessage);
+                        }
+                    }
+                };
+
+            // Send data as URL-encoded string
+            const params = Object.keys(updatedUserInfo)
+                .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(updatedUserInfo[key])}`)
+                .join('&');
+            xhr.send(params);
+        });
+        }
     });
     
 </script>
