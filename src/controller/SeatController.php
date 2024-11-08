@@ -9,8 +9,9 @@ class SeatController {
     private SeatService $seatService;
     private BookingRepository $bookingRepository;
 
-    public function __construct() {
-        $this->seatService = new SeatService();
+    public function __construct(SeatService $seatService, BookingRepository $bookingRepository) {
+        $this->seatService = $seatService;
+        $this->bookingRepository = $bookingRepository;
     }
 
     public function getAllSeatsForShowing(int $showingId, int $selectedVenueId) {

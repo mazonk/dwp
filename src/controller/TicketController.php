@@ -11,10 +11,14 @@ class TicketController {
     private TicketRepository $ticketRepository;
     private SeatRepository $seatRepository;
 
-    public function __construct() {
-        $this->ticketService = new TicketService();
-        $this->ticketRepository = new TicketRepository();
-        $this->seatRepository = new SeatRepository();
+    public function __construct(
+        TicketService $ticketService,
+        TicketRepository $ticketRepository,
+        SeatRepository $seatRepository
+    ) {
+        $this->ticketService = $ticketService;
+        $this->ticketRepository = $ticketRepository;
+        $this->seatRepository = $seatRepository;
     }
 
     public function getAllAvailableSeats(int $showingId, int $venueId): array {
