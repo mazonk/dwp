@@ -23,7 +23,7 @@ include_once "src/view/components/admin-sections/news/NewsCardAdmin.php";
             // Loop through each news item and render it using NewsCard
             echo '<div class="flex items-start flex-wrap gap-[1rem]">';
             foreach ($allNews as $news) {
-                NewsCardAdmin::render($news->getHeader(), $news->getImageURL(), $news->getContent());
+                NewsCardAdmin::render($news->getNewsId(), $news->getHeader(), $news->getImageURL(), $news->getContent());
             }
             echo '</div>';
         }
@@ -40,7 +40,7 @@ include_once "src/view/components/admin-sections/news/NewsCardAdmin.php";
                     <div class="mb-4">
                         <label for="header" class="block text-sm font-medium text-text-textLight">Header</label>
                         <input type="text" id="header" name="header" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required>
-                        <p id="error-header"  class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
+                        <p id="error-add-header"  class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
                     </div>
                     <!-- <div class="mb-4">
                         <label for="imageURL" class="block text-sm font-medium text-text-textLight">Image</label>
@@ -50,7 +50,7 @@ include_once "src/view/components/admin-sections/news/NewsCardAdmin.php";
                     <div class="mb-4">
                         <label for="content" class="block text-sm font-medium text-text-textLight">Content</label>
                         <textarea id="content" name="content" rows="4" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required></textarea>
-                        <p id="error-content" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
+                        <p id="error-add-content" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
                     </div>
                     <div class="flex justify-end">
                         <button type="submit" id="saveAddNewsButton" class="bg-primary text-textDark py-2 px-4 rounded border border-transparent hover:bg-primaryHover duration-[.2s] ease-in-out">Add</button>
@@ -60,16 +60,47 @@ include_once "src/view/components/admin-sections/news/NewsCardAdmin.php";
             </div>
         </div>
     </div>
+
+    <!-- Edit News Form Modal -->
+    <div id="editNewsModal" class="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 hidden">
+        <div class="flex items-center justify-center min-h-screen">
+            <!-- Modal -->
+            <div class="bg-bgSemiDark w-[600px] rounded-lg p-6 border-[1px] border-borderDark">
+                <h2 class="text-[1.5rem] text-center font-semibold mb-4">Edit News</h2>
+                <form id="editNewsForm" class="text-textLight">
+                    <div class="mb-4">
+                        <label for="header" class="block text-sm font-medium text-text-textLight">Header</label>
+                        <input type="text" id="header" name="header" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required>
+                        <p id="error-edit-header"  class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
+                    </div>
+                    <!-- <div class="mb-4">
+                        <label for="imageURL" class="block text-sm font-medium text-text-textLight">Image</label>
+                        <input type="file" id="imageURL" name="imageURL" class="hidden" required>
+                        <label for="imageURL" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">Choose a file</label>
+                    </div> -->
+                    <div class="mb-4">
+                        <label for="content" class="block text-sm font-medium text-text-textLight">Content</label>
+                        <textarea id="content" name="content" rows="4" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required></textarea>
+                        <p id="error-edit-content" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
+                    </div>
+                    <div class="flex justify-end">
+                        <button type="submit" id="saveEditNewsButton" class="bg-primary text-textDark py-2 px-4 rounded border border-transparent hover:bg-primaryHover duration-[.2s] ease-in-out">Save</button>
+                        <button type="button" id="cancelEditNewsButton" class="text-textLight py-2 px-4 border-[1px] border-white rounded hover:bg-borderDark ml-2 duration-[.2s] ease-in-out">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    // Add News Modal
+    /*== Add News ==*/
     const addNewsModal = document.getElementById('addNewsModal');
     const addNewsForm = document.getElementById('addNewsForm');
     const addNewsButton = document.getElementById('addNewsButton');
-    const errorMessageHeader = document.getElementById('error-header');
-    const errorMessageContent = document.getElementById('error-content');
+    const errorAddMessageHeader = document.getElementById('error-add-header');
+    const errorAddMessageContent = document.getElementById('error-add-content');
     /* const imageInput = document.getElementById('imageURL'); */
 
     // Display the modal
@@ -85,11 +116,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Clear error messages and input values
     function clearValues() {
-        errorMessageHeader.classList.add('hidden');
-        errorMessageContent.classList.add('hidden');
+        errorAddMessageHeader.classList.add('hidden');
+        errorAddMessageContent.classList.add('hidden');
         addNewsForm.reset();
     }
 
+    // Add news form submission
     addNewsForm.addEventListener('submit', function(event) {
         event.preventDefault(); // Prevent default form submission
         const xhr = new XMLHttpRequest();
@@ -123,12 +155,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     // Display error messages
                     if (response.errors['header']) {
-                        errorMessageHeader.textContent = response.errors['header'];
-                        errorMessageHeader.classList.remove('hidden');
+                        errorAddMessageHeader.textContent = response.errors['header'];
+                        errorAddMessageHeader.classList.remove('hidden');
                     }
                     if (response.errors['content']) {
-                        errorMessageContent.textContent = response.errors['content'];
-                        errorMessageContent.classList.remove('hidden');
+                        errorAddMessageContent.textContent = response.errors['content'];
+                        errorAddMessageContent.classList.remove('hidden');
                     }
                     console.error('Error:', response.errors);
                 }
@@ -142,5 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
         xhr.send(params);
 
     });
+
+    
 });
 </script>
