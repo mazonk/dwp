@@ -81,6 +81,8 @@ $bookings = [$booking1, $booking2, $booking3, $booking4, $booking5, $booking6, $
 // ################################
 
 $initialBookings = count($bookings) > 8 ? array_slice($bookings, 0, 8) : $bookings;
+
+$editMode = isset($_GET['edit']) && $_GET['edit'] == "true";
 ?>
 
 <!DOCTYPE html>
@@ -99,20 +101,40 @@ $initialBookings = count($bookings) > 8 ? array_slice($bookings, 0, 8) : $bookin
         <div class="flex flex-row">
             <div class="pr-8">
                 <div class="flex flex-col items-center mb-4 space-y-[2rem]">
-                    <img src="src/assets/default-profile-picture.png" alt="Company Logo" class="w-[250px] h-[250px] object-cover rounded-full">
-                    <div class="break-words w-[250px] space-y-2">
-                        <p class="text-[2rem] text-textLight mb-4">
-                            <?php echo htmlspecialchars($user->getFirstName()) . ' ' . htmlspecialchars($user->getLastName())?>
-                        </p>
-                        <p class="text-[1rem] text-textNormal">
-                            <?php echo htmlspecialchars($user->getEmail())?>
-                        </p>
-                        <p class="text-[1rem] text-textNormal">
-                            <?php echo htmlspecialchars($user->getDob()->format('Y-m-d'))?>
-                        </p>
+                    <img src="src/assets/default-profile-picture.png" alt="Profile Picture" class="w-[250px] h-[250px] object-cover rounded-full">
+                    <div class="break-words w-[250px] space-y-4">
+                        <?php if ($editMode): ?>
+                            <form method="POST" action="update-profile.php" class="flex flex-col space-y-6">
+                                <input type="text" required name="firstName" value="<?php echo htmlspecialchars($user->getFirstName()) ?>" 
+                                    class="text-[1rem] bg-bgSemiDark border-[1px] border-borderDark text-textNormal focus:border-textNormal w-full rounded-md outline-none leading-snug py-[.5rem] px-[.875rem]" />
+                                <input type="text" required name="lastName" value="<?php echo htmlspecialchars($user->getLastName()) ?>"
+                                    class="text-[1rem] bg-bgSemiDark border-[1px] border-borderDark text-textNormal focus:border-textNormal w-full rounded-md outline-none leading-snug py-[.5rem] px-[.875rem]" />
+                                <input type="email" required name="email" value="<?php echo htmlspecialchars($user->getEmail()) ?>" 
+                                    class="text-[1rem] bg-bgSemiDark border-[1px] border-borderDark text-textNormal focus:border-textNormal w-full rounded-md outline-none leading-snug py-[.5rem] px-[.875rem]" />
+                                <input type="date" required name="dob" value="<?php echo htmlspecialchars($user->getDob()->format('Y-m-d')) ?>" 
+                                    class="text-[1rem] bg-bgSemiDark border-[1px] border-borderDark text-textNormal focus:border-textNormal w-full rounded-md outline-none leading-snug py-[.5rem] px-[.875rem]" />
+                                <button type="submit" 
+                                    class="mt-4 text-[1rem] font-semibold bg-primary py-2 w-full text-center border border-borderDark text-textDark hover:bg-primaryHover rounded-[6px]">
+                                    Save Changes
+                                </button>
+                            </form>
+                        <?php else: ?>
+                            <p class="text-[2rem] text-textLight mb-4">
+                                <?php echo htmlspecialchars($user->getFirstName()) . ' ' . htmlspecialchars($user->getLastName()) ?>
+                            </p>
+                            <p class="text-[1rem] text-textNormal">
+                                <?php echo htmlspecialchars($user->getEmail()) ?>
+                            </p>
+                            <p class="text-[1rem] text-textNormal">
+                                <?php echo htmlspecialchars($user->getDob()->format('Y-m-d')) ?>
+                            </p>
+                            <div class="w-full flex">
+                                <a href="?edit=true" class="mt-4 text-[1rem] font-semibold bg-primary py-2 w-full text-center border border-borderDark text-textDark hover:bg-primaryHover rounded-[6px]">
+                                    Edit profile
+                                </a>
+                            </div>
+                        <?php endif; ?>
                     </div>
-                    <a href="<?php echo $_SESSION['baseRoute']?>edit-profile" 
-                    class="text-[1rem] font-semibold bg-primary py-2 w-full text-center border border-borderDark text-textDark rounded-[6px]">Edit profile</a>
                 </div>
             </div>
             <div class="border-l border-borderLight"></div>
@@ -136,5 +158,7 @@ $initialBookings = count($bookings) > 8 ? array_slice($bookings, 0, 8) : $bookin
     <?php include_once("src/view/components/Footer.php"); ?>
 </body>
 </html>
-
 <?php } ?>
+<script>
+    
+</script>
