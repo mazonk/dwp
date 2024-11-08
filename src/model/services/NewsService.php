@@ -53,6 +53,27 @@ class NewsService {
         }
     }
 
+    public function editNews(array $newsData): array {
+        $errors = [];
+
+        // Validate the form data inputs
+        $this->validateFormInputs($newsData, $errors);
+
+        // If there are no errors, edit the news
+        if (count($errors) == 0) {
+            try {
+                $this->newsRepository->editNews($newsData);
+                return ['success' => true];
+            } catch (Exception $e) {
+                return ['error' => true, 'message' => $e->getMessage()];
+            }
+        }
+        // If there are validation errors, return them
+        else {
+            return $errors;
+        }
+    }
+
     private function validateFormInputs(array $newsData, array &$errors): void {
         // Define regexes for validation
         $regex = "/^[a-zA-Z0-9áéíóöúüűæøåÆØÅ\s\-\.,;:'\"!?]+$/";
