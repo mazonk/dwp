@@ -172,7 +172,7 @@ $editMode = isset($_GET['edit']) && $_GET['edit'] == "true";
         if (editProfileInfoForm) {
         const errorMessageElement = document.createElement('p');
         errorMessageElement.classList.add('text-red-500', 'text-center', 'font-medium');
-        editProfileInfoForm.prepend(errorMessageElement);
+        editProfileInfoForm.append(errorMessageElement);
 
         editProfileInfoForm.addEventListener('submit', function(event) {
             event.preventDefault(); // Prevent default form submission
