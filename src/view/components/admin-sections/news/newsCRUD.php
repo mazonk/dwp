@@ -188,6 +188,67 @@ document.addEventListener('DOMContentLoaded', () => {
         editNewsModal.classList.remove('hidden');
     };
 
+    // Close the Edit Modal
+    document.getElementById('cancelEditNewsButton').addEventListener('click', () => {
+        editNewsModal.classList.add('hidden');
+        clearValues('edit');
+    });
+
+    // Edit news form submission
+    editNewsForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const xhr = new XMLHttpRequest();
+        const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
+        xhr.open('PUT', `${baseRoute}news/edit`, true);
+
+        const newsData = {
+            action: 'editNews',
+            newsId: editNewsId.value,
+            header: editHeaderInput.value,
+            /* imageURL: editImageURLInput.files[0], */ // TODO: Implement image upload
+            imageURL: 'gotham_news.jpg',
+            content: editContentInput.value
+        }
+
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.onreadystatechange = function() {
+            // If the request is done and successful
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                let response;
+                try {
+                    response = JSON.parse(xhr.response);
+                } catch (e) {
+                    console.error('Could not parse response as JSON:', e);
+                    return;
+                }
+
+                if (response.success) {
+                    alert('Success! News edited successfully.');
+                    window.location.reload();
+                    clearValues('edit');
+                }
+                // Display error messages
+                else {
+                    if (response.errors['header']) {
+                        errorEditMessageHeader.textContent = response.errors['header'];
+                        errorEditMessageHeader.classList.remove('hidden');
+                    }
+                    if (response.errors['content']) {
+                        errorEditMessageContent.textContent = response.errors['content'];
+                        errorEditMessageContent.classList.remove('hidden');
+                    }
+                    console.error('Error:', response.errors);
+                }
+            }
+        };
+
+        // Send data as URL-encoded string
+        const params = Object.keys(newsData)
+            .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(newsData[key])}`)
+            .join('&');
+        xhr.send(params);
+    });
+
     // Clear error messages and input values
     function clearValues(action) {
         if (action === 'edit') {
