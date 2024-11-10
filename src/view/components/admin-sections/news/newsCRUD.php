@@ -266,7 +266,59 @@ document.addEventListener('DOMContentLoaded', () => {
         xhr.send(params);
     });
 
-    
+    /*== Delete News ==*/
+    const deleteNewsModal = document.getElementById('deleteNewsModal');
+    const deleteModalNewsHeader = document.getElementById('deleteModalNewsHeader');
+    const confirmDeleteNewsButton = document.getElementById('confirmDeleteNewsButton');
+    const cancelDeleteNewsButton = document.getElementById('cancelDeleteNewsButton');
+    const deleteNewId = document.getElementById('deleteNewsId');
+
+    // Open the Delete Modal
+    window.openDeleteModal = function(newsId, header) {
+        deleteNewsId.value = newsId;
+        deleteModalNewsHeader.textContent = header;
+        deleteNewsModal.classList.remove('hidden');
+    };
+
+    // Close the Delete Modal
+    cancelDeleteNewsButton.addEventListener('click', () => {
+        deleteNewsModal.classList.add('hidden');
+    });
+
+    // Delete news
+    confirmDeleteNewsButton.addEventListener('click', () => {
+        const xhr = new XMLHttpRequest();
+        const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
+        xhr.open('PUT', `${baseRoute}news/delete`, true);
+
+        const newsData = {
+            action: 'deleteNews',
+            newsId: deleteNewsId.value
+        };
+
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.readyonstatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                let response;
+                try {
+                    response = JSON.parse(xhr.response);
+                }
+                catch (e) {
+                    console.error('Could not parse response as JSON:', e);
+                    return;
+                }
+
+                if (response.success) {
+                    alert('Success! News deleted successfully.');
+                    window.location.reload();
+                } else {
+                    console.error('Error:', response.errors);
+                }
+            }
+        };
+
+        const params = Object.keys(newsData).map(key => `${encodeURIComponent(key)}=${encodeURIComponent(newsData[key])}`).join('&');
+    });
 
     // Clear error messages and input values
     function clearValues(action) {
