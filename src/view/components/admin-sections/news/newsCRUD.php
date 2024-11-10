@@ -92,6 +92,23 @@ include_once "src/view/components/admin-sections/news/NewsCardAdmin.php";
             </div>
         </div>
     </div>
+
+    <!-- Delete News Modal -->
+    <div id="deleteNewsModal" class="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 hidden">
+        <div class="flex items-center justify-center min-h-screen">
+            <!-- Modal -->
+            <div class="bg-bgSemiDark w-[500px] rounded-lg p-6 border-[1px] border-borderDark">
+                <h2 class="text-[1.5rem] text-center font-semibold mb-4">Delete News</h2>
+                <p class="text-textLight text-center">Are you sure you want to delete this news?</p>
+                <p id="deleteModalNewsHeader" class="text-gray-400 text-center"></p>
+                <input type="hidden" id="deleteNewsId" name="deleteNewsId">
+                <div class="flex justify-center mt-4">
+                    <button id="confirmDeleteNewsButton" class="bg-red-500 text-white py-2 px-4 border-[1px] border-transparent rounded hover:bg-red-600 duration-[.2s] ease-in-out">Delete</button>
+                    <button id="cancelDeleteNewsButton" class="text-textLight py-2 px-4 border-[1px] border-white rounded hover:bg-borderDark ml-2 duration-[.2s] ease-in-out">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -208,7 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
             /* imageURL: editImageURLInput.files[0], */ // TODO: Implement image upload
             imageURL: 'gotham_news.jpg',
             content: editContentInput.value
-        }
+        };
 
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.onreadystatechange = function() {
@@ -249,6 +266,8 @@ document.addEventListener('DOMContentLoaded', () => {
         xhr.send(params);
     });
 
+    
+
     // Clear error messages and input values
     function clearValues(action) {
         if (action === 'edit') {
@@ -261,6 +280,6 @@ document.addEventListener('DOMContentLoaded', () => {
             errorAddMessageContent.classList.add('hidden');
             addNewsForm.reset();
         }
-    }
+    };
 });
 </script>
