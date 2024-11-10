@@ -333,6 +333,6 @@ document.addEventListener('DOMContentLoaded', () => {
             errorAddMessageContent.classList.add('hidden');
             addNewsForm.reset();
         }
-    };
+    }
 });
 </script>
