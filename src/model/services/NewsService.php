@@ -74,6 +74,15 @@ class NewsService {
         }
     }
 
+    public function deleteNews(int $id): array {
+        try {
+            $this->newsRepository->deleteNews($id);
+            return ['success' => true];
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+    }
+
     private function validateFormInputs(array $newsData, array &$errors): void {
         // Define regexes for validation
         $regex = "/^[a-zA-Z0-9áéíóöúüűæøåÆØÅ\s\-\.,;:'\"!?]+$/";
