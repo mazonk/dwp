@@ -271,7 +271,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const deleteModalNewsHeader = document.getElementById('deleteModalNewsHeader');
     const confirmDeleteNewsButton = document.getElementById('confirmDeleteNewsButton');
     const cancelDeleteNewsButton = document.getElementById('cancelDeleteNewsButton');
-    const deleteNewId = document.getElementById('deleteNewsId');
+    const deleteNewsId = document.getElementById('deleteNewsId');
 
     // Open the Delete Modal
     window.openDeleteModal = function(newsId, header) {
@@ -297,13 +297,13 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        xhr.readyonstatechange = function() {
+        xhr.onreadystatechange = function() {
+            // If the request is done and successful
             if (xhr.readyState === 4 && xhr.status === 200) {
                 let response;
                 try {
                     response = JSON.parse(xhr.response);
-                }
-                catch (e) {
+                } catch (e) {
                     console.error('Could not parse response as JSON:', e);
                     return;
                 }
@@ -318,6 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const params = Object.keys(newsData).map(key => `${encodeURIComponent(key)}=${encodeURIComponent(newsData[key])}`).join('&');
+        xhr.send(params);
     });
 
     // Clear error messages and input values
