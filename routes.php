@@ -247,3 +247,27 @@ put($baseRoute.'news/edit', function() {
         echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
     }
 });
+
+// Delete news put route
+put($baseRoute.'news/delete', function() {
+    require_once 'src/controller/NewsController.php';
+    $newsController = new NewsController();
+    parse_str(file_get_contents("php://input"), $_PUT); // Parse the PUT request
+
+    if (isset($_PUT['action']) && $_PUT['action'] === 'deleteNews') {
+        $newsId = htmlspecialchars(trim($_PUT['newsId']));
+
+        $result = $newsController->deleteNews($newsId);
+
+        if (isset($result['success']) && $result['success'] === true) {
+            // Return a success response
+            echo json_encode(['success' => true]);
+        } else {
+            // Return an error response
+            echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
+        }
+    } else {
+        // Invalid action response
+        echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
+    }
+});
