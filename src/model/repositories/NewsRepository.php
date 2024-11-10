@@ -56,4 +56,14 @@ class NewsRepository {
             throw new PDOException('Failed to edit news!');
         }
     }
+
+    public function deleteNews(int $id): void {
+        $db = $this->getdb();
+        $query = $db->prepare("DELETE FROM News WHERE newsId = :id");
+        try {
+            $query->execute(array(":id" => $id));
+        } catch (PDOException $e) {
+            throw new PDOException('Failed to delete news!');
+        }
+    }
 }
