@@ -57,4 +57,13 @@ class NewsController {
             return $errors;
         }
     }
+
+    public function deleteNews(int $id): array {
+        $response = $this->newsService->deleteNews($id);
+
+        if (isset($response['error']) && $response['error']) {
+            return ['errorMessage' => $response['message']];
+        }
+        return ['success' => true];
+    }
 }
