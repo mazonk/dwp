@@ -1,10 +1,9 @@
 <?php
 
-enum Status
-{
-    case pending;
-    case confirmed;
-    case cancelled;
+enum Status: string {
+    case CONFIRMED = 'confirmed';
+    case PENDING = 'pending';
+    case CANCELLED = 'cancelled';
 }
 
 class Reservation {
