@@ -16,6 +16,7 @@ class Ticket {
     $this->ticketType = $ticketType;
     $this->showing = $showing;
     $this->booking = $booking;
+
   }
 
   public function getTicketId(): int {
@@ -57,5 +58,6 @@ class Ticket {
   public function setBooking(Booking $booking): void {
     $this->booking = $booking;
   }
+
 }
 ?>
