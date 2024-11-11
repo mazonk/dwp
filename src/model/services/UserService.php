@@ -39,7 +39,6 @@ class UserService {
             return ["error"=> true, "message"=> $e->getMessage()];
         }
     }
-
     public function updateProfileInfo(int $userId, array $newProfileInfo): array|User {
         try {
             $errors = [];

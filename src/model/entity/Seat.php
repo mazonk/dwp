@@ -1,4 +1,5 @@
 <?php
+include_once "src/model/entity/Room.php";
 class Seat {
   private int $seatId;
   private int $row;

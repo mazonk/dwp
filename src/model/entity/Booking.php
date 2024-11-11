@@ -1,28 +1,24 @@
 <?php
 
-enum Status
-{
-    case pending;
-    case confirmed;
-    case cancelled;
+enum Status: string {
+    case CONFIRMED = 'confirmed';
+    case PENDING = 'pending';
+    case CANCELLED = 'cancelled';
 }
 
 class Booking {
-    private int $reservationId;
+    private int $bookingId;
     private User $user;
     private Status $status;
 
-    private array $tickets;
-
-    public function __construct(int $reservationId, User $user, Status $status, array $tickets) {
-        $this->reservationId = $reservationId;
+    public function __construct(int $bookingId, User $user, Status $status) {
+        $this->bookingId = $bookingId;
         $this->user = $user;
         $this->status = $status;
-        $this->tickets = $tickets;
     }
 
-    public function getReservationId(): int {
-        return $this->reservationId;
+    public function getBookingId(): int {
+        return $this->bookingId;
     }
 
     public function getUser(): User {
@@ -33,12 +29,8 @@ class Booking {
         return $this->status;
     }
 
-    public function getTickets(): array {
-        return $this->tickets;
-    }
-
-    public function setReservationId(int $reservationId): void {
-        $this->reservationId = $reservationId;
+    public function setBookingId(int $bookingId): void {
+        $this->bookingId = $bookingId;
     }
 
     public function setUser(User $user): void {
@@ -47,12 +39,6 @@ class Booking {
 
     public function setStatus(Status $status): void {
         $this->status = $status;
-    } 
-
-    public function setTickets(array $tickets): void {
-        $this->tickets = $tickets;
-    }
+    }   
 }
 ?>
-
-

@@ -1,5 +1,6 @@
 <?php
-require_once 'session_config.php';
+/* Might not needed */
+require_once 'session_config.php'; 
 session_start();
 
 class ContactFormService {

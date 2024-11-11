@@ -34,6 +34,7 @@ class UserRepository {
         }
     }
 
+
     /**
      * Returns a User object from the database given a user ID.
      * @param int $id The ID of the user to search for
