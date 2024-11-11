@@ -19,10 +19,17 @@ class BookingRepository {
     }
     public function getBookingById(int $bookingId): array {
         $db = $this->getdb();
+        try {
         $stmt = $db->prepare("SELECT * FROM Booking WHERE bookingId = :bookingId");
         $stmt->execute(['bookingId' => $bookingId]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (empty($result)) {
+            throw new Exception("No booking found.");
+        }
         return $result;
+        } catch (PDOException $e) {
+            throw new PDOException("Unable to fetch booking.");
+        }
     }
 
     public function getAllSeatsForBooking(int $bookingId): array {
