@@ -19,10 +19,10 @@ INSERT INTO Venue (name, phoneNr, contactEmail, addressId) VALUES
 ('Hollywood Stars Cinema', '310-555-5678', 'contact@hollywoodcinema.com', 2),
 ('Empire Cinema', '212-555-9010', 'support@empirecinema.com', 3);
 
-INSERT INTO OpeningHour (day, openingTime, closingTime, isCurrent, venueId) VALUES
-('Monday', '10:00:00', '22:00:00', TRUE, 1),
-('Tuesday', '09:00:00', '23:00:00', TRUE, 2),
-('Wednesday', '10:30:00', '21:30:00', TRUE, 3);
+INSERT INTO OpeningHour (day, openingTime, closingTime, isCurrent) VALUES
+('Monday', '10:00:00', '22:00:00', TRUE),
+('Tuesday', '09:00:00', '23:00:00', TRUE),
+('Wednesday', '10:30:00', '21:30:00', TRUE);
 
 INSERT INTO Room (roomNumber, venueId) VALUES
 (101, 1),
