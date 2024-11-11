@@ -8,18 +8,16 @@ class SeatService {
     private SeatRepository $seatRepository;
     private RoomService $roomService;
     private MovieService $movieService;
-    private TicketService $ticketService;
+    private ?TicketService $ticketService;
     
-    // Dependency injection in the constructor
-    public function __construct(
-        SeatRepository $seatRepository,
-        RoomService $roomService,
-        MovieService $movieService,
-        TicketService $ticketService
-    ) {
-        $this->seatRepository = $seatRepository;
-        $this->roomService = $roomService;
-        $this->movieService = $movieService;
+    public function __construct() {
+        $this->seatRepository = New SeatRepository();
+        $this->roomService = new RoomService();
+        $this->movieService = new MovieService();
+        $this->ticketService = null;
+    }
+
+    public function setTicketService(TicketService $ticketService) {
         $this->ticketService = $ticketService;
     }
     
@@ -50,17 +48,19 @@ class SeatService {
             $allSeats = $this->getAllSeatsForShowing($showingId, $selectedVenueId);
             $bookedTickets = $this->ticketService->getAllTicketsForShowing($showingId, $selectedVenueId);
             $bookedSeatsIds = [];
+            echo serialize($bookedTickets);
+            echo "salalalalalalahalp" .$selectedVenueId;
             foreach ($bookedTickets as $ticket) {
-                $bookedSeatsIds[] = $ticket['seatId'];
+                $bookedSeatsIds[] = $ticket->getSeat()->getSeatId();
             }
             $availableSeats = [];
-            $room = $this->roomService->getRoomById($allSeats[0]["roomId"]);
-            if (isset($room["error"]) && $room["error"]) {
+            $room = $this->roomService->getRoomById($allSeats[0]->getRoom()->getRoomId());
+            if (is_array($room) && isset($room["error"]) && $room["error"]) {
                 return $room;
             }
             foreach ($allSeats as $seatData) {
-                if (!in_array($seatData['seatId'], $bookedSeatsIds)) {
-                    $availableSeats[] = new Seat($seatData['seatId'], $seatData['row'], $seatData['seatNr'], $room);
+                if (!in_array($seatData->getSeatId(), $bookedSeatsIds)) {
+                    $availableSeats[] = $seatData;
                 }
             }
             return $availableSeats;
@@ -72,8 +72,8 @@ class SeatService {
     public function getSeatById(int $seatId): Seat|array {
         try {
             $result = $this->seatRepository->getSeatById($seatId);
-            $room = $this->roomService->getRoomById($result[0]["roomId"]);
-            if (isset($room["error"]) && $room["error"]) {
+            $room = $this->roomService->getRoomById($result["roomId"]);
+            if (is_array($room) && isset($room["error"]) && $room["error"]) {
                 return $room;
             }
             $seat = new Seat($result['seatId'], $result['row'], $result['seatNr'], $room);
