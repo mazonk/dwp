@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault(); // Prevent default form submission
         const xhr = new XMLHttpRequest();
         const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
-        xhr.open('PUT', `${baseRoute}news/add`, true);
+        xhr.open('POST', `${baseRoute}news/add`, true);
         
         const newsData = {
             action: 'addNews',
@@ -289,14 +289,10 @@ document.addEventListener('DOMContentLoaded', () => {
     confirmDeleteNewsButton.addEventListener('click', () => {
         const xhr = new XMLHttpRequest();
         const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
-        xhr.open('PUT', `${baseRoute}news/delete`, true);
+        const newsId = deleteNewsId.value;
 
-        const newsData = {
-            action: 'deleteNews',
-            newsId: deleteNewsId.value
-        };
+        xhr.open('DELETE', `${baseRoute}news/delete?newsId=${encodeURIComponent(newsId)}&action=deleteNews`, true); // newsId as query parameter
 
-        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.onreadystatechange = function() {
             // If the request is done and successful
             if (xhr.readyState === 4 && xhr.status === 200) {
@@ -317,8 +313,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        const params = Object.keys(newsData).map(key => `${encodeURIComponent(key)}=${encodeURIComponent(newsData[key])}`).join('&');
-        xhr.send(params);
+        xhr.send();
     });
 
     // Clear error messages and input values
