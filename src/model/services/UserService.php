@@ -25,4 +25,18 @@ class UserService {
             return ["error"=> true, "message"=> $e->getMessage()];
         }
     }
+
+    public function getUserById(int $id): array|User {
+        try {
+            $user = $this->userRepository->getUserById($id); //join table with userrole, so we get user's role type
+            $userRole = $this->userRoleService->getUserRoleByType($user['type']);
+            if (is_array($userRole) && isset($userRole['error']) && $userRole['error']) {
+                return ["error"=> true, "message"=> $userRole['message']];
+            }
+            return new User($user['userId'], $user['firstName'], $user['lastName'], 
+                            new Datetime($user['DoB']), $user['email'], $user['passwordHash'], $userRole);
+        } catch (Exception $e) {
+            return ["error"=> true, "message"=> $e->getMessage()];
+        }
+    }
 }

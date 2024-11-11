@@ -1,17 +1,21 @@
 <?php
+include_once "src/model/entity/Seat.php";
+include_once "src/model/entity/TicketType.php";
+include_once "src/model/entity/Showing.php";
+include_once "src/model/entity/Booking.php";
 class Ticket {
   private int $ticketId;
   private Seat $seat;
   private TicketType $ticketType;
   private Showing $showing;
-  private Reservation $reservation;
+  private Booking $booking;
 
-  public function __construct(int $ticketId, Seat $seat, TicketType $ticketType, Showing $showing, Reservation $reservation) {
+  public function __construct(int $ticketId, Seat $seat, TicketType $ticketType, Showing $showing, Booking $booking) {
     $this->ticketId = $ticketId;
     $this->seat = $seat;
     $this->ticketType = $ticketType;
     $this->showing = $showing;
-    $this->reservation = $reservation;
+    $this->booking = $booking;
   }
 
   public function getTicketId(): int {
@@ -30,8 +34,8 @@ class Ticket {
     return $this->showing;
   }
 
-  public function getReservation(): Reservation {
-    return $this->reservation;
+  public function getBooking(): Booking {
+    return $this->booking;
   }
 
   public function setTicketId(int $ticketId): void {
@@ -50,8 +54,8 @@ class Ticket {
     $this->showing = $showing;
   }
 
-  public function setReservation(Reservation $reservation): void {
-    $this->reservation = $reservation;
+  public function setBooking(Booking $booking): void {
+    $this->booking = $booking;
   }
 }
 ?>

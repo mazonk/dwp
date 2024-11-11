@@ -71,6 +71,7 @@ get($baseRoute.'upcoming', 'src/view/pages/UpcomingMoviesPage.php');
 post($baseRoute.'movies', 'src/view/pages/AllMoviesPage.php'); // used at toggle dropdown
 post($baseRoute.'upcoming', 'src/view/pages/AllMoviesPage.php'); // used at toggle dropdown
 post($baseRoute.'home', 'src/view/pages/LandingPage.php'); // used at toggle dropdown
+post($baseRoute.'booking', 'src/view/pages/BookingPage.php');
 post($baseRoute.'about', 'src/view/pages/AboutPage.php'); // used at toggle dropdown
 
 // Post route for register
@@ -100,7 +101,7 @@ post($baseRoute.'logout', function() {
     require_once 'src/controller/AuthController.php';
     $authController = new AuthController();
     $authController->logout();
-});
+});    
 
 // Post route for mail contact
 post($baseRoute.'mail', function() {
