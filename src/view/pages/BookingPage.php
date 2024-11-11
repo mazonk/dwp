@@ -7,12 +7,14 @@ include_once "src/model/services/SeatService.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com"></script>
     <?php include_once("src/assets/tailwindConfig.php"); ?>
 </head>
+
 <body class="max-w-[1440px] w-[100%] mx-auto mt-[72px] mb-[2rem] px-[100px] bg-bgDark text-textLight">
     <?php include_once("src/view/components/Navbar.php"); ?>
     <main class="mt-[56px] p-4">
@@ -39,9 +41,10 @@ include_once "src/model/services/SeatService.php";
             echo '<div id="seat-selection">';
             foreach ($seatsByRow as $row => $seats) {
                 echo "<div class='seat-row flex justify-center space-x-4 mb-4'>";
-                foreach ($seats as $seat) {
+                echo "<div class='row-number text-xl font-semibold'>{$row}</div>";                foreach ($seats as $seat) {
                     $isAvailable = array_search($seat, $availableSeats);
                     echo SeatCard::render($seat, $isAvailable, $showingId, $userId);
+                    
                 }
                 echo "</div>";
             }
@@ -68,7 +71,7 @@ include_once "src/model/services/SeatService.php";
             let bookedSeats = [];
 
             seatButtons.forEach(seat => {
-                seat.addEventListener('click', function () {
+                seat.addEventListener('click', function() {
                     const seatId = this.getAttribute('data-seat-id');
                     const isAvailable = this.getAttribute('data-is-available') === 'true';
 
@@ -92,4 +95,5 @@ include_once "src/model/services/SeatService.php";
 
     <?php include_once("src/view/components/Footer.php"); ?>
 </body>
+
 </html>
