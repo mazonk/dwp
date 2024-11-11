@@ -7,37 +7,33 @@ include_once "src/model/entity/Showing.php";
 class SeatService {
     private SeatRepository $seatRepository;
     private RoomService $roomService;
-    private MovieService $movieService;
     private ?TicketService $ticketService;
     
     public function __construct() {
         $this->seatRepository = New SeatRepository();
         $this->roomService = new RoomService();
-        $this->movieService = new MovieService();
         $this->ticketService = null;
     }
 
     public function setTicketService(TicketService $ticketService) {
         $this->ticketService = $ticketService;
+        $this->ticketService->setSeatService($this); //this shouldnt be here, reconsider this logic???
     }
-    
-    public function getAllSeatsForShowing(int $showingId, int $selectedVenueId): array {
+
+    public function getAllSeatsForShowing(int $showingId, int $selectedVenueId): array
+    {
         try {
             $result = $this->seatRepository->getAllSeatsForShowing($showingId, $selectedVenueId);
             $seats = [];
+            $room = $this->roomService->getRoomById($result[0]["roomId"]);
 
-            if (!empty($result)) {
-                $room = $this->roomService->getRoomById($result[0]["roomId"]);
-                
-                if (!$room instanceof Room) {
-                    return $room; // Return the error if not an instance of Room
-                }
-                
-                foreach ($result as $seatData) {
-                    $seats[] = new Seat($seatData["seatId"], $seatData["row"], $seatData["seatNr"], $room);
-                }
+            if (is_array($room) && isset($room["error"]) && $room["error"]) {
+                return $room; // Return the error if not an instance of Room
             }
-            return $seats; 
+            foreach ($result as $seatData) {
+                $seats[] = new Seat($seatData["seatId"], $seatData["row"], $seatData["seatNr"], $room);
+            }
+            return $seats;
         } catch (Exception $e) {
             return ['error' => true, 'message' => $e->getMessage()];
         }
@@ -48,8 +44,6 @@ class SeatService {
             $allSeats = $this->getAllSeatsForShowing($showingId, $selectedVenueId);
             $bookedTickets = $this->ticketService->getAllTicketsForShowing($showingId, $selectedVenueId);
             $bookedSeatsIds = [];
-            echo serialize($bookedTickets);
-            echo "salalalalalalahalp" .$selectedVenueId;
             foreach ($bookedTickets as $ticket) {
                 $bookedSeatsIds[] = $ticket->getSeat()->getSeatId();
             }
@@ -83,12 +77,12 @@ class SeatService {
         }
     }
 
-    public function selectSeat(int $seatId): array {
-        try {
-            $result = $this->seatRepository->selectSeat($seatId);
-            return $result;
-        } catch (Exception $e) {
-            return ['error' => true, 'message' => $e->getMessage()];
-        }
-    }
+    // public function selectSeat(int $seatId): array { //TRANSACTION
+    //     try {
+    //         $result = $this->seatRepository->selectSeat($seatId);
+    //         return $result;
+    //     } catch (Exception $e) {
+    //         return ['error' => true, 'message' => $e->getMessage()];
+    //     }
+    // }
 }

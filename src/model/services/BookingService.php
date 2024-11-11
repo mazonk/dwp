@@ -18,7 +18,6 @@ class BookingService {
             if (is_array($user) && isset($user['error']) && $user['error']) {
                 return $user;
             }
-
             return new Reservation($result['bookingId'], $user, Status::from($result['status']));
         } catch (Exception $e) {
             return ['error' => true, 'message' => $e->getMessage()];

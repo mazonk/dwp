@@ -22,21 +22,12 @@ include_once "src/model/services/SeatService.php";
         $selectedShowing = isset($_SESSION['selectedShowing']) ? unserialize($_SESSION['selectedShowing']) : null;
 
         if ($selectedShowing) {
-            echo 'salalalaal';
-            $ticketService = new TicketService();
-            $seatService = new SeatService();
-            $seatService->setTicketService($ticketService);
-            $ticketService->setSeatService($seatService);
-            $bookingRepository = new BookingRepository();
-            $seatController = new SeatController($seatService, $bookingRepository);
+            $seatController = new SeatController();
             $showingId = $selectedShowing->getShowingId();
             $userId = $_SESSION['userId'] ?? null;
 
             $totalSeats = $seatController->getAllSeatsForShowing($showingId, $selectedVenueId);
-            echo serialize($totalSeats);
-
             $availableSeats = $seatController->getAvailableSeatsForShowing($showingId, $selectedVenueId);
-            echo serialize($availableSeats);
             $seatsByRow = [];
             foreach ($totalSeats as $seat) {
                 $row = $seat->getRow();
@@ -49,13 +40,12 @@ include_once "src/model/services/SeatService.php";
             foreach ($seatsByRow as $row => $seats) {
                 echo "<div class='seat-row flex justify-center space-x-4 mb-4'>";
                 foreach ($seats as $seat) {
-                    $isAvailable = $seatController->getAvailableSeatsForShowing($seat->getSeatId(), $showingId);
+                    $isAvailable = array_search($seat, $availableSeats);
                     echo SeatCard::render($seat, $isAvailable, $showingId, $userId);
                 }
                 echo "</div>";
             }
             echo '</div>';
-
             if (empty($seatsByRow)) {
                 echo "<p class='text-red-500'>No seats are available for this showing. Please check back later or select a different showing time.</p>";
             }

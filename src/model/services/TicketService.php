@@ -23,40 +23,10 @@ class TicketService {
         $this->seatService = $seatService;
     }
 
-    public function getAvailableSeats(int $showingId, int $venueId): array {
-        try {
-            // Fetch all seats for the given showing and venue
-            $seats = $this->seatService->getAllSeatsForShowing($showingId, $venueId);
-            if (isset($seats["error"]) && $seats["error"]) {
-                return $seats;
-            }
-            $seatsIds = [];
-            foreach ($seats as $seat) {
-                array_push($seatsIds, $seat->getSeatId());
-            }
-            // Fetch all booked tickets for the given showing
-            $tickets = $this->getAllTicketsForShowing($showingId, $venueId);
-            // Extract booked seat IDs
-            $bookedSeatIds = array_map(function($ticket) {
-                return $ticket['seatId']; // Adjust based on your Ticket structure
-            }, $tickets);
-
-            // Filter out the available seats
-            $availableSeats = array_filter($seats, function($seat) use ($bookedSeatIds) {
-                return !in_array($seat['seatId'], $bookedSeatIds);
-            });
-        } catch (Exception $e) {
-            return ['error' => true, 'message' => $e->getMessage()];
-        }
-
-        return $availableSeats;
-    }
-
     public function getAllTicketsForShowing(int $showingId, int $venueId): array
     {
-        echo 'venueid from getAllTicketsForShowing: ' . $venueId;
         try {
-            $result = $this->ticketRepository->getAllTicketsForShowing($showingId, $venueId);
+            $result = $this->ticketRepository->getAllTicketsForShowing($showingId);
             $tickets = [];
             foreach ($result as $ticket) {
 
