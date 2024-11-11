@@ -139,16 +139,16 @@ INSERT INTO Address (street, streetNr, postalCodeId) VALUES
 ('Misty Pines Rd', '58', 30),
 ('Coral Rd', '211', 11),
 ('Eastview Ave', '66', 25),
-('Palisade Dr', '120', 34),
+('Palisade Dr', '120', 30),
 ('Sierra Ave', '180', 1),
 ('Cinnamon Blvd', '212', 25),
 ('Sunrise Rd', '48', 31),
 ('Ocean Breeze Rd', '115', 19),
 ('Riverbend Ave', '77', 26),
-('Shadowbrook Rd', '99', 32),
+('Shadowbrook Rd', '99', 30),
 ('Autumn Rd', '225', 26),
 ('Glenwood Blvd', '63', 28),
-('Brookstone Rd', '80', 32),
+('Brookstone Rd', '80', 28),
 ('Cascadia Rd', '95', 10);
 
 INSERT INTO CompanyInfo (companyName, companyDescription, logoUrl, addressId) VALUES
@@ -738,7 +738,6 @@ INSERT INTO Showing (showingDate, showingTime, movieId, roomId) VALUES
 ('2024-11-10', '19:00:00', 1, 4),
 ('2024-11-10', '21:30:00', 1, 5);
 
-
 INSERT INTO TicketType (name, price, description) VALUES
 ('Standard', 10.00, 'Regular seating ticket'),
 ('VIP', 20.00, 'Access to premium seating'),
@@ -752,47 +751,7 @@ INSERT INTO Booking (userId, status) VALUES
 INSERT INTO Ticket (seatId, ticketTypeId, showingId, bookingId) VALUES
 (1, 1, 1, 1),
 (2, 2, 2, 2),
-(3, 3, 3, 3),
-(1, 1, 15, 1),
-(2, 1, 15, 2),
-(3, 2, 15, 3),
-(4, 2, 15, 4),
-(5, 3, 15, 5),
-(6, 3, 15, 6),
-(7, 1, 15, 7),
-(8, 1, 15, 8),
-(9, 2, 15, 9),
-(10, 2, 15, 10),
-(11, 3, 15, 11),
-(12, 3, 15, 12),
-(13, 1, 15, 13),
-(14, 1, 15, 14),
-(15, 2, 15, 15),
-(16, 2, 15, 16),
-(17, 3, 15, 17),
-(18, 3, 15, 18),
-(19, 1, 15, 19),
-(20, 1, 15, 20),
-(1, 1, 50, 21),
-(2, 2, 50, 22),
-(3, 3, 50, 23),
-(4, 1, 50, 24),
-(5, 2, 50, 25),
-(6, 1, 50, 26),
-(7, 3, 50, 27),
-(8, 2, 50, 28),
-(9, 1, 50, 29),
-(10, 3, 50, 30),
-(11, 1, 50, 31),
-(12, 2, 50, 32),
-(13, 1, 50, 33),
-(14, 3, 50, 34),
-(15, 2, 50, 35),
-(16, 1, 50, 36),
-(17, 3, 50, 37),
-(18, 2, 50, 38),
-(19, 1, 50, 39),
-(20, 3, 50, 40);
+(3, 3, 3, 3);
 
 INSERT INTO PaymentMethod (name) VALUES
 ('Credit Card'),
@@ -803,16 +762,16 @@ INSERT INTO Payment (paymentDate, paymentTime, totalPrice, userId, addressId, bo
 ('2024-10-15', '18:30:00', 10.00, 1, 1, 1, 1),
 ('2024-10-16', '19:45:00', 20.00, 2, 2, 2, 2),
 ('2024-10-17', '20:30:00', 8.00, 3, 3, 3, 3),
-('2024-10-18', '14:00:00', 15.00, 1, 1, 4, 1),
-('2024-10-19', '16:15:00', 25.00, 2, 2, 5, 2),
-('2024-10-20', '17:30:00', 12.00, 3, 3, 6, 3),
-('2024-10-21', '15:00:00', 30.00, 1, 1, 7, 1),
-('2024-10-22', '18:45:00', 22.50, 2, 2, 8, 2),
-('2024-10-23', '20:00:00', 10.50, 3, 3, 9, 3),
-('2024-10-24', '14:30:00', 28.00, 1, 1, 10, 1),
-('2024-10-25', '16:00:00', 18.75, 2, 2, 11, 2),
-('2024-10-26', '19:15:00', 9.99, 3, 3, 12, 3),
-('2024-10-27', '21:00:00', 14.99, 1, 1, 13, 1);
+('2024-10-18', '14:00:00', 15.00, 1, 1, 1, 1),
+('2024-10-19', '16:15:00', 25.00, 2, 2, 2, 2),
+('2024-10-20', '17:30:00', 12.00, 3, 3, 3, 3),
+('2024-10-21', '15:00:00', 30.00, 1, 1, 1, 1),
+('2024-10-22', '18:45:00', 22.50, 2, 2, 2, 2),
+('2024-10-23', '20:00:00', 10.50, 3, 3, 1, 3),
+('2024-10-24', '14:30:00', 28.00, 1, 1, 1, 1),
+('2024-10-25', '16:00:00', 18.75, 2, 2, 1, 2),
+('2024-10-26', '19:15:00', 9.99, 3, 3, 2, 3),
+('2024-10-27', '21:00:00', 14.99, 1, 1, 3, 1);
 
 INSERT INTO News (imageURL, header, content) VALUES
 ('gotham_news.jpg', 'New Batman Movie Showing', 'Join us for the latest Batman movie screening at Gotham Cinema!'),
@@ -1187,41 +1146,7 @@ INSERT INTO VenueShowing (venueId, showingId) VALUES
 (1, 95),  -- Venue ID 1 -> Showing ID 95
 (2, 96),  -- Venue ID 2 -> Showing ID 96
 (2, 97),  -- Venue ID 2 -> Showing ID 97
-(1, 98),  -- Venue ID 1 -> Showing ID 98
-(2, 99),  -- Venue ID 2 -> Showing ID 99
-(1, 100), -- Venue ID 1 -> Showing ID 100
-(2, 101), -- Venue ID 2 -> Showing ID 101
-(1, 102), -- Venue ID 1 -> Showing ID 102
-(2, 103), -- Venue ID 2 -> Showing ID 103
-
-(1, 104), -- Venue ID 1 -> Showing ID 104
-(1, 105), -- Venue ID 1 -> Showing ID 105
-(2, 106), -- Venue ID 2 -> Showing ID 106
-(2, 107), -- Venue ID 2 -> Showing ID 107
-(1, 108), -- Venue ID 1 -> Showing ID 108
-(2, 109), -- Venue ID 2 -> Showing ID 109
-(1, 110), -- Venue ID 1 -> Showing ID 110
-(2, 111), -- Venue ID 2 -> Showing ID 111
-(1, 112), -- Venue ID 1 -> Showing ID 112
-(2, 113), -- Venue ID 2 -> Showing ID 113
-
-(1, 114), -- Venue ID 1 -> Showing ID 114
-(1, 115), -- Venue ID 1 -> Showing ID 115
-(2, 116), -- Venue ID 2 -> Showing ID 116
-(2, 117), -- Venue ID 2 -> Showing ID 117
-(1, 118), -- Venue ID 1 -> Showing ID 118
-(2, 119), -- Venue ID 2 -> Showing ID 119
-(3, 120), -- Venue ID 3 -> Showing ID 120
-(3, 121), -- Venue ID 3 -> Showing ID 121
-(3, 122), -- Venue ID 3 -> Showing ID 122
-(3, 123), -- Venue ID 3 -> Showing ID 123
-
-(3, 124), -- Venue ID 3 -> Showing ID 124
-(3, 125), -- Venue ID 3 -> Showing ID 125
-(3, 126), -- Venue ID 3 -> Showing ID 126
-(3, 127), -- Venue ID 3 -> Showing ID 127
-(3, 128); -- Venue ID 3 -> Showing ID 128
-
+(1, 98);  -- Venue ID 1 -> Showing ID 98
 
 INSERT INTO VenueOpeningHour (venueId, openingHourId) VALUES
 (1, 1),  -- Gotham Cinema -> Monday's opening hours
