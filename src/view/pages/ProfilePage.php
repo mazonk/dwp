@@ -54,29 +54,7 @@ $seat4 = new Seat(4, 2, 1, $room2);
 $seat5 = new Seat(5, 2, 2, $room2);
 $seat6 = new Seat(6, 2, 3, $room1);
 
-// Sample Bookings (Tickets)
-$ticket1 = new Ticket(1, $seat1, $ticketType1, $showing1);
-$ticket2 = new Ticket(2, $seat2, $ticketType2, $showing1);
-$ticket3 = new Ticket(3, $seat3, $ticketType3, $showing2);
-$ticket4 = new Ticket(4, $seat4, $ticketType1, $showing2);
-$ticket5 = new Ticket(5, $seat5, $ticketType2, $showing1);
-$ticket6 = new Ticket(6, $seat6, $ticketType3, $showing2);
-
-// Display Booking Information
-
-// Sample Bookings (assuming ticket objects are created as previously)
-$booking1 = new Booking(1, $user, Status::confirmed, [$ticket1, $ticket2]);
-$booking2 = new Booking(2, $user, Status::pending, [$ticket3, $ticket4]);
-$booking3 = new Booking(3, $user, Status::cancelled, [$ticket5]);
-$booking4 = new Booking(4, $user, Status::confirmed, [$ticket6, $ticket1]);
-$booking5 = new Booking(5, $user, Status::pending, [$ticket2, $ticket4]);
-$booking6 = new Booking(6, $user, Status::cancelled, [$ticket3]);
-$booking7 = new Booking(5, $user, Status::pending, [$ticket2, $ticket4]);
-$booking8 = new Booking(6, $user, Status::cancelled, [$ticket3]);
-$booking9 = new Booking(5, $user, Status::pending, [$ticket2, $ticket4]);
-$booking10 = new Booking(6, $user, Status::cancelled, [$ticket3]);
-
-$bookings = [$booking1, $booking2, $booking3, $booking4, $booking5, $booking6, $booking7, $booking8, $booking9, $booking10];
+$bookings = [];
 
 // ################################
 
