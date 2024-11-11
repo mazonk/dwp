@@ -228,56 +228,56 @@ INSERT INTO UserRole (type) VALUES
 
 INSERT INTO User (firstName, lastName, DoB, email, passwordHash, roleId) VALUES
 ('Admin', 'Admin', '2000-01-01', 'admin@admin.com', '$2y$10$Xt53U6KwhZ34mwbsdgVNjetv998rgpvqQ9xMAa4EzwTfH9X2zElK2', 1),
-('Bruce', 'Wayne', '1972-02-19', 'bruce@gotham.com', 'hashedpassword1', 2),
-('Clark', 'Kent', '1980-06-18', 'clark@metropolis.com', 'hashedpassword2', 2),
-('Diana', 'Prince', '1985-03-20', 'diana@themyscira.com', 'hashedpassword3', 2),
-('Barry', 'Allen', '1992-02-28', 'barry@centralcity.com', 'hashedpassword4', 2),
-('Hal', 'Jordan', '1984-08-05', 'hal@coastcity.com', 'hashedpassword5', 2),
-('Arthur', 'Curry', '1990-07-12', 'arthur@atlantis.com', 'hashedpassword6', 2),
-('Wally', 'West', '1995-05-22', 'wally@centralcity.com', 'hashedpassword7', 2),
-('John', 'Stewart', '1982-11-07', 'john@earth.com', 'hashedpassword8', 2),
-('Oliver', 'Queen', '1978-09-07', 'oliver@starcity.com', 'hashedpassword9', 2),
-('Ray', 'Palmer', '1980-10-18', 'ray@nanotech.com', 'hashedpassword10', 2),
-('Kara', 'Zor-El', '1993-01-15', 'kara@kryptonian.com', 'hashedpassword11', 2),
-('Kate', 'Kane', '1985-03-01', 'kate@batwoman.com', 'hashedpassword12', 2),
-('Barbara', 'Gordon', '1992-06-23', 'barbara@gotham.com', 'hashedpassword13', 2),
-('Jason', 'Todd', '1990-08-10', 'jason@gotham.com', 'hashedpassword14', 2),
-('Tim', 'Drake', '1995-04-12', 'tim@gotham.com', 'hashedpassword15', 2),
-('Dick', 'Grayson', '1980-03-20', 'dick@bludhaven.com', 'hashedpassword16', 2),
-('Zatanna', 'Zatara', '1985-06-11', 'zatanna@magic.com', 'hashedpassword17', 2),
-('Vixen', 'Mari McCabe', '1988-11-12', 'vixen@earth.com', 'hashedpassword18', 2),
-('Black', 'Adam', '1985-12-05', 'adam@kahndaq.com', 'hashedpassword19', 2),
-('Hawkgirl', 'Shiera Hall', '1990-03-22', 'hawkgirl@thanagar.com', 'hashedpassword20', 2),
-('Green', 'Lantern', '1990-02-14', 'lantern@earth.com', 'hashedpassword21', 2),
-('Caitlin', 'Snow', '1992-09-04', 'caitlin@centralcity.com', 'hashedpassword22', 2),
-('Cisco', 'Ramon', '1991-08-15', 'cisco@centralcity.com', 'hashedpassword23', 2),
-('Harrison', 'Wells', '1975-05-17', 'harrison@centralcity.com', 'hashedpassword24', 2),
-('Jesse', 'Quick', '1993-12-29', 'jesse@centralcity.com', 'hashedpassword25', 2),
-('Terry', 'McGinnis', '2000-06-28', 'terry@gotham.com', 'hashedpassword26', 2),
-('Jean', 'Grey', '1990-11-12', 'jean@xmen.com', 'hashedpassword27', 2),
-('Cyclops', 'Scott Summers', '1985-06-20', 'scott@xmen.com', 'hashedpassword28', 2),
-('Beast', 'Henry McCoy', '1988-05-03', 'henry@xmen.com', 'hashedpassword29', 2),
-('Wolverine', 'Logan', '1973-01-02', 'logan@xmen.com', 'hashedpassword30', 2),
-('Storm', 'Ororo Munroe', '1982-11-17', 'ororo@xmen.com', 'hashedpassword31', 2),
-('Rogue', 'Anna Marie', '1990-01-12', 'anna@xmen.com', 'hashedpassword32', 2),
-('Gambit', 'Remy LeBeau', '1987-10-15', 'remy@xmen.com', 'hashedpassword33', 2),
-('Professor', 'Charles Xavier', '1972-05-10', 'charles@xmen.com', 'hashedpassword34', 2),
-('Nightcrawler', 'Kurt Wagner', '1993-03-01', 'kurt@xmen.com', 'hashedpassword35', 2),
-('Emma', 'Frost', '1985-03-02', 'emma@xmen.com', 'hashedpassword36', 2),
-('Mystique', 'Raven Darkhölme', '1983-08-04', 'raven@xmen.com', 'hashedpassword37', 2),
-('Magneto', 'Erik Lensherr', '1975-12-16', 'erik@xmen.com', 'hashedpassword38', 2),
-('Deadpool', 'Wade Wilson', '1988-07-15', 'wade@xmen.com', 'hashedpassword39', 2),
-('X-23', 'Laura Kinney', '2005-02-12', 'laura@xmen.com', 'hashedpassword40', 2),
-('Silver', 'Sam Guthrie', '1989-05-07', 'sam@xmen.com', 'hashedpassword41', 2),
-('Bishop', 'Lucas Bishop', '1985-12-31', 'lucas@xmen.com', 'hashedpassword42', 2),
-('Cable', 'Nathan Summers', '1990-01-01', 'nathan@xmen.com', 'hashedpassword43', 2),
-('Maggie', 'Sawyer', '1983-06-30', 'maggie@supergirl.com', 'hashedpassword44', 2),
-('Lena', 'Luthor', '1992-11-28', 'lena@supergirl.com', 'hashedpassword45', 2),
-('Supergirl', 'Kara Zor-El', '1995-05-15', 'kara@supergirl.com', 'hashedpassword46', 2),
-('Alex', 'Danvers', '1990-12-06', 'alex@supergirl.com', 'hashedpassword47', 2),
-('Jonn', 'Jonzz', '1965-08-23', 'jon@supergirl.com', 'hashedpassword48', 2),
-('Win', 'Schott', '1988-04-04', 'win@supergirl.com', 'hashedpassword49', 2),
-('James', 'Olsen', '1991-11-19', 'james@supergirl.com', 'hashedpassword50', 2),
+('Bruce', 'Wayne', '1972-02-19', 'bruce@gotham.com', '$2y$12$Fv/Jfv0Ih5hgDb9cB9EJkRsd5w8CZWxvxgD8yxFdOTxjMOjFbr5u', 2),
+('Clark', 'Kent', '1980-06-18', 'clark@metropolis.com', '$2y$12$xtMIYcE8psaLxr9Yo57.OB7a1V.RmtuRlTwF2xlcTtBZY0tP1.F2S', 2),
+('Diana', 'Prince', '1985-03-20', 'diana@themyscira.com', '$2y$12$Kd8.SOVpFw.T3keqstWh4ujFP4RkADtIkRE7xWTG8U8Uy73mZsmc7', 2),
+('Barry', 'Allen', '1992-02-28', 'barry@centralcity.com', '$2y$12$Kd8.SOVpFw.T3keqstWh4ujFP4RkADtIkRE7xWTG8U8Uy73mZsmc7', 2),
+('Hal', 'Jordan', '1984-08-05', 'hal@coastcity.com', '$2y$12$Kd8.SOVpFw.T3keqstWh4ujFP4RkADtIkRE7xWTG8U8Uy73mZsmc7', 2),
+('Arthur', 'Curry', '1990-07-12', 'arthur@atlantis.com', '$2y$12$Fv/Jfv0Ih5hgDb9cB9EJkRsd5w8CZWxvxgD8yxFdOTxjMOjFbr5u', 2),
+('Wally', 'West', '1995-05-22', 'wally@centralcity.com', '$2y$12$Fv/Jfv0Ih5hgDb9cB9EJkRsd5w8CZWxvxgD8yxFdOTxjMOjFbr5u', 2),
+('John', 'Stewart', '1982-11-07', 'john@earth.com', '$2y$12$Kd8.SOVpFw.T3keqstWh4ujFP4RkADtIkRE7xWTG8U8Uy73mZsmc7', 2),
+('Oliver', 'Queen', '1978-09-07', 'oliver@starcity.com', '$2b$12$WkUVf.D2Pckd01mjJ2eHe.QC2.s5V8vtoC1P.x5wV8wDWGV8gtXCa', 2),
+('Ray', 'Palmer', '1980-10-18', 'ray@nanotech.com', '$2y$12$Fv/Jfv0Ih5hgDb9cB9EJkRsd5w8CZWxvxgD8yxFdOTxjMOjFbr5u', 2),
+('Kara', 'Zor-El', '1993-01-15', 'kara@kryptonian.com', '$2b$12$ihn71cIZV85A.nlh8T/7POb1gJ/tBRQW1S2F1kcVsZ4El4X9XYtym', 2),
+('Kate', 'Kane', '1985-03-01', 'kate@batwoman.com', '$2y$12$Kd8.SOVpFw.T3keqstWh4ujFP4RkADtIkRE7xWTG8U8Uy73mZsmc7', 2),
+('Barbara', 'Gordon', '1992-06-23', 'barbara@gotham.com', '$2y$12$Fv/Jfv0Ih5hgDb9cB9EJkRsd5w8CZWxvxgD8yxFdOTxjMOjFbr5u', 2),
+('Jason', 'Todd', '1990-08-10', 'jason@gotham.com', '$2b$12$ihn71cIZV85A.nlh8T/7POb1gJ/tBRQW1S2F1kcVsZ4El4X9XYtym', 2),
+('Tim', 'Drake', '1995-04-12', 'tim@gotham.com', '$2b$12$ihn71cIZV85A.nlh8T/7POb1gJ/tBRQW1S2F1kcVsZ4El4X9XYtym', 2),
+('Dick', 'Grayson', '1980-03-20', 'dick@bludhaven.com', '$2b$12$ihn71cIZV85A.nlh8T/7POb1gJ/tBRQW1S2F1kcVsZ4El4X9XYtym', 2),
+('Zatanna', 'Zatara', '1985-06-11', 'zatanna@magic.com', '$2y$12$Fv/Jfv0Ih5hgDb9cB9EJkRsd5w8CZWxvxgD8yxFdOTxjMOjFbr5u', 2),
+('Vixen', 'Mari McCabe', '1988-11-12', 'vixen@earth.com', '$2b$12$ihn71cIZV85A.nlh8T/7POb1gJ/tBRQW1S2F1kcVsZ4El4X9XYtym', 2),
+('Black', 'Adam', '1985-12-05', 'adam@kahndaq.com', '$2b$12$ihn71cIZV85A.nlh8T/7POb1gJ/tBRQW1S2F1kcVsZ4El4X9XYtym', 2),
+('Hawkgirl', 'Shiera Hall', '1990-03-22', 'hawkgirl@thanagar.com', '$2b$12$ihn71cIZV85A.nlh8T/7POb1gJ/tBRQW1S2F1kcVsZ4El4X9XYtym', 2),
+('Green', 'Lantern', '1990-02-14', 'lantern@earth.com', '$2y$12$Fv/Jfv0Ih5hgDb9cB9EJkRsd5w8CZWxvxgD8yxFdOTxjMOjFbr5u', 2),
+('Caitlin', 'Snow', '1992-09-04', 'caitlin@centralcity.com', '$2y$12$Fv/Jfv0Ih5hgDb9cB9EJkRsd5w8CZWxvxgD8yxFdOTxjMOjFbr5u', 2),
+('Cisco', 'Ramon', '1991-08-15', 'cisco@centralcity.com', '$2y$12$Kd8.SOVpFw.T3keqstWh4ujFP4RkADtIkRE7xWTG8U8Uy73mZsmc7', 2),
+('Harrison', 'Wells', '1975-05-17', 'harrison@centralcity.com', '$2b$12$ihn71cIZV85A.nlh8T/7POb1gJ/tBRQW1S2F1kcVsZ4El4X9XYtym', 2),
+('Jesse', 'Quick', '1993-12-29', 'jesse@centralcity.com', '$2y$12$Fv/Jfv0Ih5hgDb9cB9EJkRsd5w8CZWxvxgD8yxFdOTxjMOjFbr5u', 2),
+('Terry', 'McGinnis', '2000-06-28', 'terry@gotham.com', '$2b$12$ihn71cIZV85A.nlh8T/7POb1gJ/tBRQW1S2F1kcVsZ4El4X9XYtym', 2),
+('Jean', 'Grey', '1990-11-12', 'jean@xmen.com', '$2y$12$Fv/Jfv0Ih5hgDb9cB9EJkRsd5w8CZWxvxgD8yxFdOTxjMOjFbr5u', 2),
+('Cyclops', 'Scott Summers', '1985-06-20', 'scott@xmen.com', '$2y$12$Fv/Jfv0Ih5hgDb9cB9EJkRsd5w8CZWxvxgD8yxFdOTxjMOjFbr5u', 2),
+('Beast', 'Henry McCoy', '1988-05-03', 'henry@xmen.com', '$2y$12$Fv/Jfv0Ih5hgDb9cB9EJkRsd5w8CZWxvxgD8yxFdOTxjMOjFbr5u', 2),
+('Wolverine', 'Logan', '1973-01-02', 'logan@xmen.com', '$2y$12$Fv/Jfv0Ih5hgDb9cB9EJkRsd5w8CZWxvxgD8yxFdOTxjMOjFbr5u', 2),
+('Storm', 'Ororo Munroe', '1982-11-17', 'ororo@xmen.com', '$2y$12$Fv/Jfv0Ih5hgDb9cB9EJkRsd5w8CZWxvxgD8yxFdOTxjMOjFbr5u', 2),
+('Rogue', 'Anna Marie', '1990-01-12', 'anna@xmen.com', '$2y$12$Fv/Jfv0Ih5hgDb9cB9EJkRsd5w8CZWxvxgD8yxFdOTxjMOjFbr5u', 2),
+('Gambit', 'Remy LeBeau', '1987-10-15', 'remy@xmen.com', '$2y$12$Kd8.SOVpFw.T3keqstWh4ujFP4RkADtIkRE7xWTG8U8Uy73mZsmc7', 2),
+('Professor', 'Charles Xavier', '1972-05-10', 'charles@xmen.com', '$2y$12$Fv/Jfv0Ih5hgDb9cB9EJkRsd5w8CZWxvxgD8yxFdOTxjMOjFbr5u', 2),
+('Nightcrawler', 'Kurt Wagner', '1993-03-01', 'kurt@xmen.com', '$2y$12$Fv/Jfv0Ih5hgDb9cB9EJkRsd5w8CZWxvxgD8yxFdOTxjMOjFbr5u', 2),
+('Emma', 'Frost', '1985-03-02', 'emma@xmen.com', '$2y$12$Fv/Jfv0Ih5hgDb9cB9EJkRsd5w8CZWxvxgD8yxFdOTxjMOjFbr5u', 2),
+('Mystique', 'Raven Darkhölme', '1983-08-04', 'raven@xmen.com', '$2b$12$ihn71cIZV85A.nlh8T/7POb1gJ/tBRQW1S2F1kcVsZ4El4X9XYtym ', 2),
+('Magneto', 'Erik Lensherr', '1975-12-16', 'erik@xmen.com', '$2y$12$Kd8.SOVpFw.T3keqstWh4ujFP4RkADtIkRE7xWTG8U8Uy73mZsmc7', 2),
+('Deadpool', 'Wade Wilson', '1988-07-15', 'wade@xmen.com', '$2y$12$Fv/Jfv0Ih5hgDb9cB9EJkRsd5w8CZWxvxgD8yxFdOTxjMOjFbr5u', 2),
+('X-23', 'Laura Kinney', '2005-02-12', 'laura@xmen.com', '$2b$12$ihn71cIZV85A.nlh8T/7POb1gJ/tBRQW1S2F1kcVsZ4El4X9XYtym ', 2),
+('Silver', 'Sam Guthrie', '1989-05-07', 'sam@xmen.com', '$2y$12$Fv/Jfv0Ih5hgDb9cB9EJkRsd5w8CZWxvxgD8yxFdOTxjMOjFbr5u', 2),
+('Bishop', 'Lucas Bishop', '1985-12-31', 'lucas@xmen.com', '$2b$12$ihn71cIZV85A.nlh8T/7POb1gJ/tBRQW1S2F1kcVsZ4El4X9XYtym ', 2),
+('Cable', 'Nathan Summers', '1990-01-01', 'nathan@xmen.com', '$2b$12$ihn71cIZV85A.nlh8T/7POb1gJ/tBRQW1S2F1kcVsZ4El4X9XYtym', 2),
+('Maggie', 'Sawyer', '1983-06-30', 'maggie@supergirl.com', '$2y$12$Fv/Jfv0Ih5hgDb9cB9EJkRsd5w8CZWxvxgD8yxFdOTxjMOjFbr5u', 2),
+('Lena', 'Luthor', '1992-11-28', 'lena@supergirl.com', '$2b$12$ihn71cIZV85A.nlh8T/7POb1gJ/tBRQW1S2F1kcVsZ4El4X9XYtym ', 2),
+('Supergirl', 'Kara Zor-El', '1995-05-15', 'kara@supergirl.com', '$2b$12$ihn71cIZV85A.nlh8T/7POb1gJ/tBRQW1S2F1kcVsZ4El4X9XYtym ', 2),
+('Alex', 'Danvers', '1990-12-06', 'alex@supergirl.com', '$2b$12$ihn71cIZV85A.nlh8T/7POb1gJ/tBRQW1S2F1kcVsZ4El4X9XYtym ', 2),
+('Jonn', 'Jonzz', '1965-08-23', 'jon@supergirl.com', '$2y$12$Kd8.SOVpFw.T3keqstWh4ujFP4RkADtIkRE7xWTG8U8Uy73mZsmc7', 2),
+('Win', 'Schott', '1988-04-04', 'win@supergirl.com', '$2y$12$Fv/Jfv0Ih5hgDb9cB9EJkRsd5w8CZWxvxgD8yxFdOTxjMOjFbr5u', 2),
+('James', 'Olsen', '1991-11-19', 'james@supergirl.com', '$2b$12$ihn71cIZV85A.nlh8T/7POb1gJ/tBRQW1S2F1kcVsZ4El4X9XYtym ', 2),
 ('Mantis', 'Empath', '1990-11-15', 'mantis@guardians.com', NULL, 2),
 ('Korg', 'The Kronan', '1995-09-23', 'korg@asgard.com', NULL, 2),
 ('Valkyrie', 'Asgardian', '1983-10-10', 'valkyrie@asgard.com', NULL, 2),
@@ -389,8 +389,8 @@ INSERT INTO Director (firstName, lastName) VALUES
 ('Denis', 'Villeneuve'),
 ('Zack', 'Snyder');
 
+-- Actors for 'The Dark Knight' (movieId 1)
 INSERT INTO Actor (firstName, lastName, `character`) VALUES
---Actors for 'The Dark Knight' (movieId 1)
 ('Christian', 'Bale', 'Bruce Wayne/Batman'),
 ('Heath', 'Ledger', 'Joker'),
 ('Aaron', 'Eckhart', 'Harvey Dent/Two-Face'),
@@ -400,8 +400,10 @@ INSERT INTO Actor (firstName, lastName, `character`) VALUES
 ('Morgan', 'Freeman', 'Lucius Fox'),
 ('Eric', 'Roberts', 'Sal Maroni'),
 ('Anthony', 'Michael Hall', 'Mike Engel'),
-('Nestor', 'Carbonell', 'Mayor Garcia'),
+('Nestor', 'Carbonell', 'Mayor Garcia');
+
 -- Actors for 'Spider-Man: No Way Home' (movieId 2)
+INSERT INTO Actor (firstName, lastName, `character`) VALUES
 ('Tom', 'Holland', 'Peter Parker/Spider-Man'),
 ('Zendaya', 'Coleman', 'MJ'),
 ('Benedict', 'Cumberbatch', 'Doctor Strange'),
@@ -411,8 +413,10 @@ INSERT INTO Actor (firstName, lastName, `character`) VALUES
 ('Alfred', 'Molina', 'Doctor Octopus/Otto Octavius'),
 ('Jamie', 'Foxx', 'Electro/Max Dillon'),
 ('Benedict', 'Wong', 'Wong'),
-('Andrew', 'Garfield', 'Peter Parker/Spider-Man (Alt)'),
+('Andrew', 'Garfield', 'Peter Parker/Spider-Man (Alt)');
+
 -- Actors for 'Iron Man' (movieId 3)
+INSERT INTO Actor (firstName, lastName, `character`) VALUES
 ('Robert', 'Downey Jr.', 'Tony Stark/Iron Man'),
 ('Gwyneth', 'Paltrow', 'Pepper Potts'),
 ('Jeff', 'Bridges', 'Obadiah Stane/Iron Monger'),
@@ -422,38 +426,46 @@ INSERT INTO Actor (firstName, lastName, `character`) VALUES
 ('Faran', 'Tahir', 'Raza'),
 ('Leslie', 'Bibb', 'Christine Everhart'),
 ('Clark', 'Gregg', 'Agent Phil Coulson'),
-('Jon', 'Favreau', 'Happy Hogan'),
+('Jon', 'Favreau', 'Happy Hogan');
+
+INSERT IGNORE INTO Actor (firstName, lastName, `character`) VALUES
 -- Interstellar (movieId 4)
 ('Jessica', 'Chastain', 'Murphy Cooper'),
 ('Casey', 'Affleck', 'Tom Cooper'),
 ('Mackenzie', 'Foy', 'Young Murphy'),
 ('Michael', 'Caine', 'Professor Brand'),
 ('David', 'Gyasi', 'Romilly'),
+
 -- Andre Rieu (movieId 5)
 ('Sarah', 'Brightman', 'Guest Performer'),
 ('Richard', 'Clayderman', 'Pianist'),
 ('Stefanie', 'Jones', 'Violinist'),
 ('Klaus', 'Müller', 'Cellist'),
 ('Linda', 'Mason', 'Singer'),
+
 -- En Panda i Afrika (movieId 6)
 ('Sofie', 'Gråbøl', 'Mama Panda'),
 ('Casper', 'Christensen', 'Leo the Lion'),
 ('Birgitte', 'Hjort Sørensen', 'Narrator'),
 ('Ulrich', 'Thomsen', 'Hunter'),
 ('Nikolaj', 'Lie Kaas', 'Guide'),
+
 -- The Apprentice (movieId 7)
 ('Emma', 'Stone', 'Sarah Andrews'),
 ('Bradley', 'Cooper', 'Mentor Johnson'),
 ('Laura', 'Harrier', 'Clara White'),
 ('Jake', 'Johnson', 'Alex Smith'),
 ('Zoe', 'Kravitz', 'Assistant Manager'),
+
 -- Deadpool (movieId 8)
 ('T.J.', 'Miller', 'Weasel'),
 ('Ed', 'Skrein', 'Ajax'),
 ('Stefan', 'Kapičić', 'Colossus'),
 ('Brianna', 'Hildebrand', 'Negasonic Teenage Warhead'),
-('Leslie', 'Uggams', 'Blind Al'),
+('Leslie', 'Uggams', 'Blind Al'); 
+
 -- Additional actors for "It Ends with Us" (movieId: 9)
+INSERT INTO Actor (firstName, lastName, `character`) VALUES
 ('Blake', 'Lively', 'Lily Bloom'),
 ('Justin', 'Baldoni', 'Ryle Kincaid'),
 ('Brandon', 'Sklenar', 'Atlas Corrigan'),
@@ -463,8 +475,10 @@ INSERT INTO Actor (firstName, lastName, `character`) VALUES
 ('Henry', 'Golding', 'Dr. Lewis'),
 ('Emma', 'Stone', 'Samantha Porter'),
 ('Zac', 'Efron', 'Carter James'),
-('Elizabeth', 'Olsen', 'Daphne Michaels'),
+('Elizabeth', 'Olsen', 'Daphne Michaels');
+
 -- Additional actors for "Robot" (movieId: 10)
+INSERT INTO Actor (firstName, lastName, `character`) VALUES
 ('Rajinikanth', ' ', 'Chitti/Dr. Vaseegaran'),
 ('Aishwarya', 'Rai', 'Sana'),
 ('Danny', 'Denzongpa', 'Dr. Bohra'),
@@ -474,8 +488,10 @@ INSERT INTO Actor (firstName, lastName, `character`) VALUES
 ('Robo', 'Shankar', 'Comic Relief Robot'),
 ('Rakul', 'Preet', 'Research Assistant'),
 ('Vivek', 'Oberoi', 'Professor Ashok'),
-('Shruti', 'Haasan', 'AI Specialist'),
+('Shruti', 'Haasan', 'AI Specialist');
+
 -- Additional actors for "Joker" (movieId: 11)
+INSERT INTO Actor (firstName, lastName, `character`) VALUES
 ('Joaquin', 'Phoenix', 'Arthur Fleck/Joker'),
 ('Robert', 'De Niro', 'Murray Franklin'),
 ('Zazie', 'Beetz', 'Sophie Dumond'),
@@ -485,8 +501,10 @@ INSERT INTO Actor (firstName, lastName, `character`) VALUES
 ('Brett', 'Cullen', 'Thomas Wayne'),
 ('Douglas', 'Hodge', 'Alfred Pennyworth'),
 ('Shea', 'Whigham', 'Detective Burke'),
-('Bill', 'Camp', 'Detective Garrity'),
+('Bill', 'Camp', 'Detective Garrity');
+
 -- Additional actors for "Føreren og Forføreren" (movieId: 12)
+INSERT INTO Actor (firstName, lastName, `character`) VALUES
 ('Ulrich', 'Thomsen', 'Joseph Goebbels'),
 ('Trine', 'Dyrholm', 'Magda Goebbels'),
 ('Lars', 'Mikkelsen', 'Adolf Hitler'),
@@ -496,8 +514,10 @@ INSERT INTO Actor (firstName, lastName, `character`) VALUES
 ('Søren', 'Malling', 'Heinrich Himmler'),
 ('Sidse', 'Babett Knudsen', 'Elsa Kluge'),
 ('Nikolaj', 'Coster-Waldau', 'Propaganda Minister'),
-('Pilou', 'Asbæk', 'Hans Fritzsche'),
+('Pilou', 'Asbæk', 'Hans Fritzsche');
+
 -- Additional actors for "Minions" (movieId: 13)
+INSERT INTO Actor (firstName, lastName, `character`) VALUES
 ('Pierre', 'Coffin', 'Kevin/Stuart/Bob (voices)'),
 ('Sandra', 'Bullock', 'Scarlet Overkill (voice)'),
 ('Jon', 'Hamm', 'Herb Overkill (voice)'),
@@ -507,8 +527,10 @@ INSERT INTO Actor (firstName, lastName, `character`) VALUES
 ('Julie', 'Andrews', 'Gru’s Mom (voice)'),
 ('Jennifer', 'Saunders', 'Queen Elizabeth II (voice)'),
 ('Geoffrey', 'Rush', 'Narrator (voice)'),
-('Chris', 'Renaud', 'Additional Minions (voice)'),
+('Chris', 'Renaud', 'Additional Minions (voice)');
+
 -- Additional actors for "Star Wars: Episode V - The Empire Strikes Back" (movieId: 14)
+INSERT INTO Actor (firstName, lastName, `character`) VALUES
 ('Mark', 'Hamill', 'Luke Skywalker'),
 ('Harrison', 'Ford', 'Han Solo'),
 ('Carrie', 'Fisher', 'Leia Organa'),
@@ -518,8 +540,10 @@ INSERT INTO Actor (firstName, lastName, `character`) VALUES
 ('Frank', 'Oz', 'Yoda (voice)'),
 ('Alec', 'Guinness', 'Obi-Wan Kenobi'),
 ('Jeremy', 'Bulloch', 'Boba Fett'),
-('Peter', 'Mayhew', 'Chewbacca'),
+('Peter', 'Mayhew', 'Chewbacca');
+
 -- Additional actors for "Star Wars: Episode VI - Return of the Jedi" (movieId: 15)
+INSERT INTO Actor (firstName, lastName, `character`) VALUES
 ('Mark', 'Hamill', 'Luke Skywalker'),
 ('Harrison', 'Ford', 'Han Solo'),
 ('Carrie', 'Fisher', 'Leia Organa'),
@@ -529,8 +553,10 @@ INSERT INTO Actor (firstName, lastName, `character`) VALUES
 ('Frank', 'Oz', 'Yoda (voice)'),
 ('Sebastian', 'Shaw', 'Anakin Skywalker'),
 ('Peter', 'Mayhew', 'Chewbacca'),
-('Warwick', 'Davis', 'Wicket W. Warrick'),
+('Warwick', 'Davis', 'Wicket W. Warrick');
+
 -- Additional actors for "Guardians of the Multiverse" (movieId: 16)
+INSERT INTO Actor (firstName, lastName, `character`) VALUES
 ('Chris', 'Pratt', 'Star-Lord'),
 ('Zoe', 'Saldana', 'Gamora'),
 ('Dave', 'Bautista', 'Drax'),
@@ -540,8 +566,10 @@ INSERT INTO Actor (firstName, lastName, `character`) VALUES
 ('Elizabeth', 'Debicki', 'Ayesha'),
 ('Pom', 'Klementieff', 'Mantis'),
 ('Sylvester', 'Stallone', 'Stakar Ogord'),
-('Tessa', 'Thompson', 'Valkyrie'),
+('Tessa', 'Thompson', 'Valkyrie');
+
 -- Additional actors for "Space Explorers: The Next Journey" (movieId: 17)
+INSERT INTO Actor (firstName, lastName, `character`) VALUES
 ('Chris', 'Hemsworth', 'Captain Lewis'),
 ('Jessica', 'Chastain', 'Dr. Elena Carter'),
 ('Tom', 'Holland', 'Junior Engineer Martin'),
@@ -551,8 +579,10 @@ INSERT INTO Actor (firstName, lastName, `character`) VALUES
 ('Idris', 'Elba', 'Security Officer Cole'),
 ('Florence', 'Pugh', 'Communications Specialist Anna'),
 ('Timothée', 'Chalamet', 'Technician Miles'),
-('Viola', 'Davis', 'Mission Control Director'),
+('Viola', 'Davis', 'Mission Control Director');
+
 -- Additional actors for "The Time Jumper" (movieId: 18)
+INSERT INTO Actor (firstName, lastName, `character`) VALUES
 ('Jake', 'Gyllenhaal', 'Thomas Kline'),
 ('Emily', 'Blunt', 'Laura Knight'),
 ('Oscar', 'Isaac', 'Dr. Elias Morgan'),
@@ -562,8 +592,10 @@ INSERT INTO Actor (firstName, lastName, `character`) VALUES
 ('Toby', 'Jones', 'The Timekeeper'),
 ('Ben', 'Kingsley', 'Historian Anwar'),
 ('Rami', 'Malek', 'Chrono Agent Lee'),
-('Gugu', 'Mbatha-Raw', 'Analyst Harper'),
+('Gugu', 'Mbatha-Raw', 'Analyst Harper');
+
 -- Additional actors for "AI: Awakening" (movieId: 19)
+INSERT INTO Actor (firstName, lastName, `character`) VALUES
 ('Keanu', 'Reeves', 'Dr. Marcus Hill'),
 ('Scarlett', 'Johansson', 'AI Unit EVE (voice)'),
 ('Robert', 'Downey Jr.', 'Tech CEO Jordan Cross'),
@@ -573,8 +605,10 @@ INSERT INTO Actor (firstName, lastName, `character`) VALUES
 ('Tom', 'Hiddleston', 'Cyber Investigator Adam Frost'),
 ('Zendaya', ' ', 'Hacker Luna'),
 ('Riz', 'Ahmed', 'Analyst Raj Malik'),
-('Hugh', 'Laurie', 'Senator Bartholomew')
+('Hugh', 'Laurie', 'Senator Bartholomew');
+
 -- Additional actors for "Rise of the Phoenix" (movieId: 20)
+INSERT INTO Actor (firstName, lastName, `character`) VALUES
 ('Henry', 'Cavill', 'General Tiberius'),
 ('Charlize', 'Theron', 'Queen Valeria'),
 ('Jason', 'Momoa', 'Commander Rhea'),
