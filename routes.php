@@ -184,3 +184,88 @@ put($baseRoute.'companyInfo/edit', function() {
         echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
     }
 });
+
+// Add news put route
+post($baseRoute.'news/add', function() {
+    require_once 'src/controller/NewsController.php';
+    $newsController = new NewsController();
+
+    if (isset($_POST['action']) && $_POST['action'] === 'addNews') {
+        $newsData = [
+            'header' => htmlspecialchars(trim($_POST['header'])),
+            'imageURL' => htmlspecialchars(trim($_POST['imageURL'])),
+            'content' => htmlspecialchars(trim($_POST['content'])),
+        ];
+
+        $result = $newsController->addNews($newsData);
+
+        if (isset($result['success']) && $result['success'] === true) {
+            // Return a success response
+            echo json_encode(['success' => true]);
+        } else if (isset($result['errorMessage'])) {
+            // Return an error response
+            echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
+        } else {
+            // Return validation errors
+            echo json_encode(['success' => false, 'errors' => $result]);
+        }
+    } else {
+        // Invalid action response
+        echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
+    }
+});
+
+// Edit news put route
+put($baseRoute.'news/edit', function() {
+    require_once 'src/controller/NewsController.php';
+    $newsController = new NewsController();
+    parse_str(file_get_contents("php://input"), $_PUT); // Parse the PUT request
+
+    if (isset($_PUT['action']) && $_PUT['action'] === 'editNews') {
+        $newsData = [
+            'newsId' => htmlspecialchars(trim($_PUT['newsId'])),
+            'header' => htmlspecialchars(trim($_PUT['header'])),
+            'imageURL' => htmlspecialchars(trim($_PUT['imageURL'])),
+            'content' => htmlspecialchars(trim($_PUT['content'])),
+        ];
+
+        $result = $newsController->editNews($newsData);
+
+        if (isset($result['success']) && $result['success'] === true) {
+            // Return a success response
+            echo json_encode(['success' => true]);
+        } else if (isset($result['errorMessage'])) {
+            // Return an error response
+            echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
+        } else {
+            // Return validation errors
+            echo json_encode(['success' => false, 'errors' => $result]);
+        }
+    } else {
+        // Invalid action response
+        echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
+    }
+});
+
+// Delete news put route
+delete($baseRoute.'news/delete', function() {
+    require_once 'src/controller/NewsController.php';
+    $newsController = new NewsController();
+
+    if (isset($_GET['action']) && $_GET['action'] === 'deleteNews') {
+        $newsId = htmlspecialchars(trim($_GET['newsId']));
+
+        $result = $newsController->deleteNews($newsId);
+
+        if (isset($result['success']) && $result['success'] === true) {
+            // Return a success response
+            echo json_encode(['success' => true]);
+        } else {
+            // Return an error response
+            echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
+        }
+    } else {
+        // Invalid action response
+        echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
+    }
+});

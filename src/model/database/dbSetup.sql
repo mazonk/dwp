@@ -68,9 +68,7 @@ CREATE TABLE OpeningHour (
     day ENUM('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'), -- should we rly use enum here?
     openingTime TIME NOT NULL,
     closingTime TIME NOT NULL,
-    isCurrent BOOLEAN NOT NULL,
-    venueId INT NOT NULL,
-    FOREIGN KEY (venueId) REFERENCES Venue(venueId)
+    isCurrent BOOLEAN NOT NULL
 );
 
 CREATE TABLE Room (
