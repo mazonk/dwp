@@ -25,6 +25,7 @@ $selectedVenue = $venueController->getSelectedVenue();
 <body class="max-w-[1440px] w-[100%] mx-auto mt-[72px] mb-[2rem] px-[100px] bg-bgDark text-textLight">
     <!-- Navbar -->
     <?php include_once("src/view/components/Navbar.php"); ?>
+    <main>
     <div class="mt-[56px] py-4">
         <?php 
         if (is_array($companyInfo) && isset($companyInfo['errorMessage'])) {

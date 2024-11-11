@@ -73,6 +73,7 @@ post($baseRoute.'upcoming', 'src/view/pages/AllMoviesPage.php'); // used at togg
 post($baseRoute.'home', 'src/view/pages/LandingPage.php'); // used at toggle dropdown
 post($baseRoute.'booking', 'src/view/pages/BookingPage.php');
 post($baseRoute.'about', 'src/view/pages/AboutPage.php'); // used at toggle dropdown
+post($baseRoute.'profile', 'src/view/pages/ProfilePage.php'); // used at toggle dropdown
 
 // Post route for register
 post($baseRoute.'register', function() {
@@ -172,6 +173,35 @@ put($baseRoute.'companyInfo/edit', function() {
         ];        
 
         $result = $companyController->editCompanyInfo($companyId, $companyData);
+
+        if ($result && !is_array($result)) {
+            // Return a success response
+            echo json_encode(['success' => true]);
+        } else {
+            // Return an error response
+            echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
+        }
+    } else {
+        // Invalid action response
+        echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
+    }
+});
+
+put($baseRoute.'profile/edit', function() {
+    require_once 'src/controller/UserController.php';
+    $userController = new UserController();
+    parse_str(file_get_contents("php://input"), $_PUT);
+
+    if (isset($_PUT['action']) && $_PUT['action'] === 'updateProfileInfo') {
+        $userId = htmlspecialchars($_PUT['userId']);
+        $newProfileInfo = [
+            'firstName' => htmlspecialchars(trim($_PUT['firstName'])),
+            'lastName' => htmlspecialchars(trim($_PUT['lastName'])),
+            'dob' => htmlspecialchars(trim($_PUT['dob'])),
+            'email' => htmlspecialchars(trim($_PUT['email'])),
+        ];
+
+        $result = $userController->updateProfileInfo($userId, $newProfileInfo);
 
         if ($result && !is_array($result)) {
             // Return a success response

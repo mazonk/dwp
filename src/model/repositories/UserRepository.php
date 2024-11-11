@@ -34,6 +34,14 @@ class UserRepository {
         }
     }
 
+
+    /**
+     * Returns a User object from the database given a user ID.
+     * @param int $id The ID of the user to search for
+     * @return array A User object with its associated role
+     * @throws Exception If the user is not found
+     * @throws PDOException If there was a problem fetching the user
+     */
     public function getUserById(int $id) {
         $db = $this->getdb();
         $query = $db->prepare("SELECT u.*, ur.*
@@ -48,7 +56,23 @@ class UserRepository {
             } 
             return $result;
         } catch (PDOException $e) {
-            throw new PDOException("Unable to fetch user by ID!");
+            throw new PDOException("Unable to fetch user!");
+        }
+    }
+
+    public function updateProfileInfo(int $userId, array $newProfileInfo): void {
+        $db = $this->getdb();
+        $query = $db->prepare("UPDATE User SET firstName = :firstName, lastName = :lastName, email = :email, dob = :dob WHERE userId = :userId");
+        try {
+            $query->execute(array(
+                ":firstName" => $newProfileInfo['firstName'],
+                ":lastName" => $newProfileInfo['lastName'],
+                ":email" => $newProfileInfo['email'],
+                ":dob" => $newProfileInfo['dob'],
+                ":userId" => $userId
+            ));
+        } catch (PDOException $e) {
+            throw new PDOException("Unable to update user profile info!");
         }
     }
 }
