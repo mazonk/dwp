@@ -3,20 +3,26 @@ INSERT INTO PostalCode (postalCode, city) VALUES
 (90210, 'Beverly Hills'),
 (10001, 'New York');
 
-INSERT INTO Address (street, streetNr, postalCode) VALUES
-('Wayne Tower', '100', 60606),
-('Rodeo Drive', '222', 90210),
-('Queens Blvd', '15', 10001);
+INSERT INTO Address (street, streetNr, postalCodeId) VALUES
+('Wayne Tower', '100', 1),
+('Rodeo Drive', '222', 2),
+('Queens Blvd', '15', 3),
+('Elizabeth Tower', '200', 1);
+
+INSERT INTO CompanyInfo (companyName, companyDescription, logoUrl, addressId) VALUES
+('Spicy Pisces', 'Spicy Pisces is a renowned movie theater chain in Chicago, offering an exceptional cinematic experience with state-of-the-art technology. 
+Our theaters feature comfortable seating, top-notch sound systems, and a diverse range of film screenings, catering to audiences of all ages and preferences, 
+ensuring an unforgettable entertainment journey for every visitor.', 'logo.jpg', 4);
 
 INSERT INTO Venue (name, phoneNr, contactEmail, addressId) VALUES
 ('Gotham Cinema', '312-555-1234', 'info@gothamcinema.com', 1),
 ('Hollywood Stars Cinema', '310-555-5678', 'contact@hollywoodcinema.com', 2),
 ('Empire Cinema', '212-555-9010', 'support@empirecinema.com', 3);
 
-INSERT INTO OpeningHour (day, openingTime, closingTime, isCurrent, venueId) VALUES
-('Monday', '10:00:00', '22:00:00', TRUE, 1),
-('Tuesday', '09:00:00', '23:00:00', TRUE, 2),
-('Wednesday', '10:30:00', '21:30:00', TRUE, 3);
+INSERT INTO OpeningHour (day, openingTime, closingTime, isCurrent) VALUES
+('Monday', '10:00:00', '22:00:00', TRUE),
+('Tuesday', '09:00:00', '23:00:00', TRUE),
+('Wednesday', '10:30:00', '21:30:00', TRUE);
 
 INSERT INTO Room (roomNumber, venueId) VALUES
 (101, 1),
@@ -79,9 +85,7 @@ INSERT INTO UserRole (type) VALUES
 ('Staff');
 
 INSERT INTO User (firstName, lastName, DoB, email, passwordHash, roleId) VALUES
-('Bruce', 'Wayne', '1972-02-19', 'bruce@gotham.com', 'hashedpassword1', 1),
-('Peter', 'Parker', '1995-08-10', 'peter@spiderman.com', 'hashedpassword2', 2),
-('Tony', 'Stark', '1970-05-29', 'tony@starkindustries.com', 'hashedpassword3', 3);
+('Admin', 'Admin', '2000-01-01', 'admin@admin.com', '$2y$10$Xt53U6KwhZ34mwbsdgVNjetv998rgpvqQ9xMAa4EzwTfH9X2zElK2', 1);
 
 INSERT INTO Movie (title, description, duration, language, releaseDate, posterURL, promoURL, trailerURL, rating) VALUES
 ('The Dark Knight', 'Batman faces the Joker in Gotham City.', 152, 'English', '2008-07-18', 'poster_dark_knight.jpg', 'promo_dark_knight.mp4', 'trailer_dark_knight.mp4', 9.00),
@@ -274,8 +278,8 @@ INSERT INTO TicketType (name, price, description) VALUES
 
 INSERT INTO Booking (userId, status) VALUES
 (1, 'confirmed'),
-(2, 'pending'),
-(3, 'cancelled');
+(1, 'pending'),
+(1, 'cancelled');
 
 INSERT INTO Ticket (seatId, ticketTypeId, showingId, bookingId) VALUES
 (1, 1, 1, 1),
@@ -391,7 +395,7 @@ INSERT INTO MovieGenre (movieId, genreId) VALUES
 (19, 3),  -- AI: Awakening -> Sci-Fi
 (19, 10),  -- AI: Awakening -> Thriller
 (20, 1),  -- Rise of the Phoenix -> Action
-(20, 14);  -- Rise of the Phoenix -> Fantasy
+(20, 13);  -- Rise of the Phoenix -> Fantasy
 
 
 INSERT INTO MovieDirector (movieId, directorId) VALUES

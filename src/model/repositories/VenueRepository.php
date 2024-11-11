@@ -1,14 +1,12 @@
 <?php
 class VenueRepository {
-  private function getdb(): PDO {
-    require_once 'src/model/database/dbcon/DatabaseConnection.php';
-    return DatabaseConnection::getInstance(); // singleton
+  private PDO $db;
+  public function __construct($dbCon) {
+    $this->db = $dbCon;
   }
-
   /* Get all venues */
   public function getAllVenues(): array {
-    $db = $this->getdb();
-    $query = $db->prepare("SELECT * FROM Venue");
+    $query = $this->db->prepare("SELECT * FROM Venue");
     // Get all venues
     try {
       $query->execute();
@@ -24,8 +22,7 @@ class VenueRepository {
 
   /* Get the venue by venueId */
   public function getVenueById(int $venueId): array {
-    $db = $this->getdb();
-    $query = $db->prepare("SELECT * FROM Venue WHERE venueId = :venueId");
+    $query = $this->db->prepare("SELECT * FROM Venue WHERE venueId = :venueId");
     // Get venue by venueId
     try {
       $query->execute(['venueId' => htmlspecialchars($venueId)]);
@@ -36,6 +33,20 @@ class VenueRepository {
       return $result;
     } catch (PDOException $e) {
       throw new Exception("Unable to fetch venue");
+    }
+  }
+
+  public function editVenue(int $venueId, string $name, string $phoneNr, string $contactEmail): void {
+    $query = $this->db->prepare("UPDATE Venue SET name = :name, phoneNr = :phoneNr, contactEmail = :contactEmail WHERE venueId = :venueId");
+    try {
+      $query->execute([
+        'name' => htmlspecialchars($name),
+        'phoneNr' => htmlspecialchars($phoneNr),
+        'contactEmail' => htmlspecialchars($contactEmail),
+        'venueId' => $venueId,
+      ]);
+    } catch (PDOException $e) {
+      throw new Exception("Unable to update venue");
     }
   }
 }

@@ -7,7 +7,6 @@ include_once "src/view/components/ShowingCard.php";
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <title>All Movies</title>

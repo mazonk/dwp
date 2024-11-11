@@ -34,57 +34,62 @@
 <header class="w-[100%] fixed top-0 left-0 right-0 bg-bgDark z-[10]">
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const venueDropdownToggler = document.querySelector('#venueDropdownToggler');
-      const profileDropdownToggler = document.querySelector('#profileDropdownToggler');
+    const venueDropdownToggler = document.querySelector('#venueDropdownToggler');
+    const profileDropdownToggler = document.querySelector('#profileDropdownToggler');
 
-      venueDropdownToggler?.addEventListener('click', (e) => {
-          toggleDropdown('toggleVenueDropdown');
-      });
+    //add event listeners
+    venueDropdownToggler?.addEventListener('click', () => {
+      toggleDropdown('toggleVenueDropdown', venueDropdownToggler, profileDropdownToggler);
+    });
 
-      profileDropdownToggler?.addEventListener('click', (e) => {
-          toggleDropdown('toggleProfileDropdown');
-      });
+    profileDropdownToggler?.addEventListener('click', () => {
+      toggleDropdown('toggleProfileDropdown', profileDropdownToggler, venueDropdownToggler);
+    });
 
-      // Close dropdowns when clicked outside
-      document.addEventListener('click', e => {
-        if (!venueDropdownToggler.contains(e.target) && venueDropdownToggler.dataset.isOpen === '1') {
-          toggleDropdown('toggleVenueDropdown');
-        } else if (!profileDropdownToggler.contains(e.target) && profileDropdownToggler.dataset.isOpen === '1') {
-          toggleDropdown('toggleProfileDropdown');
-        }
-      })
-
-      function toggleDropdown(action) {
-          const xhr = new XMLHttpRequest();
-          xhr.open('POST', '', true); // @params (method, url, async)
-          xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-          xhr.onreadystatechange = function() { //event handler to check when the request is done
-              if (xhr.readyState === 4 && xhr.status === 200) { // if http response 200 (ok)
-                  // Reload the page to reflect the updated dropdown state
-                  window.location.reload();
-              }
-          };
-          xhr.send(`action=${action}`);
+    document.addEventListener('click', (e) => {
+      if (
+        !venueDropdownToggler.contains(e.target) &&
+        !profileDropdownToggler.contains(e.target) &&
+        !e.target.closest('[data-close-on-click="false"]')
+      ) {
+        if (venueDropdownToggler.dataset.isOpen === '1') toggleDropdown('toggleVenueDropdown', venueDropdownToggler);
+        if (profileDropdownToggler.dataset.isOpen === '1') toggleDropdown('toggleProfileDropdown', profileDropdownToggler);
       }
+    });
 
-      document.querySelectorAll('.venueSelectButton').forEach(button => { //get button class
+    document.querySelectorAll('.venueSelectButton').forEach(button => {
       button.addEventListener('click', (e) => {
-        e.preventDefault(); // Prevent form submission
-        
-        const venueId = button.dataset.venueId; // Get venue id from data attribute
-        
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', '', true);
-        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        xhr.onreadystatechange = function() {
-          if (xhr.readyState === 4 && xhr.status === 200) {
-            // Reload page or update the selected venue dynamically
-            window.location.reload();
-          }
-        };
-        xhr.send(`action=selectVenue&venueId=${venueId}`); // Send venue selection to the server
+        e.preventDefault();
+        const venueId = button.dataset.venueId;
+        sendToggleRequest(`selectVenue&venueId=${venueId}`);
       });
     });
+
+    //funcs
+    const toggleDropdown = (action, togglerToOpen, togglerToClose) => {
+      // Close the other dropdown if it's open
+      if (togglerToClose && togglerToClose.dataset.isOpen === '1') {
+        togglerToClose.dataset.isOpen = '0';
+        const closeAction = togglerToClose.id === 'venueDropdownToggler' ? 'toggleVenueDropdown' : 'toggleProfileDropdown';
+        sendToggleRequest(closeAction);
+      }
+
+      // Toggle the requested dropdown
+      togglerToOpen.dataset.isOpen = togglerToOpen.dataset.isOpen === '1' ? '0' : '1';
+      sendToggleRequest(action);
+    };
+
+    const sendToggleRequest = (action) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', '', true);
+      xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          window.location.reload();
+        }
+      };
+      xhr.send(`action=${action}`);
+    };
   });
   </script>
   <nav class="max-w-[1440px] w-[100%] flex justify-between items-center gap-[4rem] mx-auto py-[1rem] px-[100px] z-[10]">
@@ -105,7 +110,7 @@
       </div>
       <!-- TODO: Scroll down to ticket section -->
       <div>
-        <a href="" class="font-medium">Tickets</a>
+        <a href="<?php echo $_SESSION['baseRoute']?>about" class="font-medium">About us</a>
       </div>
       <!-- TODO: Scroll down to contact section it is in the footer -->
       <div>
@@ -152,7 +157,13 @@
       </button>
         <!-- Dropdown -->
         <?php if ($isProfileDropdownOpen): ?>
-        <div class="absolute min-w-[150px] top-[48px] right-[0] py-[.75rem] bg-bgDark border-[1px] border-bgLight rounded-[10px]">
+        <div class="absolute min-w-[150px] top-[48px] right-[0] py-[.75rem] bg-bgDark border-[1px] border-bgLight rounded-[10px]">  
+          <?php if ($_SESSION['loggedInUser']['roleType'] === "Admin"): ?>
+            <a data-close-on-click="false" href="<?php echo $_SESSION['baseRoute']?>admin" class="w-full flex gap-[.375rem] py-[.5rem] px-[.625rem] text-[.875rem] text-left leading-tight bg-bgDark ease-in-out duration-[.15s] hover:bg-bgSemiDark">
+              <i class="ri-user-line h-[18px] text-[18px]"></i>
+              <span class="translate-y-[1px]">Admin page</span>
+            </a>
+          <?php endif;?>
           <button class="w-full flex gap-[.375rem] py-[.5rem] px-[.625rem] text-[.875rem] text-left leading-tight bg-bgDark ease-in-out duration-[.15s] hover:bg-bgSemiDark">
             <i class="ri-user-line h-[18px] text-[18px]"></i>
             <span class="translate-y-[1px]">Edit profile</span>
