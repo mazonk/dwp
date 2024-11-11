@@ -20,14 +20,14 @@ public function getAllTicketsForShowing(int $showingId, int $venueId): array {
     try {
         $statement->execute([':showingId' => $showingId]);
         $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-        return $result ?: []; // Return empty array if no tickets found
+        return $result; // Return empty array if no tickets found
     } catch (PDOException $e) {
         throw new PDOException("Unable to fetch tickets: " . $e->getMessage());
     }
 }
 
 
-public function getTicketTypeById(int $ticketTypeId): array | TicketType {
+public function getTicketTypeById(int $ticketTypeId): array {
     $pdo = $this->getdb();
     $statement = $pdo->prepare("SELECT * FROM TicketType WHERE ticketTypeId = :ticketTypeId");
     try {
@@ -54,7 +54,7 @@ public function getAllTicketTypes(): array {
     }
 }
 
-public function getTicketById(int $ticketId): array | Ticket {
+public function getTicketById(int $ticketId): array {
     $pdo = $this->getdb();
     $statement = $pdo->prepare("SELECT * FROM tickets WHERE ticketId = :ticketId");
     try {
