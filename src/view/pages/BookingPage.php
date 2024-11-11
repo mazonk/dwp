@@ -2,6 +2,8 @@
 require_once 'session_config.php';
 include_once "src/view/components/SeatCard.php";
 require_once 'src/controller/SeatController.php';
+include_once "src/model/services/TicketService.php";
+include_once "src/model/services/SeatService.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -21,7 +23,12 @@ require_once 'src/controller/SeatController.php';
 
         if ($selectedShowing) {
             echo 'salalalaal';
-            $seatController = new SeatController();
+            $ticketService = new TicketService();
+            $seatService = new SeatService();
+            $seatService->setTicketService($ticketService);
+            $ticketService->setSeatService($seatService);
+            $bookingRepository = new BookingRepository();
+            $seatController = new SeatController($seatService, $bookingRepository);
             $showingId = $selectedShowing->getShowingId();
             $userId = $_SESSION['userId'] ?? null;
 
