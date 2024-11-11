@@ -82,7 +82,7 @@ if (is_array($movie) && isset($movie['errorMessage'])) {
         <span class="font-bold">Rating: </span> <?php echo $movie->getRating(); ?>
       </div>
       <div>
-                <span>Actors: <?php
+                <span class="font-bold">Actors: </span><?php
                 if (empty($movie-> getActors())) {
                     echo "No actors found for this movie.";
                 }
@@ -91,7 +91,7 @@ if (is_array($movie) && isset($movie['errorMessage'])) {
                 } ?></span>
             </div>
             <div>
-                <span>Directors: <?php 
+            <span class="font-bold">Directors: </span><?php 
                 if (empty($movie-> getDirectors())) {
                     echo "No director(s) found for this movie.";
                 }

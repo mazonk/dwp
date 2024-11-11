@@ -163,8 +163,26 @@ INSERT INTO Venue (name, phoneNr, contactEmail, addressId) VALUES
 
 INSERT INTO OpeningHour (day, openingTime, closingTime, isCurrent) VALUES
 ('Monday', '10:00:00', '22:00:00', TRUE),
+('Monday', '09:00:00', '21:00:00', FALSE),
+('Monday', '11:00:00', '22:00:00', FALSE),
 ('Tuesday', '09:00:00', '23:00:00', TRUE),
-('Wednesday', '10:30:00', '21:30:00', TRUE);
+('Tuesday', '10:00:00', '23:00:00', FALSE),
+('Tuesday', '12:00:00', '23:30:00', FALSE),
+('Wednesday', '10:30:00', '23:30:00', TRUE),
+('Wednesday', '10:00:00', '23:00:00', FALSE),
+('Wednesday', '11:00:00', '23:30:00', FALSE),
+('Thursday', '13:30:00', '22:30:00', TRUE),
+('Thursday', '14:00:00', '23:00:00', FALSE),
+('Thursday', '11:30:00', '23:30:00', FALSE),
+('Friday', '08:00:00', '23:30:00', TRUE),
+('Friday', '09:00:00', '23:00:00', FALSE),
+('Friday', '10:00:00', '23:30:00', FALSE),
+('Saturday', '12:00:00', '23:00:00', TRUE),
+('Saturday', '11:00:00', '23:30:00', FALSE),
+('Saturday', '13:00:00', '23:00:00', FALSE),
+('Sunday', '13:00:00', '23:30:00', TRUE),
+('Sunday', '14:00:00', '23:00:00', FALSE),
+('Sunday', '11:30:00', '23:30:00', FALSE);
 
 INSERT INTO Room (roomNumber, venueId) VALUES
 (101, 1),
