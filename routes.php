@@ -186,16 +186,15 @@ put($baseRoute.'companyInfo/edit', function() {
 });
 
 // Add news put route
-put($baseRoute.'news/add', function() {
+post($baseRoute.'news/add', function() {
     require_once 'src/controller/NewsController.php';
     $newsController = new NewsController();
-    parse_str(file_get_contents("php://input"), $_PUT); // Parse the PUT request
 
-    if (isset($_PUT['action']) && $_PUT['action'] === 'addNews') {
+    if (isset($_POST['action']) && $_POST['action'] === 'addNews') {
         $newsData = [
-            'header' => htmlspecialchars(trim($_PUT['header'])),
-            'imageURL' => htmlspecialchars(trim($_PUT['imageURL'])),
-            'content' => htmlspecialchars(trim($_PUT['content'])),
+            'header' => htmlspecialchars(trim($_POST['header'])),
+            'imageURL' => htmlspecialchars(trim($_POST['imageURL'])),
+            'content' => htmlspecialchars(trim($_POST['content'])),
         ];
 
         $result = $newsController->addNews($newsData);
@@ -249,13 +248,12 @@ put($baseRoute.'news/edit', function() {
 });
 
 // Delete news put route
-put($baseRoute.'news/delete', function() {
+delete($baseRoute.'news/delete', function() {
     require_once 'src/controller/NewsController.php';
     $newsController = new NewsController();
-    parse_str(file_get_contents("php://input"), $_PUT); // Parse the PUT request
 
-    if (isset($_PUT['action']) && $_PUT['action'] === 'deleteNews') {
-        $newsId = htmlspecialchars(trim($_PUT['newsId']));
+    if (isset($_GET['action']) && $_GET['action'] === 'deleteNews') {
+        $newsId = htmlspecialchars(trim($_GET['newsId']));
 
         $result = $newsController->deleteNews($newsId);
 
