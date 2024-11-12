@@ -4,7 +4,7 @@ class NewsCardAdmin {
         // Shorten the content to max 140 characters
         $shortenedContent = substr($content, 0, 140) . (strlen($content) > 140 ? '... ' : ''); 
         ?>
-        <div class="w-[400px] bg-bgSemiDark rounded-lg shadow-lg overflow-hidden">
+        <div class="w-[400px] bg-bgSemiDark border-[1px] border-borderDark rounded-lg shadow-lg overflow-hidden">
           <!-- Clickable link wrapping the image -->
           <img class="h-[275px] max-h-[275px] object-cover object-center" src="src/assets/<?php echo htmlspecialchars($imageURL); ?>" alt="Movie Poster">
           <!-- Content -->
