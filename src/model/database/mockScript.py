@@ -1,15 +1,27 @@
+from dotenv import load_dotenv
+import os
 import mysql.connector
 from faker import Faker
 import random
 from datetime import datetime, timedelta
 
+# Load environment variables from .env file
+load_dotenv('dbcon/.env')
+
+db_user = os.getenv("DB_USER")
+db_password = os.getenv("DB_PASS")
+db_host = os.getenv("DB_HOST")
+db_name = os.getenv("DB_NAME")
+
+print(f"User: {db_user}, Password: {db_password}, Host: {db_host}, Database: {db_name}")
+
 # Helper function to establish a DB connection
 def get_db_connection():
     return mysql.connector.connect(
-        host="localhost", 
-        user="andriska",
-        password="123456",
-        database="Cinema"
+        host=db_host,
+        user=db_user,
+        password=db_password,
+        database=db_name
     )
 
 # Helper function to disable/enable foreign key checks
