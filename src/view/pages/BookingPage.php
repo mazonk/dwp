@@ -2,6 +2,7 @@
 require_once 'session_config.php';
 include_once "src/view/components/SeatCard.php";
 require_once 'src/controller/SeatController.php';
+require_once 'src/controller/ShowingController.php';
 include_once "src/model/services/TicketService.php";
 include_once "src/model/services/SeatService.php";
 ?>
@@ -21,7 +22,9 @@ include_once "src/model/services/SeatService.php";
         <?php
         $selectedVenueId = $_SESSION['selectedVenueId']; // Get the selected venue ID
 
-        $selectedShowing = isset($_SESSION['selectedShowing']) ? unserialize($_SESSION['selectedShowing']) : null;
+        $selectedShowingId = isset($_GET['showing']) ? $_GET['showing'] : null;
+        $showingController = new ShowingController();
+        $selectedShowing = $showingController->getShowingById($selectedShowingId, $selectedVenueId);
 
         if ($selectedShowing) {
             $seatController = new SeatController();
