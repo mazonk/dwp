@@ -8,7 +8,6 @@ class OpeningHourRepository {
   /* Get opening hours by venueId */
   public function getOpeningHoursById(int $venueId): array {
     $db = $this->getdb();
-    $query = $db->prepare("SELECT * FROM OpeningHour WHERE venueId = :venueId");
     $query = $db->prepare("SELECT o.*
             FROM OpeningHour o
             JOIN VenueOpeningHour vo ON o.openingHourId = vo.openingHourId
