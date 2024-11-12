@@ -11,8 +11,11 @@ Required Python packages: Install the following using pip:
 pip install mysql-connector-python python-dotenv faker
 
 MySQL Database: Ensure you have a MySQL server running, and the tables Room, Seat, Showing, VenueShowing, Booking, and Ticket are already created in the database.
-Environment Setup
-Create a .env file: Store your database credentials in a file named .env within a folder named dbcon (relative to this script). The file should have the following variables:
+
+Environment Setup:
+Create a .env file: 
+
+Store your database credentials in a file named .env within a folder named dbcon (relative to this script). The file should have the following variables:
 
 DB_USER=your_db_username
 DB_PASS=your_db_password
