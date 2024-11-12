@@ -1,8 +1,3 @@
-<?php
-include_once "src/controller/NewsController.php";
-
-include_once "src/view/components/NewsCard.php";
-?>
 <section>
     <h2 class="text-3xl font-semibold mb-4 text-center">Content Management</h2>
     <div class="flex flex-col">

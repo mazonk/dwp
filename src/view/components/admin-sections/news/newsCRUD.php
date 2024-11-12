@@ -1,6 +1,5 @@
 <?php
 include_once "src/controller/NewsController.php";
-
 include_once "src/view/components/admin-sections/news/NewsCardAdmin.php";
 ?>
 
