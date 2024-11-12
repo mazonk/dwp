@@ -14,6 +14,7 @@ db_host = os.getenv("DB_HOST")
 db_port = int(os.getenv("DB_PORT"))
 db_name = os.getenv("DB_NAME")
 
+print(db_user, db_password, db_host, db_port, db_name)
 # Helper function to establish a DB connection
 def get_db_connection():
     return mysql.connector.connect(

@@ -48,10 +48,6 @@ class SeatService {
                 $bookedSeatsIds[] = $ticket->getSeat()->getSeatId();
             }
             $availableSeats = [];
-            $room = $this->roomService->getRoomById($allSeats[0]->getRoom()->getRoomId());
-            if (is_array($room) && isset($room["error"]) && $room["error"]) {
-                return $room;
-            }
             foreach ($allSeats as $seatData) {
                 if (!in_array($seatData->getSeatId(), $bookedSeatsIds)) {
                     $availableSeats[] = $seatData;

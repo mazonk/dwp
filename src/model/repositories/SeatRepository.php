@@ -10,7 +10,7 @@ class SeatRepository {
     public function getAllSeatsForShowing(int $showingId, int $selectedVenueId): array {
         $db = $this->getdb();
         $query = $db->prepare("SELECT s.*
-        FROM Seat s, Room r, Showing sh, venueshowing vs
+        FROM Seat s, Room r, Showing sh, VenueShowing vs
         WHERE s.roomId = r.roomId
         AND sh.roomId = r.roomId
         AND vs.showingId = sh.showingId
