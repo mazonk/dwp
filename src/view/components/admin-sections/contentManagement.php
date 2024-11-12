@@ -3,5 +3,6 @@
     <div class="flex flex-col">
         <hr class="w-full mx-auto border-gray-300">
         <?php include_once("src/view/components/admin-sections/news/newsCRUD.php"); ?>
+        <?php include_once("src/view/components/admin-sections/openingHours/openingHoursCRUD.php"); ?>
     </div>
 </section>
