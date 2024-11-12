@@ -26,7 +26,6 @@ def generate_rooms():
             # Truncate table
             toggle_foreign_key_checks(cursor, disable=True)
             cursor.execute("TRUNCATE TABLE Room")
-            toggle_foreign_key_checks(cursor, disable=False)
 
             # Generate rooms for each venue
             for venue_id in range(1, 4):  # venueId 1, 2, and 3
@@ -35,8 +34,11 @@ def generate_rooms():
 
                     query = "INSERT INTO Room (roomNumber, venueId) VALUES (%s, %s)"
                     cursor.execute(query, (room_name, venue_id))
+                    
+            toggle_foreign_key_checks(cursor, disable=False)
 
             db_connection.commit()
+
     print("Rooms for each venue have been inserted.")
 
 def generate_seats():
@@ -147,8 +149,112 @@ def generate_showings():
 
     print(f"Showings for each movie have been inserted for {num_days} days, with 5 showings per movie each day, and associated records in VenueShowing.")
 
+def generate_bookings():
+    """Generate 500 bookings"""
+    with get_db_connection() as db_connection:
+        with db_connection.cursor() as cursor:
+            # Truncate table
+            toggle_foreign_key_checks(cursor, disable=True)
+            cursor.execute("TRUNCATE TABLE Booking")
+            toggle_foreign_key_checks(cursor, disable=False)
+
+            # Fetch valid userIds
+            cursor.execute("SELECT userId FROM User")
+            valid_user_ids = [user[0] for user in cursor.fetchall()]
+
+            # Possible statuses
+            statuses = ["confirmed", "pending", "cancelled"]
+            weights = [0.95, 0.02, 0.03]  # Corresponding weights for confirmed, pending, cancelled status appearance
+
+            # Generate 400 bookings
+            for _ in range(400):
+                user_id = random.choice(valid_user_ids)  # Pick a random user
+                status = random.choices(statuses, weights=weights, k=1)[0]
+
+                # Insert booking
+                query = """
+                INSERT INTO Booking (userId, status) 
+                VALUES (%s, %s)
+                """
+                cursor.execute(query, (user_id, status))
+
+            db_connection.commit()
+
+    print("400 bookings have been generated.")
+
+# Method to generate tickets
+import random
+from collections import defaultdict
+
+def generate_tickets():
+    """Generate mock data for tickets."""
+    with get_db_connection() as db_connection:
+        with db_connection.cursor() as cursor:
+
+            # Truncate the Ticket table
+            toggle_foreign_key_checks(cursor, disable=True)
+            cursor.execute("TRUNCATE TABLE Ticket")
+            toggle_foreign_key_checks(cursor, disable=False)
+
+            # Fetch valid showingId and bookingId values
+            cursor.execute("SELECT showingId, roomId FROM Showing")
+            showing_rooms = cursor.fetchall()  # [(showingId, roomId), ...]
+
+            cursor.execute("SELECT bookingId FROM Booking")
+            valid_booking_ids = [booking[0] for booking in cursor.fetchall()]
+
+            # Fetch all seatIds and group them by roomId
+            cursor.execute("SELECT seatId, roomId FROM Seat")
+            seats_by_room = defaultdict(list)
+            for seat_id, room_id in cursor.fetchall():
+                seats_by_room[room_id].append(seat_id)
+
+            ticket_count = 0
+
+            # Ensure each showingId appears between 15-30 times
+            for showing_id, room_id in showing_rooms:
+                num_tickets_for_showing = random.randint(15, 30)
+                for _ in range(num_tickets_for_showing):
+                    booking_id = random.choice(valid_booking_ids)
+                    seat_id = random.choice(seats_by_room[room_id])
+                    ticket_type_id = random.randint(1, 3)
+
+                    query = """
+                    INSERT INTO Ticket (seatId, ticketTypeId, showingId, bookingId)
+                    VALUES (%s, %s, %s, %s)
+                    """
+                    cursor.execute(query, (seat_id, ticket_type_id, showing_id, booking_id))
+                    ticket_count += 1
+
+            # Additional random tickets for each booking, ensuring 1-6 tickets per booking
+            for booking_id in valid_booking_ids:
+                num_tickets = random.randint(1, 6)
+                showing_id = random.choice([sr[0] for sr in showing_rooms])
+
+                # Select seats for the room associated with the showing
+                room_id_for_showing = next(room_id for show, room_id in showing_rooms if show == showing_id)
+                valid_seat_ids_for_showing = seats_by_room[room_id_for_showing]
+
+                for _ in range(num_tickets):
+                    seat_id = random.choice(valid_seat_ids_for_showing)
+                    ticket_type_id = random.randint(1, 3)
+
+                    query = """
+                    INSERT INTO Ticket (seatId, ticketTypeId, showingId, bookingId)
+                    VALUES (%s, %s, %s, %s)
+                    """
+                    cursor.execute(query, (seat_id, ticket_type_id, showing_id, booking_id))
+                    ticket_count += 1
+
+            db_connection.commit()
+
+    print(f"{ticket_count} tickets have been inserted.")
+
+
 # Call the function when the file is run
 if __name__ == "__main__":
     generate_rooms()
     generate_seats()
     generate_showings()
+    generate_bookings()
+    generate_tickets()
