@@ -4,17 +4,25 @@ include_once "src/view/components/admin-sections/openingHours/OpeningHoursCard.p
 
 <div>
   <div class="flex justify-between my-[2rem]">
-      <h3 class="text-[1.5rem] font-semibold">Opening Hours</h3>
-      <button id="addNewsButton" class="bg-primary text-textDark py-2 px-4 rounded hover:bg-primaryHover">
-          Add New
-      </button>
+      <h3 class="text-[1.5rem] font-semibold">
+				Opening Hours
+				<span id="selectedVenue" class="ml-[1rem] text-lg text-primary italic font-medium px-4 py-1 rounded-full bg-primary/15 hidden"></span>
+			</h3>
+      <div class="flex gap-[.5rem]">
+				<button id="addOpeningHourButton" class="bg-primary text-textDark py-2 px-4 rounded hover:bg-primaryHover hidden">
+						Add New
+				</button>
+				<button id="closeOpeningHourCardsButton" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 hidden">
+					Close
+				</button>
+			</div>
   </div>
 	<?php
 	require_once "src/controller/VenueController.php";
 	$venueController = new VenueController();
 	$allVenues = $venueController->getAllVenues();
 	?>
-	<div class="grid grid-cols-<?php echo count($allVenues) > 5 ? '5' : count($allVenues) ?> gap-6 w-full">
+	<div id="venueCardsContainer" class="grid grid-cols-<?php echo count($allVenues) > 5 ? '5' : count($allVenues) ?> gap-6 w-full">
 		<?php
 		if (isset($allVenues['errorMessage'])) {
 				echo "<p class='text-red-500 text-center font-medium'>" . htmlspecialchars($allVenues['errorMessage']) . "</p>";
@@ -38,9 +46,9 @@ include_once "src/view/components/admin-sections/openingHours/OpeningHoursCard.p
 	<?php
 	require_once "src/controller/OpeningHourController.php";
 	$openingHourController = new OpeningHourController();
-	$openingHours = $openingHourController->getOpeningHoursById(1);
+	$openingHours = $openingHourController->getOpeningHoursById(3);
 	?>
-	<div class="grid grid-cols-5 gap-4">
+	<div id="openingHourCardsContainer" class="grid grid-cols-5 gap-4 hidden">
 		<?php
 		if (isset($openingHours['errorMessage'])) {
 			echo $openingHours['errorMessage'];
@@ -51,5 +59,53 @@ include_once "src/view/components/admin-sections/openingHours/OpeningHoursCard.p
 		}
 		?>
 	</div>
-          
 </div>
+
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		const openingHourCardsContainer = document.getElementById('openingHourCardsContainer');
+		const venueCardsContainer = document.getElementById('venueCardsContainer');
+		const selectedVenue = document.getElementById('selectedVenue');
+		const addOpeningHourButton = document.getElementById('addOpeningHourButton');
+		const closeOpeningHourCardsButton = document.getElementById('closeOpeningHourCardsButton');
+
+		// Add click event listener to each venue card
+		document.querySelectorAll('.venueCard').forEach(card => {
+			card.addEventListener('click', () => {
+				// Parse the venue data from the card's data attribute
+				const venueData = JSON.parse(card.getAttribute('data-venue'));
+
+				openOpeningHourCards(venueData);
+			});
+		});
+
+		// Add click event listener to close opening hour cards button
+		closeOpeningHourCardsButton.addEventListener('click', closeOpeningHourCards);
+
+		// Open opening hour cards for the selected venue
+		function openOpeningHourCards(venueData) {
+			openingHourCardsContainer.classList.remove('hidden');
+			venueCardsContainer.classList.add('hidden');
+
+			selectedVenue.textContent = venueData.name;
+			selectedVenue.classList.remove('hidden');
+
+			addOpeningHourButton.classList.remove('hidden');
+			closeOpeningHourCardsButton.classList.remove('hidden');
+		}
+
+		// Close opening hour cards and show venue cards
+		function closeOpeningHourCards() {
+			openingHourCardsContainer.classList.add('hidden');
+			venueCardsContainer.classList.remove('hidden');
+
+			selectedVenue.textContent = '';
+			selectedVenue.classList.add('hidden');
+
+			addOpeningHourButton.classList.add('hidden');
+			closeOpeningHourCardsButton.classList.add('hidden');
+		}
+
+		/*== Add News ==*/
+	});
+</script>
