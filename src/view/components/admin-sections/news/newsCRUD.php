@@ -11,23 +11,21 @@ include_once "src/view/components/admin-sections/news/NewsCardAdmin.php";
         </button>
     </div>
     <!-- Display all news in cards -->
-    <div id="tab-content" class="grid grid-cols-1 gap-4">
-        <?php
-        $newsController = new NewsController();
-        $allNews = $newsController->getAllNews();
+    <?php
+    $newsController = new NewsController();
+    $allNews = $newsController->getAllNews();
 
-        if (isset($allNews['errorMessage'])) {
-            echo $allNews['errorMessage'];
-        } else {
-            // Loop through each news item and render it using NewsCard
-            echo '<div class="flex items-start flex-wrap gap-[1rem]">';
-            foreach ($allNews as $news) {
-                NewsCardAdmin::render($news->getNewsId(), $news->getHeader(), $news->getImageURL(), $news->getContent());
-            }
-            echo '</div>';
+    if (isset($allNews['errorMessage'])) {
+        echo $allNews['errorMessage'];
+    } else {
+        // Loop through each news item and render it using NewsCard
+        echo '<div class="grid grid-cols-4 gap-4">';
+        foreach ($allNews as $news) {
+            NewsCardAdmin::render($news->getNewsId(), $news->getHeader(), $news->getImageURL(), $news->getContent());
         }
-        ?>
-    </div>
+        echo '</div>';
+    }
+    ?>
 
     <!-- Add News Form Modal -->
     <div id="addNewsModal" class="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 hidden">
