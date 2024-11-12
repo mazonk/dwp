@@ -11,15 +11,17 @@ load_dotenv('dbcon/.env')
 db_user = os.getenv("DB_USER")
 db_password = os.getenv("DB_PASS")
 db_host = os.getenv("DB_HOST")
+db_port = int(os.getenv("DB_PORT"))
 db_name = os.getenv("DB_NAME")
 
 # Helper function to establish a DB connection
 def get_db_connection():
     return mysql.connector.connect(
         host=db_host,
+        port=db_port,
         user=db_user,
         password=db_password,
-        database=db_name
+        database=db_name,
     )
 
 # Helper function to disable/enable foreign key checks
@@ -94,7 +96,7 @@ def generate_seats():
                             for seat_nr in range(1, row_seat_count + 1):
                                 # Insert seat data into the Seat table
                                 query = """
-                                INSERT INTO Seat (row, seatNr, roomId)
+                                INSERT INTO Seat (`row`, seatNr, roomId)
                                 VALUES (%s, %s, %s)
                                 """
                                 cursor.execute(query, (seat_id, seat_nr, room_number))

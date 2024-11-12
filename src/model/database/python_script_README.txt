@@ -19,6 +19,7 @@ Store your database credentials in a file named .env within a folder named dbcon
 
 DB_USER=your_db_username
 DB_PASS=your_db_password
+DB_PORT=your_db_port (if you are using XAMP, baseport is 3306)
 DB_HOST=your_db_host
 DB_NAME=your_db_name
 
