@@ -127,7 +127,6 @@ if (is_array($movie) && isset($movie['errorMessage'])) {
                         }
                     
                 }
-                echo $showing->getShowingId();
                 echo '</div>';
                 echo "</div>";
             }

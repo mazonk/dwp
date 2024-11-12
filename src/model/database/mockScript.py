@@ -213,7 +213,7 @@ def generate_tickets():
 
             # Ensure each showingId appears between 15-30 times
             for showing_id, room_id in showing_rooms:
-                num_tickets_for_showing = random.randint(15, 30)
+                num_tickets_for_showing = random.randint(20, 50)
                 for _ in range(num_tickets_for_showing):
                     booking_id = random.choice(valid_booking_ids)
                     seat_id = random.choice(seats_by_room[room_id])

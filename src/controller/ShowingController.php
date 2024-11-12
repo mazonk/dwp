@@ -35,4 +35,14 @@ class ShowingController {
         return $showing;
     }
     
+    public function getShowingById(int $showingId, int $venueId): Showing|array {
+        $showing = $this->showingService->getShowingById($showingId, $venueId);
+
+        // If the service returns an error, pass it to the frontend
+        if (is_array($showing) && isset($showing['error']) && $showing['error']) {
+            return ['errorMessage' => $showing['message']];
+        }
+        
+        return $showing;
+    }
 }
