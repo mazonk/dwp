@@ -86,18 +86,20 @@ if (is_array($movie) && isset($movie['errorMessage'])) {
                 if (empty($movie-> getActors())) {
                     echo "No actors found for this movie.";
                 }
-                foreach ($movie-> getActors() as $actor) {
-                    echo htmlspecialchars($actor->getFirstName()). ' ' .$actor->getLastName(). ", ";
-                } ?></span>
+                $actors = array_map(function($actor) {
+                    return htmlspecialchars($actor->getFirstName()). ' ' .$actor->getLastName();
+                }, $movie-> getActors());
+                echo implode(', ', $actors); ?></span>
             </div>
             <div>
             <span class="font-bold">Directors: </span><?php 
                 if (empty($movie-> getDirectors())) {
                     echo "No director(s) found for this movie.";
                 }
-                foreach ($movie->getDirectors() as $director) {
-                    echo htmlspecialchars($director->getFirstName()).' '. $director->getLastName(). ", ";
-                }?></span>
+                $directors = array_map(function($director) {
+                    return htmlspecialchars($director->getFirstName()). ' ' .$director->getLastName();
+                }, $movie-> getDirectors());
+                echo implode(', ', $directors); ?></span>
             </div>
         </div>
     <div class="trailer-video mt-10">
