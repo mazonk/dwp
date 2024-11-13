@@ -300,3 +300,27 @@ delete($baseRoute.'news/delete', function() {
         echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
     }
 });
+
+
+// Post route for get opening hours by venueId
+post($baseRoute.'openingHours/getById', function() {
+    require_once 'src/controller/OpeningHourController.php';
+    $openingHourController = new OpeningHourController();
+
+    if (isset($_POST['action']) && $_POST['action'] === 'getOpeningHoursById') {
+        $venueId = htmlspecialchars(trim($_POST['venueId']));
+
+        $openingHours = $openingHourController->getOpeningHoursById($venueId);
+
+        if (isset($openingHours['errorMessage']) && $openingHours['errorMessage']) {
+            // Return an error response
+            echo json_encode(['error' => true, 'message' => $openingHours['errorMessage']]);
+        } else {
+            // Return the opening hours
+            echo json_encode(['error' => false, 'openingHours' => $openingHours]);
+        }
+    } else {
+        // Invalid action response
+        echo json_encode(['error' => true, 'message' => 'Invalid action.']);
+    }
+});

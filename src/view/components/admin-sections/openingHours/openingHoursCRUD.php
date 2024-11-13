@@ -71,23 +71,59 @@ include_once "src/view/components/admin-sections/openingHours/OpeningHoursCard.p
 
 		// Add click event listener to each venue card
 		document.querySelectorAll('.venueCard').forEach(card => {
+			// Fetch opening hours for the selected venue
 			card.addEventListener('click', () => {
-				// Parse the venue data from the card's data attribute
-				const venueData = JSON.parse(card.getAttribute('data-venue'));
+				const xhr = new XMLHttpRequest();
+				const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
+				xhr.open('POST', `${baseRoute}openingHours/getById`, true);
 
-				openOpeningHourCards(venueData);
+				// Parse the venue data from the card's data attribute
+				const data = JSON.parse(card.getAttribute('data-venue'));
+				const venueData = {
+            action: 'getOpeningHoursById',
+            venueId: data.id
+        };
+
+				xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.onreadystatechange = function() {
+					// If the request is done and successful
+					if (xhr.readyState === 4 && xhr.status === 200) {
+							let response;
+							try {
+									response = JSON.parse(xhr.response);
+							} catch (e) {
+									console.error('Could not parse response as JSON:', e);
+									return;
+							}
+							console.log('Response from server:', response); // Log the response
+
+						if (!response.error) {
+							alert('Opening hours fetched successfully');
+							console.log('Opening hours fetched successfully:', response.openingHours);
+							displayOpeningHourCards(data.name); // Display opening hour cards
+						}
+						else {
+							alert('Failed to fetch opening hours');
+							console.error('Error:', response.errors);
+						}
+						
+					}
+				};
+
+				// Send data as URL-encoded string
+        const params = Object.keys(venueData)
+            .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(venueData[key])}`)
+            .join('&');
+        xhr.send(params);
 			});
 		});
 
-		// Add click event listener to close opening hour cards button
-		closeOpeningHourCardsButton.addEventListener('click', closeOpeningHourCards);
-
-		// Open opening hour cards for the selected venue
-		function openOpeningHourCards(venueData) {
+		// Dipslay opening hour cards for the selected venue
+		function displayOpeningHourCards(venueName) {
 			openingHourCardsContainer.classList.remove('hidden');
 			venueCardsContainer.classList.add('hidden');
 
-			selectedVenue.textContent = venueData.name;
+			selectedVenue.textContent = venueName;
 			selectedVenue.classList.remove('hidden');
 
 			addOpeningHourButton.classList.remove('hidden');
@@ -105,6 +141,9 @@ include_once "src/view/components/admin-sections/openingHours/OpeningHoursCard.p
 			addOpeningHourButton.classList.add('hidden');
 			closeOpeningHourCardsButton.classList.add('hidden');
 		}
+
+		// Add click event listener to close opening hour cards button
+		closeOpeningHourCardsButton.addEventListener('click', closeOpeningHourCards);
 
 		/*== Add News ==*/
 	});
