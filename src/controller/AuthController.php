@@ -1,4 +1,4 @@
-<?php
+<?php require_once "session_config.php";
 require_once "src/model/services/AuthService.php";
 
 class AuthController {
@@ -63,7 +63,6 @@ class AuthController {
 
             // Session handling and redirection logic
             $user = $result['user'];
-            require_once "session_config.php";
 
             // Set session variables
             $_SESSION['loggedInUser']['userId'] = $user->getId();
@@ -80,9 +79,8 @@ class AuthController {
     }
 
     public function logout(): void {
-        $this->authService->logout();
-        
         header("Location: " . $_SESSION['baseRoute'] . "login");
+        $this->authService->logout();
         exit;
     }
 }

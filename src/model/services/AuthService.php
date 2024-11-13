@@ -1,5 +1,4 @@
-<?php
-require_once 'session_config.php';
+<?php require_once 'session_config.php';
 require_once 'src/model/entity/User.php';
 include_once 'src/model/repositories/AuthRepository.php';
 require_once 'src/model/services/UserService.php';
@@ -117,7 +116,6 @@ class AuthService {
 
     public function logout(): void {
         // Unset session and destroy it
-        session_start();
         session_unset();
         session_destroy();
     }

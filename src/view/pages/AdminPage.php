@@ -1,3 +1,4 @@
+<?php require_once 'session_config.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,8 +17,6 @@
         <!-- Main Content Area -->
         <main class="flex-1 p-8 bg-bgDark text-gray-100">
             <?php
-                require_once 'session_config.php';
-
                 if (!isLoggedIn() || $_SESSION['loggedInUser']['roleType'] !== "Admin") {
                     http_response_code(403);
                     echo '<div class="text-4xl font-bold text-red-600">Nice try, but forbidden!</div>';
