@@ -148,6 +148,33 @@
 			closeOpeningHourCardsButton.classList.add('hidden');
 		});
 
-		/*== Add News ==*/
+		/*== Add Opening Hours ==*/
+		const addOpeningHoursModal = document.getElementById('addOpeningHoursModal');
+		const addOpeningHoursForm = document.getElementById('addOpeningHoursForm');
+
+		// Display the modal
+    addOpeningHourButton.addEventListener('click', () => {
+      addOpeningHoursModal.classList.remove('hidden');
+    });
+
+    // Close the modal
+    document.getElementById('cancelAddOpeningHoursButton').addEventListener('click', () => {
+			addOpeningHoursModal.classList.add('hidden');
+      clearValues('add');
+    });
+
+		// Clear error messages and input values
+    function clearValues(action) {
+			if (action === 'edit') {
+				/* errorEditMessageHeader.classList.add('hidden');
+				errorEditMessageContent.classList.add('hidden'); 
+				editOpeningHoursForm.reset();*/
+			}
+			else if (action === 'add') {
+				/* errorAddMessageHeader.classList.add('hidden');
+				errorAddMessageContent.classList.add('hidden'); */
+				addOpeningHoursForm.reset();
+			}
+    }
 	});
 </script>
