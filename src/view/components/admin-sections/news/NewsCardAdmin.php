@@ -17,13 +17,13 @@ class NewsCardAdmin {
             </p>
 
             <div class="flex gap-[.5rem]">
-              <button id="editNewsButton" onclick="openEditModal(
+              <button onclick="openEditModal(
               '<?= htmlspecialchars($newsId); ?>',
               '<?= htmlspecialchars($header); ?>',
               '<?= htmlspecialchars($imageURL); ?>',
               '<?= htmlspecialchars($content); ?>')"
                 class="py-1 px-2 text-primary border-[1px] border-primary rounded hover:text-primaryHover hover:border-primaryHover duration-[.2s] ease-in-out">Edit</button>
-              <button id="deleteNewsButton" onclick="openDeleteModal('<?= htmlspecialchars($newsId); ?>',
+              <button onclick="openDeleteModal('<?= htmlspecialchars($newsId); ?>',
               '<?= htmlspecialchars($header); ?>')" class="bg-red-500 text-textDark py-1 px-2 border-[1px] border-red-500 rounded hover:bg-red-600 hover:border-red-600">Delete</button>
             </div>
           </div>

@@ -150,6 +150,23 @@
 			</div>
   </div>
 
+	<!-- Delete News Modal -->
+	<div id="deleteOpeningHoursModal" class="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 hidden">
+        <div class="flex items-center justify-center min-h-screen">
+            <!-- Modal -->
+            <div class="bg-bgSemiDark w-[500px] rounded-lg p-6 border-[1px] border-borderDark">
+                <h2 class="text-[1.5rem] text-center font-semibold mb-4">Delete Opening Hours</h2>
+                <p class="text-textLight text-center">Are you sure you want to delete this opening hour?</p>
+                <p id="deleteModalOpeningHoursHeader" class="text-gray-400 text-center"></p>
+                <input type="hidden" id="deleteOpeningHoursId" name="deleteOpeningHoursId">
+                <div class="flex justify-center mt-4">
+                    <button id="confirmDeleteOpeningHoursButton" class="bg-red-500 text-white py-2 px-4 border-[1px] border-transparent rounded hover:bg-red-600 duration-[.2s] ease-in-out">Delete</button>
+                    <button id="cancelDeleteOpeningHoursButton" class="text-textLight py-2 px-4 border-[1px] border-white rounded hover:bg-borderDark ml-2 duration-[.2s] ease-in-out">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 </div>
 
@@ -299,14 +316,31 @@
 
 		// Submit the edit form
 
+		/*== Delete Opening Hours ==*/
+		const deleteOpeningHoursModal = document.getElementById('deleteOpeningHoursModal');
+		const deleteModalOpeningHoursHeader = document.getElementById('deleteModalOpeningHoursHeader');
+		const confirmDeleteOpeningHoursButton = document.getElementById('confirmDeleteOpeningHoursButton');
+		const cancelDeleteOpeningHoursButton = document.getElementById('cancelDeleteOpeningHoursButton');
+		const deleteOpeningHoursId = document.getElementById('deleteOpeningHoursId');
 
+		// Display the delete modal
+		window.openDeleteOpeningHoursModal = function(openingHourId) {
+			deleteOpeningHoursModal.classList.remove('hidden');
+		}
+
+		// Close the delete modal
+		cancelDeleteOpeningHoursButton.addEventListener('click', () => {
+			deleteOpeningHoursModal.classList.add('hidden');
+		});
+
+		// Confirm delete
 
 		// Clear error messages and input values
     function clearValues(action) {
 			if (action === 'edit') {
 				/* errorEditMessageHeader.classList.add('hidden');
-				errorEditMessageContent.classList.add('hidden'); 
-				editOpeningHoursForm.reset();*/
+				errorEditMessageContent.classList.add('hidden'); */ 
+				editOpeningHoursForm.reset();
 			}
 			else if (action === 'add') {
 				/* errorAddMessageHeader.classList.add('hidden');
