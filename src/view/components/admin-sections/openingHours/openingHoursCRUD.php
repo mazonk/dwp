@@ -137,7 +137,7 @@
 		}
 
 		// Close opening hour cards and show venue cards
-		function closeOpeningHourCards() {
+		closeOpeningHourCardsButton.addEventListener('click', () => {
 			openingHoursCardsContainer.classList.add('hidden');
 			venueCardsContainer.classList.remove('hidden');
 
@@ -146,10 +146,7 @@
 
 			addOpeningHourButton.classList.add('hidden');
 			closeOpeningHourCardsButton.classList.add('hidden');
-		}
-
-		// Add click event listener to close opening hour cards button
-		closeOpeningHourCardsButton.addEventListener('click', closeOpeningHourCards);
+		});
 
 		/*== Add News ==*/
 	});
