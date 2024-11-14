@@ -65,7 +65,7 @@ include_once "src/view/components/admin-sections/news/NewsCardAdmin.php";
             <div class="bg-bgSemiDark w-[600px] rounded-lg p-6 border-[1px] border-borderDark">
                 <h2 class="text-[1.5rem] text-center font-semibold mb-4">Edit News</h2>
                 <form id="editNewsForm" class="text-textLight">
-                   <input type="hidden" id="editNewsId" name="editNewsId">
+                    <input type="hidden" id="editNewsId" name="editNewsId">
                     <div class="mb-4">
                         <label for="editHeaderInput" class="block text-sm font-medium text-text-textLight">Header</label>
                         <input type="text" id="editHeaderInput" name="editHeaderInput" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required>

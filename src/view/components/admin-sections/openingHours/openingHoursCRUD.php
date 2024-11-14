@@ -45,7 +45,7 @@
 	<!-- Display opening hours for a selected venue in cards -->
 	<div id="openingHoursCardsContainer" class="grid grid-cols-5 gap-4 hidden"></div>
 
-	<!-- Add News Form Modal -->
+	<!-- Add Opening Hours Form Modal -->
 	<div id="addOpeningHoursModal" class="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 hidden">
 			<div class="flex items-center justify-center min-h-screen">
 					<!-- Modal -->
@@ -91,6 +91,59 @@
 									<div class="flex justify-end">
 											<button type="submit" id="saveAddOpeningHoursButton" class="bg-primary text-textDark py-2 px-4 rounded border border-transparent hover:bg-primaryHover duration-[.2s] ease-in-out">Add</button>
 											<button type="button" id="cancelAddOpeningHoursButton" class="text-textLight py-2 px-4 border-[1px] border-white rounded hover:bg-borderDark ml-2 duration-[.2s] ease-in-out">Cancel</button>
+									</div>
+							</form>
+					</div>
+			</div>
+  </div>
+
+	<!-- Edit Opening Hours Form Modal -->
+	<div id="editOpeningHoursModal" class="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 hidden">
+			<div class="flex items-center justify-center min-h-screen">
+					<!-- Modal -->
+					<div class="bg-bgSemiDark w-[600px] rounded-lg p-6 border-[1px] border-borderDark">
+							<h2 class="text-[1.5rem] text-center font-semibold mb-4">Add Opening Hour</h2>
+							<form id="editOpeningHoursForm" class="text-textLight">
+									<input type="hidden" id="editOpeningHoursId" name="editOpeningHoursId">
+									<div class="mb-4">
+											<label for="editDayInput" class="block text-sm font-medium text-text-textLight">Day</label>
+											<select id="editDayInput" name="editDayInput" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required>
+													<option value="" disabled>Select a day</option>
+													<option value="Monday">Monday</option>
+													<option value="Tuesday">Tuesday</option>
+													<option value="Wednesday">Wednesday</option>
+													<option value="Thursday">Thursday</option>
+													<option value="Friday">Friday</option>
+													<option value="Saturday">Saturday</option>
+													<option value="Sunday">Sunday</option>
+											</select>
+											<p id="error-edit-day"  class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
+									</div>
+									<div class="flex gap-[1rem]">
+											<div class="w-full mb-4">
+													<label for="editOpeningTimeInput" class="block text-sm font-medium text-text-textLight">Opening Time</label>
+													<input id="editOpeningTimeInput" name="editOpeningTimeInput" type="time" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required>
+													<p id="error-edit-openingTime" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
+											</div>
+											<div class="w-full mb-4">
+													<label for="editClosingTimeInput" class="block text-sm font-medium text-text-textLight">Closing Time</label>
+													<input id="editClosingTimeInput" name="editClosingTimeInput" type="time" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required>
+													<p id="error-edit-closingTime" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
+											</div>
+									</div>
+									<!-- Is current -->
+									<div class="mb-4">
+											<label for="editIsCurrentInput" class="block text-sm font-medium text-text-textLight">Current</label>
+											<select id="editIsCurrentInput" name="editIsCurrentInput" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required>
+													<option value="" disabled>Select an option</option>
+													<option value="1">Yes</option>
+													<option value="0">No</option>
+											</select>
+											<p id="error-edit-isCurrent" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
+									</div>
+									<div class="flex justify-end">
+											<button type="submit" id="saveEditOpeningHoursButton" class="bg-primary text-textDark py-2 px-4 rounded border border-transparent hover:bg-primaryHover duration-[.2s] ease-in-out">Add</button>
+											<button type="button" id="cancelEditOpeningHoursButton" class="text-textLight py-2 px-4 border-[1px] border-white rounded hover:bg-borderDark ml-2 duration-[.2s] ease-in-out">Cancel</button>
 									</div>
 							</form>
 					</div>
@@ -177,10 +230,10 @@
 							</div>
 							<p>${openingHour.openingTime} - ${openingHour.closingTime}</p>
 							<div class='flex justify-start mt-4 gap-[.5rem]'>
-								<button class='py-1 px-2 text-primary border-[1px] border-primary rounded hover:text-primaryHover hover:border-primaryHover duration-[.2s] ease-in-out'>
+								<button onclick="openEditOpeningHoursModal('${openingHour.id}')" class='py-1 px-2 text-primary border-[1px] border-primary rounded hover:text-primaryHover hover:border-primaryHover duration-[.2s] ease-in-out'>
 									Edit
 								</button>
-								<button class='bg-red-500 text-textDark py-1 px-2 border-[1px] border-red-500 rounded hover:bg-red-600 hover:border-red-600'>
+								<button onclick="openDeleteOpeningHoursModal('${openingHour.id}')" class='bg-red-500 text-textDark py-1 px-2 border-[1px] border-red-500 rounded hover:bg-red-600 hover:border-red-600'>
 									Delete
 								</button>
 							</div>
@@ -206,17 +259,47 @@
 		/*== Add Opening Hours ==*/
 		const addOpeningHoursModal = document.getElementById('addOpeningHoursModal');
 		const addOpeningHoursForm = document.getElementById('addOpeningHoursForm');
+		const errorAddDay = document.getElementById('error-add-day');
+		const errorAddOpeningTime = document.getElementById('error-add-openingTime');
+		const errorAddClosingTime = document.getElementById('error-add-closingTime');
+		const errorAddIsCurrent = document.getElementById('error-add-isCurrent');
 
-		// Display the modal
+		// Display the add modal
     addOpeningHourButton.addEventListener('click', () => {
       addOpeningHoursModal.classList.remove('hidden');
     });
 
-    // Close the modal
+    // Close the add modal
     document.getElementById('cancelAddOpeningHoursButton').addEventListener('click', () => {
 			addOpeningHoursModal.classList.add('hidden');
       clearValues('add');
     });
+
+		// Submit the add form
+
+		/*== Edit Opening Hours ==*/
+		const editOpeningHoursModal = document.getElementById('editOpeningHoursModal');
+		const editOpeningHoursForm = document.getElementById('editOpeningHoursForm');
+		const editOpeningHoursId = document.getElementById('editOpeningHoursId');
+		const errorEditDay = document.getElementById('error-edit-day');
+		const errorEditOpeningTime = document.getElementById('error-edit-openingTime');
+		const errorEditClosingTime = document.getElementById('error-edit-closingTime');
+		const errorEditIsCurrent = document.getElementById('error-edit-isCurrent');
+
+		// Display the edit modal and populate the form
+		window.openEditOpeningHoursModal = function(openingHourId) {
+			editOpeningHoursModal.classList.remove('hidden');
+		}
+		
+		// Close the edit modal
+		document.getElementById('cancelEditOpeningHoursButton').addEventListener('click', () => {
+			editOpeningHoursModal.classList.add('hidden');
+			clearValues('edit');
+		});
+
+		// Submit the edit form
+
+
 
 		// Clear error messages and input values
     function clearValues(action) {
@@ -231,5 +314,7 @@
 				addOpeningHoursForm.reset();
 			}
     }
+
+		
 	});
 </script>
