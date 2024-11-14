@@ -310,14 +310,26 @@ post($baseRoute.'openingHours/getById', function() {
     if (isset($_POST['action']) && $_POST['action'] === 'getOpeningHoursById') {
         $venueId = htmlspecialchars(trim($_POST['venueId']));
 
+        /* Get the opening hours by venueId and create an array with all the retrieved data for each opening hour
+        (if we only return the object, it will be an empty array) */
         $openingHours = $openingHourController->getOpeningHoursById($venueId);
+        $retArray = [];
+        foreach ($openingHours as $openingHour) {
+            $retArray[] = [
+                'id' => htmlspecialchars(trim($openingHour->getOpeningHourId())),
+                'day' => htmlspecialchars(trim($openingHour->getDay())),
+                'openingTime' => htmlspecialchars(trim($openingHour->getOpeningTime()->format('H:i'))),
+                'closingTime' => htmlspecialchars(trim($openingHour->getClosingTime()->format('H:i'))),
+                'isCurrent' => htmlspecialchars(trim($openingHour->getIsCurrent()))
+            ];
+        }
 
         if (isset($openingHours['errorMessage']) && $openingHours['errorMessage']) {
             // Return an error response
             echo json_encode(['error' => true, 'message' => $openingHours['errorMessage']]);
         } else {
             // Return the opening hours
-            echo json_encode(['error' => false, 'openingHours' => $openingHours]);
+            echo json_encode(['error' => false, 'openingHours' => $retArray]);
         }
     } else {
         // Invalid action response
