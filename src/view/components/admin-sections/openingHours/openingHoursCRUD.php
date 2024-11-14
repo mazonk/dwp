@@ -16,6 +16,7 @@
 				</button>
 			</div>
   </div>
+	<!-- Display all venues in cards -->
 	<?php
 	require_once "src/controller/VenueController.php";
 	$venueController = new VenueController();
@@ -43,6 +44,60 @@
 
 	<!-- Display opening hours for a selected venue in cards -->
 	<div id="openingHoursCardsContainer" class="grid grid-cols-5 gap-4 hidden"></div>
+
+	<!-- Add News Form Modal -->
+	<div id="addOpeningHoursModal" class="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 hidden">
+			<div class="flex items-center justify-center min-h-screen">
+					<!-- Modal -->
+					<div class="bg-bgSemiDark w-[600px] rounded-lg p-6 border-[1px] border-borderDark">
+							<h2 class="text-[1.5rem] text-center font-semibold mb-4">Add Opening Hour</h2>
+							<form id="addOpeningHoursForm" class="text-textLight">
+									<div class="mb-4">
+											<label for="addDayInput" class="block text-sm font-medium text-text-textLight">Day</label>
+											<select id="addDayInput" name="addDayInput" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required>
+													<option value="" disabled selected>Select a day</option>
+													<option value="Monday">Monday</option>
+													<option value="Tuesday">Tuesday</option>
+													<option value="Wednesday">Wednesday</option>
+													<option value="Thursday">Thursday</option>
+													<option value="Friday">Friday</option>
+													<option value="Saturday">Saturday</option>
+													<option value="Sunday">Sunday</option>
+											</select>
+											<p id="error-add-day"  class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
+									</div>
+									<div class="flex gap-[1rem]">
+											<div class="w-full mb-4">
+													<label for="addOpeningTimeInput" class="block text-sm font-medium text-text-textLight">Opening Time</label>
+													<input id="addOpeningTimeInput" name="addOpeningTimeInput" type="time" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required>
+													<p id="error-add-openingTime" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
+											</div>
+											<div class="w-full mb-4">
+													<label for="addClosingTimeInput" class="block text-sm font-medium text-text-textLight">Closing Time</label>
+													<input id="addClosingTimeInput" name="addClosingTimeInput" type="time" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required>
+													<p id="error-add-closingTime" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
+											</div>
+									</div>
+									<!-- Is current -->
+									<div class="mb-4">
+											<label for="addIsCurrentInput" class="block text-sm font-medium text-text-textLight">Current</label>
+											<select id="addIsCurrentInput" name="addIsCurrentInput" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required>
+													<option value="" disabled selected>Select an option</option>
+													<option value="1">Yes</option>
+													<option value="0">No</option>
+											</select>
+											<p id="error-add-isCurrent" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
+									</div>
+									<div class="flex justify-end">
+											<button type="submit" id="saveAddOpeningHoursButton" class="bg-primary text-textDark py-2 px-4 rounded border border-transparent hover:bg-primaryHover duration-[.2s] ease-in-out">Add</button>
+											<button type="button" id="cancelAddOpeningHoursButton" class="text-textLight py-2 px-4 border-[1px] border-white rounded hover:bg-borderDark ml-2 duration-[.2s] ease-in-out">Cancel</button>
+									</div>
+							</form>
+					</div>
+			</div>
+  </div>
+
+
 </div>
 
 <script>
