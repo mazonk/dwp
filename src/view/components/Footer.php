@@ -56,7 +56,7 @@ unset($_SESSION['contactSuccess']);
         <!-- TODO: Populate opening hours based on selected venue -->
         <?php
         $openingHourController = new OpeningHourController();
-        $openingHours = $openingHourController->getOpeningHoursById($_SESSION['selectedVenueId']);
+        $openingHours = $openingHourController->getCurrentOpeningHoursById($_SESSION['selectedVenueId']);
 
         if(isset($openingHours['errorMessage'])) {
           echo "<div class='text-[.875rem] text-textNormal leading-snug'>" . htmlspecialchars($openingHours['errorMessage']) . "</div>";
