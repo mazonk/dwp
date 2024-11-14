@@ -66,7 +66,7 @@
 						action: 'getOpeningHoursById',
 						venueId: data.id
 				};
-				
+
 				// Convert venueData to query string
 				const params = Object.keys(venueData)
 						.map(key => `${encodeURIComponent(key)}=${encodeURIComponent(venueData[key])}`)
@@ -108,25 +108,32 @@
 			closeOpeningHourCardsButton.classList.remove('hidden');
 
 			openingHoursCardsContainer.innerHTML = '';
-			openingHours.forEach(openingHour => {
-				openingHoursCardsContainer.innerHTML += `
-					<div class='bg-bgSemiDark border-[1px] border-borderDark rounded p-4'>
-						<div class='flex justify-between items-center'>
-							<h4 class='text-[1.25rem] font-semibold'>${openingHour.day}</h4>
-							${openingHour.isCurrent ? "<p class='py-[.125rem] px-2 text-[.75rem] font-medium text-primary border-[1px] border-primary rounded-full'>Current</p>" : ''}
+			if (openingHours.length === 0) {
+				openingHoursCardsContainer.innerHTML = "<p class='text-gray-400 italic'>No opening hours available</p>";
+				return;
+			}
+			else {
+				openingHours.forEach(openingHour => {
+					openingHoursCardsContainer.innerHTML += `
+						<div class='bg-bgSemiDark border-[1px] border-borderDark rounded p-4'>
+							<div class='flex justify-between items-center'>
+								<h4 class='text-[1.25rem] font-semibold'>${openingHour.day}</h4>
+								${openingHour.isCurrent ? "<p class='py-[.125rem] px-2 text-[.75rem] font-medium text-primary border-[1px] border-primary rounded-full'>Current</p>" : ''}
+							</div>
+							<p>${openingHour.openingTime} - ${openingHour.closingTime}</p>
+							<div class='flex justify-start mt-4 gap-[.5rem]'>
+								<button class='py-1 px-2 text-primary border-[1px] border-primary rounded hover:text-primaryHover hover:border-primaryHover duration-[.2s] ease-in-out'>
+									Edit
+								</button>
+								<button class='bg-red-500 text-textDark py-1 px-2 border-[1px] border-red-500 rounded hover:bg-red-600 hover:border-red-600'>
+									Delete
+								</button>
+							</div>
 						</div>
-						<p>${openingHour.openingTime} - ${openingHour.closingTime}</p>
-						<div class='flex justify-start mt-4 gap-[.5rem]'>
-							<button class='py-1 px-2 text-primary border-[1px] border-primary rounded hover:text-primaryHover hover:border-primaryHover duration-[.2s] ease-in-out'>
-								Edit
-							</button>
-							<button class='bg-red-500 text-textDark py-1 px-2 border-[1px] border-red-500 rounded hover:bg-red-600 hover:border-red-600'>
-								Delete
-							</button>
-						</div>
-					</div>
-				`;
-			});
+					`;
+				});
+				return;
+			}
 		}
 
 		// Close opening hour cards and show venue cards
