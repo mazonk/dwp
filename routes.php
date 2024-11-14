@@ -302,13 +302,13 @@ delete($baseRoute.'news/delete', function() {
 });
 
 
-// Post route for get opening hours by venueId
-post($baseRoute.'openingHours/getById', function() {
+// GET route for get opening hours by venueId
+get($baseRoute.'openingHours/getById', function() {
     require_once 'src/controller/OpeningHourController.php';
     $openingHourController = new OpeningHourController();
 
-    if (isset($_POST['action']) && $_POST['action'] === 'getOpeningHoursById') {
-        $venueId = htmlspecialchars(trim($_POST['venueId']));
+    if (isset($_GET['action']) && $_GET['action'] === 'getOpeningHoursById') {
+        $venueId = htmlspecialchars(trim($_GET['venueId']));
 
         /* Get the opening hours by venueId and create an array with all the retrieved data for each opening hour
         (if we only return the object, it will be an empty array) */

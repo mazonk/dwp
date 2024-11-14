@@ -1,5 +1,4 @@
 <?php
-include_once "src/view/components/admin-sections/openingHours/OpeningHoursCard.php";
 ?>
 
 <div>
@@ -43,27 +42,12 @@ include_once "src/view/components/admin-sections/openingHours/OpeningHoursCard.p
 	</div>
 
 	<!-- Display opening hours for a selected venue in cards -->
-	<?php
-	require_once "src/controller/OpeningHourController.php";
-	$openingHourController = new OpeningHourController();
-	$openingHours = $openingHourController->getOpeningHoursById(3);
-	?>
-	<div id="openingHourCardsContainer" class="grid grid-cols-5 gap-4 hidden">
-		<?php
-		if (isset($openingHours['errorMessage'])) {
-			echo $openingHours['errorMessage'];
-		} else {
-			foreach ($openingHours as $openingHour) {
-				OpeningHoursCard::render($openingHour);
-			}
-		}
-		?>
-	</div>
+	<div id="openingHoursCardsContainer" class="grid grid-cols-5 gap-4 hidden"></div>
 </div>
 
 <script>
 	document.addEventListener('DOMContentLoaded', () => {
-		const openingHourCardsContainer = document.getElementById('openingHourCardsContainer');
+		const openingHoursCardsContainer = document.getElementById('openingHoursCardsContainer');
 		const venueCardsContainer = document.getElementById('venueCardsContainer');
 		const selectedVenue = document.getElementById('selectedVenue');
 		const addOpeningHourButton = document.getElementById('addOpeningHourButton');
@@ -75,47 +59,46 @@ include_once "src/view/components/admin-sections/openingHours/OpeningHoursCard.p
 			card.addEventListener('click', () => {
 				const xhr = new XMLHttpRequest();
 				const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
-				xhr.open('POST', `${baseRoute}openingHours/getById`, true);
 
 				// Parse the venue data from the card's data attribute
 				const data = JSON.parse(card.getAttribute('data-venue'));
 				const venueData = {
-            action: 'getOpeningHoursById',
-            venueId: data.id
-        };
+						action: 'getOpeningHoursById',
+						venueId: data.id
+				};
+				
+				// Convert venueData to query string
+				const params = Object.keys(venueData)
+						.map(key => `${encodeURIComponent(key)}=${encodeURIComponent(venueData[key])}`)
+						.join('&');
 
-				xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        xhr.onreadystatechange = function() {
-					// If the request is done and successful
+				// Add params to the GET request URL
+				xhr.open('GET', `${baseRoute}openingHours/getById?${params}`, true);
+
+				xhr.onreadystatechange = function() {
 					if (xhr.readyState === 4 && xhr.status === 200) {
-							let response;
-							try {
-									response = JSON.parse(xhr.response);
-							} catch (e) {
-									console.error('Could not parse response as JSON:', e);
-									return;
-							}
+						let response;
+						try {
+								response = JSON.parse(xhr.response);
+						} catch (e) {
+								console.error('Could not parse response as JSON:', e);
+								return;
+						}
 
 						if (!response.error) {
-							displayOpeningHourCards(data.name, response.openingHours); // Display opening hour cards
-						}
-						else {
-							console.error('Error:', response.errors);
+								displayOpeningHourCards(data.name, response.openingHours); // Display opening hour cards
+						} else {
+								console.error('Error:', response.errors);
 						}
 					}
 				};
-
-				// Send data as URL-encoded string
-        const params = Object.keys(venueData)
-            .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(venueData[key])}`)
-            .join('&');
-        xhr.send(params);
+    		xhr.send();
 			});
 		});
 
 		// Dipslay opening hour cards for the selected venue
 		function displayOpeningHourCards(venueName, openingHours) {
-			openingHourCardsContainer.classList.remove('hidden');
+			openingHoursCardsContainer.classList.remove('hidden');
 			venueCardsContainer.classList.add('hidden');
 
 			selectedVenue.textContent = venueName;
@@ -124,9 +107,9 @@ include_once "src/view/components/admin-sections/openingHours/OpeningHoursCard.p
 			addOpeningHourButton.classList.remove('hidden');
 			closeOpeningHourCardsButton.classList.remove('hidden');
 
-			openingHourCardsContainer.innerHTML = '';
+			openingHoursCardsContainer.innerHTML = '';
 			openingHours.forEach(openingHour => {
-				openingHourCardsContainer.innerHTML += `
+				openingHoursCardsContainer.innerHTML += `
 					<div class='bg-bgSemiDark border-[1px] border-borderDark rounded p-4'>
 						<div class='flex justify-between items-center'>
 							<h4 class='text-[1.25rem] font-semibold'>${openingHour.day}</h4>
@@ -148,7 +131,7 @@ include_once "src/view/components/admin-sections/openingHours/OpeningHoursCard.p
 
 		// Close opening hour cards and show venue cards
 		function closeOpeningHourCards() {
-			openingHourCardsContainer.classList.add('hidden');
+			openingHoursCardsContainer.classList.add('hidden');
 			venueCardsContainer.classList.remove('hidden');
 
 			selectedVenue.textContent = '';
