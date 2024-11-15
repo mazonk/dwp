@@ -105,7 +105,7 @@ class OpeningHourService {
     }
   }
 
-  private function validateFormInputs(array $openingHourData, array &$errors): void {
+  private function validateFormInputs(array $openingHourData, int $venueId, array &$errors): void {
     // Define regex
     $hourRegex = "/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/";
 
@@ -124,6 +124,22 @@ class OpeningHourService {
 
     if (!preg_match($regex, $openingHourData['closingTime'])) {
       $errors['closingTime'] = 'Invalid closing time.';
+    }
+
+    // Check if closing time is later than opening time
+    if (strtotime($openingHourData['openingTime']) >= strtotime($openingHourData['closingTime'])) {
+      // If there's already an error for 'closingTime', append the new error message
+      $errors['closingTime'] = isset($errors['closingTime']) ? $errors['closingTime'] . ' ' . 'Closing time must be later than opening time.' : 'Closing time must be later than opening time.';
+    }
+
+    // Check for duplicate opening hour for the same day in the database TODO: Implement this method
+    if ($this->isDuplicateOpeningHour($openingHourData['day'])) {
+      $errors['day'] = 'Opening hour for this day already exists.';
+    }
+
+    // Ensure venueId exists (foreign key check) TODO: Implement this method
+    if (!$this->doesVenueExist($venueId)) {
+      $errors['general'] = 'Invalid venue ID.';
     }
 
     if (!in_array($openingHourData['isCurrent'], [0, 1])) {
