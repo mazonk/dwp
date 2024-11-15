@@ -25,4 +25,19 @@ class OpeningHourController {
     }
     return $openingHours;
   }
+
+  public function addOpeningHour(array $openingHourData, int $venueId): array {
+    $errors = $this->openingHourService->addOpeningHour($openingHourData, $venueId);
+
+    // Check if there are any validation errors
+    if (count($errors) == 0) {
+      // Check if there are any errors from adding the opening hour
+      if (isset($errors['error']) && $errors['error']) {
+        return ['errorMessage' => $errors['message']];
+      }
+      return ['success' => true];
+    } else {
+      return $errors;
+    }
+  }
 }
