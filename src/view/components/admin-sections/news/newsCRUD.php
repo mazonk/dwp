@@ -180,7 +180,6 @@ document.addEventListener('DOMContentLoaded', () => {
             .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(newsData[key])}`)
             .join('&');
         xhr.send(params);
-
     });
 
     /*== Edit News ==*/
