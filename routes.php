@@ -336,3 +336,34 @@ get($baseRoute.'openingHours/getById', function() {
         echo json_encode(['error' => true, 'message' => 'Invalid action.']);
     }
 });
+
+post($baseRoute.'openingHours/add', function() {
+    require_once 'src/controller/OpeningHourController.php';
+    $openingHourController = new OpeningHourController();
+
+    if (isset($_POST['action']) && $_POST['action'] === 'addOpeningHour') {
+        $openingHourData = [
+            'day' => htmlspecialchars(trim($_POST['day'])),
+            'openingTime' => htmlspecialchars(trim($_POST['openingTime'])),
+            'closingTime' => htmlspecialchars(trim($_POST['closingTime'])),
+            'isCurrent' => htmlspecialchars(trim($_POST['isCurrent']))
+        ];
+        $venueId = htmlspecialchars(trim($_POST['venueId']));
+
+        $result = $openingHourController->addOpeningHour($openingHourData, $venueId);
+
+        if (isset($result['success']) && $result['success'] === true) {
+            // Return a success response
+            echo json_encode(['success' => true]);
+        } else if (isset($result['errorMessage'])) {
+            // Return an error response
+            echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
+        } else {
+            // Return validation errors
+            echo json_encode(['success' => false, 'errors' => $result]);
+        }
+    } else {
+        // Invalid action response
+        echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
+    }
+});
