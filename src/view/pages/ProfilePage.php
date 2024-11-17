@@ -23,40 +23,7 @@ if (is_array($user) && isset($user['errorMessage']) && $user['errorMessage']) {
     exit;
 } else {
 
-    //TEST DATA 
-    // ################################
-    // Sample Venue
-    $venueController = new VenueController();
-$venue1 = $venueController->getVenueById(3); //how do we get the venue?
-
-// Sample Rooms
-$room1 = new Room(1, 1, $venue1);
-$room2 = new Room(2, 2, $venue1);
-
-// Sample Movies
-$movie1 = new Movie(1, "Ironman", "Description for Movie 1", 120, "English", "2024-10-01", "poster1.jpg", "promo1.jpg", 7.5, "trailer1.mp4", [], []);
-$movie2 = new Movie(2, "Interstellar", "Description for Movie 2", 90, "English", "2024-11-01", "poster2.jpg", "promo2.jpg", 8.0, "trailer2.mp4", [], []);
-
-// Sample Ticket Types
-$ticketType1 = new TicketType(1, "Regular", 12.99);
-$ticketType2 = new TicketType(2, "VIP", 25.99);
-$ticketType3 = new TicketType(3, "Student", 9.99);
-
-// Sample Showings
-$showing1 = new Showing(1, $movie1, $room1, new DateTime("2024-10-01 18:00"), new DateTime("2024-10-01 18:00"));
-$showing2 = new Showing(2, $movie2, $room2, new DateTime("2024-10-01 20:00"), new DateTime("2024-10-01 20:00"));
-
-// Sample Seats
-$seat1 = new Seat(1, 1, 1, $room1);
-$seat2 = new Seat(2, 1, 2, $room1);
-$seat3 = new Seat(3, 1, 3, $room2);
-$seat4 = new Seat(4, 2, 1, $room2);
-$seat5 = new Seat(5, 2, 2, $room2);
-$seat6 = new Seat(6, 2, 3, $room1);
-
 $bookings = [];
-
-// ################################
 
 $initialBookings = count($bookings) > 8 ? array_slice($bookings, 0, 8) : $bookings;
 
