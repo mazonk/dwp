@@ -1,14 +1,7 @@
 <?php
 require_once 'session_config.php';
 include_once 'src/controller/UserController.php';
-include_once 'src/controller/VenueController.php';
-include_once 'src/model/entity/Booking.php';
-include_once 'src/model/entity/Ticket.php';
-include_once 'src/model/entity/Room.php';
-include_once 'src/model/entity/Seat.php';
-include_once 'src/model/entity/Movie.php';
-include_once 'src/model/entity/TicketType.php';
-include_once 'src/model/entity/Showing.php';
+include_once 'src/controller/BookingController.php';
 include_once 'src/view/components/BookingCard.php';
 
 if (!isLoggedIn()) {
@@ -17,6 +10,7 @@ if (!isLoggedIn()) {
 }
 
 $userController = new UserController();
+
 $user = $userController->getUserById($_SESSION['loggedInUser']['userId']);
 if (is_array($user) && isset($user['errorMessage']) && $user['errorMessage']) {
     echo $user['errorMessage'] . ' ' . '<a class="underline text-blue-300" href="javascript:window.history.back()"><-Go back!</a>';
