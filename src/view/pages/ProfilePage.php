@@ -9,19 +9,23 @@ if (!isLoggedIn()) {
     exit;
 }
 
+//controllers
 $userController = new UserController();
+$bookingController = new BookingController();
 
+//fetch user
 $user = $userController->getUserById($_SESSION['loggedInUser']['userId']);
 if (is_array($user) && isset($user['errorMessage']) && $user['errorMessage']) {
     echo $user['errorMessage'] . ' ' . '<a class="underline text-blue-300" href="javascript:window.history.back()"><-Go back!</a>';
     exit;
-} else {
+} else { //else render component
 
-$bookings = [];
+    //fetch bookings
+    $bookings = [];
 
-$initialBookings = count($bookings) > 8 ? array_slice($bookings, 0, 8) : $bookings;
+    $initialBookings = count($bookings) > 8 ? array_slice($bookings, 0, 8) : $bookings;
 
-$editMode = isset($_GET['edit']) && $_GET['edit'] == "true";
+    $editMode = isset($_GET['edit']) && $_GET['edit'] == "true";
 ?>
 
 <!DOCTYPE html>
