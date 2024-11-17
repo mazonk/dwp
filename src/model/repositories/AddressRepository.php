@@ -1,14 +1,25 @@
 <?php
 class AddressRepository {
+<<<<<<< HEAD
   private PDO $db;
 
   public function __construct($dbCon) {
     $this->db = $dbCon;
+=======
+  private function getdb() {
+    require_once 'src/model/database/dbcon/DatabaseConnection.php';
+    return DatabaseConnection::getInstance(); // singleton
+>>>>>>> main
   }
 
   /* Get all addresses */
   public function getAllAddresses(): array {
+<<<<<<< HEAD
     $addressQuery = $this->db->prepare("SELECT *  FROM `Address`");
+=======
+    $db = $this->getdb();
+    $addressQuery = $db->prepare("SELECT *  FROM `Address`");
+>>>>>>> main
     // Get all addresses
     try {
       $addressQuery->execute();
@@ -17,7 +28,11 @@ class AddressRepository {
         throw new Exception("No addresses found");
       }
       else {
+<<<<<<< HEAD
         $postalCodeQuery = $this->db->prepare("SELECT * FROM PostalCode");
+=======
+        $postalCodeQuery = $db->prepare("SELECT * FROM PostalCode");
+>>>>>>> main
         // Get all postal codes
         try {
           $postalCodeQuery->execute();
@@ -42,7 +57,12 @@ class AddressRepository {
 
   /* Get address by id */
   public function getAddressById(int $addressId): array { 
+<<<<<<< HEAD
     $query = $this->db->prepare("SELECT * FROM `Address` WHERE addressId = :addressId");
+=======
+    $db = $this->getdb();
+    $query = $db->prepare("SELECT * FROM `Address` WHERE addressId = :addressId");
+>>>>>>> main
     // Get address by id
     try {
       $query->execute(['addressId' => htmlspecialchars($addressId)]);
@@ -51,10 +71,17 @@ class AddressRepository {
         throw new Exception("Address not found");
       }
       else {
+<<<<<<< HEAD
         $postalCodeQuery = $this->db->prepare("SELECT * FROM PostalCode WHERE postalCodeId = :postalCodeId");
         // Get postal code by postal code
         try {
           $postalCodeQuery->execute(['postalCodeId' => htmlspecialchars($addressResult['postalCodeId'])]);
+=======
+        $postalCodeQuery = $db->prepare("SELECT * FROM PostalCode WHERE postalCode = :postalCode");
+        // Get postal code by postal code
+        try {
+          $postalCodeQuery->execute(['postalCode' => htmlspecialchars($addressResult['postalCode'])]);
+>>>>>>> main
           $postalCodeResult = $postalCodeQuery->fetch(PDO::FETCH_ASSOC);
           if (empty($postalCodeResult)) {
             throw new Exception("Postal code not found");
@@ -73,6 +100,7 @@ class AddressRepository {
       throw new Exception("Unable to fetch address");
     }
   }
+<<<<<<< HEAD
 
   /* Update address */
 public function updateAddress(int $addressId, string $street, string $streetNr, int $postalCodeId, int $postalCode, string $city): void {
@@ -94,4 +122,6 @@ public function updateAddress(int $addressId, string $street, string $streetNr, 
   }
 }
 
+=======
+>>>>>>> main
 }

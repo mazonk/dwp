@@ -155,7 +155,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         });
     </script>
 </head>
+<<<<<<< HEAD
 <body class="max-w-[1440px] w-[100%] mx-auto px-[100px] bg-bgDark text-textLight overflow-y-auto">
+=======
+<body class="max-w-[1440px] w-[100%] mx-auto px-[100px] bg-bgDark text-textLight overflow-hidden">
+>>>>>>> main
     <!-- Navbar -->
     <?php include_once("src/view/components/Navbar.php"); ?>
 

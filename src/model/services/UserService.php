@@ -25,6 +25,7 @@ class UserService {
             return ["error"=> true, "message"=> $e->getMessage()];
         }
     }
+<<<<<<< HEAD
 
     public function getUserById(int $id): array|User {
         try {
@@ -90,4 +91,6 @@ class UserService {
             $errors['email'] = "Invalid email format or email is too long.";
         }
     }
+=======
+>>>>>>> main
 }

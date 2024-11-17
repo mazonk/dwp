@@ -12,14 +12,20 @@ $baseRoute = $_SERVER['HTTP_HOST'] == 'localhost' ? '/dwp/' : '/';
 
 #############################################################################
 
+<<<<<<< HEAD
 // Global middleware to check for 'contact' action
 
+=======
+>>>>>>> main
 // GET ROUTES
 
 // In the URL -> http://localhost/dwp
 // The output -> index.php (from pages folder)
 get($baseRoute.'home', 'src/view/pages/LandingPage.php');
+<<<<<<< HEAD
 get($baseRoute, 'src/view/pages/LandingPage.php');
+=======
+>>>>>>> main
 
 // In the URL -> http://localhost/dwp/about
 // The output -> AboutPage.php (from pages folder)
@@ -69,11 +75,15 @@ get($baseRoute.'upcoming', 'src/view/pages/UpcomingMoviesPage.php');
 // POST ROUTES
 
 post($baseRoute.'movies', 'src/view/pages/AllMoviesPage.php'); // used at toggle dropdown
+<<<<<<< HEAD
 post($baseRoute.'upcoming', 'src/view/pages/AllMoviesPage.php'); // used at toggle dropdown
 post($baseRoute.'home', 'src/view/pages/LandingPage.php'); // used at toggle dropdown
 post($baseRoute.'booking', 'src/view/pages/BookingPage.php');
 post($baseRoute.'about', 'src/view/pages/AboutPage.php'); // used at toggle dropdown
 post($baseRoute.'profile', 'src/view/pages/ProfilePage.php'); // used at toggle dropdown
+=======
+post($baseRoute.'home', 'src/view/pages/LandingPage.php'); // used at toggle dropdown
+>>>>>>> main
 
 // Post route for register
 post($baseRoute.'register', function() {
@@ -97,11 +107,15 @@ post($baseRoute.'login', function() {
     }
 });
 
+<<<<<<< HEAD
 // Post route for logout
+=======
+>>>>>>> main
 post($baseRoute.'logout', function() {
     require_once 'src/controller/AuthController.php';
     $authController = new AuthController();
     $authController->logout();
+<<<<<<< HEAD
 });    
 
 // Post route for mail contact
@@ -300,3 +314,11 @@ delete($baseRoute.'news/delete', function() {
         echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
     }
 });
+=======
+});
+
+// Query string routes
+
+get($baseRoute.'movies/$id', 'src/view/pages/MovieDetailsPage.php');
+get($baseRoute.'news/$id', 'src/view/pages/NewsPage.php');
+>>>>>>> main

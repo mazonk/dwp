@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+<!-- In the URL -> http://localhost/dwp/movies/1 - this is how you send query string with req. URL -->
+>>>>>>> main
 <?php
 require_once 'session_config.php';
 include_once "src/controller/MovieController.php";
@@ -76,12 +80,17 @@ if (is_array($movie) && isset($movie['errorMessage'])) {
         <span class="font-bold">Language: </span> <?php echo $movie->getLanguage(); ?>
       </div>
       <div class="movie-info mb-2">
+<<<<<<< HEAD
         <span class="font-bold">Release Date: </span> <?php echo $movie->getReleaseDate()->format('d-m-Y'); ?>
+=======
+        <span class="font-bold">Release Date: </span> <?php echo $movie->getReleaseDate()->format('Y-m-d'); ?>
+>>>>>>> main
       </div>
       <div class="movie-info mb-2">
         <span class="font-bold">Rating: </span> <?php echo $movie->getRating(); ?>
       </div>
       <div>
+<<<<<<< HEAD
                 <span class="font-bold">Actors: </span><?php
                 if (empty($movie-> getActors())) {
                     echo "No actors found for this movie.";
@@ -100,6 +109,24 @@ if (is_array($movie) && isset($movie['errorMessage'])) {
                     return htmlspecialchars($director->getFirstName()). ' ' .$director->getLastName();
                 }, $movie-> getDirectors());
                 echo implode(', ', $directors); ?></span>
+=======
+                <span>Actors: <?php
+                if (empty($movie-> getActors())) {
+                    echo "No actors found for this movie.";
+                }
+                foreach ($movie-> getActors() as $actor) {
+                    echo htmlspecialchars($actor->getFirstName()). ' ' .$actor->getLastName(). ", ";
+                } ?></span>
+            </div>
+            <div>
+                <span>Directors: <?php 
+                if (empty($movie-> getDirectors())) {
+                    echo "No director(s) found for this movie.";
+                }
+                foreach ($movie->getDirectors() as $director) {
+                    echo htmlspecialchars($director->getFirstName()).''. $director->getLastName(). ", ";
+                }?></span>
+>>>>>>> main
             </div>
         </div>
     <div class="trailer-video mt-10">

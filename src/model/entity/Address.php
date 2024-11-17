@@ -1,5 +1,8 @@
 <?php
+<<<<<<< HEAD
 include_once "src/model/entity/PostalCode.php";
+=======
+>>>>>>> main
 class  Address {
   private int $addressId;
   private string $street;

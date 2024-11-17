@@ -1,5 +1,6 @@
 <?php
 require_once 'session_config.php';
+<<<<<<< HEAD
 include_once 'src/controller/UserController.php';
 include_once 'src/controller/VenueController.php';
 include_once 'src/model/entity/Booking.php';
@@ -10,10 +11,13 @@ include_once 'src/model/entity/Movie.php';
 include_once 'src/model/entity/TicketType.php';
 include_once 'src/model/entity/Showing.php';
 include_once 'src/view/components/BookingCard.php';
+=======
+>>>>>>> main
 
 if (!isLoggedIn()) {
     header("Location: " . $_SESSION['baseRoute'] . "login");
     exit;
+<<<<<<< HEAD
 }
 
 $userController = new UserController();
@@ -217,3 +221,6 @@ $editMode = isset($_GET['edit']) && $_GET['edit'] == "true";
     });
     
 </script>
+=======
+}
+>>>>>>> main

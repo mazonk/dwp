@@ -1,5 +1,6 @@
 <?php
 require_once 'session_config.php';
+<<<<<<< HEAD
 include_once 'src/controller/CompanyInfoController.php';
 include_once 'src/controller/VenueController.php';
 
@@ -136,3 +137,5 @@ $selectedVenue = $venueController->getSelectedVenue();
 });
 
 </script>
+=======
+>>>>>>> main
