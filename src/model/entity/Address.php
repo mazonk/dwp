@@ -1,4 +1,5 @@
 <?php
+include_once "src/model/entity/PostalCode.php";
 class  Address {
   private int $addressId;
   private string $street;

@@ -1,5 +1,4 @@
-<?php
-require_once 'session_config.php';
+<?php require_once 'session_config.php';
 require_once 'src/model/entity/User.php';
 include_once 'src/model/repositories/AuthRepository.php';
 require_once 'src/model/services/UserService.php';
@@ -117,7 +116,6 @@ class AuthService {
 
     public function logout(): void {
         // Unset session and destroy it
-        session_start();
         session_unset();
         session_destroy();
     }
@@ -140,11 +138,14 @@ class AuthService {
         if (!preg_match($nameRegex, $formData['lastName'])) {
             $errors['lastName'] = "Name must only contain letters and spaces.";
         }
-        if (strlen($formData['firstName']) < 2) {
-            $errors['firstName'] = "Name must be at least 2 characters long.";
+        if (strlen($formData['firstName']) < 2 || strlen($formData['firstName']) > 50) {
+            $errors['firstName'] = "First name must be between 2 and 50 characters long.";
         }
-        if (strlen($formData['lastName']) < 2) {
-            $errors['lastName'] = "Name must be at least 2 characters long.";
+        if (strlen($formData['lastName']) < 2 || strlen($formData['lastName']) > 50) {
+            $errors['lastName'] = "Last name must be between 2 and 50 characters long.";
+        }
+        if (strlen($formData['email']) > 100) {
+            $errors['email'] = "Email must be less than 100 characters long.";
         }
         if (!preg_match($dobRegex, $formData['dob'])) {
             $errors['dob'] = "Invalid date format. Please use the format YYYY-MM-DD.";

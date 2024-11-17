@@ -1,4 +1,9 @@
 <?php
+include_once "src/model/entity/User.php";
+include_once "src/model/entity/Address.php";
+include_once "src/model/entity/Booking.php";
+include_once "src/model/entity/PaymentMethod.php";
+
 class Payment {
   private int $paymentId;
   private float $totalPrice;
@@ -6,17 +11,17 @@ class Payment {
   private DateTime $paymentTime;
   private User $user;
   private Address $address;
-  private Reservation $reservation;
+  private Booking $booking;
   private PaymentMethod $paymentMethod;
 
-  public function __construct(int $paymentId, float $totalPrice, DateTime $paymentDate, DateTime $paymentTime, User $user, Address $address, Reservation $reservation, PaymentMethod $paymentMethod) {
+  public function __construct(int $paymentId, float $totalPrice, DateTime $paymentDate, DateTime $paymentTime, User $user, Address $address, Booking $booking, PaymentMethod $paymentMethod) {
     $this->paymentId = $paymentId;
     $this->totalPrice = $totalPrice;
     $this->paymentDate = $paymentDate;
     $this->paymentTime = $paymentTime;
     $this->user = $user;
     $this->address = $address;
-    $this->reservation = $reservation;
+    $this->booking = $booking;
     $this->paymentMethod = $paymentMethod;
   }
 
@@ -44,8 +49,8 @@ class Payment {
     return $this->address;
   }
 
-  public function getReservation(): Reservation {
-    return $this->reservation;
+  public function getBooking(): Booking {
+    return $this->booking;
   }
 
   public function getPaymentMethod(): PaymentMethod {
@@ -76,8 +81,8 @@ class Payment {
     $this->address = $address;
   }
 
-  public function setReservation(Reservation $reservation): void {
-    $this->reservation = $reservation;
+  public function setBooking(Booking $booking): void {
+    $this->booking = $booking;
   }
 
   public function setPaymentMethod(PaymentMethod $paymentMethod): void {

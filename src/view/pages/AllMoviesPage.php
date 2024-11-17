@@ -7,7 +7,6 @@ include_once "src/view/components/ShowingCard.php";
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <title>All Movies</title>
@@ -38,11 +37,6 @@ include_once "src/view/components/ShowingCard.php";
         ?>
       </div>
       <div>
-        <?php
-        $showingController = new ShowingController();
-        $showings = $showingController->getAllShowingsForVenue(1);
-        
-        ?>
       </div>
         </div>
     </main>

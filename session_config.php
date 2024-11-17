@@ -1,18 +1,20 @@
 <?php
 require_once "src/controller/VenueController.php";
 
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 $venueController = new VenueController();
 $_SESSION['baseRoute'] = $_SERVER['HTTP_HOST'] == 'localhost' ? '/dwp/' : '/';
 $initialVenue = $venueController->getVenueById(1);
-$_SESSION['selectedVenueId'] ? '' : $venueController->selectVenue($initialVenue);
+isset($_SESSION['selectedVenueId']) ? '' : $venueController->selectVenue($initialVenue);
 
 // Time interval for id regeneration
 $interval = 30 * 60; 
 
 // Check if the user is logged in
-if (isset($_SESSION['userId'])) { 
+if (isset($_SESSION['loggedInUser']['userId'])) { 
     // If session regeneration timestamp doesn't exist or the interval has passed
     if (!isset($_SESSION['lastRegeneration']) || time() - $_SESSION['lastRegeneration'] >= $interval) {
         regenerate_session_id_loggedin(); // Regenerate for logged-in users
@@ -26,7 +28,7 @@ if (isset($_SESSION['userId'])) {
 
 // Functions
 function isLoggedIn() {
-    return isset($_SESSION['userId']);
+    return isset($_SESSION['loggedInUser']['userId']);
 }
 
 function confirm_logged_in() {
@@ -47,6 +49,6 @@ function regenerate_session_id_loggedin() {
     session_regenerate_id(true);
     
     // Append the user ID to a custom session key
-    $_SESSION['session_userId'] = session_id() . "_" . $_SESSION['userId'];
+    $_SESSION['session_userId'] = session_id() . "_" . $_SESSION['loggedInUser']['userId'];
     $_SESSION['lastRegeneration'] = time();
 }

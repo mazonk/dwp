@@ -17,15 +17,13 @@ class OpeningHour {
   private DateTime $openingTime;
   private DateTime $closingTime;
   private bool $isCurrent;
-  private Venue $venue;
 
-  public function __construct (int $openingHourId, Day $day, DateTime $openingTime, DateTime $closingTime, bool $isCurrent, Venue $venue) {
+  public function __construct (int $openingHourId, Day $day, DateTime $openingTime, DateTime $closingTime, bool $isCurrent) {
     $this->openingHourId = $openingHourId;
     $this->day = $day;
     $this->openingTime = $openingTime;
     $this->closingTime = $closingTime;
     $this->isCurrent = $isCurrent;
-    $this->venue = $venue;
   }
 
   public function getOpeningHourId():int {
@@ -48,10 +46,6 @@ class OpeningHour {
     return $this->isCurrent;
   }
 
-  public function getVenue(): Venue {
-    return $this->venue;
-  }
-
   public function setOpeningHourId(int $openingHourId): void {
     $this->openingHourId = $openingHourId;
   }
@@ -70,10 +64,6 @@ class OpeningHour {
 
   public function setIsCurrent(bool $isCurrent): void {
     $this->isCurrent = $isCurrent;
-  }
-
-  public function setVenue(Venue $venue): void {
-    $this->venue = $venue;
   }
 }
 ?>

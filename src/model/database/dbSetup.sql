@@ -1,6 +1,5 @@
 -- Disable foreign key checks (so tables can be dropped)
 SET FOREIGN_KEY_CHECKS = 0;
-USE cinema;
 
 -- Drop all tables
 DROP TABLE IF EXISTS PostalCode;
@@ -14,7 +13,7 @@ DROP TABLE IF EXISTS MovieGenre;
 DROP TABLE IF EXISTS News;
 DROP TABLE IF EXISTS Payment;
 DROP TABLE IF EXISTS Ticket;
-DROP TABLE IF EXISTS Reservation;
+DROP TABLE IF EXISTS Booking;
 DROP TABLE IF EXISTS TicketType;
 DROP TABLE IF EXISTS Showing;
 DROP TABLE IF EXISTS Actor;
@@ -26,13 +25,15 @@ DROP TABLE IF EXISTS Seat;
 DROP TABLE IF EXISTS Room;
 DROP TABLE IF EXISTS OpeningHour;
 DROP TABLE IF EXISTS Venue;
+DROP TABLE IF EXISTS CompanyInfo;
 DROP TABLE IF EXISTS Address;
 
 -- Enable foreign key checks
 SET FOREIGN_KEY_CHECKS = 1;
 
 CREATE TABLE PostalCode (
-    postalCode int PRIMARY KEY NOT NULL,
+    postalCodeId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    postalCode int NOT NULL,
     city VARCHAR(50) NOT NULL
 );
 
@@ -40,8 +41,17 @@ CREATE TABLE Address (
     addressId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     street VARCHAR(100) NOT NULL,
     streetNr VARCHAR(10) NOT NULL,
-    postalCode INT NOT NULL,
-    FOREIGN KEY (postalCode) REFERENCES PostalCode(postalCode)
+    postalCodeId INT NOT NULL,
+    FOREIGN KEY (postalCodeId) REFERENCES PostalCode(postalCodeId)
+);
+
+CREATE TABLE CompanyInfo (
+    companyInfoId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    companyName VARCHAR(100) NOT NULL,
+    companyDescription TEXT NOT NULL,
+    logoUrl VARCHAR(255) NOT NULL,
+    addressId INT NOT NULL,
+    FOREIGN KEY (addressId) REFERENCES Address(addressId)
 );
 
 CREATE TABLE Venue (
@@ -58,9 +68,7 @@ CREATE TABLE OpeningHour (
     day ENUM('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'), -- should we rly use enum here?
     openingTime TIME NOT NULL,
     closingTime TIME NOT NULL,
-    isCurrent BOOLEAN NOT NULL,
-    venueId INT NOT NULL,
-    FOREIGN KEY (venueId) REFERENCES Venue(venueId)
+    isCurrent BOOLEAN NOT NULL
 );
 
 CREATE TABLE Room (
@@ -143,8 +151,8 @@ CREATE TABLE TicketType (
     description TEXT NULL
 );
 
-CREATE TABLE Reservation (
-    reservationId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+CREATE TABLE Booking (
+    bookingId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     userId INT NOT NULL,
     status ENUM('pending', 'confirmed', 'cancelled') NOT NULL, -- enum?
     FOREIGN KEY (userId) REFERENCES User(userId)
@@ -155,11 +163,11 @@ CREATE TABLE Ticket (
     seatId INT NOT NULL,
     ticketTypeId INT NOT NULL,
     showingId INT NOT NULL,
-    reservationId INT NOT NULL,
+    bookingId INT NOT NULL,
     FOREIGN KEY (seatId) REFERENCES Seat(seatId),
     FOREIGN KEY (ticketTypeId) REFERENCES TicketType(ticketTypeId),
     FOREIGN KEY (showingId) REFERENCES Showing(showingId),
-    FOREIGN KEY (reservationId) REFERENCES Reservation(reservationId)
+    FOREIGN KEY (bookingId) REFERENCES Booking(bookingId)
 );
 
 CREATE TABLE PaymentMethod (
@@ -174,12 +182,12 @@ CREATE TABLE Payment (
     totalPrice DECIMAL(8, 2) NOT NULL, -- 8 digits and 2 digits after the decimal point 0.00 - 999999.99
     userId INT NOT NULL,
     addressId INT NOT NULL,
-    reservationId INT NOT NULL,
+    bookingId INT NOT NULL,
     methodId INT NOT NULL,
     FOREIGN KEY (methodId) REFERENCES PaymentMethod(methodId),
     FOREIGN KEY (userId) REFERENCES User(userId),
     FOREIGN KEY (addressId) REFERENCES Address(addressId),
-    FOREIGN KEY (reservationId) REFERENCES Reservation(reservationId)
+    FOREIGN KEY (bookingId) REFERENCES Booking(bookingId)
 );
 
 CREATE TABLE News (
