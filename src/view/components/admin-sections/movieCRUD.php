@@ -102,22 +102,26 @@ include_once "src/view/components/MovieCard.php";
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     /*== Add News ==*/
-    const addNewsModal = document.getElementById('addNewsModal');
-    const addNewsForm = document.getElementById('addNewsForm');
-    const addNewsButton = document.getElementById('addNewsButton');
+    const addMovieModal = document.getElementById('addMovieModal');
+    const addMovieButton = document.getElementById('addMovieButton');
+    const addMovieForm = document.getElementById('addMovieForm');
     const errorAddMessageHeader = document.getElementById('error-add-header');
     const errorAddMessageContent = document.getElementById('error-add-content');
     // const addImageURLInput = document.getElementById('addImageURLInput');
 
     // Display the modal
-    addNewsButton.addEventListener('click', () => {
-        addNewsModal.classList.remove('hidden');
+    addMovieButton.addEventListener('click', () => {
+        addMovieModal.classList.remove('hidden');
     });
 
     // Close the modal
-    document.getElementById('cancelAddNewsButton').addEventListener('click', () => {
-        addNewsModal.classList.add('hidden');
+    document.getElementById('cancelAddMovieButton').addEventListener('click', () => {
+        addMovieModal.classList.add('hidden');
         clearValues('add');
+    });
+
+    editMovieButton.addEventListener('click', () => {
+        editMovieModal.classList.remove('hidden');
     });
 });
 </script>
