@@ -97,7 +97,10 @@ if (is_array($user) && isset($user['errorMessage']) && $user['errorMessage']) {
                 <div class="flex flex-wrap">
                     <?php
                         foreach ($initialBookings as $booking) {
-                            BookingCard::render($booking->getTickets(), $venue1);
+                            foreach($booking->getTickets() as $ticket) {
+                                $venue= $ticket->getShowing()->getRoom()->getVenue();
+                            }
+                            BookingCard::render($booking->getTickets(), $venue);
                         }
                     ?>
                 </div>
