@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 <?php require_once "session_config.php";
+=======
+<?php
+>>>>>>> main
 require_once "src/model/services/AuthService.php";
 
 class AuthController {

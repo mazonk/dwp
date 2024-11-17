@@ -36,6 +36,7 @@ class NewsRepository {
         }
         return $result;
     }
+<<<<<<< HEAD
 
     public function addNews(array $newsData): void {
         $db = $this->getdb();
@@ -66,4 +67,6 @@ class NewsRepository {
             throw new PDOException('Failed to delete news!');
         }
     }
+=======
+>>>>>>> main
 }

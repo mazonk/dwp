@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+<!-- In the URL -> http://localhost/dwp/movies/1 - this is how you send query string with req. URL -->
+>>>>>>> main
 <?php
 require_once 'session_config.php';
 include_once "src/controller/MovieController.php";

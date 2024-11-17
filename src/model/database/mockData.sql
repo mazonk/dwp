@@ -161,6 +161,7 @@ INSERT INTO Venue (name, phoneNr, contactEmail, addressId) VALUES
 ('Hollywood Stars Cinema', '310-555-5678', 'contact@hollywoodcinema.com', 2),
 ('Empire Cinema', '212-555-9010', 'support@empirecinema.com', 3);
 
+<<<<<<< HEAD
 INSERT INTO OpeningHour (day, openingTime, closingTime, isCurrent) VALUES
 ('Monday', '10:00:00', '22:00:00', TRUE),
 ('Monday', '09:00:00', '21:00:00', FALSE),
@@ -183,10 +184,17 @@ INSERT INTO OpeningHour (day, openingTime, closingTime, isCurrent) VALUES
 ('Sunday', '13:00:00', '23:30:00', TRUE),
 ('Sunday', '14:00:00', '23:00:00', FALSE),
 ('Sunday', '11:30:00', '23:30:00', FALSE);
+=======
+INSERT INTO OpeningHour (day, openingTime, closingTime, isCurrent, venueId) VALUES
+('Monday', '10:00:00', '22:00:00', TRUE, 1),
+('Tuesday', '09:00:00', '23:00:00', TRUE, 2),
+('Wednesday', '10:30:00', '21:30:00', TRUE, 3);
+>>>>>>> main
 
 INSERT INTO Room (roomNumber, venueId) VALUES
 (101, 1),
 (202, 2),
+<<<<<<< HEAD
 (303, 3),
 (404, 1),
 (505, 2),
@@ -238,6 +246,14 @@ INSERT INTO Seat (`row`, seatNr, roomId) VALUES
 (3, 1, 6), (3, 2, 6), (3, 3, 6), (3, 4, 6), (3, 5, 6), (3, 6, 6), (3, 7, 6), (3, 8, 6), (3, 9, 6), (3, 10, 6), (3, 11, 6), (3, 12, 6), (3, 13, 6), (3, 14, 6),
 (4, 1, 6), (4, 2, 6), (4, 3, 6), (4, 4, 6), (4, 5, 6), (4, 6, 6), (4, 7, 6), (4, 8, 6),
 (5, 1, 6), (5, 2, 6), (5, 3, 6), (5, 4, 6), (5, 5, 6), (5, 6, 6), (5, 7, 6), (5, 8, 6);
+=======
+(303, 3);
+
+INSERT INTO Seat (`row`, seatNr, roomId) VALUES
+(1, 5, 1),
+(2, 8, 2),
+(3, 10, 3);
+>>>>>>> main
 
 INSERT INTO UserRole (type) VALUES
 ('Admin'), 
@@ -245,6 +261,7 @@ INSERT INTO UserRole (type) VALUES
 ('Staff');
 
 INSERT INTO User (firstName, lastName, DoB, email, passwordHash, roleId) VALUES
+<<<<<<< HEAD
 ('Admin', 'Admin', '2000-01-01', 'admin@admin.com', '$2y$10$Xt53U6KwhZ34mwbsdgVNjetv998rgpvqQ9xMAa4EzwTfH9X2zElK2', 1),
 ('Bruce', 'Wayne', '1972-02-19', 'bruce@gotham.com', '$2y$12$Fv/Jfv0Ih5hgDb9cB9EJkRsd5w8CZWxvxgD8yxFdOTxjMOjFbr5u', 2),
 ('Clark', 'Kent', '1980-06-18', 'clark@metropolis.com', '$2y$12$xtMIYcE8psaLxr9Yo57.OB7a1V.RmtuRlTwF2xlcTtBZY0tP1.F2S', 2),
@@ -369,6 +386,33 @@ INSERT INTO Movie (title, description, duration, language, releaseDate, posterUR
 ('The Time Jumper', 'A man gains the ability to travel through time, but must decide how much to alter his past.', 118, 'English', '2025-03-15', 'poster_time_jumper.jpg', 'promo_time_jumper.mp4', 'QIsjg1Sb538', 8.40),
 ('AI: Awakening', 'An advanced AI system becomes self-aware, leading humanity to confront new ethical dilemmas.', 128, 'English', '2024-11-05', 'poster_ai_awakening.jpg', 'promo_ai_awakening.mp4', '3CCGg6RjssE', 7.90),
 ('Rise of the Phoenix', 'A fallen warrior seeks redemption in a war-torn kingdom ruled by a corrupt regime.', 150, 'English', '2024-09-30', 'poster_rise_phoenix.jpg', 'promo_rise_phoenix.mp4', 'DyAsfo6rEz0', 8.50);
+=======
+('Bruce', 'Wayne', '1972-02-19', 'bruce@gotham.com', 'hashedpassword1', 1),
+('Peter', 'Parker', '1995-08-10', 'peter@spiderman.com', 'hashedpassword2', 2),
+('Tony', 'Stark', '1970-05-29', 'tony@starkindustries.com', 'hashedpassword3', 3);
+
+INSERT INTO Movie (title, description, duration, language, releaseDate, posterURL, promoURL, trailerURL, rating) VALUES
+('The Dark Knight', 'Batman faces the Joker in Gotham City.', 152, 'English', '2008-07-18', 'poster_dark_knight.jpg', 'promo_dark_knight.mp4', 'trailer_dark_knight.mp4', 9.00),
+('Spider-Man: No Way Home', 'Peter Parker deals with multiverse villains.', 148, 'English', '2021-12-17', 'poster_spiderman.jpg', 'promo_spiderman.mp4', 'trailer_spiderman.mp4', 8.50),
+('Iron Man', 'Tony Stark becomes the armored superhero.', 126, 'English', '2008-05-02', 'poster_ironman.jpg', 'promo_ironman.mp4', 'trailer_ironman.mp4', 8.70),
+('Interstellar', 'A team of explorers travel through a wormhole in space to ensure humanity’s survival.', 169, 'English', '2014-11-07', 'poster_interstellar.jpg', 'promo_interstellar.mp4', 'trailer_interstellar.mp4', 8.60),
+('Andre Rieu', 'The renowned violinist and conductor captivates audiences with his classical music performances.', 120, 'English', '2020-10-10', 'poster_andrerieu.jpg', 'promo_andrerieu.mp4', 'trailer_andrerieu.mp4', 8.30),
+('En Panda i Afrika', 'An animated adventure about a panda\'s journey to Africa, filled with humor and life lessons.', 95, 'Danish', '2023-02-14', 'poster_enpandaiafrika.jpg', 'promo_enpandaiafrika.mp4', 'trailer_enpandaiafrika.mp4', 7.20),
+('The Apprentice', 'A young woman navigates the challenges of her apprenticeship in a competitive business environment.', 110, 'English', '2018-06-25', 'poster_apprentice.jpg', 'promo_apprentice.mp4', 'trailer_apprentice.mp4', 7.80),
+('Deadpool', 'A mercenary with accelerated healing powers seeks revenge while delivering sarcastic humor.', 108, 'English', '2016-02-12', 'poster_deadpool.jpg', 'promo_deadpool.mp4', 'trailer_deadpool.mp4', 8.00),
+('It Ends with Us', 'A gripping love story, where difficult decisions must be made in the face of adversity.', 120, 'English', '2024-03-08', 'poster_itendswithus.jpg', 'promo_itendswithus.mp4', 'trailer_itendswithus.mp4', 6.50),
+('Robot', 'In a futuristic world, a humanoid robot learns about human emotions and identity.', 135, 'Hindi', '2010-10-01', 'poster_robot.jpg', 'promo_robot.mp4', 'trailer_robot.mp4', 7.10),
+('Joker', 'A gritty character study of Arthur Fleck, a man disregarded by society who becomes the infamous Joker.', 122, 'English', '2019-10-04', 'poster_joker.jpg', 'promo_joker.mp4', 'trailer_joker.mp4', 8.50),
+('Føreren og Forføreren', 'A biographical account of Nazi propaganda chief Joseph Goebbels and his role in the Third Reich.', 110, 'Danish', '2022-10-15', 'poster_foreren_forforeren.jpg', 'promo_foreren_forforeren.mp4', 'trailer_foreren_forforeren.mp4', 7.5),
+('Minions', 'The story of the yellow Minions as they search for a new evil master to serve.', 91, 'English', '2015-07-10', 'poster_minions.jpg', 'promo_minions.mp4', 'trailer_minions.mp4', 6.40),
+('Star Wars: Episode V - The Empire Strikes Back', 'Luke Skywalker and the Rebel Alliance face the Empire\'s wrath as they plan their next move against Darth Vader.', 124, 'English', '1980-05-21', 'poster_starwars5.jpg', 'promo_starwars5.mp4', 'trailer_starwars5.mp4', 8.70),
+('Star Wars: Episode VI - Return of the Jedi', 'The Rebel Alliance makes a final stand to defeat the Galactic Empire and save the galaxy.', 131, 'English', '1983-05-25', 'poster_starwars6.jpg', 'promo_starwars6.mp4', 'trailer_starwars6.mp4', 8.30),
+('Guardians of the Multiverse', 'A group of unlikely heroes band together to save multiple realities from collapse.', 140, 'English', '2025-06-15', 'poster_guardians_multiverse.jpg', 'promo_guardians_multiverse.mp4', 'trailer_guardians_multiverse.mp4', 8.90),
+('Space Explorers: The Next Journey', 'A new generation of astronauts embarks on a mission to colonize distant planets.', 135, 'English', '2024-12-20', 'poster_space_explorers.jpg', 'promo_space_explorers.mp4', 'trailer_space_explorers.mp4', 8.70),
+('The Time Jumper', 'A man gains the ability to travel through time, but must decide how much to alter his past.', 118, 'English', '2025-03-15', 'poster_time_jumper.jpg', 'promo_time_jumper.mp4', 'trailer_time_jumper.mp4', 8.40),
+('AI: Awakening', 'An advanced AI system becomes self-aware, leading humanity to confront new ethical dilemmas.', 128, 'English', '2024-11-05', 'poster_ai_awakening.jpg', 'promo_ai_awakening.mp4', 'trailer_ai_awakening.mp4', 7.90),
+('Rise of the Phoenix', 'A fallen warrior seeks redemption in a war-torn kingdom ruled by a corrupt regime.', 150, 'English', '2024-09-30', 'poster_rise_phoenix.jpg', 'promo_rise_phoenix.mp4', 'trailer_rise_phoenix.mp4', 8.50);
+>>>>>>> main
 
 INSERT INTO Genre (name) VALUES
 ('Action'),
@@ -407,6 +451,7 @@ INSERT INTO Director (firstName, lastName) VALUES
 ('Denis', 'Villeneuve'),
 ('Zack', 'Snyder');
 
+<<<<<<< HEAD
 -- Actors for 'The Dark Knight' (movieId 1)
 INSERT INTO Actor (firstName, lastName, `character`) VALUES
 ('Christian', 'Bale', 'Bruce Wayne/Batman'),
@@ -637,6 +682,31 @@ INSERT INTO Actor (firstName, lastName, `character`) VALUES
 ('Taron', 'Egerton', 'Scout Tobias'),
 ('Naomi', 'Scott', 'Healer Lyra'),
 ('Javier', 'Bardem', 'The Tyrant King');
+=======
+INSERT INTO Actor (firstName, lastName, `character`) VALUES
+('Christian', 'Bale', 'Bruce Wayne/Batman'),
+('Tom', 'Holland', 'Peter Parker/Spider-Man'),
+('Robert', 'Downey Jr.', 'Tony Stark/Iron Man'),
+('Christian', 'Bale', 'Bruce Wayne/Batman'),
+('Tom', 'Holland', 'Peter Parker/Spider-Man'),
+('Robert', 'Downey Jr.', 'Tony Stark/Iron Man'),
+('Matthew', 'McConaughey', 'Joseph Cooper'),
+('Andre', 'Rieu', 'Andre Rieu'),
+('Johan', 'Carlsson', 'Panda'),
+('Anya', 'Taylor-Joy', 'Emily Smith'),
+('Ryan', 'Reynolds', 'Wade Wilson/Deadpool'),
+('Blake', 'Lively', 'Lily Bloom'),
+('Shia', 'LaBeouf', 'Sam Witwicky'),
+('Joaquin', 'Phoenix', 'Arthur Fleck/Joker'),
+('Ulrich', 'Thomsen', 'Mads'),
+('Pierre', 'Coffin', 'Minions'),
+('Mark', 'Hamill', 'Luke Skywalker'),
+('Chris', 'Pratt', 'Peter Quill/Star-Lord'),
+('Zendaya', 'Mary', 'Jane Watson'),
+('Jake', 'Gyllenhaal', 'David Rhodes'),
+('Oscar', 'Isaac', 'Nathan Bateman'),
+('Henry', 'Cavill', 'John Wick');
+>>>>>>> main
 
 INSERT INTO Showing (showingDate, showingTime, movieId, roomId) VALUES
 ('2024-10-15', '19:00:00', 1, 1),
@@ -691,6 +761,7 @@ INSERT INTO Showing (showingDate, showingTime, movieId, roomId) VALUES
 ('2024-11-02', '17:00:00', 7, 3),
 ('2024-10-23', '19:00:00', 8, 1),
 ('2024-10-27', '20:30:00', 9, 2),
+<<<<<<< HEAD
 ('2024-10-29', '22:00:00', 10, 3),
 ('2024-11-05', '10:00:00', 1, 1),
 ('2024-11-05', '13:00:00', 1, 2),
@@ -737,18 +808,30 @@ INSERT INTO Showing (showingDate, showingTime, movieId, roomId) VALUES
 ('2024-11-10', '16:00:00', 1, 3),
 ('2024-11-10', '19:00:00', 1, 4),
 ('2024-11-10', '21:30:00', 1, 5);
+=======
+('2024-10-29', '22:00:00', 10, 3);
+>>>>>>> main
 
 INSERT INTO TicketType (name, price, description) VALUES
 ('Standard', 10.00, 'Regular seating ticket'),
 ('VIP', 20.00, 'Access to premium seating'),
 ('Student', 8.00, 'Discount for students');
 
+<<<<<<< HEAD
 INSERT INTO Booking (userId, status) VALUES
 (1, 'confirmed'),
 (1, 'pending'),
 (1, 'cancelled');
 
 INSERT INTO Ticket (seatId, ticketTypeId, showingId, bookingId) VALUES
+=======
+INSERT INTO Reservation (userId, status) VALUES
+(1, 'confirmed'),
+(2, 'pending'),
+(3, 'cancelled');
+
+INSERT INTO Ticket (seatId, ticketTypeId, showingId, reservationId) VALUES
+>>>>>>> main
 (1, 1, 1, 1),
 (2, 2, 2, 2),
 (3, 3, 3, 3);
@@ -758,6 +841,7 @@ INSERT INTO PaymentMethod (name) VALUES
 ('PayPal'),
 ('Cash');
 
+<<<<<<< HEAD
 INSERT INTO Payment (paymentDate, paymentTime, totalPrice, userId, addressId, bookingId, methodId) VALUES
 ('2024-10-15', '18:30:00', 10.00, 1, 1, 1, 1),
 ('2024-10-16', '19:45:00', 20.00, 2, 2, 2, 2),
@@ -772,16 +856,26 @@ INSERT INTO Payment (paymentDate, paymentTime, totalPrice, userId, addressId, bo
 ('2024-10-25', '16:00:00', 18.75, 2, 2, 1, 2),
 ('2024-10-26', '19:15:00', 9.99, 3, 3, 2, 3),
 ('2024-10-27', '21:00:00', 14.99, 1, 1, 3, 1);
+=======
+INSERT INTO Payment (paymentDate, paymentTime, totalPrice, userId, addressId, reservationId, methodId) VALUES
+('2024-10-15', '18:30:00', 10.00, 1, 1, 1, 1),
+('2024-10-16', '19:45:00', 20.00, 2, 2, 2, 2),
+('2024-10-17', '20:30:00', 8.00, 3, 3, 3, 3);
+>>>>>>> main
 
 INSERT INTO News (imageURL, header, content) VALUES
 ('gotham_news.jpg', 'New Batman Movie Showing', 'Join us for the latest Batman movie screening at Gotham Cinema!'),
 ('hollywood_news.jpg', 'Spider-Man Marathon', 'Enjoy a Spider-Man marathon at Hollywood Stars Cinema this weekend.'),
+<<<<<<< HEAD
 ('empire_news.jpg', 'Iron Man Reboot', 'Catch the Iron Man reboot at Empire Cinema with new special effects.'),
 ('horror_fest_news.jpg', 'Halloween Horror Fest', 'Join us for the Halloween Horror Fest featuring classic and new horror films all month long!'),
 ('animation_news.jpg', 'Animation Showcase', 'Don’t miss our Animation Showcase next week featuring beloved animated films and shorts!'),
 ('poster_starWars6.jpg', 'Star Wars Day Celebration', 'Celebrate Star Wars Day with special screenings, trivia, and themed events at our cinema!'),
 ('comedy_night_news.jpg', 'Comedy Night with Top Comedians', 'Join us for a night of laughs with top comedians performing live at the cinema next Saturday!'),
 ('documentary_news.jpg', 'New Documentary Series', 'Check out our new documentary series exploring the world’s most fascinating cultures!');
+=======
+('empire_news.jpg', 'Iron Man Reboot', 'Catch the Iron Man reboot at Empire Cinema with new special effects.');
+>>>>>>> main
 
 INSERT INTO MovieGenre (movieId, genreId) VALUES
 (1, 1),  -- The Dark Knight -> Action
@@ -789,7 +883,11 @@ INSERT INTO MovieGenre (movieId, genreId) VALUES
 (2, 1),  -- Spider-Man: No Way Home -> Action
 (2, 3),  -- Spider-Man: No Way Home -> Sci-Fi
 (3, 1),  -- Iron Man -> Action
+<<<<<<< HEAD
 (3, 3),  -- Iron Man -> Sci-Fi
+=======
+(3, 3);  -- Iron Man -> Sci-Fi
+>>>>>>> main
 (4, 3),  -- Interstellar -> Sci-Fi
 (4, 2),  -- Interstellar -> Drama
 (5, 5),  -- Andre Rieu -> Music
@@ -822,7 +920,11 @@ INSERT INTO MovieGenre (movieId, genreId) VALUES
 (19, 3),  -- AI: Awakening -> Sci-Fi
 (19, 10),  -- AI: Awakening -> Thriller
 (20, 1),  -- Rise of the Phoenix -> Action
+<<<<<<< HEAD
 (20, 13);  -- Rise of the Phoenix -> Fantasy
+=======
+(20, 14);  -- Rise of the Phoenix -> Fantasy
+>>>>>>> main
 
 
 INSERT INTO MovieDirector (movieId, directorId) VALUES
@@ -848,6 +950,7 @@ INSERT INTO MovieDirector (movieId, directorId) VALUES
 (20, 17);  -- Rise of the Phoenix -> Zack Snyder
 
 INSERT INTO MovieActor (movieId, actorId) VALUES
+<<<<<<< HEAD
 -- The Dark Knight
 (1, 1),  -- Christian Bale
 (1, 2),  -- Heath Ledger
@@ -1079,6 +1182,28 @@ INSERT INTO MovieActor (movieId, actorId) VALUES
 (20, 162), -- Samuel L. Jackson
 (20, 103), -- Don Cheadle
 (20, 163); -- Benedict Wong
+=======
+(1, 1),  -- The Dark Knight -> Christian Bale
+(2, 2),  -- Spider-Man: No Way Home -> Tom Holland
+(3, 3),  -- Iron Man -> Robert Downey Jr.
+(4, 4),  -- Interstellar -> Matthew McConaughey
+(5, 5),  -- Andre Rieu -> Andre Rieu
+(6, 6),  -- En Panda i Afrika -> Johan Carlsson
+(7, 7),  -- The Apprentice -> Anya Taylor-Joy
+(8, 8),  -- Deadpool -> Ryan Reynolds
+(9, 9),  -- It Ends with Us -> Blake Lively
+(10, 10),  -- Robot -> Shia LaBeouf
+(11, 11),  -- Joker -> Joaquin Phoenix
+(12, 12),  -- Føreren og Forføreren -> Ulrich Thomsen
+(13, 12),  -- Minions -> Pierre Coffin
+(14, 13),  -- Star Wars: Episode V -> Mark Hamill
+(15, 13),  -- Star Wars: Episode VI -> Mark Hamill
+(16, 14),  -- Guardians of the Multiverse -> Chris Pratt
+(17, 15),  -- Space Explorers: The Next Journey -> Zendaya
+(18, 16),  -- The Time Jumper -> Jake Gyllenhaal
+(19, 17),  -- AI: Awakening -> Oscar Isaac
+(20, 18);  -- Rise of the Phoenix -> Henry Cavill
+>>>>>>> main
 
 INSERT INTO VenueShowing (venueId, showingId) VALUES
 (1, 1),  -- Gotham Cinema -> Showing of The Dark Knight
@@ -1130,6 +1255,7 @@ INSERT INTO VenueShowing (venueId, showingId) VALUES
 (1, 47),  -- IMAX Theatre -> Showing of Blade Runner 2049
 (1, 48),  -- Odeon -> Showing of The Fifth Element
 (2, 49),  -- AMC Cinemas -> Showing of The Prestige
+<<<<<<< HEAD
 (2, 50), -- Alamo Drafthouse -> Showing of The Departed
 (1, 84),  -- Venue ID 1 -> Showing ID 84
 (1, 85),  -- Venue ID 1 -> Showing ID 85
@@ -1147,6 +1273,9 @@ INSERT INTO VenueShowing (venueId, showingId) VALUES
 (2, 96),  -- Venue ID 2 -> Showing ID 96
 (2, 97),  -- Venue ID 2 -> Showing ID 97
 (1, 98);  -- Venue ID 1 -> Showing ID 98
+=======
+(2, 50); -- Alamo Drafthouse -> Showing of The Departed
+>>>>>>> main
 
 INSERT INTO VenueOpeningHour (venueId, openingHourId) VALUES
 (1, 1),  -- Gotham Cinema -> Monday's opening hours

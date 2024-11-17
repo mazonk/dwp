@@ -26,6 +26,7 @@ class VenueController {
     return $venue;
   }
 
+<<<<<<< HEAD
   public function editVenue(int $venueId, array $newVenueData): array|Venue {
     // Validate input data
     $validationErrors = $this->validateInputs($newVenueData);
@@ -48,12 +49,15 @@ class VenueController {
     return ['errorMessage' => 'No venue selected. Please select a venue from the list.'];
   }
 
+=======
+>>>>>>> main
   /* Store the selected venue's venueId and name in the session */
   public function selectVenue(Venue $venue): Venue {
     $_SESSION['selectedVenueId'] = $venue->getVenueId();
     $_SESSION['selectedVenueName'] = $venue->getName();
     return $venue;
   }
+<<<<<<< HEAD
 
   private function validateInputs(array $data): array {
     $errors = [];
@@ -118,5 +122,7 @@ class VenueController {
     return $errors; 
   }
 
+=======
+>>>>>>> main
 }
 ?>
