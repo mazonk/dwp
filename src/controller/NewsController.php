@@ -27,7 +27,6 @@ class NewsController {
 
         return $news;
     }
-<<<<<<< HEAD
 
     public function addNews(array $newsData): array {
         $errors = $this->newsService->addNews($newsData);
@@ -67,6 +66,4 @@ class NewsController {
         }
         return ['success' => true];
     }
-=======
->>>>>>> main
 }

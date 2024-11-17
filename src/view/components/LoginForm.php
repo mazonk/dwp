@@ -31,11 +31,7 @@ class LoginForm {
                     <?php endif; ?>
                     <input class="text-white font-bold py-2 px-4 rounded text-center w-full mt-4 cursor-pointer" 
                         style="background: #FADF24;" type="submit" name="loginButton" value="Login" />
-<<<<<<< HEAD
                     <p class="mt-2 -mb-4 text-gray-500"> Don't have an account yet? <a class="underline text-blue-700" href="<?php echo $_SESSION['baseRoute'] ?>register">Sign up</p>
-=======
-                    <p class="mt-2 -mb-4 text-gray-500"> Don't have an account yet? <a class="underline text-blue-700" href="/dwp/register">Sign up</></p>
->>>>>>> main
                 </div>
             </form>
         </div>

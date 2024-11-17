@@ -6,7 +6,6 @@ include_once "src/model/entity/Venue.php";
 class VenueService {
   private VenueRepository $venueRepository;
   private AddressService $addressService;
-<<<<<<< HEAD
   private PDO $db;
 
   public function __construct() {
@@ -20,14 +19,6 @@ class VenueService {
     return DatabaseConnection::getInstance(); // singleton
   }
 
-=======
-
-  public function __construct() {
-    $this->venueRepository = new VenueRepository();
-    $this->addressService = new AddressService();
-  }
-
->>>>>>> main
   /* Get all venues */
   public function getAllVenues(): array {
     try {
@@ -68,7 +59,6 @@ class VenueService {
       return ["error"=> true, "message"=> $e->getMessage()];
     }
   }
-<<<<<<< HEAD
 
   public function editVenue(int $venueId, array $newVenueData): array|Venue {
     $this->db->beginTransaction();
@@ -84,6 +74,4 @@ class VenueService {
       return ["error"=> true, "message"=> $e->getMessage()];
     }
   }
-=======
->>>>>>> main
 }
