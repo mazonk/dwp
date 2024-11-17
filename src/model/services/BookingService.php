@@ -23,4 +23,21 @@ class BookingService {
             return ['error' => true, 'message' => $e->getMessage()];
         }
     }
+
+    public function getBookingsByUserId(int $userId): array {
+        try {
+            $result = $this->bookingRepository->getBookingsByUserId($userId);
+            $bookings = [];
+            foreach ($result as $booking) {
+                $user = $this->userService->getUserById($booking['userId']);
+                if (is_array($user) && isset($user['error']) && $user['error']) {
+                    return $user;
+                }
+                $bookings[] = new Booking($booking['bookingId'], $user, Status::from($booking['status']));
+            }
+            return $bookings;
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+    }
 }

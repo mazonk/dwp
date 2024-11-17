@@ -1,5 +1,6 @@
 <?php
 include_once "src/model/entity/Booking.php";
+include_once "src/model/services/BookingService.php";
 
 class BookingController {
     private BookingService $bookingService;
