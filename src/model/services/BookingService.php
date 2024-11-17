@@ -11,18 +11,18 @@ class BookingService {
         $this->userService = new UserService();
     }
 
-    // public function getBookingById(int $bookingId): Booking |array  {
-    //     try {
-    //         $result = $this->bookingRepository->getBookingById($bookingId);
-    //         $user = $this->userService->getUserById($result['userId']);
-    //         if (is_array($user) && isset($user['error']) && $user['error']) {
-    //             return $user;
-    //         }
-    //         return new Booking($result['bookingId'], $user, Status::from($result['status']));
-    //     } catch (Exception $e) {
-    //         return ['error' => true, 'message' => $e->getMessage()];
-    //     }
-    // }
+    public function getBookingById(int $bookingId): Booking |array  {
+        try {
+            $result = $this->bookingRepository->getBookingById($bookingId);
+            $user = $this->userService->getUserById($result['userId']);
+            if (is_array($user) && isset($user['error']) && $user['error']) {
+                return $user;
+            }
+            return new Booking($result['bookingId'], $user, Status::from($result['status']));
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+    }
 
     public function getBookingsByUserId(int $userId): array {
         try {
@@ -33,7 +33,6 @@ class BookingService {
                 if (is_array($user) && isset($user['error']) && $user['error']) {
                     return $user;
                 }
-                
                 $bookings[] = new Booking($booking['bookingId'], $user, Status::from($booking['status']));
             }
             return $bookings;
