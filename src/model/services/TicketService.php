@@ -43,11 +43,7 @@ class TicketService {
                 if (is_array($showing) && isset($showing["error"]) && $showing["error"]) {
                     return $showing;
                 }
-                $booking = $this->bookingService->getBookingById($ticket["bookingId"]);
-                if (is_array($booking) && isset($booking["error"]) && $booking["error"]) {
-                    return $booking;
-                }
-                $tickets[] = new Ticket($ticket["ticketId"], $seat, $ticketType, $showing, $booking);
+                $tickets[] = new Ticket($ticket["ticketId"], $seat, $ticketType, $showing);
             }
 
             return $tickets;
@@ -55,4 +51,6 @@ class TicketService {
             return ['error' => true, 'message' => $e->getMessage()];
         }
     }
+
+    
 }

@@ -26,6 +26,20 @@ public function getAllTicketsForShowing(int $showingId): array {
     }
 }
 
+public function getTicketsByBookingId(int $bookingId): array {
+    $pdo = $this->getdb();
+    $statement = $pdo->prepare("SELECT * FROM Ticket WHERE bookingId = :bookingId");
+    try {
+        $statement->execute([':bookingId' => $bookingId]);
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+        if (empty($result)) {
+            throw new Exception("No tickets found.");
+        }
+        return $result;
+    } catch (PDOException $e) {
+        throw new PDOException("Unable to fetch tickets: " . $e->getMessage());
+    }
+}
 
 public function getTicketTypeById(int $ticketTypeId): array {
     $pdo = $this->getdb();
