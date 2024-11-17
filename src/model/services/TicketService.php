@@ -52,5 +52,30 @@ class TicketService {
         }
     }
 
-    
+    public function getTicketsByBookingId(int $bookingId): array {
+        try {
+            $result = $this->ticketRepository->getTicketsByBookingId($bookingId);
+            $tickets = [];
+            foreach ($result as $ticket) {
+                $seat = $this->seatService->getSeatById($ticket["seatId"]);
+                if (is_array($seat) && isset($seat["error"]) && $seat["error"]) {
+                    return $seat;
+                }
+                $ticketTypeResult = $this->ticketRepository->getTicketTypeById($ticket["ticketTypeId"]);
+                if (is_array($ticketTypeResult) && isset($ticketTypeResult["error"]) && $ticketTypeResult["error"]) {
+                    return $ticketTypeResult;
+                }
+                $ticketType = new TicketType($ticketTypeResult["ticketTypeId"], $ticketTypeResult["name"], $ticketTypeResult["price"], $ticketTypeResult["description"]);
+                $showing = $this->showingService->getShowingById($ticket["showingId"], $ticket["venueId"]);
+                if (is_array($showing) && isset($showing["error"]) && $showing["error"]) {
+                    return $showing;
+                }
+                $tickets[] = new Ticket($ticket["ticketId"], $seat, $ticketType, $showing);
+            }
+
+            return $tickets;
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+    }
 }
