@@ -10,13 +10,11 @@ class TicketService {
     private TicketRepository $ticketRepository;
     private ?SeatService $seatService;
     private ShowingService $showingService;
-    private BookingService $bookingService;
 
     public function __construct() {
         $this->ticketRepository = new TicketRepository();
         $this->seatService = null;
         $this->showingService = new ShowingService();
-        $this->bookingService = new BookingService();
     }
     
     public function setSeatService(SeatService $seatService): void {
@@ -25,7 +23,7 @@ class TicketService {
 
     private function mapTicket(array $ticketData): array|Ticket {
         // Fetch seat details
-        $seat = $this->seatService->getSeatById($ticketData["seatId"]);
+        $seat = $this->seatService?->getSeatById($ticketData["seatId"]);
         if (is_array($seat) && isset($seat["error"]) && $seat["error"]) {
             return $seat;
         }
@@ -43,7 +41,7 @@ class TicketService {
         );
 
         // Fetch showing details
-        $showing = $this->showingService->getShowingById($ticketData["showingId"], $ticketData["venueId"]);
+        $showing = $this->showingService->getShowingById($ticketData["showingId"]);
         if (is_array($showing) && isset($showing["error"]) && $showing["error"]) {
             return $showing;
         }
@@ -57,7 +55,7 @@ class TicketService {
         );
     }
 
-    public function getAllTicketsForShowing(int $showingId, int $venueId): array {
+    public function getAllTicketsForShowing(int $showingId): array {
         try {
             $result = $this->ticketRepository->getAllTicketsForShowing($showingId);
             $tickets = [];
@@ -78,7 +76,6 @@ class TicketService {
     public function getTicketsByBookingId(int $bookingId): array {
         try {
             $result = $this->ticketRepository->getTicketsByBookingId($bookingId);
-            $tickets = [];
             foreach ($result as $ticketData) {
                 $ticket = $this->mapTicket($ticketData);
                 if (is_array($ticket) && isset($ticket["error"]) && $ticket["error"]) {

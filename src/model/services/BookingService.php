@@ -1,14 +1,21 @@
 <?php
 include_once "src/model/entity/Booking.php";
 include_once "src/model/services/UserService.php";
+include_once "src/model/services/TicketService.php";
+include_once "src/model/services/SeatService.php";
 include_once "src/model/repositories/BookingRepository.php";
 
 class BookingService {
     private BookingRepository $bookingRepository;
     private UserService $userService;
+    private TicketService $ticketService;
+
     public function __construct() {
         $this->bookingRepository = new BookingRepository();
         $this->userService = new UserService();
+        $seatService = new SeatService();
+        $this->ticketService = new TicketService();
+        $this->ticketService->setSeatService($seatService);
     }
 
     // public function getBookingById(int $bookingId): Booking |array  {
@@ -33,8 +40,11 @@ class BookingService {
                 if (is_array($user) && isset($user['error']) && $user['error']) {
                     return $user;
                 }
-                
-                $bookings[] = new Booking($booking['bookingId'], $user, Status::from($booking['status']));
+                $tickets = $this->ticketService->getTicketsByBookingId($booking['bookingId']);
+                if (isset($tickets['error']) && $tickets['error']) {
+                    return $tickets;
+                }
+                $bookings[] = new Booking($booking['bookingId'], $user, Status::from($booking['status']), $tickets);
             }
             return $bookings;
         } catch (Exception $e) {

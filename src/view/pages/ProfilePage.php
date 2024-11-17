@@ -22,6 +22,10 @@ if (is_array($user) && isset($user['errorMessage']) && $user['errorMessage']) {
 
     //fetch bookings
     $bookings = $bookingController->getBookingsByUserId($_SESSION['loggedInUser']['userId']);
+    if (is_array($bookings) && isset($bookings['errorMessage']) && $bookings['errorMessage']) {
+        echo $bookings['errorMessage'] . ' ' . '<a class="underline text-blue-300" href="javascript:window.history.back()"><-Go back!</a>';
+        exit;
+    }
 
     $initialBookings = count($bookings) > 8 ? array_slice($bookings, 0, 8) : $bookings;
 
