@@ -21,7 +21,7 @@ if (is_array($user) && isset($user['errorMessage']) && $user['errorMessage']) {
 } else { //else render component
 
     //fetch bookings
-    $bookings = [];
+    $bookings = $bookingController->getBookingsByUserId($_SESSION['loggedInUser']['userId']);
 
     $initialBookings = count($bookings) > 8 ? array_slice($bookings, 0, 8) : $bookings;
 

@@ -9,7 +9,7 @@ class BookingController {
         $this->bookingService = new BookingService();
     }
 
-    public function getBookingByUserId(int $userId): array {
+    public function getBookingsByUserId(int $userId): array {
         $bookings = $this->bookingService->getBookingsByUserId($userId);
         if (isset($bookings['error']) && $bookings['error']) {
             return ['errorMessage'=> $bookings['message']];
