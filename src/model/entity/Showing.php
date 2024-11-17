@@ -1,9 +1,6 @@
 <?php
-<<<<<<< HEAD
 include_once "src/model/entity/Movie.php";
 include_once "src/model/entity/Room.php";
-=======
->>>>>>> main
 
 class Showing {
     private int $showingId;

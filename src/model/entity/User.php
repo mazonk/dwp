@@ -1,9 +1,6 @@
 <?php
 require_once "src/model/entity/Person.php";
-<<<<<<< HEAD
 include_once "src/model/entity/UserRole.php";
-=======
->>>>>>> main
 class User extends Person {
   private ?DateTime $dob;
   private string $email;

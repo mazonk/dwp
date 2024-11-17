@@ -5,7 +5,6 @@ include_once "src/model/entity/PostalCode.php";
 
 class AddressService {
   private AddressRepository $addressRepository;
-<<<<<<< HEAD
   private PDO $db;
 
   public function __construct() {
@@ -16,11 +15,6 @@ class AddressService {
   private function getdb() {
     require_once 'src/model/database/dbcon/DatabaseConnection.php';
     return DatabaseConnection::getInstance(); // singleton
-=======
-
-  public function __construct() {
-    $this->addressRepository = new AddressRepository();
->>>>>>> main
   }
 
   /* Get all addresses */
@@ -31,13 +25,8 @@ class AddressService {
       // Create an array of Address objects with the corresponding PostalCode object
       foreach($result['addressResult'] as $addressRow) {
         foreach($result['postalCodeResult'] as $postalCodeRow) {
-<<<<<<< HEAD
           if ($addressRow['postalCodeId'] == $postalCodeRow['postalCodeId']) {
             $addressArray[] = new Address($addressRow['addressId'], $addressRow['street'], $addressRow['streetNr'], new PostalCode($postalCodeRow['postalCodeId'], $postalCodeRow['postalCode'], $postalCodeRow['city']));
-=======
-          if ($addressRow['postalCode'] == $postalCodeRow['postalCode']) {
-            $addressArray[] = new Address($addressRow['addressId'], $addressRow['street'], $addressRow['streetNr'], new PostalCode($postalCodeRow['postalCode'], $postalCodeRow['city']));
->>>>>>> main
             break;
           }
         }
@@ -53,7 +42,6 @@ class AddressService {
     try {
       $result = $this->addressRepository->getAddressById($addressId);
       // Create and return an Address object with the corresponding PostalCode object
-<<<<<<< HEAD
       return new Address($result['addressResult']['addressId'], $result['addressResult']['street'], $result['addressResult']['streetNr'], new PostalCode($result['postalCodeResult']['postalCodeId'], $result['postalCodeResult']['postalCode'], $result['postalCodeResult']['city']));
     } catch (Exception $e) {
       return ["error"=> true, "message"=> $e->getMessage()];
@@ -65,9 +53,6 @@ class AddressService {
       $this->addressRepository->updateAddress($addressId, $newAddress->getStreet(), $newAddress->getStreetNr(),
       $newAddress->getPostalCode()->getPostalCodeId(), $newAddress->getPostalCode()->getPostalCode(), $newAddress->getPostalCode()->getCity());
       return $this->getAddressById($addressId);
-=======
-      return new Address($result['addressResult']['addressId'], $result['addressResult']['street'], $result['addressResult']['streetNr'], new PostalCode($result['postalCodeResult']['postalCode'], $result['postalCodeResult']['city']));
->>>>>>> main
     } catch (Exception $e) {
       return ["error"=> true, "message"=> $e->getMessage()];
     }

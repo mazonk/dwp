@@ -5,10 +5,7 @@
 
 # db credentials
 credentials.php
-<<<<<<< HEAD
 .env
-=======
->>>>>>> main
 
 # mac binary files ignore
 .DS_Store

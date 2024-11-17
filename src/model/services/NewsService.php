@@ -1,9 +1,6 @@
 <?php
 include_once "src/model/repositories/NewsRepository.php";
-<<<<<<< HEAD
 
-=======
->>>>>>> main
 class NewsService {
     private NewsRepository $newsRepository;
 
@@ -34,7 +31,6 @@ class NewsService {
         }
         
     }
-<<<<<<< HEAD
 
     public function addNews(array $newsData): array {
         $errors = [];
@@ -115,6 +111,4 @@ class NewsService {
         }
     
     }
-=======
->>>>>>> main
 }

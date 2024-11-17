@@ -1,19 +1,12 @@
 <?php
-<<<<<<< HEAD
 include_once "src/model/entity/Room.php";
-=======
->>>>>>> main
 class Seat {
   private int $seatId;
   private int $row;
   private int $seatNr;
   private Room $room;
 
-<<<<<<< HEAD
   public function __construct(int $seatId, int $row, int $seatNr, Room $room) {
-=======
-  public function __construct(int $seatIds, int $row, int $seatNr, Room $room) {
->>>>>>> main
     $this->seatId = $seatId;
     $this->row = $row;
     $this->seatNr = $seatNr;

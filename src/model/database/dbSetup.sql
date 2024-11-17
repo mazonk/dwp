@@ -68,13 +68,7 @@ CREATE TABLE OpeningHour (
     day ENUM('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'), -- should we rly use enum here?
     openingTime TIME NOT NULL,
     closingTime TIME NOT NULL,
-<<<<<<< HEAD
     isCurrent BOOLEAN NOT NULL
-=======
-    isCurrent BOOLEAN NOT NULL,
-    venueId INT NOT NULL,
-    FOREIGN KEY (venueId) REFERENCES Venue(venueId)
->>>>>>> main
 );
 
 CREATE TABLE Room (
@@ -157,13 +151,8 @@ CREATE TABLE TicketType (
     description TEXT NULL
 );
 
-<<<<<<< HEAD
 CREATE TABLE Booking (
     bookingId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-=======
-CREATE TABLE Reservation (
-    reservationId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
->>>>>>> main
     userId INT NOT NULL,
     status ENUM('pending', 'confirmed', 'cancelled') NOT NULL, -- enum?
     FOREIGN KEY (userId) REFERENCES User(userId)
@@ -174,19 +163,11 @@ CREATE TABLE Ticket (
     seatId INT NOT NULL,
     ticketTypeId INT NOT NULL,
     showingId INT NOT NULL,
-<<<<<<< HEAD
     bookingId INT NOT NULL,
     FOREIGN KEY (seatId) REFERENCES Seat(seatId),
     FOREIGN KEY (ticketTypeId) REFERENCES TicketType(ticketTypeId),
     FOREIGN KEY (showingId) REFERENCES Showing(showingId),
     FOREIGN KEY (bookingId) REFERENCES Booking(bookingId)
-=======
-    reservationId INT NOT NULL,
-    FOREIGN KEY (seatId) REFERENCES Seat(seatId),
-    FOREIGN KEY (ticketTypeId) REFERENCES TicketType(ticketTypeId),
-    FOREIGN KEY (showingId) REFERENCES Showing(showingId),
-    FOREIGN KEY (reservationId) REFERENCES Reservation(reservationId)
->>>>>>> main
 );
 
 CREATE TABLE PaymentMethod (
@@ -201,20 +182,12 @@ CREATE TABLE Payment (
     totalPrice DECIMAL(8, 2) NOT NULL, -- 8 digits and 2 digits after the decimal point 0.00 - 999999.99
     userId INT NOT NULL,
     addressId INT NOT NULL,
-<<<<<<< HEAD
     bookingId INT NOT NULL,
-=======
-    reservationId INT NOT NULL,
->>>>>>> main
     methodId INT NOT NULL,
     FOREIGN KEY (methodId) REFERENCES PaymentMethod(methodId),
     FOREIGN KEY (userId) REFERENCES User(userId),
     FOREIGN KEY (addressId) REFERENCES Address(addressId),
-<<<<<<< HEAD
     FOREIGN KEY (bookingId) REFERENCES Booking(bookingId)
-=======
-    FOREIGN KEY (reservationId) REFERENCES Reservation(reservationId)
->>>>>>> main
 );
 
 CREATE TABLE News (

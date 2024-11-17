@@ -1,8 +1,5 @@
 <?php
-<<<<<<< HEAD
 include_once "src/model/entity/Address.php";
-=======
->>>>>>> main
 
 class Venue {
     private int $venueId;

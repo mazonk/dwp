@@ -33,7 +33,6 @@ class UserRepository {
             throw new PDOException("Unable to fetch user by email!");
         }
     }
-<<<<<<< HEAD
 
 
     /**
@@ -76,7 +75,4 @@ class UserRepository {
             throw new PDOException("Unable to update user profile info!");
         }
     }
-=======
-    
->>>>>>> main
 }
