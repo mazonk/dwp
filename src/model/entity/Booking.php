@@ -11,10 +11,13 @@ class Booking {
     private User $user;
     private Status $status;
 
-    public function __construct(int $bookingId, User $user, Status $status) {
+    private array $tickets;
+
+    public function __construct(int $bookingId, User $user, Status $status, array $tickets) {
         $this->bookingId = $bookingId;
         $this->user = $user;
         $this->status = $status;
+        $this->tickets = $tickets;
     }
 
     public function getBookingId(): int {
@@ -29,6 +32,10 @@ class Booking {
         return $this->status;
     }
 
+    public function getTickets(): array {
+        return $this->tickets;
+    }
+
     public function setBookingId(int $bookingId): void {
         $this->bookingId = $bookingId;
     }
@@ -39,6 +46,10 @@ class Booking {
 
     public function setStatus(Status $status): void {
         $this->status = $status;
-    }   
+    }
+    
+    public function setTickets(array $tickets): void {
+        $this->tickets = $tickets;
+    }
 }
 ?>
