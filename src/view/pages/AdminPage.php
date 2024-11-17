@@ -26,7 +26,7 @@
                 }
             ?>
             <?php
-                $validSections = ['company-venues', 'content-management', 'scheduling', 'bookings-invoices'];
+                $validSections = ['company-venues', 'content-management', 'movie-management', 'scheduling', 'bookings-invoices'];
                 $section = isset($_GET['section']) ? (in_array($_GET['section'] ?? 'company-venues', $validSections) ? $_GET['section'] : 'company-venues') : 'company-venues';    
 
                 switch ($section) {
@@ -35,6 +35,9 @@
                         break;
                     case 'content-management':
                         include 'src/view/components/admin-sections/contentManagement.php';
+                        break;
+                    case 'movie-management':
+                        include 'src/view/components/admin-sections/movieManagement.php';
                         break;
                     case 'scheduling':
                         include 'src/view/components/admin-sections/scheduling.php';
