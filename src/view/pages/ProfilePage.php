@@ -13,6 +13,17 @@ if (!isLoggedIn()) {
 $userController = new UserController();
 $bookingController = new BookingController();
 
+//state
+$showMore = isset($_SESSION['showMore']) ? $_SESSION['showMore'] : false;
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'enableShowMore') {
+    $_SESSION['showMore'] = !$_SESSION['showMore'];
+
+    // Return a JSON response
+    echo json_encode(['success' => true]);
+    exit;
+}
+
 //fetch user
 $user = $userController->getUserById($_SESSION['loggedInUser']['userId']);
 if (is_array($user) && isset($user['errorMessage']) && $user['errorMessage']) {
@@ -95,14 +106,24 @@ if (is_array($user) && isset($user['errorMessage']) && $user['errorMessage']) {
             <div class="pl-8 w-full">
                 <h2 class="text-[2rem] leading-snug mb-7 mt-11">Purchase History</h2>
                 <div class="flex flex-wrap">
-                    <?php
-                        foreach ($initialBookings as $booking) {
-                            foreach($booking->getTickets() as $ticket) {
-                                $venue= $ticket->getShowing()->getRoom()->getVenue();
+                    <?php 
+                    if ($showMore): 
+                        foreach ($bookings as $booking): 
+                            foreach ($booking->getTickets() as $ticket) {
+                                $venue = $ticket->getShowing()->getRoom()->getVenue();
                                 continue;
                             }
                             BookingCard::render($booking->getTickets(), $venue);
-                        }
+                        endforeach;
+                    else: 
+                        foreach ($initialBookings as $booking): 
+                            foreach ($booking->getTickets() as $ticket) {
+                                $venue = $ticket->getShowing()->getRoom()->getVenue();
+                                continue;
+                            }
+                            BookingCard::render($booking->getTickets(), $venue);
+                        endforeach;
+                    endif;
                     ?>
                 </div>
                 <?php if (count($bookings) > 8): ?>
@@ -144,7 +165,6 @@ if (is_array($user) && isset($user['errorMessage']) && $user['errorMessage']) {
                 xhr.onreadystatechange = () => {
                         if (xhr.readyState === 4 && xhr.status === 200) {
                             let response;
-                            console.log(xhr.response);
                             try {
                                 response = JSON.parse(xhr.response); // Parse the JSON response
                             } catch (e) {
@@ -182,11 +202,42 @@ if (is_array($user) && isset($user['errorMessage']) && $user['errorMessage']) {
                 xhr.send(params);
             });
         }
+
+        const cancelButton = document.getElementById('cancelButton');
         // Cancel button hides the form without submitting
-        document.getElementById('cancelButton').addEventListener('click', () => {
-            editProfileInfoForm.classList.add('hidden');
-            window.location.href = `${baseRoute}profile`; //route back to profile (edit false)
-        });
+        if (cancelButton) {
+                cancelButton.addEventListener('click', () => {
+                editProfileInfoForm.classList.add('hidden');
+                window.location.href = `${baseRoute}profile`; //route back to profile (edit false)
+            });
+        }
+
+        document.getElementById('show-more-btn').addEventListener('click', () => {
+            event.preventDefault();
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', ``, true);
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    let response;
+                            console.log(xhr.response);
+                            try {
+                                response = JSON.parse(xhr.response); // Parse the JSON response
+                            } catch (e) {
+                                console.error('Could not parse response as JSON:', e);
+                                errorMessageElement.textContent = 'An unexpected error occurred. Please try again.';
+                                errorMessageElement.style.display = 'block';
+                                return;
+                            }
+                    if (response.success) {
+                        location.reload(); // Reload the page to show all bookings
+                    } else {
+                        console.error('Error enabling show more:', response.errorMessage);
+                    }
+                }
+            };
+            xhr.send(`action=enableShowMore`);
+        })
     });
     
 </script>
