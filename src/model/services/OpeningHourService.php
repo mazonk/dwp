@@ -110,6 +110,11 @@ class OpeningHourService {
         $this->db->beginTransaction();
 
         try {
+          // If the opening hour is set as the current opening hour, set all other opening hours for the same day to inactive
+          if ($openingHourData['isCurrent'] == 1) {
+            $this->setActiveOpeningHoursToInactive($openingHourData);
+          }
+          
           $openingHourId = $this->openingHourRepository->addOpeningHour($openingHourData);
           $this->openingHourRepository->addOpeningHourToVenue($openingHourId, $venueId);
 
@@ -134,12 +139,31 @@ class OpeningHourService {
     }
   }
 
+  private function setActiveOpeningHoursToInactive(array $openingHourData): array {
+    try {
+      $result = $this->openingHourRepository->getActiveOpeningHoursByDay($openingHourData);
+
+      if (!empty($result)) {
+        foreach($result as $openingHourId) {
+          try {
+            $this->openingHourRepository->updateIsCurrent($openingHourId, 0);
+          } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+          }
+        }
+      }
+      return ['success' => true];
+    } catch (Exception $e) {
+      return ['error' => true, 'message' => $e->getMessage()];
+    }
+  }
+
   private function validateFormInputs(array $openingHourData, int $venueId, array &$errors, array &$isDuplicate): void {
     // Define regex
     $hourRegex = "/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/";
 
     // Perform checks
-    if (empty($openingHourData['day']) || empty($openingHourData['openingTime']) || empty($openingHourData['closingTime']) || empty($openingHourData['isCurrent'])) {
+    if (empty($openingHourData['day']) || empty($openingHourData['openingTime']) || empty($openingHourData['closingTime']) || $openingHourData['isCurrent'] === null) {
       $errors['general'] = 'All fields are required.';
     }
 

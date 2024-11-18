@@ -15,11 +15,29 @@ class OpeningHourRepository {
       $query->execute(['venueId' => htmlspecialchars($venueId)]);
       $result = $query->fetchAll(PDO::FETCH_ASSOC);
       if (empty($result)) {
-        throw new Exception("No opening hours found");
+        throw new Exception("No opening hours found.");
       }
       return $result;
     } catch (PDOException $e) {
-      throw new PDOException("Unable to fetch opening hours");
+      throw new PDOException("Unable to fetch opening hours.");
+    }
+  }
+
+  public function getActiveOpeningHoursByDayForVenue(array $openingHourData, int $venueId): array {
+    $query = $this->db->prepare("SELECT o.openingHourId
+            FROM OpeningHour o
+            JOIN VenueOpeningHour vo ON o.openingHourId = vo.openingHourId
+            WHERE vo.venueId = :venueId
+            AND o.day = :day 
+            AND o.isCurrent = 1");
+    try {
+      $query->execute([
+        'day' => $openingHourData['day'],
+        'venueId' => $venueId
+      ]);
+      return $query->fetchAll(PDO::FETCH_COLUMN);
+    } catch (PDOException $e) {
+      throw new PDOException("Unable to fetch opening hours.");
     }
   }
   
@@ -91,6 +109,19 @@ class OpeningHourRepository {
       }
     } catch (PDOException $e) {
       throw new PDOException('Failed to check for duplicate opening hour.');
+    }
+  }
+
+  public function updateIsCurrent(int $openingHourId, bool $setToStatus): void {
+    $query = $this->db->prepare("UPDATE OpeningHour SET isCurrent = :isCurrent WHERE openingHourId = :openingHourId");
+
+    try {
+      $query->execute([
+        'isCurrent' => $setToStatus,
+        'openingHourId' => $openingHourId
+      ]);
+    } catch (PDOException $e) {
+      throw new PDOException('Failed to update isCurrent status.');
     }
   }
 }

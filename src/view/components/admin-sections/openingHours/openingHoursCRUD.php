@@ -319,6 +319,7 @@
 				// If the request is done and successful
 				if (xhr.readyState === 4 && xhr.status === 200) {
 					let response;
+					console.log(xhr.response);
 					try {
 						response = JSON.parse(xhr.response); // Parse the JSON response
 					} catch (e) {
