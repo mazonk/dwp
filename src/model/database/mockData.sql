@@ -1147,8 +1147,3 @@ INSERT INTO VenueShowing (venueId, showingId) VALUES
 (2, 96),  -- Venue ID 2 -> Showing ID 96
 (2, 97),  -- Venue ID 2 -> Showing ID 97
 (1, 98);  -- Venue ID 1 -> Showing ID 98
-
-INSERT INTO VenueOpeningHour (venueId, openingHourId) VALUES
-(1, 1),  -- Gotham Cinema -> Monday's opening hours
-(2, 2),  -- Hollywood Stars Cinema -> Tuesday's opening hours
-(3, 3);  -- Empire Cinema -> Wednesday's opening hours
