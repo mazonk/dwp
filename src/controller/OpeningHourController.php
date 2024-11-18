@@ -8,18 +8,18 @@ class OpeningHourController {
     $this->openingHourService = new OpeningHourService();
   }
 
-  /* Get current opening hours by venueId */
-  public function getCurrentOpeningHoursById(int $venueId): array {
-    $openingHours = $this->openingHourService->getCurrentOpeningHoursById($venueId);
+  /* Get the opening hours */
+  public function getOpeningHours(): array {
+    $openingHours = $this->openingHourService->getOpeningHours();
     if (isset($openingHours['error']) && $openingHours['error']) {
       return ['errorMessage'=> $openingHours['message']];
     }
     return $openingHours;
   }
 
-  /* Get opening hours by venueId */
-  public function getOpeningHoursById(int $venueId): array {
-    $openingHours = $this->openingHourService->getOpeningHoursById($venueId);
+  /* Get current opening hours */
+  public function getCurrentOpeningHours(): array {
+    $openingHours = $this->openingHourService->getCurrentOpeningHours();
     if (isset($openingHours['error']) && $openingHours['error']) {
       return ['errorMessage'=> $openingHours['message']];
     }

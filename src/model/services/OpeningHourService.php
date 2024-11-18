@@ -5,58 +5,45 @@ include_once "src/model/services/VenueService.php";
 
 class OpeningHourService {
   private OpeningHourRepository $openingHourRepository;
-  private PDO $db;
 
   public function __construct() {
-    $this->db = $this->getdb();
-    $this->openingHourRepository = new OpeningHourRepository($this->db);
+    $this->openingHourRepository = new OpeningHourRepository();
     $this->venueService = new VenueService();
   }
 
-  private function getdb(): PDO {
-    require_once 'src/model/database/dbcon/DatabaseConnection.php';
-    return DatabaseConnection::getInstance(); // singleton
-  }
-
-  public function getCurrentOpeningHoursById(int $venueId): array {
+  public function getOpeningHours(): array {
     try {
-      $result = $this->openingHourRepository->getOpeningHoursById($venueId);
+      $result = $this->openingHourRepository->getOpeningHours();
       $retArray = [];
-      try {
-        foreach($result as $row) {
-          if ($row['isCurrent'] == 1) {
-            $day = match ($row['day']) {
-              'Monday' => Day::Monday,
-              'Tuesday' => Day::Tuesday,
-              'Wednesday' => Day::Wednesday,
-              'Thursday' => Day::Thursday,
-              'Friday' => Day::Friday,
-              'Saturday' => Day::Saturday,
-              'Sunday' => Day::Sunday,
-              default => throw new InvalidArgumentException("Invalid day: " . $row['day'])
-            };
-            // Convert strings to DateTime objects
-            $openingTime = new DateTime($row['openingTime']);
-            $closingTime = new DateTime($row['closingTime']);
+      foreach($result as $row) {
+        $day = match ($row['day']) {
+          'Monday' => Day::Monday,
+          'Tuesday' => Day::Tuesday,
+          'Wednesday' => Day::Wednesday,
+          'Thursday' => Day::Thursday,
+          'Friday' => Day::Friday,
+          'Saturday' => Day::Saturday,
+          'Sunday' => Day::Sunday,
+          default => throw new InvalidArgumentException("Invalid day: " . $row['day'])
+        };
+        // Convert strings to DateTime objects
+        $openingTime = new DateTime($row['openingTime']);
+        $closingTime = new DateTime($row['closingTime']);
 
-            $retArray[] = new OpeningHour($row['openingHourId'], $day, $openingTime, $closingTime, $row['isCurrent']);
-          }
-        }
-        return $retArray;
-      } catch (Exception $e) {
-        return ["error"=> true, "message"=> $e->getMessage()];
+        $retArray[] = new OpeningHour($row['openingHourId'], $day, $openingTime, $closingTime, $row['isCurrent']);
       }
+      return $retArray;
     } catch (Exception $e) {
       return ["error"=> true, "message"=> $e->getMessage()];
     }
   }
 
-  public function getOpeningHoursById(int $venueId): array {
+  public function getCurrentOpeningHours(): array {
     try {
-      $result = $this->openingHourRepository->getOpeningHoursById($venueId);
+      $result = $this->openingHourRepository->getOpeningHours();
       $retArray = [];
-      try {
-        foreach($result as $row) {
+      foreach($result as $row) {
+        if ($row['isCurrent'] == 1) {
           $day = match ($row['day']) {
             'Monday' => Day::Monday,
             'Tuesday' => Day::Tuesday,
@@ -73,10 +60,8 @@ class OpeningHourService {
 
           $retArray[] = new OpeningHour($row['openingHourId'], $day, $openingTime, $closingTime, $row['isCurrent']);
         }
-        return $retArray;
-      } catch (Exception $e) {
-        return ["error"=> true, "message"=> $e->getMessage()];
       }
+      return $retArray;
     } catch (Exception $e) {
       return ["error"=> true, "message"=> $e->getMessage()];
     }

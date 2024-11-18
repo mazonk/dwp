@@ -1,18 +1,15 @@
 <?php
 class OpeningHourRepository {
-  private PDO $db;
-
-  public function __construct($dbCon) {
-    $this->db = $dbCon;
+  private function getdb(): PDO {
+    require_once 'src/model/database/dbcon/DatabaseConnection.php';
+    return DatabaseConnection::getInstance();
   }
 
-  public function getOpeningHoursById(int $venueId): array {
-    $query = $this->db->prepare("SELECT o.*
-            FROM OpeningHour o
-            JOIN VenueOpeningHour vo ON o.openingHourId = vo.openingHourId
-            WHERE vo.venueId = :venueId");
+  public function getOpeningHours(): array {
+    $db = $this->getdb();
+    $query = $db->prepare("SELECT * FROM OpeningHour");
     try {
-      $query->execute(['venueId' => htmlspecialchars($venueId)]);
+      $query->execute();
       $result = $query->fetchAll(PDO::FETCH_ASSOC);
       if (empty($result)) {
         throw new Exception("No opening hours found.");
