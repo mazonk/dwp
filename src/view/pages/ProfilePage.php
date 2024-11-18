@@ -128,7 +128,7 @@ if (is_array($user) && isset($user['errorMessage']) && $user['errorMessage']) {
                 </div>
                 <?php if (count($bookings) > 8): ?>
                     <div id="show-more-btn" class="text-center mt-4 cursor-pointer text-primary">
-                        <span>Show more...</span>
+                        <?php if($showMore): ?>Show less...<?php else: ?>Show more...<?php endif; ?>
                     </div>
                 <?php endif; ?>
             </div>
