@@ -169,14 +169,38 @@ include_once "src/view/components/MovieCard.php";
     </div>
 </div>
 
+<?php
+if (isset($allMovies['errorMessage'])) {
+    echo "<p class='text-red-500 text-center font-medium'>" . htmlspecialchars($allMovies['errorMessage']) . "</p>";
+} else {
+    foreach ($allMovies as $movie) {
+        $movieData = json_encode([
+            'id' => $movie->getMovieId(),
+            'title' => $movie->getTitle(),
+            'description' => $movie->getDescription(),
+            'duration' => $movie->getDuration(),
+            'language' => $movie->getLanguage(),
+            'releaseDate' => $movie->getReleaseDate(),
+            'posterUrl' => $movie->getPosterUrl(),
+            'promoUrl' => $movie->getPromoUrl(),
+            'trailerUrl' => $movie->getTrailerUrl(),
+            'rating' => $movie->getRating(),
+        ]);
+        echo "<button class='movieCard bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 cursor-pointer' 
+                data-movie='" . htmlspecialchars($movieData) . "'>";
+        echo "<p class='text-center font-medium text-gray-700'>" . htmlspecialchars($movie->getTitle()) . "</p>";
+        echo "</button>";
+    }
+}
+?>
+
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    /*== Add News ==*/
+    const movieDetails = document.getElementById('movieDetails');
     const addMovieModal = document.getElementById('addMovieModal');
     const addMovieButton = document.getElementById('addMovieButton');
     const addMovieForm = document.getElementById('addMovieForm');
-    const errorAddMessageHeader = document.getElementById('error-add-header');
-    const errorAddMessageContent = document.getElementById('error-add-content');
+    const errorAddMessageElement = document.getElementById('error-add-header');
     // const addImageURLInput = document.getElementById('addImageURLInput');
 
     // Display the modal
@@ -195,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 document.addEventListener('DOMContentLoaded', () => {
-    const editButton = document.getElementById('editMovieButton'); // Edit button
+    const editMovieButton = document.getElementById('editMovieButton'); // Edit button
     const editForm = document.getElementById('editMovieForm'); // Form to edit movie info
     const movieInfoDisplay = document.getElementById('movieInfoDisplay'); // Placeholder where movie info is shown
     const errorMessageElement = document.createElement('p');
@@ -203,30 +227,43 @@ document.addEventListener('DOMContentLoaded', () => {
     movieInfoDisplay.prepend(errorMessageElement);
 
     // Toggle visibility and populate form fields on edit button click
-    editButton.addEventListener('click', () => {
-        editForm.classList.remove('hidden');
-        
-        const movieTitle = document.getElementById('movieTitleDisplay').textContent.trim();
-        const movieDescription = document.getElementById('movieDescriptionDisplay').textContent.trim();
-        const movieDuration = document.getElementById('movieDurationDisplay').textContent.trim();
-        const movieLanguage = document.getElementById('movieLanguageDisplay').textContent.trim();
-        const movieReleaseDate = document.getElementById('movieReleaseDateDisplay').textContent.trim();
-        const moviePosterURL = document.getElementById('moviePosterURLDisplay').textContent.trim();
-        const moviePromoURL = document.getElementById('moviePromoURLDisplay').textContent.trim();
-        const movieRating = document.getElementById('movieRatingDisplay').textContent.trim();
-        const movieTrailerURL = document.getElementById('movieTrailerURLDisplay').textContent.trim();
+    document.addEventListener('DOMContentLoaded', () => {
+    const editButtons = document.querySelectorAll('.edit-movie-btn');
+    const editModal = document.getElementById('editMovieModal');
+    const formFields = {
+        title: document.getElementById('editTitleInput'),
+        description: document.getElementById('editDescriptionInput'),
+        duration: document.getElementById('editDurationInput'),
+        language: document.getElementById('editLanguageInput'),
+        releaseDate: document.getElementById('editReleaseDateInput'),
+        posterURL: document.getElementById('editPosterURLInput'),
+        promoURL: document.getElementById('editPromoURLInput'),
+        rating: document.getElementById('editRatingInput'),
+        trailerURL: document.getElementById('editTrailerURLInput')
+    };
 
-        document.getElementById('movieTitle').value = movieTitle;
-        document.getElementById('movieDescription').value = movieDescription;
-        document.getElementById('movieDuration').value = movieDuration;
-        document.getElementById('movieLanguage').value = movieLanguage;
-        document.getElementById('movieReleaseDate').value = movieReleaseDate;
-        document.getElementById('moviePosterURL').value = moviePosterURL;
-        document.getElementById('moviePromoURL').value = moviePromoURL;
-        document.getElementById('movieRating').value = movieRating;
-        document.getElementById('movieTrailerURL').value = movieTrailerURL;
+    editButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            formFields.title.value = button.dataset.title;
+            formFields.description.value = button.dataset.description;
+            formFields.duration.value = button.dataset.duration;
+            formFields.language.value = button.dataset.language;
+            formFields.releaseDate.value = button.dataset.releasedate;
+            formFields.posterURL.value = button.dataset.posterurl;
+            formFields.promoURL.value = button.dataset.promourl;
+            formFields.rating.value = button.dataset.rating;
+            formFields.trailerURL.value = button.dataset.trailerurl;
+
+            // Show the modal
+            editModal.classList.remove('hidden');
+        });
+    });
+
+    // Close modal logic (e.g., on clicking cancel)
+    document.getElementById('cancelEditMovieButton').addEventListener('click', () => {
+        editModal.classList.add('hidden');
     });
 });
+
+});
 </script>
-
-

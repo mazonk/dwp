@@ -3,6 +3,7 @@ class MovieCard {
 
     public static function render(Movie $movie, $showReleaseDate) {
         $isMovieManagementPage = strpos($_SERVER['REQUEST_URI'], 'admin?section=movie-management') !== false;
+        $isEditPage = strpos($_SERVER['REQUEST_URI'], 'movies/edit') !== false && isset($_GET['id']) && $_GET['id'] == $movie->getMovieId();
         ?>
         <div class="w-[12.5rem] text-center m-[0.625rem] movie-card">
             <a href="<?php echo $_SESSION['baseRoute'] ?>movies/<?php echo $movie->getMovieId(); ?>">
@@ -27,14 +28,26 @@ class MovieCard {
                 ?>
                     <div class="text-[0.875rem] text-white">Release Date: <?php echo htmlspecialchars($movie->getReleaseDate()->format('Y-m-d')); ?></div>
                 <?php endif; 
-            }?>
+            } ?>
+
+            <?php if ($isEditPage): ?>
+                <script>
+                    // Populate form fields for editing
+                    document.addEventListener('DOMContentLoaded', function() {
+                        document.getElementById('editTitleInput').value = "<?php echo htmlspecialchars($movie->getTitle()); ?>";
+                        document.getElementById('editDescriptionInput').value = "<?php echo htmlspecialchars($movie->getDescription()); ?>";
+                        document.getElementById('editDurationInput').value = "<?php echo htmlspecialchars($movie->getDuration()); ?>";
+                        document.getElementById('editLanguageInput').value = "<?php echo htmlspecialchars($movie->getLanguage()); ?>";
+                        document.getElementById('editReleaseDateInput').value = "<?php echo $movie->getReleaseDate()->format('Y-m-d'); ?>";
+                        document.getElementById('editPosterURLInput').value = "<?php echo htmlspecialchars($movie->getPosterURL()); ?>";
+                        document.getElementById('editPromoURLInput').value = "<?php echo htmlspecialchars($movie->getPromoURL()); ?>";
+                        document.getElementById('editRatingInput').value = "<?php echo htmlspecialchars($movie->getRating()); ?>";
+                        document.getElementById('editTrailerURLInput').value = "<?php echo htmlspecialchars($movie->getTrailerURL()); ?>";
+                    });
+                </script>
+            <?php endif; ?>
+
         </div>
-        <script>
-            document.getElementById('movie-card-<?php echo $movie->getMovieId(); ?>').addEventListener('click', function() {
-                var movieIdElement = document.getElementById('movie-id-<?php echo $movie->getMovieId(); ?>');
-                movieIdElement.classList.toggle('hidden');
-            });
-        </script>
         <?php
     }
 }
