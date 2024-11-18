@@ -99,6 +99,7 @@ if (is_array($user) && isset($user['errorMessage']) && $user['errorMessage']) {
                         foreach ($initialBookings as $booking) {
                             foreach($booking->getTickets() as $ticket) {
                                 $venue= $ticket->getShowing()->getRoom()->getVenue();
+                                continue;
                             }
                             BookingCard::render($booking->getTickets(), $venue);
                         }
