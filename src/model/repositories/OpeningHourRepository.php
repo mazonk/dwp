@@ -28,9 +28,7 @@ class OpeningHourRepository {
     $query = $db->prepare("SELECT openingHourId FROM OpeningHour WHERE day = :day AND isCurrent = 1");
 
     try {
-      $query->execute([
-        'day' => $openingHourData['day']
-      ]);
+      $query->execute(array('day' => $openingHourData['day']));
       $result = $query->fetchAll(PDO::FETCH_COLUMN);
       
       return $result;
@@ -44,12 +42,12 @@ class OpeningHourRepository {
     $query = $db->prepare("INSERT INTO OpeningHour (day, openingTime, closingTime, isCurrent) VALUES (:day, :openingTime, :closingTime, :isCurrent)");
 
     try {
-      $query->execute([
+      $query->execute(array(
         'day' => $openingHourData['day'],
         'openingTime' => $openingHourData['openingTime'],
         'closingTime' => $openingHourData['closingTime'],
         'isCurrent' => $openingHourData['isCurrent']
-      ]);
+      ));
     } catch (PDOException $e) {
       throw new PDOException('Failed to add opening hour.');
     }
@@ -60,11 +58,7 @@ class OpeningHourRepository {
     $query = $db->prepare("SELECT openingHourId FROM OpeningHour WHERE day = :day AND openingTime = :openingTime AND closingTime = :closingTime");
 
     try {
-      $query->execute([
-        'day' => $openingHourData['day'],
-        'openingTime' => $openingHourData['openingTime'],
-        'closingTime' => $openingHourData['closingTime']
-      ]);
+      $query->execute(array('day' => $openingHourData['day'], 'openingTime' => $openingHourData['openingTime'], 'closingTime' => $openingHourData['closingTime']));
       $openingHourId = $query->fetchColumn();
 
       // If no openingHourId is found, it means this opening hour is unique
@@ -83,12 +77,20 @@ class OpeningHourRepository {
     $query = $db->prepare("UPDATE OpeningHour SET isCurrent = :isCurrent WHERE openingHourId = :openingHourId");
 
     try {
-      $query->execute([
-        'isCurrent' => $setToStatus,
-        'openingHourId' => $openingHourId
-      ]);
+      $query->execute(array('isCurrent' => $setToStatus, 'openingHourId' => $openingHourId));
     } catch (PDOException $e) {
       throw new PDOException('Failed to update isCurrent status.');
+    }
+  }
+
+  public function deleteOpeningHour(int $openingHourId): void {
+    $db = $this->getdb();
+    $query = $db->prepare("DELETE FROM OpeningHour WHERE openingHourId = :openingHourId");
+
+    try {
+      $query->execute(array('openingHourId' => $openingHourId));
+    } catch (PDOException $e) {
+      throw new PDOException('Failed to delete opening hour.');
     }
   }
 }
