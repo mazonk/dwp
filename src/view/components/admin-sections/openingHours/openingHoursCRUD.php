@@ -128,7 +128,7 @@ require_once "src/view/components/admin-sections/openingHours/OpeningHoursCard.p
 									</div>
 									<p id="error-edit-general" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
 									<div class="flex justify-end">
-											<button type="submit" id="saveEditOpeningHourButton" class="bg-primary text-textDark py-2 px-4 rounded border border-transparent hover:bg-primaryHover duration-[.2s] ease-in-out">Add</button>
+											<button type="submit" id="saveEditOpeningHourButton" class="bg-primary text-textDark py-2 px-4 rounded border border-transparent hover:bg-primaryHover duration-[.2s] ease-in-out">Save</button>
 											<button type="button" id="cancelEditOpeningHourButton" class="text-textLight py-2 px-4 border-[1px] border-white rounded hover:bg-borderDark ml-2 duration-[.2s] ease-in-out">Cancel</button>
 									</div>
 							</form>
@@ -266,12 +266,12 @@ require_once "src/view/components/admin-sections/openingHours/OpeningHoursCard.p
 
 		// Display the edit modal and populate the form
 		window.openEditOpeningHourModal = function(openingHourData) {
-			const editOpeningHourData = JSON.parse(openingHourData);
-			editOpeningHourId.value = editOpeningHourData.id;
-			editDayInput.value = editOpeningHourData.day;
-			editOpeningTimeInput.value = editOpeningHourData.openingTime;
-			editClosingTimeInput.value = editOpeningHourData.closingTime;
-			editIsCurrentInput.value = editOpeningHourData.isCurrent === true ? '1' : '0';
+			const data = JSON.parse(openingHourData);
+			editOpeningHourId.value = data.id;
+			editDayInput.value = data.day;
+			editOpeningTimeInput.value = data.openingTime;
+			editClosingTimeInput.value = data.closingTime;
+			editIsCurrentInput.value = data.isCurrent === true ? '1' : '0';
 
 			editOpeningHourModal.classList.remove('hidden');
 		}
@@ -283,6 +283,74 @@ require_once "src/view/components/admin-sections/openingHours/OpeningHoursCard.p
 		});
 
 		// Submit the edit form
+		editOpeningHourForm.addEventListener('submit', function(event) {
+			event.preventDefault(); // Prevent default form submission
+			const xhr = new XMLHttpRequest();
+			const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
+			xhr.open('PUT', `${baseRoute}openingHours/edit`, true);
+
+			const editOpeningHourData = {
+				action: 'editOpeningHour',
+				openingHourId: editOpeningHourId.value,
+				day: editDayInput.value,
+				openingTime: editOpeningTimeInput.value,
+				closingTime: editClosingTimeInput.value,
+				isCurrent: editIsCurrentInput.value
+			};
+
+			xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+			xhr.onreadystatechange = function() {
+				if (xhr.readyState === 4 && xhr.status === 200) {
+					let response;
+					try {
+						response = JSON.parse(xhr.response);
+					} catch (e) {
+						console.error('Could not parse response as JSON:', e);
+						return;
+					}
+
+					if (response.success) {
+						alert('Success! Opening hour edited successfully.');
+						window.location.reload();
+						clearValues('edit');
+					} else {
+						// Display error messages
+						if (response.errors['day']) {
+							errorEditDay.textContent = response.errors['day'];
+							errorEditDay.classList.remove('hidden');
+						}
+						if (response.errors['openingTime']) {
+							errorEditOpeningTime.textContent = response.errors['openingTime'];
+							errorEditOpeningTime.classList.remove('hidden');
+						}
+						if (response.errors['closingTime']) {
+							errorEditClosingTime.textContent = response.errors['closingTime'];
+							errorEditClosingTime.classList.remove('hidden');
+						}
+						if (response.errors['isCurrent']) {
+							errorEditIsCurrent.textContent = response.errors['isCurrent'];
+							errorEditIsCurrent.classList.remove('hidden');
+						}
+						if (response.errors['general']) {
+							errorEditGeneral.textContent = response.errors['general'];
+							errorEditGeneral.classList.remove('hidden');
+						}
+						if (response.errorMessage) {
+							console.error('Error:', response.errorMessage);
+						} else {
+							console.error('Error:', response.errors);
+						}
+					}
+				}
+			};
+
+			// Send data as URL-encoded string
+			const params = Object.keys(editOpeningHourData)
+				.map(key => `${encodeURIComponent(key)}=${encodeURIComponent(editOpeningHourData[key])}`)
+				.join('&');
+			xhr.send(params);
+			
+		});
 
 		/*== Delete Opening Hour ==*/
 		const deleteOpeningHourModal = document.getElementById('deleteOpeningHourModal');
@@ -317,7 +385,6 @@ require_once "src/view/components/admin-sections/openingHours/OpeningHoursCard.p
 				 // If the request is done and successful
 				if (xhr.readyState === 4 && xhr.status === 200) {
 					let response;
-					console.log(xhr.response);
 					try {
 						response = JSON.parse(xhr.response);
 					} catch (e) {
