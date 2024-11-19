@@ -330,6 +330,37 @@ post($baseRoute.'openingHours/add', function() {
     }
 });
 
+put($baseRoute.'openingHours/edit', function() {
+    $openingHourController = new OpeningHourController();
+    parse_str(file_get_contents("php://input"), $_PUT); // Parse the PUT request
+
+    if (isset($_PUT['action']) && $_PUT['action'] === 'editOpeningHour') {
+        $openingHourData = [
+            'openingHourId' => htmlspecialchars(trim($_PUT['openingHourId'])),
+            'day' => htmlspecialchars(trim($_PUT['day'])),
+            'openingTime' => htmlspecialchars(trim($_PUT['openingTime'])),
+            'closingTime' => htmlspecialchars(trim($_PUT['closingTime'])),
+            'isCurrent' => htmlspecialchars(trim($_PUT['isCurrent']))
+        ];
+
+        $result = $openingHourController->editOpeningHour($openingHourData);
+
+        if (isset($result['success']) && $result['success'] === true) {
+            // Return a success response
+            echo json_encode(['success' => true]);
+        } else if (isset($result['errorMessage'])) {
+            // Return an error response
+            echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
+        } else {
+            // Return validation errors
+            echo json_encode(['success' => false, 'errors' => $result]);
+        }
+    } else {
+        // Invalid action response
+        echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
+    }
+});
+
 // Delete opening hour delete route
 delete($baseRoute.'openingHours/delete', function() {
     $openingHourController = new OpeningHourController();
