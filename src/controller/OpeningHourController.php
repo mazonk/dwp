@@ -26,8 +26,8 @@ class OpeningHourController {
     return $openingHours;
   }
 
-  public function addOpeningHour(array $openingHourData, int $venueId): array {
-    $errors = $this->openingHourService->addOpeningHour($openingHourData, $venueId);
+  public function addOpeningHour(array $openingHourData): array {
+    $errors = $this->openingHourService->addOpeningHour($openingHourData);
 
     // Check if there are any validation errors
     if (count($errors) == 0) {
