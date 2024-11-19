@@ -126,6 +126,7 @@ require_once "src/view/components/admin-sections/openingHours/OpeningHoursCard.p
 											</select>
 											<p id="error-edit-isCurrent" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
 									</div>
+									<p id="error-edit-general" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
 									<div class="flex justify-end">
 											<button type="submit" id="saveEditOpeningHourButton" class="bg-primary text-textDark py-2 px-4 rounded border border-transparent hover:bg-primaryHover duration-[.2s] ease-in-out">Add</button>
 											<button type="button" id="cancelEditOpeningHourButton" class="text-textLight py-2 px-4 border-[1px] border-white rounded hover:bg-borderDark ml-2 duration-[.2s] ease-in-out">Cancel</button>
@@ -261,6 +262,7 @@ require_once "src/view/components/admin-sections/openingHours/OpeningHoursCard.p
 		const errorEditOpeningTime = document.getElementById('error-edit-openingTime');
 		const errorEditClosingTime = document.getElementById('error-edit-closingTime');
 		const errorEditIsCurrent = document.getElementById('error-edit-isCurrent');
+		const errorEditGeneral = document.getElementById('error-edit-general');
 
 		// Display the edit modal and populate the form
 		window.openEditOpeningHourModal = function(openingHourData) {
@@ -304,12 +306,44 @@ require_once "src/view/components/admin-sections/openingHours/OpeningHoursCard.p
 		});
 
 		// Confirm delete
+		confirmDeleteOpeningHourButton.addEventListener('click', () => {
+			const xhr = new XMLHttpRequest();
+			const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
+			const openingHourId = deleteOpeningHourId.value;
+
+			xhr.open('DELETE', `${baseRoute}openingHours/delete?openingHourId=${encodeURIComponent(openingHourId)}&action=deleteOpeningHour`, true); // openingHourId as query parameter with action
+
+			xhr.onreadystatechange = function() {
+				 // If the request is done and successful
+				if (xhr.readyState === 4 && xhr.status === 200) {
+					let response;
+					console.log(xhr.response);
+					try {
+						response = JSON.parse(xhr.response);
+					} catch (e) {
+						console.error('Could not parse response as JSON:', e);
+						return;
+					}
+
+					if (response.success) {
+						alert('Success! Opening hour deleted successfully.');
+						window.location.reload();
+					} else {
+						console.error('Error:', response.errorMessage);
+					}
+				}
+			};
+			xhr.send();
+		});
 
 		// Clear error messages and input values
     function clearValues(action) {
 			if (action === 'edit') {
-				/* errorEditMessageHeader.classList.add('hidden');
-				errorEditMessageContent.classList.add('hidden'); */ 
+				errorEditDay.classList.add('hidden');
+				errorEditOpeningTime.classList.add('hidden');
+				errorEditClosingTime.classList.add('hidden');
+				errorEditIsCurrent.classList.add('hidden');
+				errorEditGeneral.classList.add('hidden');
 				editOpeningHourForm.reset();
 			}
 			else if (action === 'add') {
