@@ -170,7 +170,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         errorAddMessageContent.textContent = response.errors['content'];
                         errorAddMessageContent.classList.remove('hidden');
                     }
-                    console.error('Error:', response.errors);
+                    if (response.errorMessage) {
+                        console.error('Error:', response.errorMessage);
+                    } else {
+                        console.error('Error:', response.errors);
+                    }
                 }
             }
         };
@@ -250,7 +254,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         errorEditMessageContent.textContent = response.errors['content'];
                         errorEditMessageContent.classList.remove('hidden');
                     }
-                    console.error('Error:', response.errors);
+                    if (response.errorMessage) {
+                        console.error('Error:', response.errorMessage);
+                    } else {
+                        console.error('Error:', response.errors);
+                    }
                 }
             }
         };
@@ -304,7 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert('Success! News deleted successfully.');
                     window.location.reload();
                 } else {
-                    console.error('Error:', response.errors);
+                    console.error('Error:', response.errorMessage);
                 }
             }
         };
