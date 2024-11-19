@@ -24,7 +24,7 @@ class OpeningHoursCard {
 						<button onclick=\"openEditOpeningHourModal('" . htmlspecialchars($openingHourData) . "')\" class='py-1 px-2 text-primary border-[1px] border-primary rounded hover:text-primaryHover hover:border-primaryHover duration-[.2s] ease-in-out'>
               Edit
             </button>
-						<button onclick=\"openDeleteOpeningHourModal('" . htmlspecialchars($openingHour->getOpeningHourId()) . "')\" class='bg-red-500 text-textDark py-1 px-2 border-[1px] border-red-500 rounded hover:bg-red-600 hover:border-red-600'>
+						<button onclick=\"openDeleteOpeningHourModal('" . htmlspecialchars($openingHourData) . "')\" class='bg-red-500 text-textDark py-1 px-2 border-[1px] border-red-500 rounded hover:bg-red-600 hover:border-red-600'>
 								Delete
 						</button>
 					</div>

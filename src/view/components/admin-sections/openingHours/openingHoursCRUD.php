@@ -140,9 +140,9 @@ require_once "src/view/components/admin-sections/openingHours/OpeningHoursCard.p
         <div class="flex items-center justify-center min-h-screen">
             <!-- Modal -->
             <div class="bg-bgSemiDark w-[500px] rounded-lg p-6 border-[1px] border-borderDark">
-                <h2 class="text-[1.5rem] text-center font-semibold mb-4">Delete Opening Hours</h2>
+                <h2 class="text-[1.5rem] text-center font-semibold mb-4">Delete Opening Hour</h2>
                 <p class="text-textLight text-center">Are you sure you want to delete this opening hour?</p>
-                <p id="deleteModalOpeningHourHeader" class="text-gray-400 text-center"></p>
+                <p id="deleteModalOpeningHourContent" class="text-gray-400 text-center"></p>
                 <input type="hidden" id="deleteOpeningHourId" name="deleteOpeningHourId">
                 <div class="flex justify-center mt-4">
                     <button id="confirmDeleteOpeningHourButton" class="bg-red-500 text-white py-2 px-4 border-[1px] border-transparent rounded hover:bg-red-600 duration-[.2s] ease-in-out">Delete</button>
@@ -253,6 +253,10 @@ require_once "src/view/components/admin-sections/openingHours/OpeningHoursCard.p
 		const editOpeningHourModal = document.getElementById('editOpeningHourModal');
 		const editOpeningHourForm = document.getElementById('editOpeningHourForm');
 		const editOpeningHourId = document.getElementById('editOpeningHourId');
+		const editDayInput = document.getElementById('editDayInput');
+		const editOpeningTimeInput = document.getElementById('editOpeningTimeInput');
+		const editClosingTimeInput = document.getElementById('editClosingTimeInput');
+		const editIsCurrentInput = document.getElementById('editIsCurrentInput');
 		const errorEditDay = document.getElementById('error-edit-day');
 		const errorEditOpeningTime = document.getElementById('error-edit-openingTime');
 		const errorEditClosingTime = document.getElementById('error-edit-closingTime');
@@ -260,8 +264,14 @@ require_once "src/view/components/admin-sections/openingHours/OpeningHoursCard.p
 
 		// Display the edit modal and populate the form
 		window.openEditOpeningHourModal = function(openingHourData) {
-			editOpeningHourModal.classList.remove('hidden');
 			const editOpeningHourData = JSON.parse(openingHourData);
+			editOpeningHourId.value = editOpeningHourData.id;
+			editDayInput.value = editOpeningHourData.day;
+			editOpeningTimeInput.value = editOpeningHourData.openingTime;
+			editClosingTimeInput.value = editOpeningHourData.closingTime;
+			editIsCurrentInput.value = editOpeningHourData.isCurrent === true ? '1' : '0';
+
+			editOpeningHourModal.classList.remove('hidden');
 		}
 		
 		// Close the edit modal
@@ -274,13 +284,17 @@ require_once "src/view/components/admin-sections/openingHours/OpeningHoursCard.p
 
 		/*== Delete Opening Hour ==*/
 		const deleteOpeningHourModal = document.getElementById('deleteOpeningHourModal');
-		const deleteModalOpeningHourHeader = document.getElementById('deleteModalOpeningHourHeader');
+		const deleteModalOpeningHourContent = document.getElementById('deleteModalOpeningHourContent');
 		const confirmDeleteOpeningHourButton = document.getElementById('confirmDeleteOpeningHourButton');
 		const cancelDeleteOpeningHourButton = document.getElementById('cancelDeleteOpeningHourButton');
 		const deleteOpeningHourId = document.getElementById('deleteOpeningHourId');
 
 		// Display the delete modal
-		window.openDeleteOpeningHourModal = function(openingHourId) {
+		window.openDeleteOpeningHourModal = function(openingHourData) {
+			const deleteOpeningHourData = JSON.parse(openingHourData);
+			deleteOpeningHourId.value = deleteOpeningHourData.id;
+			deleteModalOpeningHourContent.textContent = deleteOpeningHourData.day + ' ' + deleteOpeningHourData.openingTime + ' - ' + deleteOpeningHourData.closingTime;
+
 			deleteOpeningHourModal.classList.remove('hidden');
 		}
 
