@@ -13,10 +13,10 @@ class OpeningHoursCard {
 					</div>
 					<p>" . htmlspecialchars($openingHour->getOpeningTime()->format('H:i')) . " - " . htmlspecialchars($openingHour->getClosingTime()->format('H:i')) . "</p>
 					<div class='flex justify-start mt-4 gap-[.5rem]'>
-						<button class='py-1 px-2 text-primary border-[1px] border-primary rounded hover:text-primaryHover hover:border-primaryHover duration-[.2s] ease-in-out'>
+						<button onclick=\"openEditOpeningHourModal('" . htmlspecialchars(json_encode($openingHour)) . "')\" class='py-1 px-2 text-primary border-[1px] border-primary rounded hover:text-primaryHover hover:border-primaryHover duration-[.2s] ease-in-out'>
 								Edit
 						</button>
-						<button class='bg-red-500 text-textDark py-1 px-2 border-[1px] border-red-500 rounded hover:bg-red-600 hover:border-red-600'>
+						<button onclick=\"openDeleteOpeningHourModal('" . htmlspecialchars($openingHour->getOpeningHourId()) . "')\" class='bg-red-500 text-textDark py-1 px-2 border-[1px] border-red-500 rounded hover:bg-red-600 hover:border-red-600'>
 								Delete
 						</button>
 					</div>

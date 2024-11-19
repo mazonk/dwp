@@ -260,8 +260,10 @@ require_once "src/view/components/admin-sections/openingHours/OpeningHoursCard.p
 		const errorEditIsCurrent = document.getElementById('error-edit-isCurrent');
 
 		// Display the edit modal and populate the form
-		window.openEditOpeningHourModal = function(openingHourId) {
+		window.openEditOpeningHourModal = function(openingHourData) {
 			editOpeningHourModal.classList.remove('hidden');
+			
+			const openingHourData = JSON.parse(openingHourData);
 		}
 		
 		// Close the edit modal
