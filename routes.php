@@ -301,42 +301,7 @@ delete($baseRoute.'news/delete', function() {
     }
 });
 
-
-// GET route for get opening hours by venueId
-get($baseRoute.'openingHours/getById', function() {
-    require_once 'src/controller/OpeningHourController.php';
-    $openingHourController = new OpeningHourController();
-
-    if (isset($_GET['action']) && $_GET['action'] === 'getOpeningHoursById') {
-        $venueId = htmlspecialchars(trim($_GET['venueId']));
-
-        /* Get the opening hours by venueId and create an array with all the retrieved data for each opening hour
-        (if we only return the object, it will be an empty array) */
-        $openingHours = $openingHourController->getOpeningHoursById($venueId);
-        $retArray = [];
-        foreach ($openingHours as $openingHour) {
-            $retArray[] = [
-                'id' => htmlspecialchars(trim($openingHour->getOpeningHourId())),
-                'day' => htmlspecialchars(trim($openingHour->getDay())),
-                'openingTime' => htmlspecialchars(trim($openingHour->getOpeningTime()->format('H:i'))),
-                'closingTime' => htmlspecialchars(trim($openingHour->getClosingTime()->format('H:i'))),
-                'isCurrent' => htmlspecialchars(trim($openingHour->getIsCurrent()))
-            ];
-        }
-
-        if (isset($openingHours['errorMessage']) && $openingHours['errorMessage']) {
-            // Return an error response
-            echo json_encode(['error' => true, 'message' => $openingHours['errorMessage']]);
-        } else {
-            // Return the opening hours
-            echo json_encode(['error' => false, 'openingHours' => $retArray]);
-        }
-    } else {
-        // Invalid action response
-        echo json_encode(['error' => true, 'message' => 'Invalid action.']);
-    }
-});
-
+// Add opening hour post route
 post($baseRoute.'openingHours/add', function() {
     require_once 'src/controller/OpeningHourController.php';
     $openingHourController = new OpeningHourController();
@@ -348,9 +313,8 @@ post($baseRoute.'openingHours/add', function() {
             'closingTime' => htmlspecialchars(trim($_POST['closingTime'])),
             'isCurrent' => htmlspecialchars(trim($_POST['isCurrent']))
         ];
-        $venueId = htmlspecialchars(trim($_POST['venueId']));
 
-        $result = $openingHourController->addOpeningHour($openingHourData, $venueId);
+        $result = $openingHourController->addOpeningHour($openingHourData);
 
         if (isset($result['success']) && $result['success'] === true) {
             // Return a success response
