@@ -95,6 +95,15 @@ class OpeningHourService {
     }
   }
 
+  public function deleteOpeningHour(int $openingHourId): array {
+    try {
+      $this->openingHourRepository->deleteOpeningHour($openingHourId);
+      return ['success' => true];
+    } catch (Exception $e) {
+      return ['error' => true, 'message' => $e->getMessage()];
+    }
+  }
+
   private function isOpeningHourDuplicate(array $openingHourData): array {
     try {
       return $this->openingHourRepository->isOpeningHourDuplicate($openingHourData);
