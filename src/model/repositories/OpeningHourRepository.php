@@ -64,7 +64,12 @@ class OpeningHourRepository {
       // If no openingHourId is found, it means this opening hour is unique
       if (!$openingHourId) {
         return ["isDuplicate" => false];
-      } else {
+      } 
+      // If the openingHourId is found and it is the same as the openingHourId in the data, it means the opening hour is being edited
+      else if (isset($openingHourData['openingHourId']) && $openingHourId == $openingHourData['openingHourId']) {
+        return ["isDuplicate" => false];
+      } 
+      else {
         return ["isDuplicate" => true];
       }
     } catch (PDOException $e) {
@@ -80,6 +85,23 @@ class OpeningHourRepository {
       $query->execute(array('isCurrent' => $setToStatus, 'openingHourId' => $openingHourId));
     } catch (PDOException $e) {
       throw new PDOException('Failed to update isCurrent status.');
+    }
+  }
+
+  public function editOpeningHour(array $openingHourData): void {
+    $db = $this->getdb();
+    $query = $db->prepare("UPDATE OpeningHour SET day = :day, openingTime = :openingTime, closingTime = :closingTime, isCurrent = :isCurrent WHERE openingHourId = :openingHourId");
+
+    try {
+       $query->execute(array(
+        'day' => $openingHourData['day'],
+        'openingTime' => $openingHourData['openingTime'],
+        'closingTime' => $openingHourData['closingTime'],
+        'isCurrent' => $openingHourData['isCurrent'],
+        'openingHourId' => $openingHourData['openingHourId']
+       ));
+    } catch (PDOException $e) {
+      throw new PDOException('Failed to edit opening hour.');
     }
   }
 
