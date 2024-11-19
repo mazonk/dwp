@@ -41,6 +41,21 @@ class OpeningHourController {
     }
   }
 
+  public function editOpeningHour(array $openingHourData): array {
+    $errors = $this->openingHourService->editOpeningHour($openingHourData);
+
+    // Check if there are any validation errors
+    if (count($errors) == 0) {
+      // Check if there are any errors from editing the opening hour
+      if (isset($errors['error']) && $errors['error']) {
+        return ['errorMessage' => $errors['message']];
+      }
+      return ['success' => true];
+    } else {
+      return $errors;
+    }
+  }
+
   public function deleteOpeningHour(int $openingHourId): array {
     $result = $this->openingHourService->deleteOpeningHour($openingHourId);
 
