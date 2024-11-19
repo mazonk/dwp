@@ -200,7 +200,6 @@ require_once "src/view/components/admin-sections/openingHours/OpeningHoursCard.p
 				// If the request is done and successful
 				if (xhr.readyState === 4 && xhr.status === 200) {
 					let response;
-					console.log(xhr.response);
 					try {
 						response = JSON.parse(xhr.response); // Parse the JSON response
 					} catch (e) {
@@ -262,8 +261,7 @@ require_once "src/view/components/admin-sections/openingHours/OpeningHoursCard.p
 		// Display the edit modal and populate the form
 		window.openEditOpeningHourModal = function(openingHourData) {
 			editOpeningHourModal.classList.remove('hidden');
-			
-			const openingHourData = JSON.parse(openingHourData);
+			const editOpeningHourData = JSON.parse(openingHourData);
 		}
 		
 		// Close the edit modal
