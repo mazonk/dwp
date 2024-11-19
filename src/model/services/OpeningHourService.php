@@ -95,6 +95,34 @@ class OpeningHourService {
     }
   }
 
+  public function editOpeningHour(array $openingHourData): array {
+    $errors = [];
+
+    $this->validateFormInputs($openingHourData, $errors);
+
+    // If there are no validation errors, edit the opening hour
+    if (count($errors) == 0) {
+      // If the opening hour is set as the current opening hour, set all the other opening hours for the same day to inactive
+      if ($openingHourData['isCurrent'] == 1) {
+        $result = $this->setCurrentOpeningHoursToInactive($openingHourData);
+
+        if (isset($result['error']) && $result['error']) {
+          return ['error' => true, 'message' => $result['message']];
+        }
+      }
+
+      try {
+        $this->openingHourRepository->editOpeningHour($openingHourData);
+        return ['success' => true];
+      } catch (Exception $e) {
+        return ['error' => true, 'message' => $e->getMessage()];
+      }
+    } else {
+      // If there are validation errors, return them
+      return $errors;
+    }
+  }
+
   public function deleteOpeningHour(int $openingHourId): array {
     try {
       $this->openingHourRepository->deleteOpeningHour($openingHourId);
