@@ -67,71 +67,50 @@ class OpeningHourService {
     }
   }
 
-  public function addOpeningHour(array $openingHourData, int $venueId): array {
+  public function addOpeningHour(array $openingHourData): array {
     $errors = [];
-    $isDuplicate = [];
 
-    $this->validateFormInputs($openingHourData, $venueId, $errors, $isDuplicate);
+    $this->validateFormInputs($openingHourData, $errors);
 
     // If there are no validation errors, add the opening hour
     if (count($errors) == 0) {
-      // If the opening hour already exists and is linked to the venue
-      if ($isDuplicate['duplicate'] && $isDuplicate['linkedToVenue']) {
-        return ['error' => true, 'message' => 'This opening hour already exists and is linked to the venue.'];
-      } 
-      // If the opening hour already exists but is not linked to the venue
-      else if ($isDuplicate['duplicate'] && !$isDuplicate['linkedToVenue']) {
-        $openingHourId = $isDuplicate['openingHourId'];
+      // If the opening hour is set as the current opening hour, set all other opening hours for the same day to inactive
+      if ($openingHourData['isCurrent'] == 1) {
+        $result = $this->setCurrentOpeningHoursToInactive($openingHourData);
 
-        try {
-          $this->openingHourRepository->addOpeningHourToVenue($openingHourId, $venueId);
-          return ['success' => true];
-        } catch (Exception $e) {
-          return ['error' => true, 'message' => $e->getMessage()];
-        }
-      } 
-      // If the opening hour is unique
-      else {
-        $this->db->beginTransaction();
-
-        try {
-          // If the opening hour is set as the current opening hour, set all other opening hours for the same day to inactive
-          if ($openingHourData['isCurrent'] == 1) {
-            $this->setActiveOpeningHoursToInactive($openingHourData);
-          }
-          
-          $openingHourId = $this->openingHourRepository->addOpeningHour($openingHourData);
-          $this->openingHourRepository->addOpeningHourToVenue($openingHourId, $venueId);
-
-          $this->db->commit();
-          return ['success' => true];
-        } catch (Exception $e) {
-          $this->db->rollBack();
-          return ['error' => true, 'message' => $e->getMessage()];
+        if (isset($result['error']) && $result['error']) {
+          return ['error' => true, 'message' => $result['message']];
         }
       }
+      
+      try {
+        $this->openingHourRepository->addOpeningHour($openingHourData);
+        return ['success' => true];
+      } catch (Exception $e) {
+        return ['error' => true, 'message' => $e->getMessage()];
+      } 
     } else {
       // If there are validation errors, return them
       return $errors;
     }
   }
 
-  private function isDuplicateOpeningHour(array $openingHourData, int $venueId): array {
+  private function isOpeningHourDuplicate(array $openingHourData): array {
     try {
-      return $this->openingHourRepository->isDuplicateOpeningHour($openingHourData, $venueId);
+      return $this->openingHourRepository->isOpeningHourDuplicate($openingHourData);
     } catch (Exception $e) {
       return ["error"=> true, "message"=> $e->getMessage()];
     }
   }
 
-  private function setActiveOpeningHoursToInactive(array $openingHourData): array {
+  private function setCurrentOpeningHoursToInactive(array $openingHourData): array {
     try {
-      $result = $this->openingHourRepository->getActiveOpeningHoursByDay($openingHourData);
+      $result = $this->openingHourRepository->getCurrentOpeningHoursIdByDay($openingHourData);
 
       if (!empty($result)) {
         foreach($result as $openingHourId) {
           try {
-            $this->openingHourRepository->updateIsCurrent($openingHourId, 0);
+            $this->openingHourRepository->updateIsCurrentById($openingHourId, 0);
           } catch (Exception $e) {
             return ['error' => true, 'message' => $e->getMessage()];
           }
@@ -143,12 +122,12 @@ class OpeningHourService {
     }
   }
 
-  private function validateFormInputs(array $openingHourData, int $venueId, array &$errors, array &$isDuplicate): void {
+  private function validateFormInputs(array $openingHourData, array &$errors): void {
     // Define regex
     $hourRegex = "/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/";
 
     // Perform checks
-    if (empty($openingHourData['day']) || empty($openingHourData['openingTime']) || empty($openingHourData['closingTime']) || $openingHourData['isCurrent'] === null) {
+    if (empty($openingHourData['day']) || empty($openingHourData['openingTime']) || empty($openingHourData['closingTime']) || $openingHourData['isCurrent'] === null || $openingHourData['isCurrent'] === '') {
       $errors['general'] = 'All fields are required.';
     }
 
@@ -170,33 +149,14 @@ class OpeningHourService {
       $errors['closingTime'] = isset($errors['closingTime']) ? $errors['closingTime'] . ' ' . 'Closing time must be later than opening time.' : 'Closing time must be later than opening time.';
     }
 
-    // Check if venueId exists
-    $doesVenueExist = $this->venueService->doesVenueExist($venueId);
-    if (isset($doesVenueExist['error']) && $doesVenueExist['error']) {
-      $errors['general'] = $doesVenueExist['message'];
-    } else if (!$doesVenueExist) {
-      $errors['general'] = 'Invalid venue ID.';
-    }
-
-    // Check for duplicate opening hour for the same day in the same time range
-    $isDuplicate = $this->isDuplicateOpeningHour($openingHourData, $venueId);
-    if (isset($isDuplicate['error']) && $isDuplicate['error']) {
-      // If there's an error
-      $errors['general'] = $isDuplicate['message'];
-    } else if (isset($isDuplicate['isDuplicate']) && $isDuplicate['isDuplicate'] && isset($isDuplicate['linkedToVenue']) && $isDuplicate['linkedToVenue']) {
-      // If the opening hour already exists and is linked to the venue
-      $isDuplicate['duplicate'] = true;
-      $isDuplicate['linkedToVenue'] = true;
-      $errors['general'] = 'This opening hour already exists and is linked to the venue.';
-    } else if (isset($isDuplicate['isDuplicate']) && $isDuplicate['isDuplicate'] && isset($isDuplicate['linkedToVenue']) && !$isDuplicate['linkedToVenue']) {
-      // If the opening hour already exists but is not linked to the venue
-      $isDuplicate['duplicate'] = true;
-      $isDuplicate['linkedToVenue'] = false;
-      $isDuplicate['openingHourId'] = $isDuplicate['openingHourId'];
-    } else {
-      // If the opening hour is unique
-      $isDuplicate['duplicate'] = false;
-    }
+    // Check for duplicate opening hour for the same day at the same time range
+    $result = $this->isOpeningHourDuplicate($openingHourData);
+    
+    if (isset($result['error']) && $result['error']) {
+      $errors['general'] = $result['message'];
+    } else if (isset($result['isDuplicate']) && $result['isDuplicate']) {
+      $errors['general'] = 'This opening hour already exists.';
+    } 
 
     if (!in_array($openingHourData['isCurrent'], [0, 1])) {
       $errors['isCurrent'] = 'Invalid current value.';
