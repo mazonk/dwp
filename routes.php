@@ -216,9 +216,9 @@ put($baseRoute.'profile/edit', function() {
     }
 });
 
-// Add news put route
+require_once 'src/controller/NewsController.php';
+// Add news post route
 post($baseRoute.'news/add', function() {
-    require_once 'src/controller/NewsController.php';
     $newsController = new NewsController();
 
     if (isset($_POST['action']) && $_POST['action'] === 'addNews') {
@@ -248,7 +248,6 @@ post($baseRoute.'news/add', function() {
 
 // Edit news put route
 put($baseRoute.'news/edit', function() {
-    require_once 'src/controller/NewsController.php';
     $newsController = new NewsController();
     parse_str(file_get_contents("php://input"), $_PUT); // Parse the PUT request
 
@@ -278,9 +277,8 @@ put($baseRoute.'news/edit', function() {
     }
 });
 
-// Delete news put route
+// Delete news delete route
 delete($baseRoute.'news/delete', function() {
-    require_once 'src/controller/NewsController.php';
     $newsController = new NewsController();
 
     if (isset($_GET['action']) && $_GET['action'] === 'deleteNews') {
@@ -301,9 +299,9 @@ delete($baseRoute.'news/delete', function() {
     }
 });
 
+require_once 'src/controller/OpeningHourController.php';
 // Add opening hour post route
 post($baseRoute.'openingHours/add', function() {
-    require_once 'src/controller/OpeningHourController.php';
     $openingHourController = new OpeningHourController();
 
     if (isset($_POST['action']) && $_POST['action'] === 'addOpeningHour') {
@@ -326,6 +324,28 @@ post($baseRoute.'openingHours/add', function() {
             // Return validation errors
             echo json_encode(['success' => false, 'errors' => $result]);
         }
+    } else {
+        // Invalid action response
+        echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
+    }
+});
+
+// Delete opening hour delete route
+delete($baseRoute.'openingHours/delete', function() {
+    $openingHourController = new OpeningHourController();
+
+    if (isset($_GET['action']) && $_GET['action'] === 'deleteOpeningHour') {
+       $openingHourId = htmlspecialchars(trim($_GET['openingHourId']));
+       
+       $result = $openingHourController->deleteOpeningHour($openingHourId);
+
+       if (isset($result['success']) && $result['success'] === true) {
+           // Return a success response
+           echo json_encode(['success' => true]);
+       } else {
+           // Return an error response
+           echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
+       }
     } else {
         // Invalid action response
         echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
