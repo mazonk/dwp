@@ -40,4 +40,13 @@ class OpeningHourController {
       return $errors;
     }
   }
+
+  public function deleteOpeningHour(int $openingHourId): array {
+    $result = $this->openingHourService->deleteOpeningHour($openingHourId);
+
+    if (isset($result['error']) && $result['error']) {
+      return ['errorMessage' => $result['message']];
+    }
+    return ['success' => true];
+  }
 }
