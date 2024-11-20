@@ -16,7 +16,7 @@ include_once "src/view/components/admin-sections/news/NewsCardAdmin.php";
     $allNews = $newsController->getAllNews();
 
     if (isset($allNews['errorMessage'])) {
-        echo $allNews['errorMessage'];
+        echo htmlspecialchars($allNews['errorMessage']);
     } else {
         // Loop through each news item and render it using NewsCard
         echo '<div class="grid grid-cols-4 gap-4">';
@@ -37,7 +37,7 @@ include_once "src/view/components/admin-sections/news/NewsCardAdmin.php";
                     <div class="mb-4">
                         <label for="addHeaderInput" class="block text-sm font-medium text-text-textLight">Header</label>
                         <input type="text" id="addHeaderInput" name="addHeaderInput" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required>
-                        <p id="error-add-header"  class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
+                        <p id="error-add-news-header"  class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
                     </div>
                     <!-- <div class="mb-4">
                         <label for="addImageURLInput" class="block text-sm font-medium text-text-textLight">Image</label>
@@ -47,9 +47,9 @@ include_once "src/view/components/admin-sections/news/NewsCardAdmin.php";
                     <div class="mb-4">
                         <label for="addContentInput" class="block text-sm font-medium text-text-textLight">Content</label>
                         <textarea id="addContentInput" name="addContentInput" rows="4" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required></textarea>
-                        <p id="error-add-content" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
+                        <p id="error-add-news-content" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
                     </div>
-                    <p id="error-add-general" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
+                    <p id="error-add-news-general" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
                     <div class="flex justify-end">
                         <button type="submit" id="saveAddNewsButton" class="bg-primary text-textDark py-2 px-4 rounded border border-transparent hover:bg-primaryHover duration-[.2s] ease-in-out">Add</button>
                         <button type="button" id="cancelAddNewsButton" class="text-textLight py-2 px-4 border-[1px] border-white rounded hover:bg-borderDark ml-2 duration-[.2s] ease-in-out">Cancel</button>
@@ -70,7 +70,7 @@ include_once "src/view/components/admin-sections/news/NewsCardAdmin.php";
                     <div class="mb-4">
                         <label for="editHeaderInput" class="block text-sm font-medium text-text-textLight">Header</label>
                         <input type="text" id="editHeaderInput" name="editHeaderInput" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required>
-                        <p id="error-edit-header"  class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
+                        <p id="error-edit-news-header"  class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
                     </div>
                     <!-- <div class="mb-4">
                         <label for="editImageURLInput" class="block text-sm font-medium text-text-textLight">Image</label>
@@ -80,9 +80,9 @@ include_once "src/view/components/admin-sections/news/NewsCardAdmin.php";
                     <div class="mb-4">
                         <label for="editContentInput" class="block text-sm font-medium text-text-textLight">Content</label>
                         <textarea id="editContentInput" name="editContentInput" rows="4" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required></textarea>
-                        <p id="error-edit-content" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
+                        <p id="error-edit-news-content" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
                     </div>
-                    <p id="error-edit-general" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
+                    <p id="error-edit-news-general" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
                     <div class="flex justify-end">
                         <button type="submit" id="saveEditNewsButton" class="bg-primary text-textDark py-2 px-4 rounded border border-transparent hover:bg-primaryHover duration-[.2s] ease-in-out">Save</button>
                         <button type="button" id="cancelEditNewsButton" class="text-textLight py-2 px-4 border-[1px] border-white rounded hover:bg-borderDark ml-2 duration-[.2s] ease-in-out">Cancel</button>
@@ -116,9 +116,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const addNewsModal = document.getElementById('addNewsModal');
     const addNewsForm = document.getElementById('addNewsForm');
     const addNewsButton = document.getElementById('addNewsButton');
-    const errorAddMessageHeader = document.getElementById('error-add-header');
-    const errorAddMessageContent = document.getElementById('error-add-content');
-    const errorAddGeneral = document.getElementById('error-add-general');
+    const errorAddNewsMessageHeader = document.getElementById('error-add-news-header');
+    const errorAddNewsMessageContent = document.getElementById('error-add-news-content');
+    const errorAddNewsGeneral = document.getElementById('error-add-news-general');
     /* const addImageURLInput = document.getElementById('addImageURLInput'); */
 
     // Display the modal
@@ -152,6 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // If the request is done and successful
             if (xhr.readyState === 4 && xhr.status === 200) {
                 let response;
+                console.log(xhr.response);
                 try {
                     response = JSON.parse(xhr.response); // Parse the JSON response
                 } catch (e) {
@@ -166,16 +167,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     // Display error messages
                     if (response.errors['header']) {
-                        errorAddMessageHeader.textContent = response.errors['header'];
-                        errorAddMessageHeader.classList.remove('hidden');
+                        errorAddNewsMessageHeader.textContent = response.errors['header'];
+                        errorAddNewsMessageHeader.classList.remove('hidden');
                     }
                     if (response.errors['content']) {
-                        errorAddMessageContent.textContent = response.errors['content'];
-                        errorAddMessageContent.classList.remove('hidden');
+                        errorAddNewsMessageContent.textContent = response.errors['content'];
+                        errorAddNewsMessageContent.classList.remove('hidden');
                     }
                     if (response.errors['general']) {
-                        errorAddGeneral.textContent = response.errors['general'];
-                        errorAddGeneral.classList.remove('hidden');
+                        errorAddNewsGeneral.textContent = response.errors['general'];
+                        errorAddNewsGeneral.classList.remove('hidden');
                     }
                     if (response.errorMessage) {
                         console.error('Error:', response.errorMessage);
@@ -200,9 +201,9 @@ document.addEventListener('DOMContentLoaded', () => {
     /* const editImageURLInput = document.getElementById('editImageURLInput'); */
     const editHeaderInput = document.getElementById('editHeaderInput');
     const editContentInput = document.getElementById('editContentInput');
-    const errorEditMessageHeader = document.getElementById('error-edit-header');
-    const errorEditMessageContent = document.getElementById('error-edit-content');
-    const errorEditGeneral = document.getElementById('error-edit-general');
+    const errorEditNewsMessageHeader = document.getElementById('error-edit-news-header');
+    const errorEditNewsMessageContent = document.getElementById('error-edit-news-content');
+    const errorEditNewsGeneral = document.getElementById('error-edit-news-general');
 
     // Open the Edit Modal and populate it with data
     window.openEditModal = function(newsId, header, imageURL, content) {
@@ -255,16 +256,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Display error messages
                 else {
                     if (response.errors['header']) {
-                        errorEditMessageHeader.textContent = response.errors['header'];
-                        errorEditMessageHeader.classList.remove('hidden');
+                        errorEditNewsMessageHeader.textContent = response.errors['header'];
+                        errorEditNewsMessageHeader.classList.remove('hidden');
                     }
                     if (response.errors['content']) {
-                        errorEditMessageContent.textContent = response.errors['content'];
-                        errorEditMessageContent.classList.remove('hidden');
+                        errorEditNewsMessageContent.textContent = response.errors['content'];
+                        errorEditNewsMessageContent.classList.remove('hidden');
                     }
                     if (response.errors['general']) {
-                        errorEditGeneral.textContent = response.errors['general'];
-                        errorEditGeneral.classList.remove('hidden');
+                        errorEditNewsGeneral.textContent = response.errors['general'];
+                        errorEditNewsGeneral.classList.remove('hidden');
                     }
                     if (response.errorMessage) {
                         console.error('Error:', response.errorMessage);
@@ -335,15 +336,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Clear error messages and input values
     function clearValues(action) {
         if (action === 'edit') {
-            errorEditMessageHeader.classList.add('hidden');
-            errorEditMessageContent.classList.add('hidden');
-            errorEditGeneral.classList.add('hidden');
+            errorEditNewsMessageHeader.classList.add('hidden');
+            errorEditNewsMessageContent.classList.add('hidden');
+            errorEditNewsGeneral.classList.add('hidden');
             editNewsForm.reset();
         }
         else if (action === 'add') {
-            errorAddMessageHeader.classList.add('hidden');
-            errorAddMessageContent.classList.add('hidden');
-            errorAddGeneral.classList.add('hidden');
+            errorAddNewsMessageHeader.classList.add('hidden');
+            errorAddNewsMessageContent.classList.add('hidden');
+            errorAddNewsGeneral.classList.add('hidden');
             addNewsForm.reset();
         }
     }
