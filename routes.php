@@ -235,10 +235,19 @@ post($baseRoute.'news/add', function() {
             echo json_encode(['success' => true]);
         } else if (isset($result['errorMessage'])) {
             // Return an error response
-            echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
+            echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);
         } else {
-            // Return validation errors
-            echo json_encode(['success' => false, 'errors' => $result]);
+            if (is_array($result)) {
+                // Sanitize the array of errors
+                $sanitizedErrors = array_map(function($error) {
+                    return htmlspecialchars($error);
+                }, $result);
+
+                echo json_encode(['success' => false, 'errors' => $sanitizedErrors]);
+            } else {
+                // Return a single error response
+                echo json_encode(['success' => false, 'errors' => htmlspecialchars($result)]);
+            }
         }
     } else {
         // Invalid action response
@@ -266,10 +275,19 @@ put($baseRoute.'news/edit', function() {
             echo json_encode(['success' => true]);
         } else if (isset($result['errorMessage'])) {
             // Return an error response
-            echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
+            echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);
         } else {
-            // Return validation errors
-            echo json_encode(['success' => false, 'errors' => $result]);
+            if (is_array($result)) {
+                // Sanitize the array of errors
+                $sanitizedErrors = array_map(function($error) {
+                    return htmlspecialchars($error);
+                }, $result);
+
+                echo json_encode(['success' => false, 'errors' => $sanitizedErrors]);
+            } else {
+                // Return a single error response
+                echo json_encode(['success' => false, 'errors' => htmlspecialchars($result)]);
+            }
         }
     } else {
         // Invalid action response
@@ -291,7 +309,7 @@ delete($baseRoute.'news/delete', function() {
             echo json_encode(['success' => true]);
         } else {
             // Return an error response
-            echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
+            echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);
         }
     } else {
         // Invalid action response
@@ -319,10 +337,19 @@ post($baseRoute.'openingHours/add', function() {
             echo json_encode(['success' => true]);
         } else if (isset($result['errorMessage'])) {
             // Return an error response
-            echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
+            echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);
         } else {
-            // Return validation errors
-            echo json_encode(['success' => false, 'errors' => $result]);
+            if (is_array($result)) {
+                // Sanitize the array of errors
+                $sanitizedErrors = array_map(function($error) {
+                    return htmlspecialchars($error);
+                }, $result);
+
+                echo json_encode(['success' => false, 'errors' => $sanitizedErrors]);
+            } else {
+                // Return a single error response
+                echo json_encode(['success' => false, 'errors' => htmlspecialchars($result)]);
+            }
         }
     } else {
         // Invalid action response
@@ -350,10 +377,19 @@ put($baseRoute.'openingHours/edit', function() {
             echo json_encode(['success' => true]);
         } else if (isset($result['errorMessage'])) {
             // Return an error response
-            echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
+            echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);
         } else {
-            // Return validation errors
-            echo json_encode(['success' => false, 'errors' => $result]);
+            if (is_array($result)) {
+                // Sanitize the array of errors
+                $sanitizedErrors = array_map(function($error) {
+                    return htmlspecialchars($error);
+                }, $result);
+
+                echo json_encode(['success' => false, 'errors' => $sanitizedErrors]);
+            } else {
+                // Return a single error response
+                echo json_encode(['success' => false, 'errors' => htmlspecialchars($result)]);
+            }
         }
     } else {
         // Invalid action response
@@ -375,7 +411,7 @@ delete($baseRoute.'openingHours/delete', function() {
            echo json_encode(['success' => true]);
        } else {
            // Return an error response
-           echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
+           echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);
        }
     } else {
         // Invalid action response
