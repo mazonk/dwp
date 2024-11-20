@@ -48,18 +48,18 @@ require_once "src/view/components/admin-sections/openingHours/OpeningHoursCard.p
 													<option value="Saturday">Saturday</option>
 													<option value="Sunday">Sunday</option>
 											</select>
-											<p id="error-add-day"  class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
+											<p id="error-add-openingHour-day"  class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
 									</div>
 									<div class="flex gap-[1rem]">
 											<div class="w-full mb-4">
 													<label for="addOpeningTimeInput" class="block text-sm font-medium text-text-textLight">Opening Time</label>
 													<input id="addOpeningTimeInput" name="addOpeningTimeInput" type="time" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required>
-													<p id="error-add-openingTime" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
+													<p id="error-add-openingHour-openingTime" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
 											</div>
 											<div class="w-full mb-4">
 													<label for="addClosingTimeInput" class="block text-sm font-medium text-text-textLight">Closing Time</label>
 													<input id="addClosingTimeInput" name="addClosingTimeInput" type="time" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required>
-													<p id="error-add-closingTime" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
+													<p id="error-add-openingHour-closingTime" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
 											</div>
 									</div>
 									<!-- Is current -->
@@ -70,9 +70,9 @@ require_once "src/view/components/admin-sections/openingHours/OpeningHoursCard.p
 													<option value="1">Yes</option>
 													<option value="0">No</option>
 											</select>
-											<p id="error-add-isCurrent" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
+											<p id="error-add-openingHour-isCurrent" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
 									</div>
-									<p id="error-add-general" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
+									<p id="error-add-openingHour-general" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
 									<div class="flex justify-end">
 											<button type="submit" id="saveAddOpeningHourButton" class="bg-primary text-textDark py-2 px-4 rounded border border-transparent hover:bg-primaryHover duration-[.2s] ease-in-out">Add</button>
 											<button type="button" id="cancelAddOpeningHourButton" class="text-textLight py-2 px-4 border-[1px] border-white rounded hover:bg-borderDark ml-2 duration-[.2s] ease-in-out">Cancel</button>
@@ -102,18 +102,18 @@ require_once "src/view/components/admin-sections/openingHours/OpeningHoursCard.p
 													<option value="Saturday">Saturday</option>
 													<option value="Sunday">Sunday</option>
 											</select>
-											<p id="error-edit-day"  class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
+											<p id="error-edit-openingHour-day"  class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
 									</div>
 									<div class="flex gap-[1rem]">
 											<div class="w-full mb-4">
 													<label for="editOpeningTimeInput" class="block text-sm font-medium text-text-textLight">Opening Time</label>
 													<input id="editOpeningTimeInput" name="editOpeningTimeInput" type="time" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required>
-													<p id="error-edit-openingTime" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
+													<p id="error-edit-openingHour-openingTime" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
 											</div>
 											<div class="w-full mb-4">
 													<label for="editClosingTimeInput" class="block text-sm font-medium text-text-textLight">Closing Time</label>
 													<input id="editClosingTimeInput" name="editClosingTimeInput" type="time" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required>
-													<p id="error-edit-closingTime" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
+													<p id="error-edit-openingHour-closingTime" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
 											</div>
 									</div>
 									<!-- Is current -->
@@ -124,9 +124,9 @@ require_once "src/view/components/admin-sections/openingHours/OpeningHoursCard.p
 													<option value="1">Yes</option>
 													<option value="0">No</option>
 											</select>
-											<p id="error-edit-isCurrent" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
+											<p id="error-edit-openingHour-isCurrent" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
 									</div>
-									<p id="error-edit-general" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
+									<p id="error-edit-openingHour-general" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
 									<div class="flex justify-end">
 											<button type="submit" id="saveEditOpeningHourButton" class="bg-primary text-textDark py-2 px-4 rounded border border-transparent hover:bg-primaryHover duration-[.2s] ease-in-out">Save</button>
 											<button type="button" id="cancelEditOpeningHourButton" class="text-textLight py-2 px-4 border-[1px] border-white rounded hover:bg-borderDark ml-2 duration-[.2s] ease-in-out">Cancel</button>
@@ -162,11 +162,11 @@ require_once "src/view/components/admin-sections/openingHours/OpeningHoursCard.p
 		const addOpeningHourModal = document.getElementById('addOpeningHourModal');
 		const addOpeningHourForm = document.getElementById('addOpeningHourForm');
 		const addOpeningHourButton = document.getElementById('addOpeningHourButton');
-		const errorAddDay = document.getElementById('error-add-day');
-		const errorAddOpeningTime = document.getElementById('error-add-openingTime');
-		const errorAddClosingTime = document.getElementById('error-add-closingTime');
-		const errorAddIsCurrent = document.getElementById('error-add-isCurrent');
-		const errorAddGeneral = document.getElementById('error-add-general');
+		const errorAddOpeningHourDay = document.getElementById('error-add-openingHour-day');
+		const errorAddOpeningHourOpeningTime = document.getElementById('error-add-openingHour-openingTime');
+		const errorAddOpeningHourClosingTime = document.getElementById('error-add-openingHour-closingTime');
+		const errorAddOpeningHourIsCurrent = document.getElementById('error-add-openingHour-isCurrent');
+		const errorAddOpeningHourGeneral = document.getElementById('error-add-openingHour-general');
 
 
 
@@ -213,27 +213,29 @@ require_once "src/view/components/admin-sections/openingHours/OpeningHoursCard.p
 						window.location.reload();
 						clearValues('add');
 					} else {
+						console.log(response.errors);
 						// Display error messages
 						if (response.errors['day']) {
-							errorAddDay.textContent = response.errors['day'];
-							errorAddDay.classList.remove('hidden');
+							errorAddOpeningHourDay.textContent = response.errors['day'];
+							errorAddOpeningHourDay.classList.remove('hidden');
 						}
 						if (response.errors['openingTime']) {
-							errorAddOpeningTime.textContent = response.errors['openingTime'];
-							errorAddOpeningTime.classList.remove('hidden');
+							errorAddOpeningHourOpeningTime.textContent = response.errors['openingTime'];
+							errorAddOpeningHourOpeningTime.classList.remove('hidden');
 						}
 						if (response.errors['closingTime']) {
-							errorAddClosingTime.textContent = response.errors['closingTime'];
-							errorAddClosingTime.classList.remove('hidden');
+							console.log(response.errors['closingTime']);
+							errorAddOpeningHourClosingTime.textContent = response.errors['closingTime'];
+							errorAddOpeningHourClosingTime.classList.remove('hidden');
 						}
 						if (response.errors['isCurrent']) {
-							errorAddIsCurrent.textContent = response.errors['isCurrent'];
-							errorAddIsCurrent.classList.remove('hidden');
+							errorAddOpeningHourIsCurrent.textContent = response.errors['isCurrent'];
+							errorAddOpeningHourIsCurrent.classList.remove('hidden');
 						}
-						if (response.errors['general']) {
-							errorAddGeneral.textContent = response.errors['general'];
-							errorAddGeneral.classList.remove('hidden');
-						}
+            if (response.errors['general']) {
+							errorAddOpeningHourGeneral.textContent = response.errors['general'];
+							errorAddOpeningHourGeneral.classList.remove('hidden');
+            }
 						if (response.errorMessage) {
 							console.error('Error:', response.errorMessage);
 						} else {
@@ -258,11 +260,11 @@ require_once "src/view/components/admin-sections/openingHours/OpeningHoursCard.p
 		const editOpeningTimeInput = document.getElementById('editOpeningTimeInput');
 		const editClosingTimeInput = document.getElementById('editClosingTimeInput');
 		const editIsCurrentInput = document.getElementById('editIsCurrentInput');
-		const errorEditDay = document.getElementById('error-edit-day');
-		const errorEditOpeningTime = document.getElementById('error-edit-openingTime');
-		const errorEditClosingTime = document.getElementById('error-edit-closingTime');
-		const errorEditIsCurrent = document.getElementById('error-edit-isCurrent');
-		const errorEditGeneral = document.getElementById('error-edit-general');
+		const errorEditOpeningHourDay = document.getElementById('error-edit-openingHour-day');
+		const errorEditOpeningHourOpeningTime = document.getElementById('error-edit-openingHour-openingTime');
+		const errorEditOpeningHourClosingTime = document.getElementById('error-edit-openingHour-closingTime');
+		const errorEditOpeningHourIsCurrent = document.getElementById('error-edit-openingHour-isCurrent');
+		const errorEditOpeningHourGeneral = document.getElementById('error-edit-openingHour-general');
 
 		// Display the edit modal and populate the form
 		window.openEditOpeningHourModal = function(openingHourData) {
@@ -316,24 +318,24 @@ require_once "src/view/components/admin-sections/openingHours/OpeningHoursCard.p
 					} else {
 						// Display error messages
 						if (response.errors['day']) {
-							errorEditDay.textContent = response.errors['day'];
-							errorEditDay.classList.remove('hidden');
+							errorEditOpeningHourDay.textContent = response.errors['day'];
+							errorEditOpeningHourDay.classList.remove('hidden');
 						}
 						if (response.errors['openingTime']) {
-							errorEditOpeningTime.textContent = response.errors['openingTime'];
-							errorEditOpeningTime.classList.remove('hidden');
+							errorEditOpeningHourOpeningTime.textContent = response.errors['openingTime'];
+							errorEditOpeningHourOpeningTime.classList.remove('hidden');
 						}
 						if (response.errors['closingTime']) {
-							errorEditClosingTime.textContent = response.errors['closingTime'];
-							errorEditClosingTime.classList.remove('hidden');
+							errorEditOpeningHourClosingTime.textContent = response.errors['closingTime'];
+							errorEditOpeningHourClosingTime.classList.remove('hidden');
 						}
 						if (response.errors['isCurrent']) {
-							errorEditIsCurrent.textContent = response.errors['isCurrent'];
-							errorEditIsCurrent.classList.remove('hidden');
+							errorEditOpeningHourIsCurrent.textContent = response.errors['isCurrent'];
+							errorEditOpeningHourIsCurrent.classList.remove('hidden');
 						}
 						if (response.errors['general']) {
-							errorEditGeneral.textContent = response.errors['general'];
-							errorEditGeneral.classList.remove('hidden');
+							errorEditOpeningHourGeneral.textContent = response.errors['general'];
+							errorEditOpeningHourGeneral.classList.remove('hidden');
 						}
 						if (response.errorMessage) {
 							console.error('Error:', response.errorMessage);
@@ -406,19 +408,19 @@ require_once "src/view/components/admin-sections/openingHours/OpeningHoursCard.p
 		// Clear error messages and input values
     function clearValues(action) {
 			if (action === 'edit') {
-				errorEditDay.classList.add('hidden');
-				errorEditOpeningTime.classList.add('hidden');
-				errorEditClosingTime.classList.add('hidden');
-				errorEditIsCurrent.classList.add('hidden');
-				errorEditGeneral.classList.add('hidden');
+				errorEditOpeningHourDay.classList.add('hidden');
+				errorEditOpeningHourOpeningTime.classList.add('hidden');
+				errorEditOpeningHourClosingTime.classList.add('hidden');
+				errorEditOpeningHourIsCurrent.classList.add('hidden');
+				errorEditOpeningHourGeneral.classList.add('hidden');
 				editOpeningHourForm.reset();
 			}
 			else if (action === 'add') {
-				errorAddDay.classList.add('hidden');
-				errorAddOpeningTime.classList.add('hidden');
-				errorAddClosingTime.classList.add('hidden');
-				errorAddIsCurrent.classList.add('hidden');
-				errorAddGeneral.classList.add('hidden');
+				errorAddOpeningHourDay.classList.add('hidden');
+				errorAddOpeningHourOpeningTime.classList.add('hidden');
+				errorAddOpeningHourClosingTime.classList.add('hidden');
+				errorAddOpeningHourIsCurrent.classList.add('hidden');
+				errorAddOpeningHourGeneral.classList.add('hidden');
 				addOpeningHourForm.reset();
 			}
     }
