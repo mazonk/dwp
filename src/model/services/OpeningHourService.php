@@ -32,6 +32,22 @@ class OpeningHourService {
 
         $retArray[] = new OpeningHour($row['openingHourId'], $day, $openingTime, $closingTime, $row['isCurrent']);
       }
+      // Define the order of the days of the week
+      $dayOrder = [
+        'Monday' => 0,
+        'Tuesday' => 1,
+        'Wednesday' => 2,
+        'Thursday' => 3,
+        'Friday' => 4,
+        'Saturday' => 5,
+        'Sunday' => 6
+      ];
+
+      // Sort the array by day in ascending order
+      usort($retArray, function($a, $b) use($dayOrder) {
+        return $dayOrder[$a->getDay()] <=> $dayOrder[$b->getDay()];
+      });
+
       return $retArray;
     } catch (Exception $e) {
       return ["error"=> true, "message"=> $e->getMessage()];
@@ -61,6 +77,22 @@ class OpeningHourService {
           $retArray[] = new OpeningHour($row['openingHourId'], $day, $openingTime, $closingTime, $row['isCurrent']);
         }
       }
+      // Define the order of the days of the week
+      $dayOrder = [
+        'Monday' => 0,
+        'Tuesday' => 1,
+        'Wednesday' => 2,
+        'Thursday' => 3,
+        'Friday' => 4,
+        'Saturday' => 5,
+        'Sunday' => 6
+      ];
+
+      // Sort the array by day in ascending order
+      usort($retArray, function($a, $b) use($dayOrder) {
+        return $dayOrder[$a->getDay()] <=> $dayOrder[$b->getDay()];
+      });
+
       return $retArray;
     } catch (Exception $e) {
       return ["error"=> true, "message"=> $e->getMessage()];
