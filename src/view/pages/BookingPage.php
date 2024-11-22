@@ -44,7 +44,8 @@ include_once "src/model/services/SeatService.php";
             echo '<div id="seat-selection">';
             foreach ($seatsByRow as $row => $seats) {
                 echo "<div class='seat-row flex justify-center space-x-4 mb-4'>";
-                echo "<div class='row-number text-xl font-semibold'>{$row}</div>";                foreach ($seats as $seat) {
+                echo "<div class='row-number text-xl font-semibold'>{$row}</div>";
+                foreach ($seats as $seat) {
                     $isAvailable = array_search($seat, $availableSeats);
                     echo SeatCard::render($seat, $isAvailable, $showingId, $userId);
                     
@@ -63,15 +64,15 @@ include_once "src/model/services/SeatService.php";
         <!-- Booked seats display -->
         <div id="booked-seats-display" class="mt-4 text-xl">
             <span>Booked Seats: </span>
-            <span id="booked-seats-list" class="font-semibold"></span>
+            <span id="selected-seats-list" class="font-semibold"></span>
         </div>
     </main>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const seatButtons = document.querySelectorAll('.seat-card');
-            const bookedSeatsList = document.getElementById('booked-seats-list');
-            let bookedSeats = [];
+            const selectedSeatsList = document.getElementById('selected-seats-list');
+            let selectedSeats = [];
 
             seatButtons.forEach(seat => {
                 seat.addEventListener('click', function() {
@@ -79,17 +80,25 @@ include_once "src/model/services/SeatService.php";
                     const isAvailable = this.getAttribute('data-is-available') === 'true';
 
                     if (isAvailable) {
-                        if (bookedSeats.includes(seatId)) {
-                            bookedSeats = bookedSeats.filter(id => id !== seatId);
+                        if (selectedSeats.includes(seatId)) {
+                            selectedSeats = selectedSeats.filter(id => id !== seatId);
                             this.classList.remove('bg-red-500');
                             this.classList.add('bg-lime-600');
                         } else {
-                            bookedSeats.push(seatId);
+                            selectedSeats.push(seatId);
                             this.classList.remove('bg-lime-600');
                             this.classList.add('bg-red-500');
                         }
 
-                        bookedSeatsList.textContent = bookedSeats.join(', ');
+                        selectedSeatsList.textContent = selectedSeats.join(', ');
+                    } else {
+                        const unavailablePopup = document.createElement('div');
+                        unavailablePopup.classList.add('absolute', 'px-2', 'py-1', 'bg-red-500', 'text-white', 'rounded', 'text-xs', 'z-10');
+                        unavailablePopup.textContent = 'This seat is taken!';
+                        this.appendChild(unavailablePopup);
+                        setTimeout(() => {
+                            unavailablePopup.remove();
+                        }, 1000);
                     }
                 });
             });
