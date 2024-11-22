@@ -115,7 +115,7 @@ class VenueController {
         $errors[] = 'City must be at least 2 characters long.';
     }
 
-    return $errors; 
+    return $errors;
   }
 
 }

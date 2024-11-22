@@ -3,6 +3,7 @@ include_once "src/model/entity/Seat.php";
 include_once "src/model/entity/Room.php";
 include_once "src/model/entity/Movie.php";
 include_once "src/model/entity/Showing.php";
+include_once "src/model/repositories/SeatRepository.php";
 
 class SeatService {
     private SeatRepository $seatRepository;
