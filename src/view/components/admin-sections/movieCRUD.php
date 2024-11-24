@@ -21,7 +21,25 @@ include_once "src/view/components/MovieCard.php";
         } else {
             echo '<div class="flex items-start flex-wrap gap-[1rem]">';
             foreach ($allMovies as $movie) {
-                MovieCard::render($movie, false);
+                $movieData = json_encode([
+                    'id' => $movie->getMovieId(),
+                    'title' => $movie->getTitle(),
+                    'description' => $movie->getDescription(),
+                    'duration' => $movie->getDuration(),
+                    'language' => $movie->getLanguage(),
+                    'releaseDate' => $movie->getReleaseDate(),
+                    'posterURL' => $movie->getPosterURL(),
+                    'promoURL' => $movie->getPromoURL(),
+                    'trailerURL' => $movie->getTrailerURL(),
+                    'rating' => $movie->getRating(),
+                ]);
+                echo "<button 
+                    class='movieCard m-[0.5rem] bg-white rounded-lg shadow-lg transition-transform transform hover:scale-105 cursor-pointer'
+                    data-movie='" . htmlspecialchars($movieData) . "'>";
+                //echo "<img src='" . htmlspecialchars($movie->getPosterURL()). "' >";
+                echo "<p class='text-center font-semibold text-gray-800'>" . htmlspecialchars($movie->getTitle()) . "</p>";
+                echo "<p class='text-center text-gray-600 text-sm'>" . htmlspecialchars($movie->getDescription()) . "</p>";
+                echo "<p class='text-center text-gray-600 text-sm'>Rating: " . htmlspecialchars($movie->getRating()) . "</p>";
             }
             echo '</div>';
         }
@@ -167,29 +185,32 @@ include_once "src/view/components/MovieCard.php";
             </form>
         </div>
     </div>
+    <div id="deleteMovieModal" class="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 hidden">
+    <div class="flex items-center justify-center min-h-screen">
+        <!-- Modal -->
+        <div class="bg-bgSemiDark w-[400px] rounded-lg p-6 border-[1px] border-borderDark">
+            <h2 class="text-[1.5rem] text-center font-semibold mb-4 text-red-500">Delete Movie</h2>
+            <p class="text-textLight text-center mb-6">Are you sure you want to delete this movie? This action cannot be undone.</p>
+
+            <!-- Hidden Input for Movie ID -->
+            <input type="hidden" id="deleteMovieIdInput" value="">
+
+            <!-- Confirm and Cancel Buttons -->
+            <div class="flex justify-center gap-4">
+                <button id="confirmDeleteMovieButton" class="bg-red-500 text-white py-2 px-4 rounded border border-transparent hover:bg-red-600 duration-[.2s] ease-in-out">
+                    Delete
+                </button>
+                <button type="button" id="cancelDeleteMovieButton" class="text-textLight py-2 px-4 border-[1px] border-white rounded hover:bg-borderDark duration-[.2s] ease-in-out">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 
-<?php
-if (isset($allMovies['errorMessage'])) {
-    echo "<p class='text-red-500 text-center font-medium'>" . htmlspecialchars($allMovies['errorMessage']) . "</p>";
-} else {
-    foreach ($allMovies as $movie) {
-        $movieData = json_encode([
-            'id' => $movie->getMovieId(),
-            'title' => $movie->getTitle(),
-            'description' => $movie->getDescription(),
-            'duration' => $movie->getDuration(),
-            'language' => $movie->getLanguage(),
-            'releaseDate' => $movie->getReleaseDate(),
-            'posterUrl' => $movie->getPosterUrl(),
-            'promoUrl' => $movie->getPromoUrl(),
-            'trailerUrl' => $movie->getTrailerUrl(),
-            'rating' => $movie->getRating(),
-        ]);
-        echo "</button>";
-    }
-}
-?>
+</div>
+
+
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
@@ -211,56 +232,15 @@ document.addEventListener('DOMContentLoaded', () => {
         clearValues('add');
     });
 
-    editMovieButton.addEventListener('click', () => {
-        editMovieModal.classList.remove('hidden');
+    // Add movie form submission
+    addMovieForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const formData = new FormData(addMovieForm);
+        const data = Object.fromEntries(formData);
+        addMovie(data);
+        addMovieModal.classList.add('hidden');
     });
-});
-document.addEventListener('DOMContentLoaded', () => {
-    const editMovieButton = document.getElementById('editMovieButton'); // Edit button
-    const editForm = document.getElementById('editMovieForm'); // Form to edit movie info
-    const movieInfoDisplay = document.getElementById('movieInfoDisplay'); // Placeholder where movie info is shown
-    const errorMessageElement = document.createElement('p');
-    errorMessageElement.classList.add('text-red-500', 'text-center', 'font-medium');
-    movieInfoDisplay.prepend(errorMessageElement);
-
-    // Toggle visibility and populate form fields on edit button click
-    document.addEventListener('DOMContentLoaded', () => {
-    const editButtons = document.querySelectorAll('.edit-movie-btn');
-    const editModal = document.getElementById('editMovieModal');
-    const formFields = {
-        title: document.getElementById('editTitleInput'),
-        description: document.getElementById('editDescriptionInput'),
-        duration: document.getElementById('editDurationInput'),
-        language: document.getElementById('editLanguageInput'),
-        releaseDate: document.getElementById('editReleaseDateInput'),
-        posterURL: document.getElementById('editPosterURLInput'),
-        promoURL: document.getElementById('editPromoURLInput'),
-        rating: document.getElementById('editRatingInput'),
-        trailerURL: document.getElementById('editTrailerURLInput')
-    };
-
-    editButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            formFields.title.value = button.dataset.title;
-            formFields.description.value = button.dataset.description;
-            formFields.duration.value = button.dataset.duration;
-            formFields.language.value = button.dataset.language;
-            formFields.releaseDate.value = button.dataset.releasedate;
-            formFields.posterURL.value = button.dataset.posterurl;
-            formFields.promoURL.value = button.dataset.promourl;
-            formFields.rating.value = button.dataset.rating;
-            formFields.trailerURL.value = button.dataset.trailerurl;
-
-            // Show the modal
-            editModal.classList.remove('hidden');
-        });
-    });
-
-    // Close modal logic (e.g., on clicking cancel)
-    document.getElementById('cancelEditMovieButton').addEventListener('click', () => {
-        editModal.classList.add('hidden');
-    });
-});
-
+    
+    //  Edit movie form
 });
 </script>
