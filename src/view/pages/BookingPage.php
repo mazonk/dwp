@@ -80,22 +80,37 @@ include_once "src/model/services/SeatService.php";
 
                     if (isAvailable) {
                         if (selectedSeats.includes(seatId)) {
-                            selectedSeats = selectedSeats.filter(id => id !== seatId);
-                            this.classList.remove('bg-red-500');
-                            this.classList.add('bg-lime-600');
-                        } else {
-                            // Temporarily add the seat to selectedSeats
-                            const tempSeats = [...selectedSeats, seatId];
-                            const errorMessage = validateSeats(tempSeats);
+                            // Temporarily remove the seat to check validation
+                            const tempSeats = selectedSeats.filter(id => id !== seatId);
+                            const errorMessage = validateDeselect(tempSeats);
+
                             if (errorMessage === '') {
+                                // If validation passes, deselect the seat
+                                selectedSeats = tempSeats;
+                                this.classList.remove('bg-red-500');
+                                this.classList.add('bg-lime-600');
+                            } else {
+                                // Show error message if deselecting causes invalid gaps
+                                showError(errorMessage, this);
+                                return;
+                            }
+                        } else {
+                            // Temporarily add the seat to validate selection
+                            const tempSeats = [...selectedSeats, seatId];
+                            const errorMessage = validateSelect(tempSeats);
+
+                            if (errorMessage === '') {
+                                // If validation passes, select the seat
                                 selectedSeats.push(seatId);
                                 this.classList.remove('bg-lime-600');
                                 this.classList.add('bg-red-500');
                             } else {
+                                // Show error message if adding the seat causes invalid gaps
                                 showError(errorMessage, this);
                                 return;
                             }
                         }
+
                         selectedSeatsList.textContent = selectedSeats.join(', ');
                     } else {
                         showError('This seat is taken!', this);
@@ -113,20 +128,61 @@ include_once "src/model/services/SeatService.php";
                 });
             });
 
-            function validateSeats(selectedSeats) {
+            function validateSelect(selectedSeats) {
+                const bookedSeats = [...document.querySelectorAll('[data-is-available="false"]')]
+                    .map(seat => parseInt(seat.getAttribute('data-seat-id'), 10));
+
                 if (selectedSeats.length === 2) {
-                    // Check if the two seats are adjacent
+                    // Check if the two selected seats are adjacent, ignoring booked seats
                     const [seat1, seat2] = selectedSeats.map(Number).sort((a, b) => a - b);
                     if (Math.abs(seat1 - seat2) !== 1) {
                         return "Selected seats must be next to each other.";
                     }
                 } else if (selectedSeats.length > 2) {
-                    // Check if gaps between seats are valid (at least 2 if there are gaps)
+                    // Validate for gaps between selected seats
                     const sortedSeats = selectedSeats.map(Number).sort((a, b) => a - b);
+
                     for (let i = 0; i < sortedSeats.length - 1; i++) {
                         const gap = sortedSeats[i + 1] - sortedSeats[i];
-                        if (gap > 1 && gap < 3) { // Allow adjacent seats but validate gaps
-                            return "There must be a gap of at least 2 between the second and third seats.";
+
+                        if (gap > 1) {
+                            // Intermediate seats
+                            const intermediateSeats = Array.from({ length: gap - 1 }, (_, index) => sortedSeats[i] + index + 1);
+
+                            // Check for available seats in the gap
+                            const availableGap = intermediateSeats.filter(
+                                seat => !bookedSeats.includes(seat) && !selectedSeats.includes(seat)
+                            );
+
+                            // The gap of available seats is at least 2
+                            if (availableGap.length < 2) {
+                                return "Any gap of available seats must be at least 2 seats wide.";
+                            }
+                        }
+                    }
+                }
+
+                // No single-seat gaps next to booked seats
+                const allSeats = [...selectedSeats, ...bookedSeats].sort((a, b) => a - b);
+
+                for (let i = 0; i < allSeats.length - 1; i++) {
+                    const gap = allSeats[i + 1] - allSeats[i];
+
+                    if (gap === 2 && selectedSeats.includes(allSeats[i + 1] - 1)) {
+                        return "Single-seat gaps next to booked seats are not allowed.";
+                    }
+                }
+
+                return ''; // No errors
+            }
+
+            function validateDeselect(selectedSeats) {
+                if (selectedSeats.length > 1) {
+                    const sortedSeats = selectedSeats.map(Number).sort((a, b) => a - b);
+                    for (let i = 0; i < sortedSeats.length - 1; i++) {
+                        const gap = (sortedSeats[i + 1] - sortedSeats[i]) -1;
+                        if (gap === 1) {
+                            return "Deselecting this seat will leave adjacent seats with a gap.";
                         }
                     }
                 }
