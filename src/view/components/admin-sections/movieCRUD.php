@@ -186,9 +186,6 @@ if (isset($allMovies['errorMessage'])) {
             'trailerUrl' => $movie->getTrailerUrl(),
             'rating' => $movie->getRating(),
         ]);
-        echo "<button class='movieCard bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 cursor-pointer' 
-                data-movie='" . htmlspecialchars($movieData) . "'>";
-        echo "<p class='text-center font-medium text-gray-700'>" . htmlspecialchars($movie->getTitle()) . "</p>";
         echo "</button>";
     }
 }
