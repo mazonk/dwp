@@ -48,7 +48,6 @@ include_once "src/model/services/SeatService.php";
                 foreach ($seats as $seat) {
                     $isAvailable = array_search($seat, $availableSeats);
                     echo SeatCard::render($seat, $isAvailable, $showingId, $userId);
-                    
                 }
                 echo "</div>";
             }
@@ -75,7 +74,7 @@ include_once "src/model/services/SeatService.php";
             let selectedSeats = [];
 
             seatButtons.forEach(seat => {
-                seat.addEventListener('click', function() {
+                seat.addEventListener('click', function () {
                     const seatId = this.getAttribute('data-seat-id');
                     const isAvailable = this.getAttribute('data-is-available') === 'true';
 
@@ -85,23 +84,54 @@ include_once "src/model/services/SeatService.php";
                             this.classList.remove('bg-red-500');
                             this.classList.add('bg-lime-600');
                         } else {
-                            selectedSeats.push(seatId);
-                            this.classList.remove('bg-lime-600');
-                            this.classList.add('bg-red-500');
+                            // Temporarily add the seat to selectedSeats
+                            const tempSeats = [...selectedSeats, seatId];
+                            const errorMessage = validateSeats(tempSeats);
+                            if (errorMessage === '') {
+                                selectedSeats.push(seatId);
+                                this.classList.remove('bg-lime-600');
+                                this.classList.add('bg-red-500');
+                            } else {
+                                showError(errorMessage, this);
+                                return;
+                            }
                         }
-
                         selectedSeatsList.textContent = selectedSeats.join(', ');
                     } else {
-                        const unavailablePopup = document.createElement('div');
-                        unavailablePopup.classList.add('absolute', 'px-2', 'py-1', 'bg-red-500', 'text-white', 'rounded', 'text-xs', 'z-10');
-                        unavailablePopup.textContent = 'This seat is taken!';
-                        this.appendChild(unavailablePopup);
+                        showError('This seat is taken!', this);
+                    }
+
+                    function showError(errorMessage, _this) {
+                        const popup = document.createElement('div');
+                        popup.classList.add('absolute', 'px-2', 'py-1', 'bg-red-500', 'text-white', 'rounded', 'text-xs', 'z-10');
+                        popup.textContent = errorMessage;
+                        _this.appendChild(popup);
                         setTimeout(() => {
-                            unavailablePopup.remove();
-                        }, 1000);
+                            popup.remove();
+                        }, 2000);
                     }
                 });
             });
+
+            function validateSeats(selectedSeats) {
+                if (selectedSeats.length === 2) {
+                    // Check if the two seats are adjacent
+                    const [seat1, seat2] = selectedSeats.map(Number).sort((a, b) => a - b);
+                    if (Math.abs(seat1 - seat2) !== 1) {
+                        return "Selected seats must be next to each other.";
+                    }
+                } else if (selectedSeats.length > 2) {
+                    // Check if gaps between seats are valid (at least 2 if there are gaps)
+                    const sortedSeats = selectedSeats.map(Number).sort((a, b) => a - b);
+                    for (let i = 0; i < sortedSeats.length - 1; i++) {
+                        const gap = sortedSeats[i + 1] - sortedSeats[i];
+                        if (gap > 1 && gap < 3) { // Allow adjacent seats but validate gaps
+                            return "There must be a gap of at least 2 between the second and third seats.";
+                        }
+                    }
+                }
+                return '';
+            }
         });
     </script>
 
