@@ -5,6 +5,7 @@ require_once 'src/controller/SeatController.php';
 require_once 'src/controller/ShowingController.php';
 include_once "src/model/services/TicketService.php";
 include_once "src/model/services/SeatService.php";
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -60,10 +61,15 @@ include_once "src/model/services/SeatService.php";
         }
         ?>
 
-        <!-- Booked seats display -->
+        <!-- Selected seats display -->
         <div id="booked-seats-display" class="mt-4 text-xl">
-            <span>Booked Seats: </span>
+            <span>Selected Seats: </span>
             <span id="selected-seats-list" class="font-semibold"></span>
+        </div>
+        <div class="mt-12">
+            <a class="py-2.5 px-2 text-primary border-[1px] border-primary rounded hover:text-primaryHover hover:border-primaryHover duration-[.2s] ease-in-out cursor-pointer">
+                Proceed to overview
+            </a>
         </div>
     </main>
 
@@ -97,6 +103,10 @@ include_once "src/model/services/SeatService.php";
                         } else {
                             // Temporarily add the seat to validate selection
                             const tempSeats = [...selectedSeats, seatId];
+                            if (tempSeats.length > 6) {
+                                alert('You can only book up to 6 seats at a time. For booking more than 6 seats, please contact us!');
+                                return;
+                            }
                             const errorMessage = validateSelect(tempSeats);
 
                             if (errorMessage === '') {
@@ -111,7 +121,13 @@ include_once "src/model/services/SeatService.php";
                             }
                         }
 
-                        selectedSeatsList.textContent = selectedSeats.join(', ');
+                        const seatsWithRowAndSeatNr = selectedSeats.map(seatId => {
+                            const seat = document.querySelector(`[data-seat-id="${seatId}"]`);
+                            const row = seat.getAttribute('data-row');
+                            const seatNr = seat.getAttribute('data-seat-nr');
+                            return `Row: ${row} | Seat: ${seatNr}`;
+                        }).join(', ');
+                        selectedSeatsList.textContent = seatsWithRowAndSeatNr;
                     } else {
                         showError('This seat is taken!', this);
                     }
