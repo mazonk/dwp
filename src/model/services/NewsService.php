@@ -109,6 +109,5 @@ class NewsService {
         if(strlen($newsData['content']) > 5000) {
             $errors['content'] = "Content can't be longer than 5000 characters.";
         }
-    
     }
 }

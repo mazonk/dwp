@@ -7,7 +7,6 @@ DROP TABLE IF EXISTS PaymentMethod;
 DROP TABLE IF EXISTS UserRole;
 DROP TABLE IF EXISTS MovieActor;
 DROP TABLE IF EXISTS VenueShowing;
-DROP TABLE IF EXISTS VenueOpeningHour;
 DROP TABLE IF EXISTS MovieDirector;
 DROP TABLE IF EXISTS MovieGenre;
 DROP TABLE IF EXISTS News;
@@ -233,13 +232,4 @@ CREATE TABLE VenueShowing (
     PRIMARY KEY (venueId, showingId),
     FOREIGN KEY (venueId) REFERENCES Venue(venueId),
     FOREIGN KEY (showingId) REFERENCES Showing(showingId)
-);
-
--- Venue to OpeningHour (many-to-many)
-CREATE TABLE VenueOpeningHour (
-    venueId INT NOT NULL,
-    openingHourId INT NOT NULL,
-    PRIMARY KEY (venueId, openingHourId),
-    FOREIGN KEY (venueId) REFERENCES Venue(venueId),
-    FOREIGN KEY (openingHourId) REFERENCES OpeningHour(openingHourId)
 );
