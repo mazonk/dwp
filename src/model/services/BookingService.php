@@ -51,4 +51,17 @@ class BookingService {
             return ['error' => true, 'message' => $e->getMessage()];
         }
     }
+
+    public function createBooking(int $userId, string $status): Booking|array {
+        try {
+            $user = $this->userService->getUserById($userId);
+            if (is_array($user) && isset($user['error']) && $user['error']) {
+                return $user;
+            }
+            $bookingId = $this->bookingRepository->createBooking($user, Status::from($status));
+            return new Booking($bookingId, $user, Status::from($status), []);
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+    }
 }

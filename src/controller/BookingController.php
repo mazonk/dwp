@@ -17,7 +17,7 @@ class BookingController {
         return $bookings;
     }
 
-    public function createBooking(int $userId, string $status) {
+    public function createBooking(int $userId, string $status): Booking|array {
         $insertedBooking = $this->bookingService->createBooking($userId, $status);
         if (isset($insertedBooking['error']) && $insertedBooking['error']) {
             return ['errorMessage'=> $insertedBooking['message']];
