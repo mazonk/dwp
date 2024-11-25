@@ -183,6 +183,7 @@ CREATE TABLE Payment (
     addressId INT NOT NULL,
     bookingId INT NOT NULL,
     methodId INT NOT NULL,
+    status ENUM('pending', 'confirmed', 'cancelled') NOT NULL,
     FOREIGN KEY (methodId) REFERENCES PaymentMethod(methodId),
     FOREIGN KEY (userId) REFERENCES User(userId),
     FOREIGN KEY (addressId) REFERENCES Address(addressId),

@@ -4,6 +4,12 @@ include_once "src/model/entity/Address.php";
 include_once "src/model/entity/Booking.php";
 include_once "src/model/entity/PaymentMethod.php";
 
+enum Status: string {
+  case CONFIRMED = 'confirmed';
+  case PENDING = 'pending';
+  case CANCELLED = 'cancelled';
+}
+
 class Payment {
   private int $paymentId;
   private float $totalPrice;
@@ -13,8 +19,9 @@ class Payment {
   private Address $address;
   private Booking $booking;
   private PaymentMethod $paymentMethod;
+  private Status $status;
 
-  public function __construct(int $paymentId, float $totalPrice, DateTime $paymentDate, DateTime $paymentTime, User $user, Address $address, Booking $booking, PaymentMethod $paymentMethod) {
+  public function __construct(int $paymentId, float $totalPrice, DateTime $paymentDate, DateTime $paymentTime, User $user, Address $address, Booking $booking, PaymentMethod $paymentMethod, Status $status,) {
     $this->paymentId = $paymentId;
     $this->totalPrice = $totalPrice;
     $this->paymentDate = $paymentDate;
@@ -23,6 +30,7 @@ class Payment {
     $this->address = $address;
     $this->booking = $booking;
     $this->paymentMethod = $paymentMethod;
+    $this->status = $status;
   }
 
   public function getPaymentId(): int {
@@ -57,6 +65,10 @@ class Payment {
     return $this->paymentMethod;
   }
 
+  public function getStatus(): Status {
+    return $this->status;
+  }
+
   public function setPaymentId(int $paymentId): void {
     $this->paymentId = $paymentId;
   }
@@ -87,6 +99,10 @@ class Payment {
 
   public function setPaymentMethod(PaymentMethod $paymentMethod): void {
     $this->paymentMethod = $paymentMethod;
+  }
+
+  public function setStatus(Status $status): void {
+    $this->status = $status;
   }
 }
 ?>
