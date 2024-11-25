@@ -69,4 +69,34 @@ class MovieRepository {
         
         return $result;
     }
+
+    public function addMovie(array $movieData): void {
+        $db = $this->getdb();
+        $query = $db->prepare("INSERT INTO Movie (name, year, rating, imageURL) VALUES (:name, :year, :rating, :imageURL)");
+        try {
+            $query->execute(array(":name" => $movieData['name'], ":year" => $movie['year'], ":rating" => $movie['rating'], ":imageURL" => $movie['imageURL']));
+        } catch (PDOException $e) {
+            throw new PDOException("Unable to add movie!");
+        }
+    }
+
+    public function editMovie(array $movieData): void {
+        $db = $this->getdb();
+        $query = $db->prepare("UPDATE Movie SET name = :name, year = :year, rating = :rating, imageURL = :imageURL WHERE movieId = :movieId");
+        try {
+            $query->execute(array(":name" => $movieData['name'], ":year" => $movie['year'], ":rating" => $movie['rating'], ":imageURL" => $movie['imageURL'], ":movieId" => $movie['movieId']));
+        } catch (PDOException $e) {
+            throw new PDOException("Unable to edit movie!");
+        }
+    }
+
+    public function deleteMovie(int $movieId): void {
+        $db = $this->getdb();
+        $query = $db->prepare("DELETE FROM Movie WHERE movieId = :movieId");
+        try {
+            $query->execute(array(":movieId" => $movieId));
+        } catch (PDOException $e) {
+            throw new PDOException("Unable to delete movie!");
+        }
+    }
 }

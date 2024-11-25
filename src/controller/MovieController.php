@@ -29,4 +29,38 @@ class MovieController {
         
         return $movie;
     }
+
+    public function addMovie(Movie $movie): array {
+        $errors = $this->movieService->addMovie($movieData);
+        if(count($errors) == 0) {
+            // Check if there are any errors from adding the news
+            if (isset($errors['error']) && $errors['error']) {
+                return ['errorMessage' => $errors['message']];
+            }
+            return ['success' => true];
+        } else {
+            return $errors;
+        }
+    }
+
+    public function editMovie(Movie $movie): array {
+        $errors = $this->movieService->editMovie($movieData);
+        if(count($errors) == 0) {
+            // Check if there are any errors from adding the news
+            if (isset($errors['error']) && $errors['error']) {
+                return ['errorMessage' => $errors['message']];
+            }
+            return ['success' => true];
+        } else {
+            return $errors;
+        }
+    }
+
+    public function deleteMovie(int $movieId): array {
+        $result = $this->movieService->deleteMovie(htmlspecialchars($movieId));
+        if (isset($result['error']) && $result['error']) {
+            return ['errorMessage' => $result['message']];
+        }
+        return ['success' => true];
+    }
 }
