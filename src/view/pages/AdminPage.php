@@ -37,7 +37,7 @@
                         include 'src/view/components/admin-sections/contentManagement.php';
                         break;
                     case 'movie-management':
-                        include 'src/view/components/admin-sections/movieManagement.php';
+                        include 'src/view/components/admin-sections/movies/movieManagement.php';
                         break;
                     case 'scheduling':
                         include 'src/view/components/admin-sections/scheduling.php';

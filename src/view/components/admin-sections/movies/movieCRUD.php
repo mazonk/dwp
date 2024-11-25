@@ -1,6 +1,6 @@
 <?php
 include_once "src/controller/MovieController.php";
-include_once "src/view/components/MovieCard.php";
+include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
 ?>
 
 <div>
@@ -12,39 +12,33 @@ include_once "src/view/components/MovieCard.php";
     </div>
 
     <div id="tab-content" class="grid grid-cols-1 gap-4">
-        <?php
-        $movieController = new MovieController();
-        $allMovies = $movieController->getAllMovies();
+    <?php
+    $movieController = new MovieController();
+    $allMovies = $movieController->getAllMovies();
 
-        if (isset($allMovies['errorMessage'])) {
-            echo $allMovies['errorMessage'];
-        } else {
-            echo '<div class="flex items-start flex-wrap gap-[1rem]">';
-            foreach ($allMovies as $movie) {
-                $movieData = json_encode([
-                    'id' => $movie->getMovieId(),
-                    'title' => $movie->getTitle(),
-                    'description' => $movie->getDescription(),
-                    'duration' => $movie->getDuration(),
-                    'language' => $movie->getLanguage(),
-                    'releaseDate' => $movie->getReleaseDate(),
-                    'posterURL' => $movie->getPosterURL(),
-                    'promoURL' => $movie->getPromoURL(),
-                    'trailerURL' => $movie->getTrailerURL(),
-                    'rating' => $movie->getRating(),
-                ]);
-                echo "<button 
-                    class='movieCard m-[0.5rem] bg-white rounded-lg shadow-lg transition-transform transform hover:scale-105 cursor-pointer'
-                    data-movie='" . htmlspecialchars($movieData) . "'>";
-                //echo "<img src='" . htmlspecialchars($movie->getPosterURL()). "' >";
-                echo "<p class='text-center font-semibold text-gray-800'>" . htmlspecialchars($movie->getTitle()) . "</p>";
-                echo "<p class='text-center text-gray-600 text-sm'>" . htmlspecialchars($movie->getDescription()) . "</p>";
-                echo "<p class='text-center text-gray-600 text-sm'>Rating: " . htmlspecialchars($movie->getRating()) . "</p>";
-            }
+    if (isset($allMovies['errorMessage'])) {
+        echo $allMovies['errorMessage'];
+    } else {
+        echo '<div class="flex items-start flex-wrap gap-[1rem]">';
+
+        foreach ($allMovies as $movie) {
+            MovieCardAdmin::render($movie, false);
+        }
+            // Render each movie card with the Edit and Delete button
+            echo '<div class="bg-bgSemiDark border-[1px] border-borderDark rounded-lg shadow-lg overflow-hidden">';
+            echo '<div class="p-4">';
+            echo '<p class="text-lg text-yellow-500 font-bold mb-3">Rating: ' . htmlspecialchars($movie['rating']) . ' ⭐</p>';
+            echo '<div class="flex gap-[.5rem]">';
+            echo '<button onclick="openEditModal(' . htmlspecialchars(json_encode($movie)) . ')" class="py-1 px-2 text-primary border-[1px] border-primary rounded hover:text-primaryHover hover:border-primaryHover duration-[.2s] ease-in-out">Edit</button>';
+            echo '<button onclick="openDeleteModal(' . htmlspecialchars(json_encode($movie['id'])) . ')" class="bg-red-500 text-textDark py-1 px-2 border-[1px] border-red-500 rounded hover:bg-red-600 hover:border-red-600">Delete</button>';
+            echo '</div>';
+            echo '</div>';
             echo '</div>';
         }
-        ?>
-    </div>
+
+        echo '</div>'; // End of flex container
+    ?>
+</div>
 
     <!-- Add Movie Form Modal -->
 <div id="addMovieModal" class="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 hidden">

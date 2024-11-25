@@ -1,10 +1,8 @@
 <?php
 include_once "src/model/entity/Movie.php";
-class MovieCard {
 
-  
+class MovieCardAdmin {
     public static function render(Movie $movie, $showReleaseDate) {
-
         ?>
           <body>
         <div class="w-[12.5rem] text-center m-[0.625rem] movie-card">
@@ -13,11 +11,6 @@ class MovieCard {
             src="src/assets/<?php echo $movie->getPosterURL(); ?>" alt="Movie Poster">
           </a>
         <div class="text-[1.2rem] text-white"><?php echo htmlspecialchars($movie->getTitle()); ?></div>
-
-          <?php if ($showReleaseDate):?>
-              <div class="text-[0.875rem] text-white">Release Date: <?php echo htmlspecialchars($movie->getReleaseDate()->format('Y-m-d')); ?></div>
-          <?php endif; ?>
-
         </div>
         <?php
     }
