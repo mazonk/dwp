@@ -22,6 +22,10 @@ class BookingController {
         if (isset($insertedBooking['error']) && $insertedBooking['error']) {
             return ['errorMessage'=> $insertedBooking['message']];
         }
+        $_SESSION['activeBooking'] = [
+            'id' => $insertedBooking,
+            'expiry' => time() + 15 * 60 // 15 minutes from now
+        ];
         return $insertedBooking;
     }
 }
