@@ -60,6 +60,19 @@ class VenueService {
     }
   }
 
+  public function doesVenueExist(int $venueId): bool {
+    try {
+      $result = $this->venueRepository->getVenueById($venueId);
+      return true;
+    } catch (Exception $e) {
+      if ($e->getMessage() == "Venue not found") {
+        return false;
+      } else {
+        return ["error"=> true, "message"=> $e->getMessage()];
+      }
+    }
+  }
+
   public function editVenue(int $venueId, array $newVenueData): array|Venue {
     $this->db->beginTransaction();
     try {

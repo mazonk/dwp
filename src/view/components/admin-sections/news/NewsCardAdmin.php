@@ -4,7 +4,7 @@ class NewsCardAdmin {
         // Shorten the content to max 140 characters
         $shortenedContent = substr($content, 0, 140) . (strlen($content) > 140 ? '... ' : ''); 
         ?>
-        <div class="w-[400px] bg-bgSemiDark rounded-lg shadow-lg overflow-hidden">
+        <div class="bg-bgSemiDark border-[1px] border-borderDark rounded-lg shadow-lg overflow-hidden">
           <!-- Clickable link wrapping the image -->
           <img class="h-[275px] max-h-[275px] object-cover object-center" src="src/assets/<?php echo htmlspecialchars($imageURL); ?>" alt="Movie Poster">
           <!-- Content -->
@@ -17,14 +17,14 @@ class NewsCardAdmin {
             </p>
 
             <div class="flex gap-[.5rem]">
-              <button id="editNewsButton" onclick="openEditModal(
+              <button onclick="openEditModal(
               '<?= htmlspecialchars($newsId); ?>',
               '<?= htmlspecialchars($header); ?>',
               '<?= htmlspecialchars($imageURL); ?>',
               '<?= htmlspecialchars($content); ?>')"
-                class="text-white py-2 px-4 border-[1px] border-white rounded hover:bg-borderDark duration-[.2s] ease-in-out">Edit</button>
-              <button id="deleteNewsButton" onclick="openDeleteModal('<?= htmlspecialchars($newsId); ?>',
-              '<?= htmlspecialchars($header); ?>')" class="bg-red-500 text-white py-2 px-4 border-[1px] border-transparent rounded hover:bg-red-600 duration-[.2s] ease-in-out">Delete</button>
+                class="py-1 px-2 text-primary border-[1px] border-primary rounded hover:text-primaryHover hover:border-primaryHover duration-[.2s] ease-in-out">Edit</button>
+              <button onclick="openDeleteModal('<?= htmlspecialchars($newsId); ?>',
+              '<?= htmlspecialchars($header); ?>')" class="bg-red-500 text-textDark py-1 px-2 border-[1px] border-red-500 rounded hover:bg-red-600 hover:border-red-600">Delete</button>
             </div>
           </div>
         </div>
