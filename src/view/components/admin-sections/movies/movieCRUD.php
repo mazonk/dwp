@@ -25,15 +25,6 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
             MovieCardAdmin::render($movie, false);
         }
             // Render each movie card with the Edit and Delete button
-            echo '<div class="bg-bgSemiDark border-[1px] border-borderDark rounded-lg shadow-lg overflow-hidden">';
-            echo '<div class="p-4">';
-            echo '<p class="text-lg text-yellow-500 font-bold mb-3">Rating: ' . htmlspecialchars($movie['rating']) . ' ⭐</p>';
-            echo '<div class="flex gap-[.5rem]">';
-            echo '<button onclick="openEditModal(' . htmlspecialchars(json_encode($movie)) . ')" class="py-1 px-2 text-primary border-[1px] border-primary rounded hover:text-primaryHover hover:border-primaryHover duration-[.2s] ease-in-out">Edit</button>';
-            echo '<button onclick="openDeleteModal(' . htmlspecialchars(json_encode($movie['id'])) . ')" class="bg-red-500 text-textDark py-1 px-2 border-[1px] border-red-500 rounded hover:bg-red-600 hover:border-red-600">Delete</button>';
-            echo '</div>';
-            echo '</div>';
-            echo '</div>';
         }
 
         echo '</div>'; // End of flex container
