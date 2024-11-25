@@ -8,12 +8,60 @@ class OpeningHourController {
     $this->openingHourService = new OpeningHourService();
   }
 
-  /* Get opening hours by venueId */
-  public function getOpeningHoursById(int $venueId): array {
-    $openingHours = $this->openingHourService->getOpeningHoursById($venueId);
+  /* Get the opening hours */
+  public function getOpeningHours(): array {
+    $openingHours = $this->openingHourService->getOpeningHours();
     if (isset($openingHours['error']) && $openingHours['error']) {
       return ['errorMessage'=> $openingHours['message']];
     }
     return $openingHours;
+  }
+
+  /* Get current opening hours */
+  public function getCurrentOpeningHours(): array {
+    $openingHours = $this->openingHourService->getCurrentOpeningHours();
+    if (isset($openingHours['error']) && $openingHours['error']) {
+      return ['errorMessage'=> $openingHours['message']];
+    }
+    return $openingHours;
+  }
+
+  public function addOpeningHour(array $openingHourData): array {
+    $errors = $this->openingHourService->addOpeningHour($openingHourData);
+
+    // Check if there are any validation errors
+    if (count($errors) == 0) {
+      // Check if there are any errors from adding the opening hour
+      if (isset($errors['error']) && $errors['error']) {
+        return ['errorMessage' => $errors['message']];
+      }
+      return ['success' => true];
+    } else {
+      return $errors;
+    }
+  }
+
+  public function editOpeningHour(array $openingHourData): array {
+    $errors = $this->openingHourService->editOpeningHour($openingHourData);
+
+    // Check if there are any validation errors
+    if (count($errors) == 0) {
+      // Check if there are any errors from editing the opening hour
+      if (isset($errors['error']) && $errors['error']) {
+        return ['errorMessage' => $errors['message']];
+      }
+      return ['success' => true];
+    } else {
+      return $errors;
+    }
+  }
+
+  public function deleteOpeningHour(int $openingHourId): array {
+    $result = $this->openingHourService->deleteOpeningHour($openingHourId);
+
+    if (isset($result['error']) && $result['error']) {
+      return ['errorMessage' => $result['message']];
+    }
+    return ['success' => true];
   }
 }

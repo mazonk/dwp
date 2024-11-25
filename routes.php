@@ -216,9 +216,9 @@ put($baseRoute.'profile/edit', function() {
     }
 });
 
-// Add news put route
+require_once 'src/controller/NewsController.php';
+// Add news post route
 post($baseRoute.'news/add', function() {
-    require_once 'src/controller/NewsController.php';
     $newsController = new NewsController();
 
     if (isset($_POST['action']) && $_POST['action'] === 'addNews') {
@@ -235,10 +235,19 @@ post($baseRoute.'news/add', function() {
             echo json_encode(['success' => true]);
         } else if (isset($result['errorMessage'])) {
             // Return an error response
-            echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
+            echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);
         } else {
-            // Return validation errors
-            echo json_encode(['success' => false, 'errors' => $result]);
+            if (is_array($result)) {
+                // Sanitize the array of errors
+                $sanitizedErrors = array_map(function($error) {
+                    return htmlspecialchars($error);
+                }, $result);
+
+                echo json_encode(['success' => false, 'errors' => $sanitizedErrors]);
+            } else {
+                // Return a single error response
+                echo json_encode(['success' => false, 'errors' => htmlspecialchars($result)]);
+            }
         }
     } else {
         // Invalid action response
@@ -248,7 +257,6 @@ post($baseRoute.'news/add', function() {
 
 // Edit news put route
 put($baseRoute.'news/edit', function() {
-    require_once 'src/controller/NewsController.php';
     $newsController = new NewsController();
     parse_str(file_get_contents("php://input"), $_PUT); // Parse the PUT request
 
@@ -267,10 +275,19 @@ put($baseRoute.'news/edit', function() {
             echo json_encode(['success' => true]);
         } else if (isset($result['errorMessage'])) {
             // Return an error response
-            echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
+            echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);
         } else {
-            // Return validation errors
-            echo json_encode(['success' => false, 'errors' => $result]);
+            if (is_array($result)) {
+                // Sanitize the array of errors
+                $sanitizedErrors = array_map(function($error) {
+                    return htmlspecialchars($error);
+                }, $result);
+
+                echo json_encode(['success' => false, 'errors' => $sanitizedErrors]);
+            } else {
+                // Return a single error response
+                echo json_encode(['success' => false, 'errors' => htmlspecialchars($result)]);
+            }
         }
     } else {
         // Invalid action response
@@ -278,9 +295,8 @@ put($baseRoute.'news/edit', function() {
     }
 });
 
-// Delete news put route
+// Delete news delete route
 delete($baseRoute.'news/delete', function() {
-    require_once 'src/controller/NewsController.php';
     $newsController = new NewsController();
 
     if (isset($_GET['action']) && $_GET['action'] === 'deleteNews') {
@@ -293,8 +309,110 @@ delete($baseRoute.'news/delete', function() {
             echo json_encode(['success' => true]);
         } else {
             // Return an error response
-            echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
+            echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);
         }
+    } else {
+        // Invalid action response
+        echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
+    }
+});
+
+require_once 'src/controller/OpeningHourController.php';
+// Add opening hour post route
+post($baseRoute.'openingHours/add', function() {
+    $openingHourController = new OpeningHourController();
+
+    if (isset($_POST['action']) && $_POST['action'] === 'addOpeningHour') {
+        $openingHourData = [
+            'day' => htmlspecialchars(trim($_POST['day'])),
+            'openingTime' => htmlspecialchars(trim($_POST['openingTime'])),
+            'closingTime' => htmlspecialchars(trim($_POST['closingTime'])),
+            'isCurrent' => htmlspecialchars(trim($_POST['isCurrent']))
+        ];
+
+        $result = $openingHourController->addOpeningHour($openingHourData);
+
+        if (isset($result['success']) && $result['success'] === true) {
+            // Return a success response
+            echo json_encode(['success' => true]);
+        } else if (isset($result['errorMessage'])) {
+            // Return an error response
+            echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);
+        } else {
+            if (is_array($result)) {
+                // Sanitize the array of errors
+                $sanitizedErrors = array_map(function($error) {
+                    return htmlspecialchars($error);
+                }, $result);
+
+                echo json_encode(['success' => false, 'errors' => $sanitizedErrors]);
+            } else {
+                // Return a single error response
+                echo json_encode(['success' => false, 'errors' => htmlspecialchars($result)]);
+            }
+        }
+    } else {
+        // Invalid action response
+        echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
+    }
+});
+
+put($baseRoute.'openingHours/edit', function() {
+    $openingHourController = new OpeningHourController();
+    parse_str(file_get_contents("php://input"), $_PUT); // Parse the PUT request
+
+    if (isset($_PUT['action']) && $_PUT['action'] === 'editOpeningHour') {
+        $openingHourData = [
+            'openingHourId' => htmlspecialchars(trim($_PUT['openingHourId'])),
+            'day' => htmlspecialchars(trim($_PUT['day'])),
+            'openingTime' => htmlspecialchars(trim($_PUT['openingTime'])),
+            'closingTime' => htmlspecialchars(trim($_PUT['closingTime'])),
+            'isCurrent' => htmlspecialchars(trim($_PUT['isCurrent']))
+        ];
+
+        $result = $openingHourController->editOpeningHour($openingHourData);
+
+        if (isset($result['success']) && $result['success'] === true) {
+            // Return a success response
+            echo json_encode(['success' => true]);
+        } else if (isset($result['errorMessage'])) {
+            // Return an error response
+            echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);
+        } else {
+            if (is_array($result)) {
+                // Sanitize the array of errors
+                $sanitizedErrors = array_map(function($error) {
+                    return htmlspecialchars($error);
+                }, $result);
+
+                echo json_encode(['success' => false, 'errors' => $sanitizedErrors]);
+            } else {
+                // Return a single error response
+                echo json_encode(['success' => false, 'errors' => htmlspecialchars($result)]);
+            }
+        }
+    } else {
+        // Invalid action response
+        echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
+    }
+});
+
+// Delete opening hour delete route
+delete($baseRoute.'openingHours/delete', function() {
+    $openingHourController = new OpeningHourController();
+
+    if (isset($_GET['action']) && $_GET['action'] === 'deleteOpeningHour') {
+       $openingHourId = htmlspecialchars(trim($_GET['openingHourId']));
+       
+       $result = $openingHourController->deleteOpeningHour($openingHourId);
+
+       if (isset($result['success']) && $result['success'] === true) {
+           // Return a success response
+           echo json_encode(['success' => true]);
+       } else {
+           // Return an error response
+           echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);
+       }
     } else {
         // Invalid action response
         echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);

@@ -36,7 +36,7 @@ class BookingCard {
                 </div>
                 <div class="flex items-center space-x-2">
                     <i class="ri-money-dollar-circle-line text-primary"></i>
-                    <span><?php echo htmlspecialchars($totalPrice); ?></span>
+                    <span><?php echo htmlspecialchars($totalPrice) . ' $'; ?></span>
                 </div>
             </div>
         </div>

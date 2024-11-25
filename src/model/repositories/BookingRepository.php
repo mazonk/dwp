@@ -32,6 +32,21 @@ class BookingRepository {
         }
     }
 
+    public function getBookingsByUserId(int $userId): array {
+        $db = $this->getdb();
+        try {
+            $stmt = $db->prepare("SELECT * FROM Booking WHERE userId = :userId");
+            $stmt->execute(['userId' => $userId]);
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            if (empty($result)) {
+                throw new Exception("No bookings found.");
+            }
+            return $result;
+        } catch (PDOException $e) {
+            throw new PDOException("Unable to fetch bookings.");
+        }
+    }
+
     public function getAllSeatsForBooking(int $bookingId): array {
         $db = $this->getdb();
         $stmt = $db->prepare("SELECT * FROM Ticket WHERE bookingId = :bookingId");

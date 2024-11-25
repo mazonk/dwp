@@ -21,13 +21,9 @@ class ShowingService {
         $this->venueService = new VenueService();
     }
 
-    public function getShowingById(int $showingId, int $venueId): array|Showing {
+    public function getShowingById(int $showingId): array|Showing {
         try {
             $showingData = $this->showingRepository->getShowingById($showingId);
-            $venue = $this->venueService->getVenueById($venueId);
-            if (is_array($venue) && isset($venue['error']) && $venue['error']) {
-                return $venue; //return the errors if there are any
-            }
             $room = $this->roomService->getRoomById($showingData['roomId']);
             if (is_array($room) && isset($room['error']) && $room['error']) {
                 return $room; //return the errors if there are any
@@ -53,7 +49,7 @@ class ShowingService {
             $result = $this->showingRepository->getShowingsForMovie($movieId, $selectedVenueId);
             $showings = [];
             foreach ($result as $showing) {
-                $result = $this->getShowingById($showing["showingId"], $showing["venueId"]);
+                $result = $this->getShowingById($showing["showingId"]);
                 if (is_array($result) && isset($result['error']) && $result['error']) {
                     continue;
                 } else {

@@ -9,7 +9,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <?php include_once("src/assets/tailwindConfig.php"); ?>
 </head>
-<body class="w-[100%] mx-auto bg-bgDark text-textLight overflow-hidden max-h-screen">
+<body class="w-[100%] mx-auto bg-bgDark text-textLight max-h-screen">
     <div class="flex">
         <!-- Include the Admin Sidebar -->
         <?php include 'src/view/components/AdminSidebar.php'; ?>
