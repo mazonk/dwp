@@ -72,9 +72,10 @@ class MovieRepository {
 
     public function addMovie(array $movieData): void {
         $db = $this->getdb();
-        $query = $db->prepare("INSERT INTO Movie (name, year, rating, imageURL) VALUES (:name, :year, :rating, :imageURL)");
+        $query = $db->prepare("INSERT INTO Movie (title, description, duration, language, releaseDate, posterURL, promoURL, trailerURL, rating) VALUES
+ (:title, :year, :rating, :imageURL)");
         try {
-            $query->execute(array(":name" => $movieData['name'], ":year" => $movie['year'], ":rating" => $movie['rating'], ":imageURL" => $movie['imageURL']));
+            $query->execute(array(":title" => $movieData['title'],":description"=> $movieData['description'], ":duration" => $movieData['duration'], ":language" => $movieData['language'], ":releaseDate" => $movieData['releaseDate'], ":posterURL" => $movieData['posterURL'], ":promoURL" => $movieData['promoURL'], ":trailerURL" => $movieData['trailerURL'], ":rating" => $movieData['rating']));
         } catch (PDOException $e) {
             throw new PDOException("Unable to add movie!");
         }
@@ -82,9 +83,9 @@ class MovieRepository {
 
     public function editMovie(array $movieData): void {
         $db = $this->getdb();
-        $query = $db->prepare("UPDATE Movie SET name = :name, year = :year, rating = :rating, imageURL = :imageURL WHERE movieId = :movieId");
+        $query = $db->prepare("UPDATE Movie SET title = :title, description = :description, duration = :duration, language = :language, releaseDate = :releaseDate, posterURL = :posterURL, promoURL = :promoURL, trailerURL = :trailerURL, rating = :rating WHERE movieId = :movieId");
         try {
-            $query->execute(array(":name" => $movieData['name'], ":year" => $movie['year'], ":rating" => $movie['rating'], ":imageURL" => $movie['imageURL'], ":movieId" => $movie['movieId']));
+            $query->execute(array(":title" => $movieData['title'],":description"=> $movieData['description'], ":duration" => $movieData['duration'], ":language" => $movieData['language'], ":releaseDate" => $movieData['releaseDate'], ":posterURL" => $movieData['posterURL'], ":promoURL" => $movieData['promoURL'], ":trailerURL" => $movieData['trailerURL'], ":rating" => $movieData['rating']));
         } catch (PDOException $e) {
             throw new PDOException("Unable to edit movie!");
         }

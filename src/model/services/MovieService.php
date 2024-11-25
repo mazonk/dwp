@@ -171,8 +171,8 @@ class MovieService {
     if (strlen($movieData['description']) < 25) {
         $errors['description'] = "Description must be at least 25 characters long.";
     }
-    if (strlen($movieData['description']) > 5000) {
-        $errors['description'] = "Description can't be longer than 5000 characters.";
+    if (strlen($movieData['description']) > 1000) {
+        $errors['description'] = "Description can't be longer than 1000 characters.";
     }
 
     // Rating validation
@@ -181,6 +181,5 @@ class MovieService {
         floatval($movieData['rating']) > 10) {
         $errors['rating'] = "Rating must be a number between 0 and 10.";
     }
-
     }
 }
