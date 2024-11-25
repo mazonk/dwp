@@ -30,7 +30,7 @@ class MovieController {
         return $movie;
     }
 
-    public function addMovie(Movie $movie): array {
+    public function addMovie(array $movieData): array {
         $errors = $this->movieService->addMovie($movieData);
         if(count($errors) == 0) {
             // Check if there are any errors from adding the news
@@ -43,7 +43,7 @@ class MovieController {
         }
     }
 
-    public function editMovie(Movie $movie): array {
+    public function editMovie(array $movieData): array {
         $errors = $this->movieService->editMovie($movieData);
         if(count($errors) == 0) {
             // Check if there are any errors from adding the news
