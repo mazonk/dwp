@@ -16,5 +16,13 @@ class BookingController {
         }
         return $bookings;
     }
+
+    public function createBooking(int $userId, string $status) {
+        $insertedBooking = $this->bookingService->createBooking($userId, $status);
+        if (isset($insertedBooking['error']) && $insertedBooking['error']) {
+            return ['errorMessage'=> $insertedBooking['message']];
+        }
+        return $insertedBooking;
+    }
 }
 

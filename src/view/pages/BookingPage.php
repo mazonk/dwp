@@ -3,9 +3,9 @@ require_once 'session_config.php';
 include_once "src/view/components/SeatCard.php";
 require_once 'src/controller/SeatController.php';
 require_once 'src/controller/ShowingController.php';
-include_once "src/model/services/TicketService.php";
-include_once "src/model/services/SeatService.php";
-
+require_once "src/model/services/TicketService.php";
+require_once "src/model/services/SeatService.php";
+require_once "src/model/controller/BookingController.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">
