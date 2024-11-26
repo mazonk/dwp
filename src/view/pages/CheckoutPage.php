@@ -14,7 +14,7 @@ require_once 'session_config.php';
 </head>
 <body class="max-w-[1440px] w-[100%] mx-auto mt-[72px] mb-[2rem] px-[100px] bg-bgDark text-textLight">
   <main class="p-4"> <!-- mt-[56px] needed if there is a navbar -->
-    <form action="checkout.php">
+    <form action="charge">
       <button type="submit" class="py-[.5rem] px-[1rem] bg-bgSemiDark border-[1px] border-borderDark rounded-[10px]">Pay</button>
     </form>
   </main>
