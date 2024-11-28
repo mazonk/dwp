@@ -180,7 +180,7 @@ CREATE TABLE Payment (
     paymentTime TIME NOT NULL,
     totalPrice DECIMAL(8, 2) NOT NULL, -- 8 digits and 2 digits after the decimal point 0.00 - 999999.99
     currency VARCHAR(3) NOT NULL,
-    token VARCHAR(100) NOT NULL,
+    checkoutSessionId VARCHAR(100) NOT NULL,
     status ENUM('pending', 'confirmed', 'cancelled') NOT NULL,
     venueId INT NOT NULL,
     bookingId INT NOT NULL,
