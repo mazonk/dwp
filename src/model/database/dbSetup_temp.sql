@@ -169,6 +169,11 @@ CREATE TABLE Ticket (
     FOREIGN KEY (bookingId) REFERENCES Booking(bookingId)
 );
 
+CREATE TABLE PaymentMethod (
+    methodId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    name VARCHAR(50) NOT NULL
+);
+
 CREATE TABLE Payment (
     paymentId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     paymentDate DATE NOT NULL,
