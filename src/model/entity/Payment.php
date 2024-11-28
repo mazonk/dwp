@@ -4,7 +4,7 @@ include_once "src/model/entity/Address.php";
 include_once "src/model/entity/Booking.php";
 include_once "src/model/entity/PaymentMethod.php";
 
-enum Status: string {
+enum PaymentStatus: string {
   case CONFIRMED = 'confirmed';
   case PENDING = 'pending';
   case CANCELLED = 'cancelled';
@@ -16,19 +16,21 @@ class Payment {
   private DateTime $paymentTime;
   private float $totalPrice;
   private string $currency;
+  private string $paymentMethod;
   private string $checkoutSessionId;
-  private Status $status;
+  private PaymentStatus $paymentStatus;
   private Venue $venue;
   private Booking $booking;
   
-  public function __construct(int $paymentId, DateTime $paymentDate, DateTime $paymentTime, float $totalPrice, string $currency, string $checkoutSessionId, Status $status, Venue $venue, Booking $booking) {
+  public function __construct(int $paymentId, DateTime $paymentDate, DateTime $paymentTime, float $totalPrice, string $currency, string $paymentMethod, string $checkoutSessionId, PaymentStatus $paymentStatus, Venue $venue, Booking $booking) {
     $this->paymentId = $paymentId;
     $this->paymentDate = $paymentDate;
     $this->paymentTime = $paymentTime;
     $this->totalPrice = $totalPrice;
     $this->currency = $currency;
+    $this->paymentMethod = $paymentMethod;
     $this->checkoutSessionId = $checkoutSessionId;
-    $this->status = $status;
+    $this->paymentStatus = $paymentStatus;
     $this->venue = $venue;
     $this->booking = $booking;
   }
@@ -53,12 +55,16 @@ class Payment {
     return $this->currency;
   }
 
+  public function getPaymentMethod(): string {
+    return $this->paymentMethod;
+  }
+  
   public function getCheckoutSessionId(): string {
     return $this->checkoutSessionId;
   }
 
-  public function getStatus(): Status {
-    return $this->status;
+  public function getPaymentStatus(): Status {
+    return $this->paymentStatus;
   }
 
   public function getVenue(): Venue {
@@ -89,12 +95,16 @@ class Payment {
     $this->currency = $currency;
   }
 
+  public function setPaymentMethod(string $paymentMethod): void {
+    $this->paymentMethod = $paymentMethod;
+  }
+
   public function setCheckoutSessionId(string $checkoutSessionId): void {
     $this->checkoutSessionId = $checkoutSessionId;
   }
 
-  public function setStatus(Status $status): void {
-    $this->status = $status;
+  public function setPaymentStatus(PaymentStatus $paymentStatus): void {
+    $this->paymentStatus = $paymentStatus;
   }
 
   public function setVenue(Venue $venue): void {
