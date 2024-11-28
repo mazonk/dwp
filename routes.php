@@ -45,6 +45,10 @@ get($baseRoute.'booking/checkout', 'src/view/pages/CheckoutPage.php');
 // The output -> charge.php (from third-party folder)
 get($baseRoute.'booking/charge', 'third-party/charge.php');
 
+// In the URL -> http://localhost/dwp/booking/checkout_success
+// The output -> CheckoutSuccess.php (from third-party folder)
+get($baseRoute.'booking/checkout_success', 'src/view/pages/CheckoutSuccess.php');
+
 // In the URL -> http://localhost/dwp/login
 // The output -> LoginPage.php (from pages folder)
 get($baseRoute.'login', 'src/view/pages/LoginPage.php');
