@@ -12,8 +12,8 @@ $stripe_secret_key = getenv('STRIPE_SK');
 $checkout_session = \Stripe\Checkout\Session::create([
   "mode" => "payment",
   // TODO: dynamic success and cancel route
-  "success_url" => "http://localhost/dwp?success=true",
-  "cancel_url" => "http://localhost/dwp?success=false",
+  "success_url" => "http://localhost/dwp/booking/checkout_success?session",
+  "cancel_url" => "http://localhost/dwp/booking/checkout",
   // TODO: dynamic items, in this case tickets for the movie
   "line_items" => [
     [
