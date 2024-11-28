@@ -12,33 +12,29 @@ enum Status: string {
 
 class Payment {
   private int $paymentId;
-  private float $totalPrice;
   private DateTime $paymentDate;
   private DateTime $paymentTime;
-  private User $user;
-  private Address $address;
-  private Booking $booking;
-  private PaymentMethod $paymentMethod;
+  private float $totalPrice;
+  private string $currency;
+  private string $checkoutSessionId;
   private Status $status;
-
-  public function __construct(int $paymentId, float $totalPrice, DateTime $paymentDate, DateTime $paymentTime, User $user, Address $address, Booking $booking, PaymentMethod $paymentMethod, Status $status,) {
+  private Venue $venue;
+  private Booking $booking;
+  
+  public function __construct(int $paymentId, DateTime $paymentDate, DateTime $paymentTime, float $totalPrice, string $currency, string $checkoutSessionId, Status $status, Venue $venue, Booking $booking) {
     $this->paymentId = $paymentId;
-    $this->totalPrice = $totalPrice;
     $this->paymentDate = $paymentDate;
     $this->paymentTime = $paymentTime;
-    $this->user = $user;
-    $this->address = $address;
-    $this->booking = $booking;
-    $this->paymentMethod = $paymentMethod;
+    $this->totalPrice = $totalPrice;
+    $this->currency = $currency;
+    $this->checkoutSessionId = $checkoutSessionId;
     $this->status = $status;
+    $this->venue = $venue;
+    $this->booking = $booking;
   }
 
   public function getPaymentId(): int {
     return $this->paymentId;
-  }
-
-  public function getTotalPrice(): float {
-    return $this->totalPrice;
   }
 
   public function getPaymentDate(): DateTime {
@@ -49,32 +45,32 @@ class Payment {
     return $this->paymentTime;
   }
 
-  public function getUser(): User {
-    return $this->user;
+  public function getTotalPrice(): float {
+    return $this->totalPrice;
   }
 
-  public function getAddress(): Address {
-    return $this->address;
+  public function getCurrency(): string {
+    return $this->currency;
   }
 
-  public function getBooking(): Booking {
-    return $this->booking;
-  }
-
-  public function getPaymentMethod(): PaymentMethod {
-    return $this->paymentMethod;
+  public function getCheckoutSessionId(): string {
+    return $this->checkoutSessionId;
   }
 
   public function getStatus(): Status {
     return $this->status;
   }
 
-  public function setPaymentId(int $paymentId): void {
-    $this->paymentId = $paymentId;
+  public function getVenue(): Venue {
+    return $this->venue;
   }
 
-  public function setTotalPrice(float $totalPrice): void {
-    $this->totalPrice = $totalPrice;
+  public function getBooking(): Booking {
+    return $this->booking;
+  }
+
+  public function setPaymentId(int $paymentId): void {
+    $this->paymentId = $paymentId;
   }
 
   public function setPaymentDate(DateTime $paymentDate): void {
@@ -85,24 +81,28 @@ class Payment {
     $this->paymentTime = $paymentTime;
   }
 
-  public function setUser(User $user): void {
-    $this->user = $user;
+  public function setTotalPrice(float $totalPrice): void {
+    $this->totalPrice = $totalPrice;
   }
 
-  public function setAddress(Address $address): void {
-    $this->address = $address;
+  public function setCurrency(string $currency): void {
+    $this->currency = $currency;
   }
 
-  public function setBooking(Booking $booking): void {
-    $this->booking = $booking;
-  }
-
-  public function setPaymentMethod(PaymentMethod $paymentMethod): void {
-    $this->paymentMethod = $paymentMethod;
+  public function setCheckoutSessionId(string $checkoutSessionId): void {
+    $this->checkoutSessionId = $checkoutSessionId;
   }
 
   public function setStatus(Status $status): void {
     $this->status = $status;
+  }
+
+  public function setVenue(Venue $venue): void {
+    $this->venue = $venue;
+  }
+
+  public function setBooking(Booking $booking): void {
+    $this->booking = $booking;
   }
 }
 ?>
