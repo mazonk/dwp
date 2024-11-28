@@ -1,7 +1,6 @@
 <?php
 require_once 'session_config.php';
 
-echo $_GET['session_id'];
 ?>
 
 <!DOCTYPE html>
