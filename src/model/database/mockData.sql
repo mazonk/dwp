@@ -345,8 +345,7 @@ INSERT INTO User (firstName, lastName, DoB, email, passwordHash, roleId) VALUES
 ('Mystique', 'Raven Darkhölme', '1975-11-05', 'mystique@xmen.com', NULL, 2),
 ('Silver', 'Samurai', '1993-05-02', 'silver@samurai.com', NULL, 2),
 ('Deadpool', 'Wade Wilson', '1984-02-25', 'deadpool@xmen.com', NULL, 2),
-('Clark', 'Kent', '1980-02-29', 'clark@dailyplanet.com', '$2a$12$6RivwA1dH6Yh0RpA4tXFuW4GoFdFlFbmkAgPXYi5yTwgM8ZFbvm.a', 3),
-('Admin', 'Admin', '1980-01-01', 'adminadmin@example.com', '$2a$12$yA3fjKkOWv9nZT7u6reRa.WQKYFw6fH5uPtYq4ahmQkdF4JdFkgda', 1);
+('Clark', 'Kent', '1980-02-29', 'clark@dailyplanet.com', '$2a$12$6RivwA1dH6Yh0RpA4tXFuW4GoFdFlFbmkAgPXYi5yTwgM8ZFbvm.a', 3);
 
 INSERT INTO Movie (title, description, duration, language, releaseDate, posterURL, promoURL, trailerURL, rating) VALUES
 ('The Dark Knight', 'Batman faces the Joker in Gotham City.', 152, 'English', '2008-07-18', 'poster_dark_knight.jpg', 'promo_dark_knight.mp4', 'EXeTwQWrcwY', 9.00),
@@ -753,12 +752,12 @@ INSERT INTO Ticket (seatId, ticketTypeId, showingId, bookingId) VALUES
 (2, 2, 2, 2),
 (3, 3, 3, 3);
 
-INSERT INTO PaymentMethod (name) VALUES
+/* INSERT INTO PaymentMethod (name) VALUES
 ('Credit Card'),
 ('PayPal'),
 ('Cash');
 
-INSERT INTO Payment (paymentDate, paymentTime, totalPrice, userId, addressId, bookingId, methodId, status) VALUES
+ INSERT INTO Payment (paymentDate, paymentTime, totalPrice, userId, addressId, bookingId, methodId, status) VALUES
 ('2024-10-15', '18:30:00', 10.00, 1, 1, 1, 1, 'confirmed'),
 ('2024-10-16', '19:45:00', 20.00, 2, 2, 2, 2, 'cancelled'),
 ('2024-10-17', '20:30:00', 8.00, 3, 3, 3, 3, 'confirmed'),
@@ -771,7 +770,7 @@ INSERT INTO Payment (paymentDate, paymentTime, totalPrice, userId, addressId, bo
 ('2024-10-24', '14:30:00', 28.00, 1, 1, 1, 1, 'confirmed'),
 ('2024-10-25', '16:00:00', 18.75, 2, 2, 1, 2, 'confirmed'),
 ('2024-10-26', '19:15:00', 9.99, 3, 3, 2, 3, 'cancelled'),
-('2024-10-27', '21:00:00', 14.99, 1, 1, 3, 1, 'confirmed');
+('2024-10-27', '21:00:00', 14.99, 1, 1, 3, 1, 'confirmed'); */
 
 INSERT INTO News (imageURL, header, content) VALUES
 ('gotham_news.jpg', 'New Batman Movie Showing', 'Join us for the latest Batman movie screening at Gotham Cinema!'),
@@ -1141,7 +1140,6 @@ INSERT INTO VenueShowing (venueId, showingId) VALUES
 (2, 91),  -- Venue ID 2 -> Showing ID 91
 (1, 92),  -- Venue ID 1 -> Showing ID 92
 (2, 93),  -- Venue ID 2 -> Showing ID 93
-
 (1, 94),  -- Venue ID 1 -> Showing ID 94
 (1, 95),  -- Venue ID 1 -> Showing ID 95
 (2, 96),  -- Venue ID 2 -> Showing ID 96
