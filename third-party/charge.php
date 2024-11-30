@@ -6,7 +6,6 @@ require_once 'src/controller/BookingController.php';
 
 // Load environment variables for Stripe API keys
 loadEnv();
-$stripe_public_key = getenv('STRIPE_PK');
 $stripe_secret_key = getenv('STRIPE_SK');
 
 \Stripe\Stripe::setApiKey($stripe_secret_key);
