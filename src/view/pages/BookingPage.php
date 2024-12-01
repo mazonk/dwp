@@ -100,6 +100,9 @@ require_once "src/controller/BookingController.php";
                     clearInterval(interval);
                     alert('Your booking has expired!');
                     localStorage.removeItem('bookingExpiry');
+                    if (isset($_SESSION['activeBooking'])) {
+                        unset($_SESSION['activeBooking']);
+                    }
                     window.location.reload(); // Or redirect to a different page
                 }
             }, 1000);
@@ -145,12 +148,11 @@ require_once "src/controller/BookingController.php";
                                 xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
                                 xhr.onreadystatechange = function() {
                                     if (xhr.readyState === 4 && xhr.status === 200) {
-                                        console.log(xhr.responseText);
                                         try {
                                             const response = JSON.parse(xhr.responseText);
                                             if (response.success) {
-                                                console.log(response);
-                                                alert('Booking created successfully!');
+                                                //booking was created, create ticket:
+                                                
                                             } else {
                                                 alert('Failed to create booking: ' + response.errorMessage);
                                             }

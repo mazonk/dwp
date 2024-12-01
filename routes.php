@@ -266,7 +266,7 @@ post($baseRoute.'booking/create', function() {
 
         if ($result && !is_array($result)) {
             // Return a success response
-            echo json_encode(['success' => $result->getBookingId()]);
+            echo json_encode(['success' => $result]);
         } else {
             // Return an error response
             echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);

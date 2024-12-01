@@ -52,16 +52,12 @@ class BookingService {
         }
     }
 
-    public function createEmptyBooking($userId, string $status): Booking|array {
+    public function createEmptyBooking($userId, string $status): int|array {
         try {
             $user = $userId ? $this->userService->getUserById($userId) : null; //user null if no id was provided (user isnt logged in)
             
             $bookingId = $this->bookingRepository->createBooking($userId, Status::from($status));
-            if (is_array($user) && isset($user['error']) && $user['error']) {
-                return new Booking($bookingId, null, Status::from($status), []);
-            } else {
-                return new Booking($bookingId, $user, Status::from($status), []);
-            }
+            return $bookingId;
         } catch (Exception $e) {
             return ['error' => true, 'message' => $e->getMessage()];
         }
