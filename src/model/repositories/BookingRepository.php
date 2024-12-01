@@ -55,11 +55,11 @@ class BookingRepository {
     //     return $result;
     // }
 
-    public function createBooking(User $user, Status $status): int {
+    public function createBooking($userId, Status $status): int {
         $db = $this->getdb();
         try {
             $stmt = $db->prepare("INSERT INTO Booking (userId, status) VALUES (:userId, :status)");
-            $stmt->execute(['userId' => $user->getId(), 'status' => $status->value]);
+            $stmt->execute(['userId' => $userId, 'status' => $status->value]);
             return $db->lastInsertId();
         } catch (PDOException $e) {
             throw new PDOException("Unable to create booking.");

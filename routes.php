@@ -262,7 +262,7 @@ post($baseRoute.'booking/create', function() {
     $bookingController = new BookingController();
     
     if (isset($_POST['action']) && $_POST['action'] === 'createEmptyBooking') {
-        $result = $bookingController->createEmptyBooking($_SESSION['loggedInUser']['userId'], $_POST['status']);
+        $result = $bookingController->createEmptyBooking(isset($_SESSION['loggedInUser']) ? $_SESSION['loggedInUser']['userId'] : null, $_POST['status']);
 
         if ($result && !is_array($result)) {
             // Return a success response

@@ -18,9 +18,9 @@ class BookingController {
     }
 
 
-    public function createEmptyBooking(int $userId, string $status): Booking|array {
+    public function createEmptyBooking($userId, string $status): Booking|array {
         $insertedBooking = $this->bookingService->createEmptyBooking($userId, $status);
-        if (isset($insertedBooking['error']) && $insertedBooking['error']) {
+        if (is_array($insertedBooking) && isset($insertedBooking['error']) && $insertedBooking['error']) {
             return ['errorMessage'=> $insertedBooking['message']];
         }
         $_SESSION['activeBooking'] = [
