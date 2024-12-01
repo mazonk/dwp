@@ -5,7 +5,7 @@ require_once 'src/controller/SeatController.php';
 require_once 'src/controller/ShowingController.php';
 require_once "src/model/services/TicketService.php";
 require_once "src/model/services/SeatService.php";
-require_once "src/model/controller/BookingController.php";
+require_once "src/controller/BookingController.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,6 +20,7 @@ require_once "src/model/controller/BookingController.php";
 <body class="max-w-[1440px] w-[100%] mx-auto mt-[72px] mb-[2rem] px-[100px] bg-bgDark text-textLight">
     <?php include_once("src/view/components/Navbar.php"); ?>
     <main class="mt-[56px] p-4">
+        <div id="timer" class="text-red-500 text-lg font-bold"></div>
         <?php
         $selectedVenueId = $_SESSION['selectedVenueId']; // Get the selected venue ID
 
@@ -75,6 +76,34 @@ require_once "src/model/controller/BookingController.php";
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            window.addEventListener('beforeunload', (event) => {
+                const confirmationMessage = 'You have an active booking. If you leave or refresh, your seats will be lost.';
+                event.returnValue = confirmationMessage; // For modern browsers
+                return confirmationMessage; // For older browsers
+            });
+
+            const timerDisplay = document.getElementById('timer');
+            let bookingExpiry = localStorage.getItem('bookingExpiry');
+
+            if (!bookingExpiry) {
+                bookingExpiry = Date.now() + 15 * 60 * 1000; // 15 minutes from now
+                localStorage.setItem('bookingExpiry', bookingExpiry);
+            }
+
+            const interval = setInterval(() => {
+                const timeLeft = Math.max(0, bookingExpiry - Date.now());
+                const minutes = Math.floor(timeLeft / 60000);
+                const seconds = Math.floor((timeLeft % 60000) / 1000);
+                timerDisplay.textContent = `Time left: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+                if (timeLeft <= 0) {
+                    clearInterval(interval);
+                    alert('Your booking has expired!');
+                    localStorage.removeItem('bookingExpiry');
+                    window.location.reload(); // Or redirect to a different page
+                }
+            }, 1000);
+
             const seatButtons = document.querySelectorAll('.seat-card');
             const selectedSeatsList = document.getElementById('selected-seats-list');
             let selectedSeats = [];
@@ -109,6 +138,29 @@ require_once "src/model/controller/BookingController.php";
                             }
                             const errorMessage = validateSelect(tempSeats);
 
+                            if (tempSeats.length === 1) {
+                                const xhr = new XMLHttpRequest();
+                                const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
+                                xhr.open('POST', `${baseRoute}booking/create`, true);
+                                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                                xhr.onreadystatechange = function() {
+                                    if (xhr.readyState === 4 && xhr.status === 200) {
+                                        console.log(xhr.responseText);
+                                        try {
+                                            const response = JSON.parse(xhr.responseText);
+                                            if (response.success) {
+                                                console.log(response);
+                                                alert('Booking created successfully!');
+                                            } else {
+                                                alert('Failed to create booking: ' + response.errorMessage);
+                                            }
+                                        } catch (error) {
+                                            alert('An error occurred: ' + error.message);
+                                        }
+                                    }
+                                };
+                                xhr.send(`action=createEmptyBooking&status=pending`);
+                            }
                             if (errorMessage === '') {
                                 // If validation passes, select the seat
                                 selectedSeats.push(seatId);

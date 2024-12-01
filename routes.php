@@ -255,6 +255,25 @@ post($baseRoute.'news/add', function() {
     }
 });
 
+// Post route for booking
+post($baseRoute.'booking/create', function() {
+    require_once 'src/controller/BookingController.php';
+    require_once 'session_config.php';
+    $bookingController = new BookingController();
+    
+    if (isset($_POST['action']) && $_POST['action'] === 'createEmptyBooking') {
+        $result = $bookingController->createEmptyBooking($_SESSION['loggedInUser']['userId'], $_POST['status']);
+
+        if ($result && !is_array($result)) {
+            // Return a success response
+            echo json_encode(['success' => $result->getBookingId()]);
+        } else {
+            // Return an error response
+            echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
+        }
+    }
+});
+
 // Edit news put route
 put($baseRoute.'news/edit', function() {
     $newsController = new NewsController();

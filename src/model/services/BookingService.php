@@ -52,7 +52,7 @@ class BookingService {
         }
     }
 
-    public function createBooking(int $userId, string $status): Booking|array {
+    public function createEmptyBooking(int $userId, string $status): Booking|array {
         try {
             $user = $this->userService->getUserById($userId);
             if (is_array($user) && isset($user['error']) && $user['error']) {

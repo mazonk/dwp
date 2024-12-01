@@ -17,14 +17,15 @@ class BookingController {
         return $bookings;
     }
 
-    public function createBooking(int $userId, string $status): Booking|array {
-        $insertedBooking = $this->bookingService->createBooking($userId, $status);
+
+    public function createEmptyBooking(int $userId, string $status): Booking|array {
+        $insertedBooking = $this->bookingService->createEmptyBooking($userId, $status);
         if (isset($insertedBooking['error']) && $insertedBooking['error']) {
             return ['errorMessage'=> $insertedBooking['message']];
         }
         $_SESSION['activeBooking'] = [
             'id' => $insertedBooking,
-            'expiry' => time() + 15 * 60 // 15 minutes from now
+            'expiry' => time() + 15 * 60 // 15 minutes
         ];
         return $insertedBooking;
     }
