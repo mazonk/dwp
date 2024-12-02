@@ -5,7 +5,7 @@ include_once "src/model/entity/Booking.php";
 include_once "src/model/entity/PaymentMethod.php";
 
 enum PaymentStatus: string {
-  case COMPLETED = 'completed';
+  case CONFIRMED = 'confirmed';
   case PENDING = 'pending';
   case FAILED = 'failed';
 }

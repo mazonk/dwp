@@ -3,7 +3,7 @@
 enum Status: string {
     case CONFIRMED = 'confirmed';
     case PENDING = 'pending';
-    case CANCELLED = 'cancelled';
+    case FAILED = 'failed';
 }
 
 class Booking {
