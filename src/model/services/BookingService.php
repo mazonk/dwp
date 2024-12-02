@@ -62,4 +62,12 @@ class BookingService {
             return ['error' => true, 'message' => $e->getMessage()];
         }
     }
+
+    public function rollBackBooking(int $bookingId): bool {
+        try {
+            return $this->bookingRepository->rollBackBooking($bookingId);
+        } catch (Exception $e) {
+            return false;
+        }
+    }
 }

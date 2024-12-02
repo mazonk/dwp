@@ -65,4 +65,14 @@ class BookingRepository {
             throw new PDOException("Unable to create booking.");
         }
     }
+
+    public function rollBackBooking($bookingId){
+        $db = $this->getdb();
+        try {
+            $stmt = $db->prepare("UPDATE Booking SET status = 'cancelled' WHERE bookingId = :bookingId");
+            return $stmt->execute(['bookingId' => $bookingId]);
+        } catch (PDOException $e) {
+            throw new PDOException("Unable to rollback booking.");
+        }
+    }
 }

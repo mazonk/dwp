@@ -22,10 +22,16 @@ require_once "src/controller/BookingController.php";
     <main class="mt-[56px] p-4">
         <div id="timer" class="text-red-500 text-lg font-bold"></div>
         <?php
-        $selectedVenueId = $_SESSION['selectedVenueId']; // Get the selected venue ID
+        //remove booking if the timer expired
         if (isset($_SESSION['activeBooking']) && ($_SESSION['activeBooking']['expiry'] / 1000 - 1) < time()) {
-            unset($_SESSION['activeBooking']);
+            $bookingController = new BookingController();
+            $wasRolledBack = $bookingController->rollBackBooking($_SESSION['activeBooking']['id']);
+            if (!$wasRolledBack) {
+                die();
+            }
         }
+
+        $selectedVenueId = $_SESSION['selectedVenueId']; // Get the selected venue ID
 
         $selectedShowingId = isset($_GET['showing']) ? $_GET['showing'] : null;
         $showingController = new ShowingController();

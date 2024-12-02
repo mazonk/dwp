@@ -33,5 +33,11 @@ class BookingController {
             return $_SESSION['activeBooking']['id'];
         }
     }
+
+    public function rollBackBooking($bookingId): bool {
+        $wasRolledBack = $this->bookingService->rollBackBooking($bookingId);
+        unset($_SESSION['activeBooking']);
+        return $wasRolledBack;
+    }
 }
 
