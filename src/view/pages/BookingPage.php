@@ -23,6 +23,9 @@ require_once "src/controller/BookingController.php";
         <div id="timer" class="text-red-500 text-lg font-bold"></div>
         <?php
         $selectedVenueId = $_SESSION['selectedVenueId']; // Get the selected venue ID
+        if (isset($_SESSION['activeBooking']) && ($_SESSION['activeBooking']['expiry'] / 1000 - 1) < time()) {
+            unset($_SESSION['activeBooking']);
+        }
 
         $selectedShowingId = isset($_GET['showing']) ? $_GET['showing'] : null;
         $showingController = new ShowingController();
@@ -76,12 +79,6 @@ require_once "src/controller/BookingController.php";
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            window.addEventListener('beforeunload', (event) => {
-                const confirmationMessage = 'You have an active booking. If you leave or refresh, your seats will be lost.';
-                event.returnValue = confirmationMessage; // For modern browsers
-                return confirmationMessage; // For older browsers
-            });
-
             const timerDisplay = document.getElementById('timer');
             let bookingExpiry = localStorage.getItem('bookingExpiry');
 
@@ -100,10 +97,7 @@ require_once "src/controller/BookingController.php";
                     clearInterval(interval);
                     alert('Your booking has expired!');
                     localStorage.removeItem('bookingExpiry');
-                    if (isset($_SESSION['activeBooking'])) {
-                        unset($_SESSION['activeBooking']);
-                    }
-                    window.location.reload(); // Or redirect to a different page
+                    window.location.reload(true); // Or redirect to a different page
                 }
             }, 1000);
 
@@ -150,9 +144,27 @@ require_once "src/controller/BookingController.php";
                                     if (xhr.readyState === 4 && xhr.status === 200) {
                                         try {
                                             const response = JSON.parse(xhr.responseText);
+                                            console.log(response);
                                             if (response.success) {
-                                                //booking was created, create ticket:
-                                                
+                                                xhr.open('POST', `${baseRoute}ticket/create`, true);
+                                                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                                                xhr.onreadystatechange = function() {
+                                                    if (xhr.readyState === 4 && xhr.status === 200) {
+                                                        try {
+                                                            const response = JSON.parse(xhr.responseText);
+                                                            console.log(response);
+                                                            if (response.success) {
+                                                                alert('Success! Booking created successfully.');
+                                                                window.location.reload();
+                                                            } else {
+                                                                alert('Failed to create booking: ' + response.errorMessage);
+                                                            }
+                                                        } catch (error) {
+                                                            alert('An error occurred: ' + error.message);
+                                                        }
+                                                    }
+                                                };
+                                                xhr.send(`action=createTicket&bookingId=${response.success}`);
                                             } else {
                                                 alert('Failed to create booking: ' + response.errorMessage);
                                             }
@@ -161,7 +173,7 @@ require_once "src/controller/BookingController.php";
                                         }
                                     }
                                 };
-                                xhr.send(`action=createEmptyBooking&status=pending`);
+                                xhr.send(`action=createEmptyBooking&status=pending&expiry=${localStorage.getItem('bookingExpiry')}`);
                             }
                             if (errorMessage === '') {
                                 // If validation passes, select the seat
