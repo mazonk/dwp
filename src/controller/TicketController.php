@@ -1,18 +1,20 @@
 <?php
-include_once "src/model/repositories/TicketRepository.php";
-include_once "src/model/repositories/SeatRepository.php";
-include_once "src/model/services/TicketService.php";
-include_once "src/model/entity/Seat.php";
-include_once "src/model/entity/Ticket.php";
-include_once "src/model/entity/TicketType.php";
+require_once "src/model/services/TicketService.php";
 
 class TicketController {
     private TicketService $ticketService;
-    private TicketRepository $ticketRepository;
 
     public function __construct() {
         $this->ticketService = new TicketService();
-        $this->ticketRepository = new TicketRepository();
+    }
+
+    public function createTicket(int $seatId, int $ticketTypeId, int $showingId): int|array {
+        $insertedTicketId = $this->ticketService->createTicket($seatId, $ticketTypeId, $showingId);
+        if (is_array($insertedTicketId) && isset($insertedTicketId["error"]) && $insertedTicketId["error"]) {
+            return ["errorMessage" => $insertedTicketId["message"]];
+        }
+        $_SESSION['activeBooking']['ticketIds'] += $insertedTicketId.', ';
+        return $insertedTicketId;
     }
 
     // public function getAllTicketsForShowing(int $showingId, int $venueId): array {

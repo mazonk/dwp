@@ -56,7 +56,7 @@ class BookingService {
         try {
             $user = $userId ? $this->userService->getUserById($userId) : null; //user null if no id was provided (user isnt logged in)
             
-            $bookingId = $this->bookingRepository->createBooking($userId, Status::from($status));
+            $bookingId = $this->bookingRepository->createBooking($user, Status::from($status));
             return $bookingId;
         } catch (Exception $e) {
             return ['error' => true, 'message' => $e->getMessage()];
