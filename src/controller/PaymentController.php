@@ -16,4 +16,13 @@ class PaymentController {
     }
     return ['success' => true];
   }
+
+  public function updatePaymentStatus(int $paymentId, int $bookingId, string $paymentStatus): array {
+    $payment = $this->paymentService->updatePaymentStatus($paymentId, $bookingId, $paymentStatus);
+
+    if (isset($payment['error']) && $payment['error']) {
+      return ['errorMessage' => $payment['message']];
+    }
+    return ['success' => true];
+  }
 }

@@ -2,17 +2,21 @@
 include_once "src/model/entity/Payment.php";
 include_once "src/model/repositories/PaymentRepository.php";
 include_once "src/model/services/BookingService.php";
-include_once "src/model/services/VenueService.php";
 
 class PaymentService {
+  private PDO $db;
   private PaymentRepository $paymentRepository;
   private BookingService $bookingService;
-  private VenueService $venueService;
 
   public function __construct() {
-    $this->paymentRepository = new PaymentRepository();
+    $this->db = $this->getdb();
+    $this->paymentRepository = new PaymentRepository($this->db);
     $this->bookingService = new BookingService();
-    $this->venueService = new VenueService();
+  }
+
+  private function getdb() {
+    require_once 'src/model/database/dbcon/DatabaseConnection.php';
+    return DatabaseConnection::getInstance();
   }
 
   public function addPayment(array $paymentData): array {
@@ -24,4 +28,20 @@ class PaymentService {
       return ["error" => true, "message" => $e->getMessage()];
     }
   }
+
+  public function updatePaymentStatus(int $paymentId, int $bookingId, string $paymentStatus): array {
+    $this->db->beginTransaction();
+    try {
+      $this->paymentRepository->updatePaymentStatus($paymentId, $paymentStatus);
+      $this->bookingService->updateBookingStatus($bookingId, $paymentStatus);
+
+      $this->db->commit();
+      return ['success' => true];
+    } catch (Exception $e) {
+      $this->db->rollBack();
+      return ["error" => true, "message" => $e->getMessage()];
+    }
+  }
+
+  
 }

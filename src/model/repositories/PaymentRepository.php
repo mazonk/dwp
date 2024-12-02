@@ -1,13 +1,13 @@
 <?php
 class PaymentRepository {
-  private function getdb(): PDO {
-    require_once 'src/model/database/dbcon/DatabaseConnection.php';
-    return DatabaseConnection::getInstance();
+  private PDO $db;
+
+  public function __construct($dbCon) {
+    $this->db = $dbCon;
   }
 
   public function addPayment(array $paymentData): void {
-    $db = $this->getdb();
-    $query = $db->prepare('INSERT INTO payment (paymentDate, paymentTime, totalPrice, currency, paymentMethod, checkoutSessionId, paymentStatus, venueId, bookingId) VALUES (:paymentDate, :paymentTime, :totalPrice, :currency, :paymentMethod, :checkoutSessionId, :paymentStatus, :venueId, :bookingId)');
+    $query = $this->db->prepare('INSERT INTO payment (paymentDate, paymentTime, totalPrice, currency, paymentMethod, checkoutSessionId, paymentStatus, venueId, bookingId) VALUES (:paymentDate, :paymentTime, :totalPrice, :currency, :paymentMethod, :checkoutSessionId, :paymentStatus, :venueId, :bookingId)');
 
     try {
       $query->execute(array(
@@ -23,6 +23,19 @@ class PaymentRepository {
       ));
     } catch (PDOException $e) {
       throw new PDOException('Failed to add payment.');
+    }
+  }
+
+  public function updatePaymentStatus(int $paymentId, string $paymentStatus): void {
+    $query = $this->db->prepare("UPDATE Payment SET paymentStatus = :paymentStatus WHERE paymentId = :paymentId");
+
+    try {
+      $query->execute(array(
+        'paymentId' => $paymentId,
+        'paymentStatus' => $paymentStatus
+      ));
+    } catch (PDOException $e) {
+      throw new PDOException('Failed to update payment status.');
     }
   }
 }
