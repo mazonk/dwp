@@ -1,6 +1,7 @@
 <?php
 require_once 'third-party/stripe-php/init.php';
 require_once 'src/controller/PaymentController.php';
+require_once 'src/controller/InvoiceController.php';
 require_once 'loadEnv.php';
 
 // Load environment variables for Stripe API keys
@@ -37,10 +38,10 @@ switch ($event->type) {
     $eventData = $event->data->object;
     // Update payment status to confirmed, and send invoice
     $paymentIds = $paymentController->getIdsByCheckoutSessionId($eventData->id);
-    $paymentController->updatePaymentStatus($paymentIds['paymentId'], $paymentIds['bookingId'], 'confirmed');
+    $paymentController->updatePaymentStatus($paymentIds['paymentId'], $paymentIds['bookingId'], 'confirmed'); 
 
-    // TODO: Implement the following functions
-    // sendInvoice($eventData);
+    $invoiceController = new InvoiceController();
+    $invoiceController->sendInvoice($eventData); // TODO: Sanitizing, validation, and error handling, and also the actual invoice data
     break;
 
   case: 'payment_intent.payment_failed':
