@@ -745,7 +745,7 @@ INSERT INTO TicketType (name, price, description) VALUES
 INSERT INTO Booking (userId, status) VALUES
 (1, 'confirmed'),
 (1, 'pending'),
-(1, 'cancelled');
+(1, 'failed');
 
 INSERT INTO Ticket (seatId, ticketTypeId, showingId, bookingId) VALUES
 (1, 1, 1, 1),

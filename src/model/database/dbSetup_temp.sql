@@ -153,7 +153,7 @@ CREATE TABLE TicketType (
 CREATE TABLE Booking (
     bookingId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     userId INT NOT NULL,
-    status ENUM('pending', 'confirmed', 'cancelled') NOT NULL, -- enum?
+    status ENUM('pending', 'confirmed', 'failed') NOT NULL, -- enum?
     FOREIGN KEY (userId) REFERENCES User(userId)
 );
 
@@ -182,7 +182,7 @@ CREATE TABLE Payment (
     currency VARCHAR(3) NOT NULL,
     paymentMethod VARCHAR(50) NOT NULL,
     checkoutSessionId VARCHAR(100) NOT NULL,
-    paymentStatus ENUM('pending', 'confirmed', 'cancelled') NOT NULL,
+    paymentStatus ENUM('pending', 'confirmed', 'failed') NOT NULL,
     venueId INT NOT NULL,
     bookingId INT NOT NULL,
     FOREIGN KEY (venueId) REFERENCES Venue(venueId),
