@@ -54,4 +54,18 @@ class BookingRepository {
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
+
+    public function updateBookingStatus(int $bookingId, string $status): void {
+        $db = $this->getdb();
+        $query = $db->prepare("UPDATE Booking SET status = :status WHERE bookingId = :bookingId");
+        
+        try {
+            $query->execute(array(
+                'bookingId' => $bookingId,
+                'status' => $status
+            ));
+        } catch (PDOException $e) {
+            throw new PDOException('Failed to update booking status.');
+        }
+    }
 }
