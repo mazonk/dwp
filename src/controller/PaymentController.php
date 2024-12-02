@@ -8,6 +8,15 @@ class PaymentController {
     $this->paymentService = new PaymentService();
   }
 
+  public function getIdsByCheckoutSessionId(string $checkoutSessionId): array {
+    $paymentIds = $this->paymentService->getIdsByCheckoutSessionId($checkoutSessionId);
+
+    if (isset($paymentIds['error']) && $paymentIds['error']) {
+      return ['errorMessage' => $paymentIds['message']];
+    }
+    return $paymentIds;
+  }
+
   public function addPayment(array $paymentData): array {
     $payment = $this->paymentService->addPayment($paymentData);
 

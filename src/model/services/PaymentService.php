@@ -12,6 +12,14 @@ class PaymentService {
     $this->bookingService = new BookingService();
   }
 
+  public function getIdsByCheckoutSessionId(string $checkoutSessionId): array {
+    try {
+      return $this->paymentRepository->getIdsByCheckoutSessionId($checkoutSessionId);
+    } catch (Exception $e) {
+      return ["error" => true, "message" => $e->getMessage()];
+    }
+  }
+
   public function addPayment(array $paymentData): array {
     try {
       $this->paymentRepository->addPayment($paymentData);

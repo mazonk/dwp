@@ -6,6 +6,23 @@ class PaymentRepository {
     return DatabaseConnection::getInstance();
   }
 
+  public function getIdsByCheckoutSessionId(string $checkoutSessionId): array {
+    $db = $this->getdb();
+    $query = $db->prepare('SELECT paymentId, venueId, bookingId FROM payment WHERE checkoutSessionId = :checkoutSessionId');
+
+    try {
+      $query->execute(array('checkoutSessionId' => $checkoutSessionId));
+      $result = $query->fetch(PDO::FETCH_ASSOC);
+
+      if (empty($result)) {
+        throw new Exception('No payment found by checkout session ID.');
+      }
+      return $result;
+    } catch (PDOException $e) {
+      throw new PDOException('Failed to get payment by checkout session ID.');
+    }
+  }
+
   public function addPayment(array $paymentData): void {
     $db = $this->getdb();
     $query = $db->prepare('INSERT INTO payment (paymentDate, paymentTime, totalPrice, currency, paymentMethod, checkoutSessionId, paymentStatus, venueId, bookingId) VALUES (:paymentDate, :paymentTime, :totalPrice, :currency, :paymentMethod, :checkoutSessionId, :paymentStatus, :venueId, :bookingId)');
