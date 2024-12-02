@@ -18,7 +18,7 @@ class BookingController {
     }
 
 
-    public function createEmptyBooking($userId, string $status): int|array {
+    public function createEmptyBooking($userId, string $status, string $expiry): int|array {
         if (!isset($_SESSION['activeBooking'])) {
             $insertedBooking = $this->bookingService->createEmptyBooking($userId, $status);
             if (is_array($insertedBooking) && isset($insertedBooking['error']) && $insertedBooking['error']) {
@@ -26,7 +26,7 @@ class BookingController {
             }
             $_SESSION['activeBooking'] = [
                 'id' => $insertedBooking,
-                'expiry' => time() + 15 * 60 // 15 minutes
+                'expiry' => $expiry
             ];
             return $insertedBooking;
         } else {

@@ -90,10 +90,10 @@ class TicketService {
         }
     }
 
-    public function createTicket(int $seatId, int $ticketTypeId, int $showingId): int|array {
+    public function createTicket(int $seatId, int $ticketTypeId, int $showingId, int $bookingId): int|array {
         try {
-            $result = $this->ticketRepository->createTicket($seatId, $ticketTypeId, $showingId);
-            return $result;
+            $insertedId = $this->ticketRepository->createTicket($seatId, $ticketTypeId, $showingId, $bookingId);
+            return $insertedId;
         } catch (Exception $e) {
             return ['error' => true, 'message' => $e->getMessage()];
         }

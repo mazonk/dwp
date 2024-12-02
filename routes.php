@@ -262,7 +262,7 @@ post($baseRoute.'booking/create', function() {
     $bookingController = new BookingController();
     
     if (isset($_POST['action']) && $_POST['action'] === 'createEmptyBooking') {
-        $result = $bookingController->createEmptyBooking(isset($_SESSION['loggedInUser']) ? $_SESSION['loggedInUser']['userId'] : null, $_POST['status']);
+        $result = $bookingController->createEmptyBooking(isset($_SESSION['loggedInUser']) ? $_SESSION['loggedInUser']['userId'] : null, htmlspecialchars($_POST['status']), htmlspecialchars($_POST['expiry']));
 
         if ($result && !is_array($result)) {
             // Return a success response
@@ -272,6 +272,15 @@ post($baseRoute.'booking/create', function() {
             echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
         }
     }
+});
+
+// Post route for creating tickets
+post($baseRoute.'ticket/create', function() {
+    require_once 'src/controller/TicketController.php';
+    require_once 'session_config.php';
+    $ticketController = new TicketController();
+
+    
 });
 
 // Edit news put route

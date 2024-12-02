@@ -71,18 +71,34 @@ public function getAllTicketTypes(): array {
     }
 }
 
-public function getTicketById(int $ticketId): array {
-    $pdo = $this->getdb();
-    $statement = $pdo->prepare("SELECT * FROM tickets WHERE ticketId = :ticketId");
+// public function getTicketById(int $ticketId): array {
+//     $pdo = $this->getdb();
+//     $statement = $pdo->prepare("SELECT * FROM tickets WHERE ticketId = :ticketId");
+//     try {
+//         $statement->execute([':ticketId' => $ticketId]);
+//         $result = $statement->fetch(PDO::FETCH_ASSOC);
+//         if (empty($result)) {
+//             throw new Exception("No ticket found.");
+//         }
+//         return $result;
+//     } catch (PDOException $e) {
+//         throw new PDOException("Unable to fetch ticket.");
+//     }
+// }
+
+public function createTicket(int $seatId, int $ticketTypeId, int $showingId, int $bookingId): int {
+    $db = $this->getdb();
+    $statement = $db->prepare("INSERT INTO Ticket (seatId, ticketTypeId, showingId, bookingId) VALUES (:seatId, :ticketTypeId, :showingId, :bookingId)");
     try {
-        $statement->execute([':ticketId' => $ticketId]);
-        $result = $statement->fetch(PDO::FETCH_ASSOC);
-        if (empty($result)) {
-            throw new Exception("No ticket found.");
-        }
-        return $result;
+        $statement->execute([
+            ':seatId' => $seatId,
+            ':ticketTypeId' => $ticketTypeId,
+            ':showingId' => $showingId,
+            ':bookingId' => $bookingId
+        ]);
+        return (int)$db->lastInsertId();
     } catch (PDOException $e) {
-        throw new PDOException("Unable to fetch ticket.");
+        throw new PDOException("Unable to create ticket: ". $e->getMessage());
     }
 }
 }

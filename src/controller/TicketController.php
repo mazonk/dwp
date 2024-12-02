@@ -9,7 +9,7 @@ class TicketController {
     }
 
     public function createTicket(int $seatId, int $ticketTypeId, int $showingId): int|array {
-        $insertedTicketId = $this->ticketService->createTicket($seatId, $ticketTypeId, $showingId);
+        $insertedTicketId = $this->ticketService->createTicket($seatId, $ticketTypeId, $showingId, $_SESSION['activeBooking']['id']);
         if (is_array($insertedTicketId) && isset($insertedTicketId["error"]) && $insertedTicketId["error"]) {
             return ["errorMessage" => $insertedTicketId["message"]];
         }
