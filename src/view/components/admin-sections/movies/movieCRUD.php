@@ -330,7 +330,6 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
         const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
         xhr.open('PUT', `${baseRoute}movies/edit`, true);
 
-        console.log(editMovieIdInput.value);
         const editMovieData = {
             action: 'editMovie',
             title: editTitleInput.value,
@@ -506,3 +505,4 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
     }
 });
 </script>
+
