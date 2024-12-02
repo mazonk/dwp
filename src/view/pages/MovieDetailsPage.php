@@ -79,7 +79,7 @@ if (is_array($movie) && isset($movie['errorMessage'])) {
         <span class="font-bold">Release Date: </span> <?php echo $movie->getReleaseDate()->format('d-m-Y'); ?>
       </div>
       <div class="movie-info mb-2">
-        <span class="font-bold">Rating: </span> <?php echo $movie->getRating(); ?>
+        <span class="font-bold">Rating: </span> <?php echo $movie->getRating() . ' / 10';?> ⭐
       </div>
       <div>
                 <span class="font-bold">Actors: </span><?php

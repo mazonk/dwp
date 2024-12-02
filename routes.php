@@ -421,6 +421,7 @@ delete($baseRoute.'openingHours/delete', function() {
 
 // Update movie route
 put($baseRoute . 'movies/edit', function() {
+    require_once 'src/controller/MovieController.php';
     $movieController = new MovieController();
     parse_str(file_get_contents("php://input"), $_PUT); // Parse the PUT request
 
@@ -428,13 +429,14 @@ put($baseRoute . 'movies/edit', function() {
         $movieData = [
             'title' => htmlspecialchars(trim($_PUT['title'])),
             'releaseDate' => htmlspecialchars(trim($_PUT['releaseDate'])),
-            'duration' => htmlspecialchars(trim($_PUT['duration'])),
+            'duration' => htmlspecialchars($_PUT['duration']),
             'language' => htmlspecialchars(trim($_PUT['language'])),
             'description' => htmlspecialchars(trim($_PUT['description'])),
             'posterURL' => htmlspecialchars(trim($_PUT['posterURL'])),
             'promoURL' => htmlspecialchars(trim($_PUT['promoURL'])),
             'trailerURL' => htmlspecialchars(trim($_PUT['trailerURL'])),
-            'rating' => htmlspecialchars(trim($_PUT['rating']))
+            'rating' => htmlspecialchars($_PUT['rating']),
+            'movieId' => htmlspecialchars($_PUT['movieId'])
         ];
 
         $result = $movieController->editMovie($movieData);

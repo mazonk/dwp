@@ -68,19 +68,19 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
                     <!-- Poster URL Field -->
                     <div class="mb-4">
                         <label for="addPosterURLInput" class="block text-sm font-medium text-textLight">Poster URL</label>
-                        <input type="url" id="addPosterURLInput" name="posterURL" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">
+                        <input type="text" id="addPosterURLInput" name="posterURL" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">
                     </div>
 
                     <!-- Promo URL Field -->
                     <div class="mb-4">
                         <label for="addPromoURLInput" class="block text-sm font-medium text-textLight">Promo URL</label>
-                        <input type="url" id="addPromoURLInput" name="promoURL" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">
+                        <input type="text" id="addPromoURLInput" name="promoURL" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">
                     </div>
 
                     <!-- Trailer URL Field -->
                     <div class="mb-4">
                         <label for="addTrailerURLInput" class="block text-sm font-medium text-textLight">Trailer URL</label>
-                        <input type="url" id="addTrailerURLInput" name="trailerURL" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">
+                        <input type="text" id="addTrailerURLInput" name="trailerURL" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">
                     </div>
 
                     <!-- Rating Field -->
@@ -104,6 +104,7 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
             <div class="bg-bgSemiDark w-[600px] rounded-lg p-6 border-[1px] border-borderDark">
                 <h2 class="text-[1.5rem] text-center font-semibold mb-4">Edit Movie</h2>
                 <form id="editMovieForm" class="text-textLight">
+                    <input type="hidden" id="editMovieIdInput" name="id">
                     <div class="mb-4">
                     <!-- Title Field -->
                         <label for="editTitleInput" class="block text-sm font-medium text-textLight">Title</label>
@@ -136,26 +137,26 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
 
                     <!-- Poster URL Field -->
                     <div class="mb-4">
-                        <label for="editPosterURLInput" class="block text-sm font-medium text-textLight">Poster URL</label>
-                        <input type="url" id="editPosterURLInput" name="posterURL" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">
+                        <label for="editPosterUrlInput" class="block text-sm font-medium text-textLight">Poster URL</label>
+                        <input type="text" id="editPosterUrlInput" name="posterURL" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">
                     </div>
 
                     <!-- Promo URL Field -->
                     <div class="mb-4">
-                        <label for="editPromoURLInput" class="block text-sm font-medium text-textLight">Promo URL</label>
-                        <input type="url" id="editPromoURLInput" name="promoURL" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">
+                        <label for="editPromoUrlInput" class="block text-sm font-medium text-textLight">Promo URL</label>
+                        <input type="text" id="editPromoUrlInput" name="promoURL" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">
                     </div>
 
                     <!-- Trailer URL Field -->
                     <div class="mb-4">
-                        <label for="editTrailerURLInput" class="block text-sm font-medium text-textLight">Trailer URL</label>
-                        <input type="url" id="editTrailerURLInput" name="trailerURL" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">
+                        <label for="editTrailerUrlInput" class="block text-sm font-medium text-textLight">Trailer URL</label>
+                        <input type="text" id="editTrailerUrlInput" name="trailerURL" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">
                     </div>
 
                     <!-- Rating Field -->
                     <div class="mb-4">
                         <label for="editRatingInput" class="block text-sm font-medium text-textLight">Rating</label>
-                        <input type="number" step="0.1" max="10" min="0" id="editRatingInput" name="rating" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">
+                        <input type="number" step="0.01" max="10" min="0" id="editRatingInput" name="rating" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">
                     </div>
 
                     <!-- Submit and Cancel Buttons -->
@@ -281,6 +282,7 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
     });
 
     /*== Edit Movie ==*/
+    const editMovieIdInput = document.getElementById('editMovieIdInput');
     const editMovieModal = document.getElementById('editMovieModal');
     const editMovieForm = document.getElementById('editMovieForm');
     const editMovieButton = document.getElementById('editMovieButton');
@@ -290,22 +292,30 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
     const editLanguageInput = document.getElementById('editLanguageInput');
     const editReleaseDateInput = document.getElementById('editReleaseDateInput');
     const editPosterUrlInput = document.getElementById('editPosterUrlInput');
+    const editPromoUrlInput = document.getElementById('editPromoUrlInput');
     const editTrailerUrlInput = document.getElementById('editTrailerUrlInput');
     const editRatingInput = document.getElementById('editRatingInput');
     const errorEditMovieMessageGeneral = document.getElementById('error-edit-movie-general');
 
-    window.openEditMovieModal = function(title, description, duration, language, releaseDate, posterUrl, trailerUrl, rating) {
+    window.openEditMovieModal = function(title, description, duration, language, releaseDate, posterUrl, promoURL, trailerUrl, rating, id) {
         editTitleInput.value = title;
         editDescriptionInput.value = description;
         editDurationInput.value = duration;
-        editLanguageInput.value = language;
+        editLanguageInput.value = language;        
         editReleaseDateInput.value = releaseDate;
         editPosterUrlInput.value = posterUrl;
         editPromoUrlInput.value = promoURL;
         editTrailerUrlInput.value = trailerUrl;
         editRatingInput.value = rating;
+        editMovieIdInput.value = id;
+
         editMovieModal.classList.remove('hidden');
     };
+
+    editMovieButton.addEventListener('click', () => {
+        editMovieButton.classList.remove('hidden');
+        
+    });
 
     // Close the Edit modal
     document.getElementById('cancelEditMovieButton').addEventListener('click', () => {
@@ -320,6 +330,7 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
         const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
         xhr.open('PUT', `${baseRoute}movies/edit`, true);
 
+        console.log(editMovieIdInput.value);
         const editMovieData = {
             action: 'editMovie',
             title: editTitleInput.value,
@@ -327,10 +338,11 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
             duration: editDurationInput.value,
             language: editLanguageInput.value,
             releaseDate: editReleaseDateInput.value,
-            posterUrl: editPosterUrlInput.value,
+            posterURL: editPosterUrlInput.value,
             promoURL: editPromoUrlInput.value,
-            trailerUrl: editTrailerUrlInput.value,
-            rating: editRatingInput.value
+            trailerURL: editTrailerUrlInput.value,
+            rating: editRatingInput.value,
+            movieId: editMovieIdInput.value
         };
 
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -339,6 +351,7 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
             if (xhr.readyState === 4 && xhr.status === 200) {
                 let response;
                 try {
+                    console.log(xhr.response);
                     response = JSON.parse(xhr.response);
                 } catch (e) {
                     console.error('Could not parse response as JSON:', e);
