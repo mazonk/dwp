@@ -4,19 +4,12 @@ include_once "src/model/repositories/PaymentRepository.php";
 include_once "src/model/services/BookingService.php";
 
 class PaymentService {
-  private PDO $db;
   private PaymentRepository $paymentRepository;
   private BookingService $bookingService;
 
   public function __construct() {
-    $this->db = $this->getdb();
-    $this->paymentRepository = new PaymentRepository($this->db);
+    $this->paymentRepository = new PaymentRepository();
     $this->bookingService = new BookingService();
-  }
-
-  private function getdb() {
-    require_once 'src/model/database/dbcon/DatabaseConnection.php';
-    return DatabaseConnection::getInstance();
   }
 
   public function addPayment(array $paymentData): array {
@@ -30,15 +23,12 @@ class PaymentService {
   }
 
   public function updatePaymentStatus(int $paymentId, int $bookingId, string $paymentStatus): array {
-    $this->db->beginTransaction();
     try {
       $this->paymentRepository->updatePaymentStatus($paymentId, $paymentStatus);
       $this->bookingService->updateBookingStatus($bookingId, $paymentStatus);
 
-      $this->db->commit();
       return ['success' => true];
     } catch (Exception $e) {
-      $this->db->rollBack();
       return ["error" => true, "message" => $e->getMessage()];
     }
   }

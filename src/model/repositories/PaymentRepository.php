@@ -1,13 +1,14 @@
 <?php
 class PaymentRepository {
-  private PDO $db;
-
-  public function __construct($dbCon) {
-    $this->db = $dbCon;
+  
+  private function getdb(): PDO {
+    require_once 'src/model/database/dbcon/DatabaseConnection.php';
+    return DatabaseConnection::getInstance();
   }
 
   public function addPayment(array $paymentData): void {
-    $query = $this->db->prepare('INSERT INTO payment (paymentDate, paymentTime, totalPrice, currency, paymentMethod, checkoutSessionId, paymentStatus, venueId, bookingId) VALUES (:paymentDate, :paymentTime, :totalPrice, :currency, :paymentMethod, :checkoutSessionId, :paymentStatus, :venueId, :bookingId)');
+    $db = $this->getdb();
+    $query = $db->prepare('INSERT INTO payment (paymentDate, paymentTime, totalPrice, currency, paymentMethod, checkoutSessionId, paymentStatus, venueId, bookingId) VALUES (:paymentDate, :paymentTime, :totalPrice, :currency, :paymentMethod, :checkoutSessionId, :paymentStatus, :venueId, :bookingId)');
 
     try {
       $query->execute(array(
@@ -27,7 +28,8 @@ class PaymentRepository {
   }
 
   public function updatePaymentStatus(int $paymentId, string $paymentStatus): void {
-    $query = $this->db->prepare("UPDATE Payment SET paymentStatus = :paymentStatus WHERE paymentId = :paymentId");
+    $db = $this->getdb();
+    $query = $db->prepare("UPDATE Payment SET paymentStatus = :paymentStatus WHERE paymentId = :paymentId");
 
     try {
       $query->execute(array(
