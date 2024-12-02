@@ -27,7 +27,7 @@ try {
   $checkout_session = \Stripe\Checkout\Session::create([
     "mode" => "payment",
     // TODO: dynamic success and cancel route
-    "success_url" => "http://localhost/dwp/booking/checkout_success",
+    "success_url" => "http://localhost/dwp/booking/checkout_success?checkout_session_id={CHECKOUT_SESSION_ID}",
     "cancel_url" => "http://localhost/dwp/booking/checkout",
     // TODO: dynamic items, in this case tickets for the movie
     "line_items" => [
