@@ -89,4 +89,13 @@ class TicketService {
             return ['error' => true, 'message' => $e->getMessage()];
         }
     }
+
+    public function createTicket(int $seatId, int $ticketTypeId, int $showingId): int|array {
+        try {
+            $result = $this->ticketRepository->createTicket($seatId, $ticketTypeId, $showingId);
+            return $result;
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+    }
 }
