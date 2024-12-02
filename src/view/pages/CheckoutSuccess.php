@@ -1,11 +1,5 @@
 <?php
 require_once 'session_config.php';
-require_once 'src/controller/PaymentController.php';
-
-$paymentController = new PaymentController();
-$paymentIds = $paymentController->getIdsByCheckoutSessionId($_GET['checkout_session_id']);
-
-$paymentController->updatePaymentStatus($paymentIds['paymentId'], $paymentIds['bookingId'], 'confirmed');
 ?>
 
 <!DOCTYPE html>
