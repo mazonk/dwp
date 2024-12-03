@@ -418,8 +418,61 @@ delete($baseRoute.'openingHours/delete', function() {
         echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
     }
 });
+<<<<<<< Updated upstream
 
 // Update movie route
+=======
+<<<<<<< Updated upstream
+=======
+
+//Add movie post route
+post($baseRoute.'movies/add', function() {
+    require_once 'src/controller/MovieController.php';
+    $movieController = new MovieController();
+    parse_str(file_get_contents("php://input"), $_POST); // Parse the PUT request
+
+    if (isset($_POST['action']) && $_POST['action'] === 'addMovie') {
+        $movieData = [
+            'title' => htmlspecialchars(trim($_POST['title'])),
+            'releaseDate' => htmlspecialchars(trim($_POST['releaseDate'])),
+            'duration' => htmlspecialchars(trim($_POST['duration'])),
+            'language' => htmlspecialchars(trim($_POST['language'])),
+            'description' => htmlspecialchars(trim($_POST['description'])),
+            'posterURL' => htmlspecialchars(trim($_POST['posterUrl'])),
+            'promoURL' => htmlspecialchars(trim($_POST['promoUrl'])),
+            'trailerURL' => htmlspecialchars(trim($_POST['trailerUrl'])),
+            'rating' => htmlspecialchars(trim($_POST['rating']))
+        ];
+
+        $result = $movieController->addMovie($movieData);
+
+        if (isset($result['success']) && $result['success'] === true) {
+            // Return a success response
+            echo json_encode(['success' => true]);
+        } else if (isset($result['errorMessage'])) {
+            // Return an error response
+            echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);
+        } else {
+            if (is_array($result)) {
+                // Sanitize the array of errors
+                $sanitizedErrors = array_map(function($error) {
+                    return htmlspecialchars($error);
+                }, $result);
+
+                echo json_encode(['success' => false, 'errors' => $sanitizedErrors]);
+            } else {
+                // Return a single error response
+                echo json_encode(['success' => false, 'errors' => htmlspecialchars($result)]);
+            }
+        }
+    } else {
+        // Invalid action response
+        echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
+    }
+});
+
+// Edit movie route
+>>>>>>> Stashed changes
 put($baseRoute . 'movies/edit', function() {
     require_once 'src/controller/MovieController.php';
     $movieController = new MovieController();
@@ -489,3 +542,26 @@ delete($baseRoute . 'movies/delete', function() {
     }
 });
 
+<<<<<<< Updated upstream
+=======
+// Archive movie route
+get($baseRoute . 'movies/archive', function() {
+    require_once 'src/controller/MovieController.php';
+    $movieController = new MovieController();
+
+    if (isset($_GET['movieId'])) {
+        $movieId = htmlspecialchars(trim($_GET['movieId']));
+
+        $result = $movieController->archiveMovie($movieId);
+
+        if (isset($result['success']) && $result['success'] === true) {
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);
+        }
+    } else {
+        echo json_encode(['success' => false, 'errorMessage' => 'Invalid movie ID.']);
+    }
+});
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
