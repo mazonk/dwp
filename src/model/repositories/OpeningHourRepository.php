@@ -82,7 +82,7 @@ class OpeningHourRepository {
     $query = $db->prepare("UPDATE OpeningHour SET isCurrent = :isCurrent WHERE openingHourId = :openingHourId");
 
     try {
-      $query->execute(array('isCurrent' => $setToStatus, 'openingHourId' => $openingHourId));
+      $query->execute(array('isCurrent' => $setToStatus == true ? 1 : 0, 'openingHourId' => $openingHourId));
     } catch (PDOException $e) {
       throw new PDOException('Failed to update isCurrent status.');
     }

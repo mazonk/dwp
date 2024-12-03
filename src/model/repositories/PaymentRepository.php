@@ -23,7 +23,7 @@ class PaymentRepository {
   }
 
   public function addPayment(array $paymentData): void {
-    $query = $this->db->prepare('INSERT INTO payment (paymentDate, paymentTime, totalPrice, currency, paymentMethod, checkoutSessionId, paymentStatus, addressId, bookingId) VALUES (:paymentDate, :paymentTime, :totalPrice, :currency, :paymentMethod, :checkoutSessionId, :paymentStatus, :addressId, :bookingId)');
+    $query = $this->db->prepare('INSERT INTO Payment (paymentDate, paymentTime, totalPrice, currency, paymentMethod, checkoutSessionId, paymentStatus, addressId, bookingId) VALUES (:paymentDate, :paymentTime, :totalPrice, :currency, :paymentMethod, :checkoutSessionId, :paymentStatus, :addressId, :bookingId)');
 
     try {
       $query->execute(array(
