@@ -29,11 +29,16 @@ include_once "src/view/components/ShowingCard.php";
       if (isset($allMovies['errorMessage'])) {
         echo $allMovies['errorMessage'];
       } else {
-        // Loop through each movie and render its movie card
         foreach ($allMovies as $movie) {
-          MovieCard::render($movie, false);
+          $releaseDate = $movie->getReleaseDate();
+          $currentDate = new DateTime();
+          
+          // Check if the release date is in the future
+          if ($releaseDate < $currentDate) {
+              MovieCard::render($movie, false);
+          }
+        }
       }
-    }
         ?>
       </div>
       <div>
