@@ -256,21 +256,19 @@ post($baseRoute.'news/add', function() {
 });
 
 // Post route for booking
-post($baseRoute.'booking/create', function() {
+post($baseRoute.'booking/overview', function() {
     require_once 'src/controller/BookingController.php';
     require_once 'session_config.php';
     $bookingController = new BookingController();
     
-    if (isset($_POST['action']) && $_POST['action'] === 'createEmptyBooking') {
-        $result = $bookingController->createEmptyBooking(isset($_SESSION['loggedInUser']) ? $_SESSION['loggedInUser']['userId'] : null, htmlspecialchars($_POST['status']), htmlspecialchars($_POST['expiry']));
+    $result = $bookingController->createEmptyBooking(isset($_SESSION['loggedInUser']) ? $_SESSION['loggedInUser']['userId'] : null, 'pending');
 
-        if ($result && !is_array($result)) {
-            // Return a success response
-            echo json_encode(['success' => $result]);
-        } else {
-            // Return an error response
-            echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
-        }
+    if ($result && !is_array($result)) {
+        // Return a success response
+        echo json_encode(['success' => $result]);
+    } else {
+        // Return an error response
+        echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
     }
 });
 
@@ -280,7 +278,16 @@ post($baseRoute.'ticket/create', function() {
     require_once 'session_config.php';
     $ticketController = new TicketController();
 
-    
+    if(isset($_POST['action']) && $_POST['action'] === 'createTicket') {
+        $result = $ticketController->createTicket(htmlspecialchars($_POST['seatId']), htmlspecialchars($_POST['ticketTypeId']), intval($_POST['showingId']));
+        if ($result && !is_array($result)) {
+            // Return a success response
+            echo json_encode(['success' => $result]);
+        } else {
+            // Return an error response
+            echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
+        }
+    }
 });
 
 // Edit news put route

@@ -13,7 +13,8 @@ class TicketController {
         if (is_array($insertedTicketId) && isset($insertedTicketId["error"]) && $insertedTicketId["error"]) {
             return ["errorMessage" => $insertedTicketId["message"]];
         }
-        $_SESSION['activeBooking']['ticketIds'] += $insertedTicketId.', ';
+        $_SESSION['activeBooking']['ticketIds'] += $insertedTicketId;
+        echo json_encode($insertedTicketId);
         return $insertedTicketId;
     }
 

@@ -22,14 +22,14 @@ require_once "src/controller/BookingController.php";
     <main class="mt-[56px] p-4">
         <div id="timer" class="text-red-500 text-lg font-bold"></div>
         <?php
-        //remove booking if the timer expired
-        if (isset($_SESSION['activeBooking']) && ($_SESSION['activeBooking']['expiry'] / 1000 - 1) < time()) {
-            $bookingController = new BookingController();
-            $wasRolledBack = $bookingController->rollBackBooking($_SESSION['activeBooking']['id']);
-            if (!$wasRolledBack) {
-                die();
-            }
-        }
+        // //remove booking if the timer expired
+        // if (isset($_SESSION['activeBooking']) && ($_SESSION['activeBooking']['expiry'] / 1000 - 1) < time()) {
+        //     $bookingController = new BookingController();
+        //     $wasRolledBack = $bookingController->rollBackBooking($_SESSION['activeBooking']['id']);
+        //     if (!$wasRolledBack) {
+        //         die();
+        //     }
+        // }
 
         $selectedVenueId = $_SESSION['selectedVenueId']; // Get the selected venue ID
 
@@ -77,35 +77,70 @@ require_once "src/controller/BookingController.php";
             <span id="selected-seats-list" class="font-semibold"></span>
         </div>
         <div class="mt-12">
-            <a class="py-2.5 px-2 text-primary border-[1px] border-primary rounded hover:text-primaryHover hover:border-primaryHover duration-[.2s] ease-in-out cursor-pointer">
+            <button class="py-2.5 px-2 text-primary border-[1px] border-primary rounded hover:text-primaryHover hover:border-primaryHover duration-[.2s] ease-in-out cursor-pointer"
+            onclick="proceedToOverview(
+                '<?= htmlspecialchars($_GET['showing'])?>'
+            )">
                 Proceed to overview
-            </a>
+            </button>
         </div>
     </main>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const timerDisplay = document.getElementById('timer');
-            let bookingExpiry = localStorage.getItem('bookingExpiry');
+        function proceedToOverview(showingId) {
+            const selectedSeatsList = document.getElementById('selected-seats-list');
+            const selectedSeats = selectedSeatsList.dataset.selectedSeats;
 
-            if (!bookingExpiry) {
-                bookingExpiry = Date.now() + 15 * 60 * 1000; // 15 minutes from now
-                localStorage.setItem('bookingExpiry', bookingExpiry);
+            if (!selectedSeats) {
+                alert('Please select at least one seat before proceeding to the overview.');
+                return;
             }
 
-            const interval = setInterval(() => {
-                const timeLeft = Math.max(0, bookingExpiry - Date.now());
-                const minutes = Math.floor(timeLeft / 60000);
-                const seconds = Math.floor((timeLeft % 60000) / 1000);
-                timerDisplay.textContent = `Time left: ${minutes}:${seconds.toString().padStart(2, '0')}`;
-
-                if (timeLeft <= 0) {
-                    clearInterval(interval);
-                    alert('Your booking has expired!');
-                    localStorage.removeItem('bookingExpiry');
-                    window.location.reload(true); // Or redirect to a different page
+            // Optionally send the selected seats to the server or store them for later use
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '<?php echo $_SESSION['baseRoute']; ?>booking/overview', true);
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    try {
+                        console.log(xhr.responseText);
+                        const response = JSON.parse(xhr.responseText);
+                        if (response.success) {
+                            // Redirect to the overview page
+                            window.location.href = '<?php echo $_SESSION['baseRoute']; ?>booking/checkout';
+                        } else {
+                            alert('Failed to proceed: ' + response.errorMessage);
+                        }
+                    } catch (error) {
+                        alert('An error occurred: ' + error.message);
+                    }
                 }
-            }, 1000);
+            };
+
+            xhr.send(`selectedSeats=${encodeURIComponent(selectedSeats)}`);
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            // const timerDisplay = document.getElementById('timer');
+            // let bookingExpiry = localStorage.getItem('bookingExpiry');
+
+            // if (!bookingExpiry) {
+            //     bookingExpiry = Date.now() + 15 * 60 * 1000; // 15 minutes from now
+            //     localStorage.setItem('bookingExpiry', bookingExpiry);
+            // }
+
+            // const interval = setInterval(() => {
+            //     const timeLeft = Math.max(0, bookingExpiry - Date.now());
+            //     const minutes = Math.floor(timeLeft / 60000);
+            //     const seconds = Math.floor((timeLeft % 60000) / 1000);
+            //     timerDisplay.textContent = `Time left: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+            //     if (timeLeft <= 0) {
+            //         clearInterval(interval);
+            //         alert('Your booking has expired!');
+            //         localStorage.removeItem('bookingExpiry');
+            //         window.location.reload(true); // Or redirect to a different page
+            //     }
+            // }, 1000);
 
             const seatButtons = document.querySelectorAll('.seat-card');
             const selectedSeatsList = document.getElementById('selected-seats-list');
@@ -141,46 +176,45 @@ require_once "src/controller/BookingController.php";
                             }
                             const errorMessage = validateSelect(tempSeats);
 
-                            if (tempSeats.length === 1) {
-                                const xhr = new XMLHttpRequest();
-                                const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
-                                xhr.open('POST', `${baseRoute}booking/create`, true);
-                                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                                xhr.onreadystatechange = function() {
-                                    if (xhr.readyState === 4 && xhr.status === 200) {
-                                        try {
-                                            const response = JSON.parse(xhr.responseText);
-                                            console.log(response);
-                                            if (response.success) {
-                                                xhr.open('POST', `${baseRoute}ticket/create`, true);
-                                                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                                                xhr.onreadystatechange = function() {
-                                                    if (xhr.readyState === 4 && xhr.status === 200) {
-                                                        try {
-                                                            const response = JSON.parse(xhr.responseText);
-                                                            console.log(response);
-                                                            if (response.success) {
-                                                                alert('Success! Booking created successfully.');
-                                                                window.location.reload();
-                                                            } else {
-                                                                alert('Failed to create booking: ' + response.errorMessage);
-                                                            }
-                                                        } catch (error) {
-                                                            alert('An error occurred: ' + error.message);
-                                                        }
-                                                    }
-                                                };
-                                                xhr.send(`action=createTicket&bookingId=${response.success}`);
-                                            } else {
-                                                alert('Failed to create booking: ' + response.errorMessage);
-                                            }
-                                        } catch (error) {
-                                            alert('An error occurred: ' + error.message);
-                                        }
-                                    }
-                                };
-                                xhr.send(`action=createEmptyBooking&status=pending&expiry=${localStorage.getItem('bookingExpiry')}`);
-                            }
+                            // if (tempSeats.length === 1) {
+                            //     const xhr = new XMLHttpRequest();
+                            //     const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
+                            //     xhr.open('POST', `${baseRoute}booking/create`, true);
+                            //     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                            //     xhr.onreadystatechange = function() {
+                            //         if (xhr.readyState === 4 && xhr.status === 200) {
+                            //             try {
+                            //                 const response = JSON.parse(xhr.responseText);
+                            //                 console.log(response);
+                            //                 if (response.success) {
+                            //                     xhr.open('POST', `${baseRoute}ticket/create`, true);
+                            //                     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                            //                     xhr.onreadystatechange = function() {
+                            //                         if (xhr.readyState === 4 && xhr.status === 200) {
+                            //                             try {
+                            //                                 console.log(xhr.responseText);
+                            //                                 const response = JSON.parse(xhr.responseText);
+                            //                                 if (response.success) {
+                            //                                     alert('Success! Ticket created successfully.');
+                            //                                 } else {
+                            //                                     alert('Failed to create ticket: ' + response.errorMessage);
+                            //                                 }
+                            //                             } catch (error) {
+                            //                                 alert('ticket An error occurred: ' + error.message);
+                            //                             }
+                            //                         }
+                            //                     };
+                            //                     xhr.send(`action=createTicket&bookingId=${response.bookingId}&seatId=${seatId}&ticketTypeId=1&showingId=<?php echo $_GET['showing'] ?>`);
+                            //                 } else {
+                            //                     alert('Failed to create booking: ' + response.errorMessage);
+                            //                 }
+                            //             } catch (error) {
+                            //                 alert('An error occurred: ' + error.message);
+                            //             }
+                            //         }
+                            //     };
+                            //     xhr.send(`action=createEmptyBooking&status=pending&expiry=${localStorage.getItem('bookingExpiry')}`);
+                            // }
                             if (errorMessage === '') {
                                 // If validation passes, select the seat
                                 selectedSeats.push(seatId);
@@ -200,6 +234,7 @@ require_once "src/controller/BookingController.php";
                             return `Row: ${row} | Seat: ${seatNr}`;
                         }).join(', ');
                         selectedSeatsList.textContent = seatsWithRowAndSeatNr;
+                        selectedSeatsList.dataset.selectedSeats = selectedSeats;
                     } else {
                         showError('This seat is taken!', this);
                     }
