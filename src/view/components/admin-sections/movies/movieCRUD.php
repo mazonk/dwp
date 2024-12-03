@@ -67,20 +67,20 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
 
                     <!-- Poster URL Field -->
                     <div class="mb-4">
-                        <label for="addPosterURLInput" class="block text-sm font-medium text-textLight">Poster URL</label>
-                        <input type="text" id="addPosterURLInput" name="posterURL" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">
+                        <label for="addPosterUrlInput" class="block text-sm font-medium text-textLight">Poster URL</label>
+                        <input type="text" id="addPosterUrlInput" name="posterURL" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">
                     </div>
 
                     <!-- Promo URL Field -->
                     <div class="mb-4">
-                        <label for="addPromoURLInput" class="block text-sm font-medium text-textLight">Promo URL</label>
-                        <input type="text" id="addPromoURLInput" name="promoURL" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">
+                        <label for="addPromoUrlInput" class="block text-sm font-medium text-textLight">Promo URL</label>
+                        <input type="text" id="addPromoUrlInput" name="promoURL" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">
                     </div>
 
                     <!-- Trailer URL Field -->
                     <div class="mb-4">
-                        <label for="addTrailerURLInput" class="block text-sm font-medium text-textLight">Trailer URL</label>
-                        <input type="text" id="addTrailerURLInput" name="trailerURL" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">
+                        <label for="addTrailerUrlInput" class="block text-sm font-medium text-textLight">Trailer URL</label>
+                        <input type="text" id="addTrailerUrlInput" name="trailerURL" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">
                     </div>
 
                     <!-- Rating Field -->
@@ -216,13 +216,13 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
     const movieId = document.getElementById('movieId');
     const addTitleInput = document.getElementById('addTitleInput');
     const addDescriptionInput = document.getElementById('addDescriptionInput');
-    const addReleaseDateInput = document.getElementById('addReleaseDateInput');
-    const addPosterURLInput = document.getElementById('addPosterURLInput');
-    const addPromoURLInput = document.getElementById('addPromoURLInput');
-    const addTrailerURLInput = document.getElementById('addTrailerURLInput');
-    const addRatingInput = document.getElementById('addRatingInput');
     const addDurationInput = document.getElementById('addDurationInput');
     const addLanguageInput = document.getElementById('addLanguageInput');
+    const addReleaseDateInput = document.getElementById('addReleaseDateInput');
+    const addPosterUrlInput = document.getElementById('addPosterUrlInput');
+    const addPromoUrlInput = document.getElementById('addPromoUrlInput');
+    const addTrailerUrlInput = document.getElementById('addTrailerUrlInput');
+    const addRatingInput = document.getElementById('addRatingInput');
 
     // Display the modal
     addMovieButton.addEventListener('click', () => {
@@ -235,6 +235,20 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
         clearValues('add');
     });
 
+    window.openAddMovieModal = function(title, description, duration, language, releaseDate, posterUrl, promoURL, trailerUrl, rating, id) {
+        add.value = title;
+        addDescriptionInput.value = description;
+        addDurationInput.value = duration;
+        addLanguageInput.value = language;        
+        addReleaseDateInput.value = releaseDate;
+        addPosterUrlInput.value = posterUrl;
+        addPromoUrlInput.value = promoUrl;
+        addTrailerUrlInput.value = trailerUrl;
+        addRatingInput.value = rating;
+        addMovieIdInput.value = id;
+        addMovieModal.classList.remove('hidden');
+    };
+
     // Add movie form submission
     addMovieForm.addEventListener('submit', function (event) {
         event.preventDefault();
@@ -246,15 +260,15 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
 
         const movieData = {
             action: 'addMovie',
-            title: document.getElementById('addTitleInput').value,
-            description: document.getElementById('addDescriptionInput').value,
-            duration: document.getElementById('addDurationInput').value,
-            language: document.getElementById('addLanguageInput').value,
-            releaseDate: document.getElementById('addReleaseDateInput').value,
-            posterURL: document.getElementById('addPosterURLInput').value,
-            promoURL: document.getElementById('addPromoURLInput').value,
-            trailerURL: document.getElementById('addTrailerURLInput').value,
-            rating: document.getElementById('addRatingInput').value
+            title: addTitleInput.value,
+            description: addDescriptionInput.value,
+            duration: addDurationInput.value,
+            language: addLanguageInput.value,
+            releaseDate: addReleaseDateInput.value,
+            posterUrl: addPosterUrlInput.value,
+            promoUrl: addPromoUrlInput.value,
+            trailerUrl: addTrailerUrlInput.value,
+            rating: addRatingInput.value
         }
 
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -262,8 +276,8 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
             // If the request is done and successful
             if (xhr.readyState === 4 && xhr.status === 200) {
                 let response
-                console.log(xhr.response);
                 try {
+                    console.log(xhr.response);
                     response = JSON.parse(xhr.response); // Parse the JSON response
                 } catch (e) {
                     console.error('Could not parse response as JSON:', e);

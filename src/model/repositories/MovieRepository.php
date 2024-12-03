@@ -89,9 +89,9 @@ class MovieRepository {
     public function addMovie(array $movieData): void {
         $db = $this->getdb();
         $query = $db->prepare("INSERT INTO Movie (title, description, duration, language, releaseDate, posterURL, promoURL, trailerURL, rating) VALUES
- (:title, :year, :rating, :imageURL)");
+ (:title, :description, :duration, :language, :releaseDate, :posterUrl, :promoUrl, :trailerUrl, :rating)");
         try {
-            $query->execute(array(":title" => $movieData['title'],":description"=> $movieData['description'], ":duration" => $movieData['duration'], ":language" => $movieData['language'], ":releaseDate" => $movieData['releaseDate'], ":posterURL" => $movieData['posterURL'], ":promoURL" => $movieData['promoURL'], ":trailerURL" => $movieData['trailerURL'], ":rating" => $movieData['rating']));
+            $query->execute(array(":title" => $movieData['title'],":description"=> $movieData['description'], ":duration" => $movieData['duration'], ":language" => $movieData['language'], ":releaseDate" => $movieData['releaseDate'], ":posterUrl" => $movieData['posterURL'], ":promoUrl" => $movieData['promoURL'], ":trailerUrl" => $movieData['trailerURL'], ":rating" => $movieData['rating']));
         } catch (PDOException $e) {
             throw new PDOException("Unable to add movie!");
         }
