@@ -70,6 +70,9 @@ foreach ($booking['ticketIds'] as $ticketId) {
                     echo "<br>"."Row " . $seat->getRow() . " - Seat " . $seat->getSeatNr();
                 } ?>
             </p>
+            <button onclick="cancelBooking()" class="mt-2 py-1 px-3 bg-bgDark border border-primary text-white rounded hover:bg-bgSemiDark transition duration-200">
+                I want different seats!
+            </button>
         </div>
         <div class="mb-6 bg-gray-700 p-4 rounded-lg shadow-md">
             <h3 class="text-lg font-bold mb-2">Ticket Types and Total Price:</h3>
@@ -128,7 +131,7 @@ foreach ($booking['ticketIds'] as $ticketId) {
     </div>
 
     <div>
-        <button onclick="proceedToPayment()" class="w-full py-1 border border-primary text-white rounded-lg transition duration-200 flex items-center justify-center">
+        <button onclick="proceedToPayment()" class="w-full py-1 border border-primary bg-bgDark hover:bg-bgSemiDark text-white rounded-lg transition duration-200 flex items-center justify-center">
             Pay with
             <img src="<?php echo $_SESSION['baseRoute'] ?>src/assets/stripe-logo.png" alt="Stripe" class="mx-2 mt-1 w-12">
         </button>
@@ -150,7 +153,7 @@ foreach ($booking['ticketIds'] as $ticketId) {
         let bookingExpiry = localStorage.getItem('bookingExpiry');
 
         if (!bookingExpiry) {
-            bookingExpiry = Date.now() + 5 * 3 * 1000; // 15 minutes from now
+            bookingExpiry = Date.now() + 15 * 60 * 1000; // 15 minutes from now
             localStorage.setItem('bookingExpiry', bookingExpiry);
         }
 
@@ -163,36 +166,44 @@ foreach ($booking['ticketIds'] as $ticketId) {
             if (timeLeft <= 0) {
                 clearInterval(interval);
                 alert('Your booking has expired!');
-                localStorage.removeItem('bookingExpiry');
 
-                const xhr = new XMLHttpRequest();
-                const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
-                xhr.open('POST', `${baseRoute}booking/rollback`, true);
-                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === 4 && xhr.status === 200) {
-                        console.log(xhr.responseText);
-                        history.back();
-                    }
-                };
-                xhr.send();
+                rollbackBooking(true);
             }
         }, 1000);
-    });
-    function cancelBooking() {
-        localStorage.removeItem('bookingExpiry');
 
-        const xhr = new XMLHttpRequest();
-        const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
-        xhr.open('POST', `${baseRoute}booking/rollback`, true);
-        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                console.log(xhr.responseText);
-                history.back();
+        const warnBeforeNavigation = (url) => {
+            if (!url.includes('/booking')) {
+                return "Leaving this page will cancel your booking. Are you sure?";
             }
+            return null;
         };
-        xhr.send();
+
+        // Listen for link clicks to capture the "next" path.
+        document.body.addEventListener('click', function (e) {
+            const link = e.target.closest('a');
+            if (link) {
+                const url = new URL(link.href);
+                const warningMessage = warnBeforeNavigation(url.pathname);
+                if (warningMessage && !confirm(warningMessage)) {
+                    e.preventDefault(); // Prevent navigation if user cancels
+                } else {
+                    rollbackBooking();
+                }
+            }
+        });
+
+        // Handle direct URL entries or external navigation
+        window.addEventListener('beforeunload', function (e) {
+            const nextUrl = e.target.activeElement?.href || '';
+            if (nextUrl && !nextUrl.includes('/booking')) {
+                const message = "Leaving this page will cancel your booking. Are you sure?";
+                e.returnValue = message;
+                return message;
+            }
+        });
+    });
+    function cancelBooking(redirectBack = true) {
+        rollbackBooking(true);
     }
 
     function showGuestForm() {
@@ -203,5 +214,22 @@ foreach ($booking['ticketIds'] as $ticketId) {
         // Validation logic here
         alert('Proceeding to payment...');
         // Redirect to payment gateway
+    }
+
+    function rollbackBooking(redirectBack) {
+        localStorage.removeItem('bookingExpiry');
+
+        const xhr = new XMLHttpRequest();
+        const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
+        xhr.open('POST', `${baseRoute}booking/rollback`, true);
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                if (redirectBack) {
+                    history.back();
+                }
+            }
+        };
+        xhr.send();
     }
 </script>

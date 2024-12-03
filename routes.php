@@ -292,25 +292,6 @@ post($baseRoute.'booking/rollback', function() {
     }
 });
 
-
-// Post route for creating tickets
-// post($baseRoute.'ticket/create', function() {
-//     require_once 'src/controller/TicketController.php';
-//     require_once 'session_config.php';
-//     $ticketController = new TicketController();
-
-//     if(isset($_POST['action']) && $_POST['action'] === 'createTicket') {
-//         $result = $ticketController->createTicket(htmlspecialchars($_POST['seatId']), htmlspecialchars($_POST['ticketTypeId']), intval($_POST['showingId']));
-//         if ($result && !is_array($result)) {
-//             // Return a success response
-//             echo json_encode(['success' => $result]);
-//         } else {
-//             // Return an error response
-//             echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
-//         }
-//     }
-// });
-
 // Edit news put route
 put($baseRoute.'news/edit', function() {
     $newsController = new NewsController();
