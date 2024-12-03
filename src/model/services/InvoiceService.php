@@ -1,6 +1,6 @@
 <?php
 class InvoiceService {
-  public function sendInvoice(array $invoiceData): array {
+  public function sendInvoice(): array {
     $subject = "Invoice for your purchase";
     $mailTo = "customers_email"; // Customer's email
     $headers = "From: email_here"; // Venue/Companys's email

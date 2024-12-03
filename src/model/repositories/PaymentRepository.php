@@ -7,7 +7,7 @@ class PaymentRepository {
   }
 
   public function getIdsByCheckoutSessionId(string $checkoutSessionId): array {
-    $query = $this->db->prepare('SELECT paymentId, addressId, bookingId FROM payment WHERE checkoutSessionId = :checkoutSessionId');
+    $query = $this->db->prepare('SELECT paymentId, addressId, bookingId FROM Payment WHERE checkoutSessionId = :checkoutSessionId');
 
     try {
       $query->execute(array('checkoutSessionId' => $checkoutSessionId));
