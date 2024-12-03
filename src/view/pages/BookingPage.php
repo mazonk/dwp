@@ -103,7 +103,6 @@ require_once "src/controller/BookingController.php";
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4 && xhr.status === 200) {
                     try {
-                        console.log(xhr.responseText);
                         const response = JSON.parse(xhr.responseText);
                         if (response.success) {
                             // Redirect to the overview page
@@ -117,7 +116,7 @@ require_once "src/controller/BookingController.php";
                 }
             };
 
-            xhr.send(`selectedSeats=${encodeURIComponent(selectedSeats)}`);
+            xhr.send(`selectedSeats=${encodeURIComponent(selectedSeats)}&showingId=${showingId}`);
         }
         document.addEventListener('DOMContentLoaded', () => {
             // const timerDisplay = document.getElementById('timer');

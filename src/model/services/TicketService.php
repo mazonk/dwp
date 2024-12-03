@@ -10,11 +10,18 @@ class TicketService {
     private TicketRepository $ticketRepository;
     private ?SeatService $seatService;
     private ShowingService $showingService;
+    private PDO $db;
 
     public function __construct() {
         $this->ticketRepository = new TicketRepository();
         $this->seatService = null;
         $this->showingService = new ShowingService();
+        $this->db = $this->getdb();
+    }
+
+    private function getdb() {
+        require_once 'src/model/database/dbcon/DatabaseConnection.php';
+        return DatabaseConnection::getInstance(); // singleton
     }
     
     public function setSeatService(SeatService $seatService): void {
@@ -90,12 +97,36 @@ class TicketService {
         }
     }
 
-    public function createTicket(int $seatId, int $ticketTypeId, int $showingId, int $bookingId): int|array {
+    // public function createTicket(int $seatId, int $ticketTypeId, int $showingId, int $bookingId): int|array {
+    //     try {
+    //         $insertedId = $this->ticketRepository->createTicket($seatId, $ticketTypeId, $showingId, $bookingId);
+    //         return $insertedId;
+    //     } catch (Exception $e) {
+    //         return ['error' => true, 'message' => $e->getMessage()];
+    //     }
+    // }
+
+    public function createTickets(array $seatIds, int $ticketTypeId, int $showingId, int $bookingId): array {
         try {
-            $insertedId = $this->ticketRepository->createTicket($seatId, $ticketTypeId, $showingId, $bookingId);
-            return $insertedId;
+            // Start transaction
+            $this->db->beginTransaction();
+
+            $insertedIds = [];
+            foreach ($seatIds as $seatId) {
+                $insertedId = $this->ticketRepository->createTicket($seatId, $ticketTypeId, $showingId, $bookingId);
+                if ($insertedId === false) {
+                    // Roll back on failed to insert 
+                    $this->db->rollBack();
+                    return ['error' => true, 'message' => "Failed to create ticket for seat {$seatId}"];
+                }
+                $insertedIds[] = $insertedId;
+            }
+            $this->db->commit();
+            return $insertedIds;
         } catch (Exception $e) {
+            $this->db->rollBack();
             return ['error' => true, 'message' => $e->getMessage()];
         }
     }
+
 }

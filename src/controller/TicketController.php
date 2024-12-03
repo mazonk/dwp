@@ -8,15 +8,25 @@ class TicketController {
         $this->ticketService = new TicketService();
     }
 
-    public function createTicket(int $seatId, int $ticketTypeId, int $showingId): int|array {
-        $insertedTicketId = $this->ticketService->createTicket($seatId, $ticketTypeId, $showingId, $_SESSION['activeBooking']['id']);
-        if (is_array($insertedTicketId) && isset($insertedTicketId["error"]) && $insertedTicketId["error"]) {
-            return ["errorMessage" => $insertedTicketId["message"]];
+    public function createTickets(array $seatIds, int $ticketTypeId, int $showingId, int $bookingId): array {
+        $insertedTicketIds = $this->ticketService->createTickets($seatIds, $ticketTypeId, $showingId, $bookingId);
+        if (is_array($insertedTicketIds) && isset($insertedTicketIds["error"]) && $insertedTicketIds["error"]) {
+            return ["errorMessage" => $insertedTicketIds["message"]];
         }
-        $_SESSION['activeBooking']['ticketIds'] += $insertedTicketId;
-        echo json_encode($insertedTicketId);
-        return $insertedTicketId;
+        $_SESSION['activeBooking']['showingId'] = $showingId;
+        $_SESSION['activeBooking']['ticketIds'] = $insertedTicketIds;
+        return $insertedTicketIds;
     }
+
+    // public function createTicket(int $seatId, int $ticketTypeId, int $showingId): int|array {
+    //     $insertedTicketId = $this->ticketService->createTicket($seatId, $ticketTypeId, $showingId, $_SESSION['activeBooking']['id']);
+    //     if (is_array($insertedTicketId) && isset($insertedTicketId["error"]) && $insertedTicketId["error"]) {
+    //         return ["errorMessage" => $insertedTicketId["message"]];
+    //     }
+    //     $_SESSION['activeBooking']['ticketIds'] += $insertedTicketId;
+    //     echo json_encode($insertedTicketId);
+    //     return $insertedTicketId;
+    // }
 
     // public function getAllTicketsForShowing(int $showingId, int $venueId): array {
     //     $tickets = [];

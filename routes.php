@@ -258,37 +258,41 @@ post($baseRoute.'news/add', function() {
 // Post route for booking
 post($baseRoute.'booking/overview', function() {
     require_once 'src/controller/BookingController.php';
+    require_once 'src/controller/TicketController.php';
     require_once 'session_config.php';
     $bookingController = new BookingController();
+    $ticketController = new TicketController();
     
-    $result = $bookingController->createEmptyBooking(isset($_SESSION['loggedInUser']) ? $_SESSION['loggedInUser']['userId'] : null, 'pending');
+    $createBookingResult = $bookingController->createEmptyBooking(isset($_SESSION['loggedInUser']) ? $_SESSION['loggedInUser']['userId'] : null, 'pending');
+    $selectedSeatsArray = explode(',', htmlspecialchars($_POST['selectedSeats']));
+    $createTicketsResult = $ticketController->createTickets($selectedSeatsArray, 1, intval($_POST['showingId']), $createBookingResult);
 
-    if ($result && !is_array($result)) {
+    if ($createBookingResult && !is_array($createBookingResult)) {
         // Return a success response
-        echo json_encode(['success' => $result]);
+        echo json_encode(['success' => $createBookingResult]);
     } else {
         // Return an error response
-        echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
+        echo json_encode(['success' => false, 'errorMessage' => $createBookingResult['errorMessage']]);
     }
 });
 
 // Post route for creating tickets
-post($baseRoute.'ticket/create', function() {
-    require_once 'src/controller/TicketController.php';
-    require_once 'session_config.php';
-    $ticketController = new TicketController();
+// post($baseRoute.'ticket/create', function() {
+//     require_once 'src/controller/TicketController.php';
+//     require_once 'session_config.php';
+//     $ticketController = new TicketController();
 
-    if(isset($_POST['action']) && $_POST['action'] === 'createTicket') {
-        $result = $ticketController->createTicket(htmlspecialchars($_POST['seatId']), htmlspecialchars($_POST['ticketTypeId']), intval($_POST['showingId']));
-        if ($result && !is_array($result)) {
-            // Return a success response
-            echo json_encode(['success' => $result]);
-        } else {
-            // Return an error response
-            echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
-        }
-    }
-});
+//     if(isset($_POST['action']) && $_POST['action'] === 'createTicket') {
+//         $result = $ticketController->createTicket(htmlspecialchars($_POST['seatId']), htmlspecialchars($_POST['ticketTypeId']), intval($_POST['showingId']));
+//         if ($result && !is_array($result)) {
+//             // Return a success response
+//             echo json_encode(['success' => $result]);
+//         } else {
+//             // Return an error response
+//             echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
+//         }
+//     }
+// });
 
 // Edit news put route
 put($baseRoute.'news/edit', function() {
