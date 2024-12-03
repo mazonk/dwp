@@ -468,6 +468,7 @@ put($baseRoute . 'movies/edit', function() {
 
 // Delete movie route
 delete($baseRoute . 'movies/delete', function() {
+    require_once 'src/controller/MovieController.php';
     $movieController = new MovieController();
 
     if (isset($_GET['action']) && $_GET['action'] === 'deleteMovie') {
@@ -477,7 +478,7 @@ delete($baseRoute . 'movies/delete', function() {
 
         if (isset($result['success']) && $result['success'] === true) {
             // Return a success response
-            echo json_encode(['success' => true]);
+            echo json_encode(['success' => "true"]);
         } else {
             // Return an error response
             echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);

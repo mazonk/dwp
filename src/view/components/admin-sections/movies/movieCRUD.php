@@ -171,12 +171,12 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
 
     <!-- Delete Movie Modal -->
     <div id="deleteMovieModal" class="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 hidden">
-        <div class="flex items-center justify-center min-h-screen">
+    <div class="flex items-center justify-center min-h-screen">
             <!-- Modal -->
             <div class="bg-bgSemiDark w-[500px] rounded-lg p-6 border-[1px] border-borderDark">
                 <h2 class="text-[1.5rem] text-center font-semibold mb-4">Delete Movie</h2>
                 <p class="text-textLight text-center">Are you sure you want to delete this movie?</p>
-                <input type="hidden" id="deleteMovieId" name="deleteMovieId">
+                <input type="hidden" id="deleteMovieIdInput" name="deleteMovieIdInput">
                 <div class="flex justify-center mt-4">
                     <button id="confirmDeleteMovieButton" class="bg-red-500 text-white py-2 px-4 border-[1px] border-transparent rounded hover:bg-red-600 duration-[.2s] ease-in-out">Delete</button>
                     <button id="cancelDeleteMovieButton" class="text-textLight py-2 px-4 border-[1px] border-white rounded hover:bg-borderDark ml-2 duration-[.2s] ease-in-out">Cancel</button>
@@ -212,21 +212,6 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
         addMovieModal.classList.add('hidden');
         clearValues('add');
     });
-
-    // document.querySelectorAll('.movieCard').forEach((movieCard) => {
-    //     movieCard.addEventListener('click', () => {
-    //         const movie = JSON.parse(movieCard.dataset.movie);
-    //         movieId.value = movie.id;
-    //         title.value = movie.title;
-    //         description.value = movie.description;
-    //         releaseDate.value = movie.releaseDate;
-    //         posterURL.value = movie.posterURL;
-    //         promoURL.value = movie.promoURL;
-    //         trailerURL.value = movie.trailerURL;
-    //         rating.value = movie.rating;
-    //     })
-    // });
-
 
     // Add movie form submission
     addMovieForm.addEventListener('submit', function (event) {
@@ -308,7 +293,6 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
         editTrailerUrlInput.value = trailerUrl;
         editRatingInput.value = rating;
         editMovieIdInput.value = id;
-
         editMovieModal.classList.remove('hidden');
     };
 
@@ -420,20 +404,28 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
     });
 
     const deleteMovieModal = document.getElementById('deleteMovieModal');
+    const deleteMovieIdInput = document.getElementById('deleteMovieIdInput');
     const confirmDeleteMovieButton = document.getElementById('confirmDeleteMovieButton');
     const cancelDeleteMovieButton = document.getElementById('cancelDeleteMovieButton');
 
     //Open the delete modal
     window.openDeleteMovieModal = function(movieId) {
-        deleteMovieIdInput.value = movieId;
-        deleteMovieModal.classList.remove('hidden');
+        if (deleteMovieIdInput && deleteMovieModal) { //not necessary??
+            deleteMovieIdInput.value = movieId;
+            deleteMovieModal.classList.remove('hidden');
+        } else {
+            console.error('Required elements are missing from the DOM.');
+        }
     };
 
     //Close the delete modal
-    cancelDeleteMovieButton.addEventListener('click', () => {
-        deleteMovieModal.classList.add('hidden');
-    })
+    if (cancelDeleteMovieButton) {
+        cancelDeleteMovieButton.addEventListener('click', () => {
+            deleteMovieModal.classList.add('hidden');
+        });
+    }
 
+    // Add click event listener for confirm delete movie button
     document.addEventListener('click', (event) => {
         if (event.target.classList.contains('confirmDeleteMovieButton')) {
             const movieId = event.target.dataset.movieId;
@@ -442,6 +434,7 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
         }
     });
 
+    // Close the delete modal and clear the input value
     cancelDeleteMovieButton.addEventListener('click', () => {
         deleteMovieModal.classList.add('hidden');
         deleteMovieIdInput.value = '';
@@ -449,14 +442,17 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
 
     //Delete movie
     confirmDeleteMovieButton.addEventListener('click', () => {
-        const movieId = confirmDeleteMovieButton.value;
         const xhr = new XMLHttpRequest();
         const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
-        xhr.open('DELETE', `${baseRoute}movie/delete?movieId=${encodeURIComponent(movieId)}&action=deleteMovie`, true);
+        const movieId = deleteMovieIdInput.value;
+        console.log(xhr);
+
+        xhr.open('DELETE', `${baseRoute}movies/delete?movieId=${encodeURIComponent(movieId)}&action=deleteMovie`, true);
 
         xhr.onreadystatechange = function() {
             // If the request is done and successful
             if (xhr.readyState === 4 && xhr.status === 200) {
+
                 let response;
                 try {
                     response = JSON.parse(xhr.response);
