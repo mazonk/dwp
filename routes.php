@@ -418,12 +418,6 @@ delete($baseRoute.'openingHours/delete', function() {
         echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
     }
 });
-<<<<<<< Updated upstream
-
-// Update movie route
-=======
-<<<<<<< Updated upstream
-=======
 
 //Add movie post route
 post($baseRoute.'movies/add', function() {
@@ -472,7 +466,6 @@ post($baseRoute.'movies/add', function() {
 });
 
 // Edit movie route
->>>>>>> Stashed changes
 put($baseRoute . 'movies/edit', function() {
     require_once 'src/controller/MovieController.php';
     $movieController = new MovieController();
@@ -542,15 +535,15 @@ delete($baseRoute . 'movies/delete', function() {
     }
 });
 
-<<<<<<< Updated upstream
-=======
 // Archive movie route
-get($baseRoute . 'movies/archive', function() {
+put($baseRoute . 'movies/archive', function() {
     require_once 'src/controller/MovieController.php';
     $movieController = new MovieController();
+    parse_str(file_get_contents("php://input"), $_PUT); // Parse the PUT request
 
-    if (isset($_GET['movieId'])) {
-        $movieId = htmlspecialchars(trim($_GET['movieId']));
+
+    if (isset($_PUT['movieId'])) {
+        $movieId = htmlspecialchars(trim($_PUT['movieId']));
 
         $result = $movieController->archiveMovie($movieId);
 
@@ -560,8 +553,6 @@ get($baseRoute . 'movies/archive', function() {
             echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);
         }
     } else {
-        echo json_encode(['success' => false, 'errorMessage' => 'Invalid movie ID.']);
+        echo json_encode(['success' => false, 'errorMessage' => 'Invalid movie ID.' . $_PUT['movieId']]);
     }
 });
->>>>>>> Stashed changes
->>>>>>> Stashed changes

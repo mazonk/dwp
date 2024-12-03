@@ -538,7 +538,6 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
         if (event.target.classList.contains('confirmArchiveMovieButton')) {
             const movieId = event.target.dataset.movieId;
             archiveMovieIdInput.value = movieId;
-            archiveMovieModal.classList.remove('hidden');
         }
     });
 
@@ -553,17 +552,14 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
     const xhr = new XMLHttpRequest();
     const baseRoute = '<?php echo $_SESSION['baseRoute']; ?>';
     const movieId = archiveMovieIdInput.value;
+    console.log(movieId);
 
-    console.log(xhr);
-
-    xhr.open('POST', `${baseRoute}movies/archive?movieId=${encodeURIComponent(movieId)}&action=archiveMovie`, true);
+    xhr.open('PUT', `${baseRoute}movies/archive`, true);
   
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');  //not needed?
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
             let response
             console.log(xhr.response);
-        }
         try {
             response = JSON.parse(xhr.response);
         } catch (e) {
@@ -574,43 +570,22 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
         if (response.success) {
             alert('Success! Movie archived successfully.');
             window.location.reload();
-            clearValues('add');
+            clearValues('archive');
             archiveMovieModal.classList.add('hidden');
         } else {
             console.error('Error:', response.errorMessage);
         }
     }
-
-
+};
     // Send the request with movieId in URL parameters or form data
-    xhr.send();
+    xhr.send(`movieId=${movieId}&action=archiveMovie`);
 });
 
     //Clear error messages and input values
     function clearValues(action) {
         if (action === 'edit') {
-            errorEditMovieMessageTitle.classList.add('hidden');
-            errorEditMovieMessageDescription.classList.add('hidden');
-            errorEditMovieMessageDuration.classList.add('hidden');
-            errorEditMovieMessageLanguage.classList.add('hidden');
-            errorEditMovieMessageReleaseDate.classList.add('hidden');
-            errorEditMovieMessagePosterUrl.classList.add('hidden');
-            errorEditMovieMessagePromoUrl.classList.add('hidden');
-            errorEditMovieMessageTrailerUrl.classList.add('hidden');
-            errorEditMovieMessageRating.classList.add('hidden');
-            errorEditMovieMessageGeneral.classList.add('hidden');
-            editMovieForm.reset();
+        editMovieForm.reset();
         } else if (action === 'add') {
-            errorAddMovieMessageTitle.classList.add('hidden');
-            errorAddMovieMessageDescription.classList.add('hidden');
-            errorAddMovieMessageDuration.classList.add('hidden');
-            errorAddMovieMessageLanguage.classList.add('hidden');
-            errorAddMovieMessageReleaseDate.classList.add('hidden');
-            errorAddMovieMessagePosterUrl.classList.add('hidden');
-            errorAddMovieMessagePromoUrl.classList.add('hidden');
-            errorAddMovieMessageTrailerUrl.classList.add('hidden');
-            errorAddMovieMessageRating.classList.add('hidden');
-            errorAddMovieMessageGeneral.classList.add('hidden');
             addMovieForm.reset();
         } else if (action === 'archive') {
             errorArchiveMovieMessageGeneral.classList.add('hidden');
