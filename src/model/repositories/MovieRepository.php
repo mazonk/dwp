@@ -20,6 +20,22 @@ class MovieRepository {
         return $result;
     }
 
+    public function getAllActiveMovies(): array {
+        $db = $this->getdb();
+        $query = $db->prepare("SELECT * FROM Movie WHERE archived = 0");
+        try {
+            $query->execute();
+            $result = $query->fetchAll(PDO::FETCH_ASSOC);
+            if (empty($result)) {
+                throw new Exception("No active movies found!");
+            }
+        } catch (PDOException $e) {
+            throw new PDOException("Unable to fetch active movies!");
+        }
+
+        return $result;
+    }
+
     public function getActorsByMovieId(int $movieId): array {
         $db = $this->getdb();
         $query = $db->prepare("SELECT a.* FROM Actor as a JOIN MovieActor as ma ON a.actorId = ma.actorId WHERE ma.movieId = :movieId");
@@ -96,8 +112,26 @@ class MovieRepository {
         $query = $db->prepare("DELETE FROM Movie WHERE movieId = :movieId");
         try {
             $query->execute(array(":movieId" => $movieId));
+            $this->deleteFromJunctionTable('movieactor', $movieId, $db);
+            $this->deleteFromJunctionTable('moviedirector', $movieId, $db);
+            $this->deleteFromJunctionTable('moviegenre', $movieId, $db);
         } catch (PDOException $e) {
             throw new PDOException("Unable to delete movie!");
+        }
+    }
+
+    private function deleteFromJunctionTable(string $tableName, int $movieId, $db): void {
+        $query = $db->prepare("DELETE FROM $tableName WHERE movieId = :movieId");
+        $query->execute(array(":movieId" => $movieId));
+    }
+
+    public function archiveMovie(int $movieId): void {
+        $db = $this->getdb();
+        $query = $db->prepare("UPDATE Movie SET archived = 1 WHERE movieId = :movieId");
+        try {
+            $query->execute(array(":movieId" => $movieId));
+        } catch (PDOException $e) {
+            throw new PDOException("Unable to archive movie!");
         }
     }
 }

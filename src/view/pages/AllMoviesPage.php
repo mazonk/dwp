@@ -24,7 +24,7 @@ include_once "src/view/components/ShowingCard.php";
       <?php
       // Create a new instance of MovieController and fetch all movies
       $movieController = new MovieController();
-      $allMovies = $movieController->getAllMovies();
+      $allMovies = $movieController->getAllActiveMovies();
 
       if (isset($allMovies['errorMessage'])) {
         echo $allMovies['errorMessage'];

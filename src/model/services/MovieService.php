@@ -24,6 +24,19 @@ class MovieService {
         return $movies;
     }
 
+    public function getAllActiveMovies(): array {
+        try {
+            $result = $this->movieRepository->getAllActiveMovies();
+            $movies = [];
+            foreach ($result as $row) {
+                $movies[] = $this->createMovieMap($row);
+            }
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+        return $movies;
+    }
+
     public function getMovieById(int $movieId): array|Movie {
         try {
             $result = $this->movieRepository->getMovieById($movieId);
@@ -113,6 +126,15 @@ class MovieService {
     public function deleteMovie(int $movieId): array {
         try {
             $this->movieRepository->deleteMovie($movieId);
+            return ['success' => true];
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+    }
+
+    public function archiveMovie(int $movieId): array {
+        try {
+            $this->movieRepository->archiveMovie($movieId);
             return ['success' => true];
         } catch (Exception $e) {
             return ['error' => true, 'message' => $e->getMessage()];

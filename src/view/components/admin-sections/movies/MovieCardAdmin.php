@@ -32,10 +32,9 @@ class MovieCardAdmin
                     class="py-1 px-2 text-primary text-xs border-[1px] border-primary rounded hover:text-primaryHover hover:border-primaryHover duration-[0.2s] ease-in-out">
                     Edit
                 </button>
-
-                <button onclick="openDeleteMovieModal('<?= htmlspecialchars($movie->getMovieId()); ?>')"
-                        class="bg-red-500 text-textDark py-1 px-2 text-xs border-[1px] border-red-500 rounded hover:bg-red-600 hover:border-red-600">
-                    Delete
+                <button onclick="openArchiveMovieModal('<?= htmlspecialchars($movie->getMovieId()); ?>')"
+                        class="bg-blue-400 text-textDark py-1 px-2 text-xs border-[1px] border-blue-500 rounded hover:bg-blue-600 hover:border-blue-600">
+                    Archive
                 </button>
             </div>
         </div>
