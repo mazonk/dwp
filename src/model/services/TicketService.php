@@ -142,4 +142,12 @@ class TicketService {
         }
     }
 
+    public function rollbackTicket(int $ticketId) {
+        try {
+            return $this->ticketRepository->rollbackTicket($ticketId);
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+    }
+
 }

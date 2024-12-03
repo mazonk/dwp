@@ -5,6 +5,10 @@ include_once 'src/controller/VenueController.php';
 include_once 'src/controller/TicketController.php';
 
 // Get booking details from session
+if (!isset($_SESSION['activeBooking'])) {
+    echo  'Start a booking to access this page!' . ' ' . '<a class="underline text-blue-300" href="javascript:window.history.back()"><-Go back!</a>';
+    exit();
+}
 $booking = $_SESSION['activeBooking'];
 
 // Get showing details from the showing service
@@ -168,7 +172,7 @@ foreach ($booking['ticketIds'] as $ticketId) {
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === 4 && xhr.status === 200) {
                         console.log(xhr.responseText);
-                        // history.back();
+                        history.back();
                     }
                 };
                 xhr.send();
@@ -176,7 +180,19 @@ foreach ($booking['ticketIds'] as $ticketId) {
         }, 1000);
     });
     function cancelBooking() {
-        window.history.back();
+        localStorage.removeItem('bookingExpiry');
+
+        const xhr = new XMLHttpRequest();
+        const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
+        xhr.open('POST', `${baseRoute}booking/rollback`, true);
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                console.log(xhr.responseText);
+                history.back();
+            }
+        };
+        xhr.send();
     }
 
     function showGuestForm() {

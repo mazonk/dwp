@@ -101,4 +101,14 @@ public function createTicket(int $seatId, int $ticketTypeId, int $showingId, int
         throw new PDOException("Unable to create ticket: ". $e->getMessage());
     }
 }
+
+public function rollbackTicket(int $ticketId): bool {
+    $db = $this->getdb();
+    $statement = $db->prepare("DELETE FROM Ticket WHERE ticketId = :ticketId");
+    try {
+        return $statement->execute([':ticketId' => $ticketId]);
+    } catch (PDOException $e) {
+        throw new PDOException("Unable to rollback ticket: ". $e->getMessage());
+    }
+}
 }

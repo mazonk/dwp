@@ -61,11 +61,18 @@ class BookingService {
         }
     }
 
-    public function rollBackBooking(int $bookingId): bool {
+    public function rollBackBooking(int $bookingId, array $ticketIds): bool {
         try {
+            foreach ($ticketIds as $ticketId) {
+                $result = $this->ticketService->rollBackTicket($ticketId);
+                if (is_array($result) && isset($result['error']) && $result['error']) {
+                    return false;
+                }
+            }
             return $this->bookingRepository->rollBackBooking($bookingId);
         } catch (Exception $e) {
             return false;
         }
     }
+
 }

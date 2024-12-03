@@ -34,8 +34,8 @@ class BookingController {
         }
     }
 
-    public function rollBackBooking($bookingId): bool {
-        $wasRolledBack = $this->bookingService->rollBackBooking($bookingId);
+    public function rollBackBooking(int $bookingId, array $ticketIds): bool {
+        $wasRolledBack = $this->bookingService->rollBackBooking($bookingId, $ticketIds);
         unset($_SESSION['activeBooking']);
         return $wasRolledBack;
     }
