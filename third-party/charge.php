@@ -19,7 +19,7 @@ $paymentData = [
   'paymentMethod' => null,
   'checkoutSessionId' => null,
   'paymentStatus' => 'pending',
-  'venueId' => 1,
+  'addressId' => 1,
   'bookingId' => 1
 ];
 

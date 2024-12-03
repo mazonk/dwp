@@ -1,8 +1,6 @@
 <?php
-include_once "src/model/entity/User.php";
 include_once "src/model/entity/Address.php";
 include_once "src/model/entity/Booking.php";
-include_once "src/model/entity/PaymentMethod.php";
 
 enum PaymentStatus: string {
   case CONFIRMED = 'confirmed';
@@ -19,10 +17,10 @@ class Payment {
   private string $paymentMethod;
   private string $checkoutSessionId;
   private PaymentStatus $paymentStatus;
-  private Venue $venue;
+  private Address $address;
   private Booking $booking;
   
-  public function __construct(int $paymentId, DateTime $paymentDate, DateTime $paymentTime, float $totalPrice, string $currency, string $paymentMethod, string $checkoutSessionId, PaymentStatus $paymentStatus, Venue $venue, Booking $booking) {
+  public function __construct(int $paymentId, DateTime $paymentDate, DateTime $paymentTime, float $totalPrice, string $currency, string $paymentMethod, string $checkoutSessionId, PaymentStatus $paymentStatus, Address $address, Booking $booking) {
     $this->paymentId = $paymentId;
     $this->paymentDate = $paymentDate;
     $this->paymentTime = $paymentTime;
@@ -31,7 +29,7 @@ class Payment {
     $this->paymentMethod = $paymentMethod;
     $this->checkoutSessionId = $checkoutSessionId;
     $this->paymentStatus = $paymentStatus;
-    $this->venue = $venue;
+    $this->address = $address;
     $this->booking = $booking;
   }
 
@@ -67,8 +65,8 @@ class Payment {
     return $this->paymentStatus;
   }
 
-  public function getVenue(): Venue {
-    return $this->venue;
+  public function getAddress(): Address {
+    return $this->address;
   }
 
   public function getBooking(): Booking {
@@ -107,8 +105,8 @@ class Payment {
     $this->paymentStatus = $paymentStatus;
   }
 
-  public function setVenue(Venue $venue): void {
-    $this->venue = $venue;
+  public function setAddress(Address $address): void {
+    $this->address = $address;
   }
 
   public function setBooking(Booking $booking): void {

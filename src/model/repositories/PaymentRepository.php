@@ -1,14 +1,13 @@
 <?php
 class PaymentRepository {
-  
-  private function getdb(): PDO {
-    require_once 'src/model/database/dbcon/DatabaseConnection.php';
-    return DatabaseConnection::getInstance();
+  private PDO $db;
+
+  public function __construct($dbCon) {
+    $this->db = $dbCon;
   }
 
   public function getIdsByCheckoutSessionId(string $checkoutSessionId): array {
-    $db = $this->getdb();
-    $query = $db->prepare('SELECT paymentId, venueId, bookingId FROM payment WHERE checkoutSessionId = :checkoutSessionId');
+    $query = $this->db->prepare('SELECT paymentId, addressId, bookingId FROM payment WHERE checkoutSessionId = :checkoutSessionId');
 
     try {
       $query->execute(array('checkoutSessionId' => $checkoutSessionId));
@@ -24,8 +23,7 @@ class PaymentRepository {
   }
 
   public function addPayment(array $paymentData): void {
-    $db = $this->getdb();
-    $query = $db->prepare('INSERT INTO payment (paymentDate, paymentTime, totalPrice, currency, paymentMethod, checkoutSessionId, paymentStatus, venueId, bookingId) VALUES (:paymentDate, :paymentTime, :totalPrice, :currency, :paymentMethod, :checkoutSessionId, :paymentStatus, :venueId, :bookingId)');
+    $query = $this->db->prepare('INSERT INTO payment (paymentDate, paymentTime, totalPrice, currency, paymentMethod, checkoutSessionId, paymentStatus, addressId, bookingId) VALUES (:paymentDate, :paymentTime, :totalPrice, :currency, :paymentMethod, :checkoutSessionId, :paymentStatus, :addressId, :bookingId)');
 
     try {
       $query->execute(array(
@@ -36,7 +34,7 @@ class PaymentRepository {
         'paymentMethod' => $paymentData['paymentMethod'],
         'checkoutSessionId' => $paymentData['checkoutSessionId'],
         'paymentStatus' => $paymentData['paymentStatus'],
-        'venueId' => $paymentData['venueId'],
+        'addressId' => $paymentData['addressId'],
         'bookingId' => $paymentData['bookingId']
       ));
     } catch (PDOException $e) {
@@ -45,8 +43,7 @@ class PaymentRepository {
   }
 
   public function updatePaymentStatus(int $paymentId, string $paymentStatus): void {
-    $db = $this->getdb();
-    $query = $db->prepare("UPDATE Payment SET paymentStatus = :paymentStatus WHERE paymentId = :paymentId");
+    $query = $this->db->prepare("UPDATE Payment SET paymentStatus = :paymentStatus WHERE paymentId = :paymentId");
 
     try {
       $query->execute(array(
