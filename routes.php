@@ -82,6 +82,7 @@ post($baseRoute.'home', 'src/view/pages/LandingPage.php'); // used at toggle dro
 post($baseRoute.'booking', 'src/view/pages/BookingPage.php');
 post($baseRoute.'about', 'src/view/pages/AboutPage.php'); // used at toggle dropdown
 post($baseRoute.'profile', 'src/view/pages/ProfilePage.php'); // used at toggle dropdown
+post($baseRoute.'stripe-webhook', 'stripe_webhook.php'); // used at stripe webhook
 
 // Post route for register
 post($baseRoute.'register', function() {
