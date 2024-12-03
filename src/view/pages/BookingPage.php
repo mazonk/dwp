@@ -42,7 +42,8 @@ require_once "src/controller/BookingController.php";
                 }
                 $seatsByRow[$row][] = $seat;
             }
-            echo '<div id="seat-selection">';
+            echo '<div id="seat-selection" class="flex flex-col items-center justify-center">';
+            echo '<div class="screen bg-gray-700 text-white text-center py-2 w-full max-w-[70%] rounded mb-12">Screen</div>';
             foreach ($seatsByRow as $row => $seats) {
                 echo "<div class='seat-row flex justify-center space-x-4 mb-4'>";
                 echo "<div class='row-number text-xl font-semibold'>{$row}</div>";
@@ -61,18 +62,40 @@ require_once "src/controller/BookingController.php";
         }
         ?>
 
+        <div class="flex flex-row items-center align-baseline justify-between">
+            <!-- Color Explanation -->
+            <div class="color-legend mt-6">
+                <h3 class="text-lg font-semibold mb-2">Color Legend:</h3>
+                <div class="flex space-x-4">
+                    <div class="flex items-center">
+                        <div class="w-4 h-4 bg-lime-600 mr-2 rounded"></div>
+                        <span>Available</span>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-4 h-4 bg-red-500 mr-2 rounded"></div>
+                        <span>Selected</span>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-4 h-4 bg-purple-500 mr-2 rounded"></div>
+                        <span>Unavailable</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Proceed Button -->
+            <div class="mt-12">
+                <button class="py-2.5 px-12 text-primary border-[1px] border-primary rounded hover:text-primaryHover hover:border-primaryHover duration-[.2s] ease-in-out cursor-pointer"
+                onclick="proceedToOverview(
+                    '<?= htmlspecialchars($_GET['showing'])?>'
+                )">
+                    Proceed to overview
+                </button>
+            </div>
+        </div>
+
         <!-- Selected seats display -->
         <div id="booked-seats-display" class="mt-4 text-xl hidden">
             <span>Selected Seats: </span>
             <span id="selected-seats-list" class="font-semibold"></span>
-        </div>
-        <div class="mt-12">
-            <button class="py-2.5 px-2 text-primary border-[1px] border-primary rounded hover:text-primaryHover hover:border-primaryHover duration-[.2s] ease-in-out cursor-pointer"
-            onclick="proceedToOverview(
-                '<?= htmlspecialchars($_GET['showing'])?>'
-            )">
-                Proceed to overview
-            </button>
         </div>
     </main>
 
