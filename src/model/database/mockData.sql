@@ -753,21 +753,6 @@ INSERT INTO Ticket (seatId, ticketTypeId, showingId, bookingId) VALUES
 (2, 2, 2, 2),
 (3, 3, 3, 3);
 
-/* INSERT INTO Payment (paymentDate, paymentTime, totalPrice, userId, addressId, bookingId, methodId, status) VALUES
-('2024-10-15', '18:30:00', 10.00, 1, 1, 1, 1, 'confirmed'),
-('2024-10-16', '19:45:00', 20.00, 2, 2, 2, 2, 'cancelled'),
-('2024-10-17', '20:30:00', 8.00, 3, 3, 3, 3, 'confirmed'),
-('2024-10-18', '14:00:00', 15.00, 1, 1, 1, 1, 'confirmed'),
-('2024-10-19', '16:15:00', 25.00, 2, 2, 2, 2, 'confirmed'),
-('2024-10-20', '17:30:00', 12.00, 3, 3, 3, 3, 'confirmed'),
-('2024-10-21', '15:00:00', 30.00, 1, 1, 1, 1, 'confirmed'),
-('2024-10-22', '18:45:00', 22.50, 2, 2, 2, 2, 'confirmed'),
-('2024-10-23', '20:00:00', 10.50, 3, 3, 1, 3, 'confirmed'),
-('2024-10-24', '14:30:00', 28.00, 1, 1, 1, 1, 'confirmed'),
-('2024-10-25', '16:00:00', 18.75, 2, 2, 1, 2, 'confirmed'),
-('2024-10-26', '19:15:00', 9.99, 3, 3, 2, 3, 'cancelled'),
-('2024-10-27', '21:00:00', 14.99, 1, 1, 3, 1, 'confirmed'); */
-
 INSERT INTO News (imageURL, header, content) VALUES
 ('gotham_news.jpg', 'New Batman Movie Showing', 'Join us for the latest Batman movie screening at Gotham Cinema!'),
 ('hollywood_news.jpg', 'Spider-Man Marathon', 'Enjoy a Spider-Man marathon at Hollywood Stars Cinema this weekend.'),
