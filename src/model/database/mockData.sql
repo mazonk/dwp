@@ -746,19 +746,14 @@ INSERT INTO TicketType (name, price, description) VALUES
 INSERT INTO Booking (userId, status) VALUES
 (1, 'confirmed'),
 (1, 'pending'),
-(1, 'cancelled');
+(1, 'failed');
 
 INSERT INTO Ticket (seatId, ticketTypeId, showingId, bookingId) VALUES
 (1, 1, 1, 1),
 (2, 2, 2, 2),
 (3, 3, 3, 3);
 
-INSERT INTO PaymentMethod (name) VALUES
-('Credit Card'),
-('PayPal'),
-('Cash');
-
-INSERT INTO Payment (paymentDate, paymentTime, totalPrice, userId, addressId, bookingId, methodId, status) VALUES
+/* INSERT INTO Payment (paymentDate, paymentTime, totalPrice, userId, addressId, bookingId, methodId, status) VALUES
 ('2024-10-15', '18:30:00', 10.00, 1, 1, 1, 1, 'confirmed'),
 ('2024-10-16', '19:45:00', 20.00, 2, 2, 2, 2, 'cancelled'),
 ('2024-10-17', '20:30:00', 8.00, 3, 3, 3, 3, 'confirmed'),
@@ -771,7 +766,7 @@ INSERT INTO Payment (paymentDate, paymentTime, totalPrice, userId, addressId, bo
 ('2024-10-24', '14:30:00', 28.00, 1, 1, 1, 1, 'confirmed'),
 ('2024-10-25', '16:00:00', 18.75, 2, 2, 1, 2, 'confirmed'),
 ('2024-10-26', '19:15:00', 9.99, 3, 3, 2, 3, 'cancelled'),
-('2024-10-27', '21:00:00', 14.99, 1, 1, 3, 1, 'confirmed');
+('2024-10-27', '21:00:00', 14.99, 1, 1, 3, 1, 'confirmed'); */
 
 INSERT INTO News (imageURL, header, content) VALUES
 ('gotham_news.jpg', 'New Batman Movie Showing', 'Join us for the latest Batman movie screening at Gotham Cinema!'),
