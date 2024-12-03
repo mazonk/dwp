@@ -6,6 +6,16 @@ class TicketController {
 
     public function __construct() {
         $this->ticketService = new TicketService();
+        $seatService = new SeatService();
+        $this->ticketService->setSeatService($seatService);
+    }
+
+    public function getTicketById(int $id): Ticket|array {
+        $ticket = $this->ticketService->getTicketById($id);
+        if (is_array($ticket) && isset($ticket['error']) && $ticket['error']) {
+            return ['errorMessage' => $ticket['message']];
+        }
+        return $ticket;
     }
 
     public function createTickets(array $seatIds, int $ticketTypeId, int $showingId, int $bookingId): array {

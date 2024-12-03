@@ -97,6 +97,19 @@ class TicketService {
         }
     }
 
+    public function getTicketById(int $id): array|Ticket {
+        try {
+            $result = $this->ticketRepository->getTicketById($id);
+            $ticket = $this->mapTicket($result);
+            if (is_array($ticket) && isset($ticket["error"]) && $ticket["error"]) {
+                return $ticket; // Return error array
+            }
+            return $ticket;
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+    }
+
     // public function createTicket(int $seatId, int $ticketTypeId, int $showingId, int $bookingId): int|array {
     //     try {
     //         $insertedId = $this->ticketRepository->createTicket($seatId, $ticketTypeId, $showingId, $bookingId);
