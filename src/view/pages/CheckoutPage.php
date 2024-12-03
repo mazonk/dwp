@@ -42,9 +42,12 @@ foreach ($booking['ticketIds'] as $ticketId) {
 
     <div class="mb-6 flex justify-between items-center">
         <h2 class="text-4xl font-bold  text-center">Booking Overview</h2>
-        <button onclick="cancelBooking()" class="py-2 px-4 text-red-500 border border-red-500 rounded hover:bg-red-500 hover:text-white transition duration-200">
-            Cancel Booking
-        </button>
+        <div class="flex flex-row items-center space-x-4">
+            <div id="timer" class="text-red-500 text-lg font-bold"></div>
+            <button onclick="cancelBooking()" class="py-2 px-4 text-red-500 border border-red-500 rounded hover:bg-red-500 hover:text-white transition duration-200">
+                Cancel Booking
+            </button>
+        </div>
     </div>
 
     <div class="flex gap-6 mb-6 justify-between">
@@ -138,6 +141,40 @@ foreach ($booking['ticketIds'] as $ticketId) {
 </html>
 
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const timerDisplay = document.getElementById('timer');
+        let bookingExpiry = localStorage.getItem('bookingExpiry');
+
+        if (!bookingExpiry) {
+            bookingExpiry = Date.now() + 5 * 3 * 1000; // 15 minutes from now
+            localStorage.setItem('bookingExpiry', bookingExpiry);
+        }
+
+        const interval = setInterval(() => {
+            const timeLeft = Math.max(0, bookingExpiry - Date.now());
+            const minutes = Math.floor(timeLeft / 60000);
+            const seconds = Math.floor((timeLeft % 60000) / 1000);
+            timerDisplay.textContent = `Time left: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+            if (timeLeft <= 0) {
+                clearInterval(interval);
+                alert('Your booking has expired!');
+                localStorage.removeItem('bookingExpiry');
+
+                const xhr = new XMLHttpRequest();
+                const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
+                xhr.open('POST', `${baseRoute}booking/rollback`, true);
+                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        console.log(xhr.responseText);
+                        // history.back();
+                    }
+                };
+                xhr.send();
+            }
+        }, 1000);
+    });
     function cancelBooking() {
         window.history.back();
     }

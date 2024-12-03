@@ -266,7 +266,7 @@ post($baseRoute.'booking/overview', function() {
     
     $createBookingResult = $bookingController->createEmptyBooking(isset($_SESSION['loggedInUser']) ? $_SESSION['loggedInUser']['userId'] : null, 'pending');
     $selectedSeatsArray = explode(',', htmlspecialchars($_POST['selectedSeats']));
-    $createTicketsResult = $ticketController->createTickets($selectedSeatsArray, 1, intval($_POST['showingId']), $createBookingResult);
+    $ticketController->createTickets($selectedSeatsArray, 1, intval($_POST['showingId']), $createBookingResult);
 
     if ($createBookingResult && !is_array($createBookingResult)) {
         // Return a success response
@@ -276,6 +276,22 @@ post($baseRoute.'booking/overview', function() {
         echo json_encode(['success' => false, 'errorMessage' => $createBookingResult['errorMessage']]);
     }
 });
+
+post($baseRoute.'booking/rollback', function() {
+    require_once 'session_config.php';
+    require_once 'src/controller/BookingController.php';
+    $bookingController = new BookingController();
+    $result = $bookingController->rollBackBooking($_SESSION['activeBooking']['id']);
+    
+    if ($result && !is_array($result)) {
+        // Return a success response
+        echo json_encode(['success' => $result]);
+    } else {
+        // Return an error response
+        echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
+    }
+});
+
 
 // Post route for creating tickets
 // post($baseRoute.'ticket/create', function() {

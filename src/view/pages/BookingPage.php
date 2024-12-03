@@ -20,7 +20,6 @@ require_once "src/controller/BookingController.php";
 <body class="max-w-[1440px] w-[100%] mx-auto mt-[72px] mb-[2rem] px-[100px] bg-bgDark text-textLight">
     <?php include_once("src/view/components/Navbar.php"); ?>
     <main class="mt-[56px] p-4">
-        <div id="timer" class="text-red-500 text-lg font-bold"></div>
         <?php
         // //remove booking if the timer expired
         // if (isset($_SESSION['activeBooking']) && ($_SESSION['activeBooking']['expiry'] / 1000 - 1) < time()) {
@@ -119,28 +118,6 @@ require_once "src/controller/BookingController.php";
             xhr.send(`selectedSeats=${encodeURIComponent(selectedSeats)}&showingId=${showingId}`);
         }
         document.addEventListener('DOMContentLoaded', () => {
-            // const timerDisplay = document.getElementById('timer');
-            // let bookingExpiry = localStorage.getItem('bookingExpiry');
-
-            // if (!bookingExpiry) {
-            //     bookingExpiry = Date.now() + 15 * 60 * 1000; // 15 minutes from now
-            //     localStorage.setItem('bookingExpiry', bookingExpiry);
-            // }
-
-            // const interval = setInterval(() => {
-            //     const timeLeft = Math.max(0, bookingExpiry - Date.now());
-            //     const minutes = Math.floor(timeLeft / 60000);
-            //     const seconds = Math.floor((timeLeft % 60000) / 1000);
-            //     timerDisplay.textContent = `Time left: ${minutes}:${seconds.toString().padStart(2, '0')}`;
-
-            //     if (timeLeft <= 0) {
-            //         clearInterval(interval);
-            //         alert('Your booking has expired!');
-            //         localStorage.removeItem('bookingExpiry');
-            //         window.location.reload(true); // Or redirect to a different page
-            //     }
-            // }, 1000);
-
             const seatButtons = document.querySelectorAll('.seat-card');
             const selectedSeatsList = document.getElementById('selected-seats-list');
             let selectedSeats = [];
