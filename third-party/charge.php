@@ -2,7 +2,6 @@
 require_once 'third-party/stripe-php/init.php';
 require_once 'loadEnv.php';
 require_once 'src/controller/PaymentController.php';
-require_once 'src/controller/BookingController.php';
 
 // Load environment variables for Stripe API keys
 loadEnv();
@@ -20,15 +19,15 @@ $paymentData = [
   'checkoutSessionId' => null,
   'paymentStatus' => 'pending',
   'addressId' => 1,
-  'bookingId' => 1
+  'bookingId' => 2
 ];
 
 try {
   $checkout_session = \Stripe\Checkout\Session::create([
     "mode" => "payment",
     // TODO: dynamic success and cancel route
-    "success_url" => "http://localhost/dwp/booking/checkout_success",
-    "cancel_url" => "http://localhost/dwp/booking/checkout",
+    "success_url" => "https://spicypisces.eu/booking/checkout_success",
+    "cancel_url" => "https://spicypisces.eu",
     // TODO: dynamic items, in this case tickets for the movie
     "line_items" => [
       [
@@ -52,9 +51,10 @@ try {
   $payment = $paymentController->addPayment($paymentData);
   
   if(isset($payment['errorMessage'])) {
-    foreach ($paymentData as $key => $value) {
+    /* foreach ($paymentData as $key => $value) {
       echo $key . ': ' . $value . '<br>';
-    }
+    } */
+    echo $payment['errorMessage'];
   } 
   else {
     // 303 See Other status code, so the form doesn't get resubmitted for example on refresh or when going back to the page
