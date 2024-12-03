@@ -7,6 +7,9 @@
 credentials.php
 .env
 
+#cloudinary
+.cloudenv
+
 # mac binary files ignore
 .DS_Store
 
