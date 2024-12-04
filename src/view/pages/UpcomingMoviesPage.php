@@ -24,7 +24,7 @@ $currentDate = new DateTime();
   <div class="grid grid-cols-5 gap-16">
     <?php
     $movieController = new MovieController();
-    $allMovies = $movieController->getAllMovies();
+    $allMovies = $movieController->getAllActiveMovies();
 
     if (isset($allMovies['errorMessage'])) {
       echo $allMovies['errorMessage'];

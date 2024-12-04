@@ -174,7 +174,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         errorMessageElement.style.display = 'block';
                         return;
                     }
-
                     if (response.success) {
                         alert('Success! Venue edited successfully.');
                         window.location.reload();
