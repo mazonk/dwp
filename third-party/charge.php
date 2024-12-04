@@ -28,6 +28,7 @@ try {
     // TODO: dynamic success and cancel route
     "success_url" => "https://spicypisces.eu/booking/checkout_success",
     "cancel_url" => "https://spicypisces.eu",
+    'expires_at' => time() + 1800, // Custom expiration time 30 minutes (minimum)
     // TODO: dynamic items, in this case tickets for the movie
     "line_items" => [
       [

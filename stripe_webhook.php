@@ -45,21 +45,20 @@ switch ($event->type) {
     // Update payment status to confirmed, and send invoice
     $paymentIds = $paymentController->getIdsByCheckoutSessionId($eventData->id);
     $paymentController->updatePaymentStatus($paymentIds['paymentId'], $paymentIds['bookingId'], 'confirmed'); 
-
     $invoiceController->sendInvoice(); // TODO: Sanitizing, validation, and error handling, and also the actual invoice data
     break;
 
-  case 'payment_intent.payment_failed':
+  case 'chekcout.session.expired':
     //Log
-    error_log("Handling 'payment_intent.payment_failed' event.");
+    error_log("Handling 'chekcout.session.expired' event.");
     $eventData = $event->data->object;
     // Update payment status to failed
     $paymentIds = $paymentController->getIdsByCheckoutSessionId($eventData->id);
     //Log
-    error_log("Retrieved payment IDs for failed intent: " . json_encode($paymentIds));
+    error_log("Retrieved payment IDs for expired event: " . json_encode($paymentIds));
     $paymentController->updatePaymentStatus($paymentIds['paymentId'], $paymentIds['bookingId'], 'failed');
     //Log
-    error_log("Payment status updated to 'failed'");
+    error_log("Payment and booking status updated to 'failed'");
     break;
 
   default:
