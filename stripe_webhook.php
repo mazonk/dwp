@@ -48,9 +48,9 @@ switch ($event->type) {
     $invoiceController->sendInvoice(); // TODO: Sanitizing, validation, and error handling, and also the actual invoice data
     break;
 
-  case 'chekcout.session.expired':
+  case 'checkout.session.expired':
     //Log
-    error_log("Handling 'chekcout.session.expired' event.");
+    error_log("Handling 'checkout.session.expired' event.");
     $eventData = $event->data->object;
     // Update payment status to failed
     $paymentIds = $paymentController->getIdsByCheckoutSessionId($eventData->id);
