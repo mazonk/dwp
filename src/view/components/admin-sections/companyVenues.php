@@ -1,5 +1,5 @@
 <?php parse_str(file_get_contents("php://input"), $_PUT); ?>
-<section class="max-h-screen overflow-y-auto">
+<section class="">
     <h2 class="text-3xl font-semibold mb-4 text-center">Company & Venues</h2>
     <div class="flex flex-col">
         <hr class="mb-4 w-full mx-auto border-gray-300">

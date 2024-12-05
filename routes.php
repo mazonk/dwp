@@ -423,7 +423,6 @@ delete($baseRoute.'openingHours/delete', function() {
 post($baseRoute.'movies/add', function() {
     require_once 'src/controller/MovieController.php';
     $movieController = new MovieController();
-
     if (isset($_POST['action']) && $_POST['action'] === 'addMovie') {
         $movieData = [
             'title' => htmlspecialchars(trim($_POST['title'])),

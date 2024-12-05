@@ -19,6 +19,17 @@ class MovieController {
         return $movies;
     }
 
+    public function getAllActiveMovies(): array {
+        $movies = $this->movieService->getAllActiveMovies();
+
+        // If the service returns an error, pass it to the frontend
+        if (isset($movies['error']) && $movies['error']) {
+            return ['errorMessage' => $movies['message']];
+        }
+        
+        return $movies;
+    }
+
     public function getMovieById(int $movieId): array|Movie {
         $movie = $this->movieService->getMovieById(htmlspecialchars($movieId));
         
