@@ -8,7 +8,6 @@ class OpeningHourService {
 
   public function __construct() {
     $this->openingHourRepository = new OpeningHourRepository();
-    $this->venueService = new VenueService();
   }
 
   public function getOpeningHours(): array {

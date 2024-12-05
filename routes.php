@@ -82,7 +82,6 @@ post($baseRoute.'home', 'src/view/pages/LandingPage.php'); // used at toggle dro
 post($baseRoute.'booking', 'src/view/pages/BookingPage.php');
 post($baseRoute.'about', 'src/view/pages/AboutPage.php'); // used at toggle dropdown
 post($baseRoute.'profile', 'src/view/pages/ProfilePage.php'); // used at toggle dropdown
-post($baseRoute.'stripe-webhook', 'stripe_webhook.php'); // used at stripe webhook
 
 // Post route for register
 post($baseRoute.'register', function() {
@@ -264,6 +263,42 @@ post($baseRoute.'news/add', function() {
     }
 });
 
+// Post route for booking
+post($baseRoute.'booking/overview', function() {
+    require_once 'src/controller/BookingController.php';
+    require_once 'src/controller/TicketController.php';
+    require_once 'session_config.php';
+    $bookingController = new BookingController();
+    $ticketController = new TicketController();
+    
+    $createBookingResult = $bookingController->createEmptyBooking(isset($_SESSION['loggedInUser']) ? $_SESSION['loggedInUser']['userId'] : null, 'pending');
+    $selectedSeatsArray = explode(',', htmlspecialchars($_POST['selectedSeats']));
+    $ticketController->createTickets($selectedSeatsArray, 1, intval($_POST['showingId']), $createBookingResult);
+
+    if ($createBookingResult && !is_array($createBookingResult)) {
+        // Return a success response
+        echo json_encode(['success' => $createBookingResult]);
+    } else {
+        // Return an error response
+        echo json_encode(['success' => false, 'errorMessage' => $createBookingResult['errorMessage']]);
+    }
+});
+
+post($baseRoute.'booking/rollback', function() {
+    require_once 'session_config.php';
+    require_once 'src/controller/BookingController.php';
+    $bookingController = new BookingController();
+    $result = $bookingController->rollBackBooking($_SESSION['activeBooking']['id'], $_SESSION['activeBooking']['ticketIds']);
+    
+    if ($result && !is_array($result)) {
+        // Return a success response
+        echo json_encode(['success' => $result]);
+    } else {
+        // Return an error response
+        echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
+    }
+});
+
 // Edit news put route
 put($baseRoute.'news/edit', function() {
     $newsController = new NewsController();
@@ -425,5 +460,143 @@ delete($baseRoute.'openingHours/delete', function() {
     } else {
         // Invalid action response
         echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
+    }
+});
+
+//Add movie post route
+post($baseRoute.'movies/add', function() {
+    require_once 'src/controller/MovieController.php';
+    $movieController = new MovieController();
+    parse_str(file_get_contents("php://input"), $_POST); // Parse the PUT request
+
+    if (isset($_POST['action']) && $_POST['action'] === 'addMovie') {
+        $movieData = [
+            'title' => htmlspecialchars(trim($_POST['title'])),
+            'releaseDate' => htmlspecialchars(trim($_POST['releaseDate'])),
+            'duration' => htmlspecialchars(trim($_POST['duration'])),
+            'language' => htmlspecialchars(trim($_POST['language'])),
+            'description' => htmlspecialchars(trim($_POST['description'])),
+            'posterURL' => htmlspecialchars(trim($_POST['posterUrl'])),
+            'promoURL' => htmlspecialchars(trim($_POST['promoUrl'])),
+            'trailerURL' => htmlspecialchars(trim($_POST['trailerUrl'])),
+            'rating' => htmlspecialchars(trim($_POST['rating']))
+        ];
+
+        $result = $movieController->addMovie($movieData);
+
+        if (isset($result['success']) && $result['success'] === true) {
+            // Return a success response
+            echo json_encode(['success' => true]);
+        } else if (isset($result['errorMessage'])) {
+            // Return an error response
+            echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);
+        } else {
+            if (is_array($result)) {
+                // Sanitize the array of errors
+                $sanitizedErrors = array_map(function($error) {
+                    return htmlspecialchars($error);
+                }, $result);
+
+                echo json_encode(['success' => false, 'errors' => $sanitizedErrors]);
+            } else {
+                // Return a single error response
+                echo json_encode(['success' => false, 'errors' => htmlspecialchars($result)]);
+            }
+        }
+    } else {
+        // Invalid action response
+        echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
+    }
+});
+
+// Edit movie route
+put($baseRoute . 'movies/edit', function() {
+    require_once 'src/controller/MovieController.php';
+    $movieController = new MovieController();
+    parse_str(file_get_contents("php://input"), $_PUT); // Parse the PUT request
+
+    if (isset($_PUT['action']) && $_PUT['action'] === 'editMovie') {
+        $movieData = [
+            'title' => htmlspecialchars(trim($_PUT['title'])),
+            'releaseDate' => htmlspecialchars(trim($_PUT['releaseDate'])),
+            'duration' => htmlspecialchars($_PUT['duration']),
+            'language' => htmlspecialchars(trim($_PUT['language'])),
+            'description' => htmlspecialchars(trim($_PUT['description'])),
+            'posterURL' => htmlspecialchars(trim($_PUT['posterURL'])),
+            'promoURL' => htmlspecialchars(trim($_PUT['promoURL'])),
+            'trailerURL' => htmlspecialchars(trim($_PUT['trailerURL'])),
+            'rating' => htmlspecialchars($_PUT['rating']),
+            'movieId' => htmlspecialchars($_PUT['movieId'])
+        ];
+
+        $result = $movieController->editMovie($movieData);
+
+        if (isset($result['success']) && $result['success'] === true) {
+            // Return a success response
+            echo json_encode(['success' => true]);
+        } else if (isset($result['errorMessage'])) {
+            // Return an error response
+            echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);
+        } else {
+            if (is_array($result)) {
+                // Sanitize the array of errors
+                $sanitizedErrors = array_map(function($error) {
+                    return htmlspecialchars($error);
+                }, $result);
+
+                echo json_encode(['success' => false, 'errors' => $sanitizedErrors]);
+            } else {
+                // Return a single error response
+                echo json_encode(['success' => false, 'errors' => htmlspecialchars($result)]);
+            }
+        }
+    } else {
+        // Invalid action response
+        echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
+    }
+});
+
+// Delete movie route
+delete($baseRoute . 'movies/delete', function() {
+    require_once 'src/controller/MovieController.php';
+    $movieController = new MovieController();
+
+    if (isset($_GET['action']) && $_GET['action'] === 'deleteMovie') {
+        $movieId = htmlspecialchars(trim($_GET['movieId']));
+
+        $result = $movieController->deleteMovie($movieId);
+
+        if (isset($result['success']) && $result['success'] === true) {
+            // Return a success response
+            echo json_encode(['success' => "true"]);
+        } else {
+            // Return an error response
+            echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);
+        }
+    } else {
+        // Invalid action response
+        echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
+    }
+});
+
+// Archive movie route
+put($baseRoute . 'movies/archive', function() {
+    require_once 'src/controller/MovieController.php';
+    $movieController = new MovieController();
+    parse_str(file_get_contents("php://input"), $_PUT); // Parse the PUT request
+
+
+    if (isset($_PUT['movieId'])) {
+        $movieId = htmlspecialchars(trim($_PUT['movieId']));
+
+        $result = $movieController->archiveMovie($movieId);
+
+        if (isset($result['success']) && $result['success'] === true) {
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);
+        }
+    } else {
+        echo json_encode(['success' => false, 'errorMessage' => 'Invalid movie ID.' . $_PUT['movieId']]);
     }
 });

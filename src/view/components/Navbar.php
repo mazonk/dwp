@@ -49,11 +49,11 @@
     document.addEventListener('click', (e) => {
       if (
         !venueDropdownToggler.contains(e.target) &&
-        !profileDropdownToggler.contains(e.target) &&
+        !profileDropdownToggler?.contains(e.target) &&
         !e.target.closest('[data-close-on-click="false"]')
       ) {
         if (venueDropdownToggler.dataset.isOpen === '1') toggleDropdown('toggleVenueDropdown', venueDropdownToggler);
-        if (profileDropdownToggler.dataset.isOpen === '1') toggleDropdown('toggleProfileDropdown', profileDropdownToggler);
+        if (profileDropdownToggler?.dataset.isOpen === '1') toggleDropdown('toggleProfileDropdown', profileDropdownToggler);
       }
     });
 

@@ -79,7 +79,7 @@ if (is_array($movie) && isset($movie['errorMessage'])) {
         <span class="font-bold">Release Date: </span> <?php echo $movie->getReleaseDate()->format('d-m-Y'); ?>
       </div>
       <div class="movie-info mb-2">
-        <span class="font-bold">Rating: </span> <?php echo $movie->getRating(); ?>
+        <span class="font-bold">Rating: </span> <?php echo $movie->getRating() . ' / 10';?> ⭐
       </div>
       <div>
                 <span class="font-bold">Actors: </span><?php
@@ -123,12 +123,23 @@ if (is_array($movie) && isset($movie['errorMessage'])) {
                 echo '<div class="bg-bgLight text-white py-2 px-4 my-2 rounded-md w-full text-center">';
                 echo "$formatedDay";
                 echo '<div class="flex flex-col items-center">';
-                    foreach ($showingsForMovie as $showing) {
-                        if ($showing->getShowingDate()->format('l d, M') == $formatedDay) {
-                            ShowingCard::render($showing);
-                        }
-                    
-                }
+                  foreach ($showingsForMovie as $showing) {
+                      $showingDate = $showing->getShowingDate();
+                      $showingTime = $showing->getShowingTime();
+                      
+                      // Check if the showing is today
+                      if ($showingDate->format('Y-m-d') === $today->format('Y-m-d') && $showingDate->format('l d, M') === $formatedDay) {
+                          // For today's showings, compare the time (show only later showings than now)
+                          if ($showingTime->format('H:i:s') > $today->format('H:i:s')) {
+                              ShowingCard::render($showing);
+                          }
+                      } else {
+                          // For other days, match the formatted day
+                          if ($showingDate->format('l d, M') === $formatedDay) {
+                              ShowingCard::render($showing);
+                          }
+                      }
+                  }
                 echo '</div>';
                 echo "</div>";
             }
