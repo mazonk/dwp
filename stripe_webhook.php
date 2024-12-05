@@ -51,6 +51,7 @@ switch ($event->type) {
   case 'checkout.session.expired':
     //Log
     error_log("Handling 'checkout.session.expired' event.");
+    error_log("Processing event: " . $event->id . " at " . date('Y-m-d H:i:s'));
     $eventData = $event->data->object;
     // Update payment status to failed
     $paymentIds = $paymentController->getIdsByCheckoutSessionId($eventData->id);
