@@ -13,6 +13,14 @@ class SeatController {
         $this->seatService->setTicketService($ticketService);
     }
 
+    public function getSeatById(int $id): Seat|array {
+        $seat = $this->seatService->getSeatById($id);
+        if (isset($seat['error']) && $seat['error']) {
+            return ['errorMessage' => $seat['message']];
+        }
+        return $seat;
+    }
+
     public function getAllSeatsForShowing(int $showingId, int $selectedVenueId): array {
         $seats = $this->seatService->getAllSeatsForShowing($showingId, $selectedVenueId);
         if (isset($seats['error']) && $seats['error']) {

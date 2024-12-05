@@ -73,7 +73,7 @@ public function getAllTicketTypes(): array {
 
 public function getTicketById(int $ticketId): array {
     $pdo = $this->getdb();
-    $statement = $pdo->prepare("SELECT * FROM tickets WHERE ticketId = :ticketId");
+    $statement = $pdo->prepare("SELECT * FROM Ticket WHERE ticketId = :ticketId");
     try {
         $statement->execute([':ticketId' => $ticketId]);
         $result = $statement->fetch(PDO::FETCH_ASSOC);
@@ -83,6 +83,32 @@ public function getTicketById(int $ticketId): array {
         return $result;
     } catch (PDOException $e) {
         throw new PDOException("Unable to fetch ticket.");
+    }
+}
+
+public function createTicket(int $seatId, int $ticketTypeId, int $showingId, int $bookingId): int {
+    $db = $this->getdb();
+    $statement = $db->prepare("INSERT INTO Ticket (seatId, ticketTypeId, showingId, bookingId) VALUES (:seatId, :ticketTypeId, :showingId, :bookingId)");
+    try {
+        $statement->execute([
+            ':seatId' => $seatId,
+            ':ticketTypeId' => $ticketTypeId,
+            ':showingId' => $showingId,
+            ':bookingId' => $bookingId
+        ]);
+        return (int)$db->lastInsertId();
+    } catch (PDOException $e) {
+        throw new PDOException("Unable to create ticket: ". $e->getMessage());
+    }
+}
+
+public function rollbackTicket(int $ticketId): bool {
+    $db = $this->getdb();
+    $statement = $db->prepare("DELETE FROM Ticket WHERE ticketId = :ticketId");
+    try {
+        return $statement->execute([':ticketId' => $ticketId]);
+    } catch (PDOException $e) {
+        throw new PDOException("Unable to rollback ticket: ". $e->getMessage());
     }
 }
 }

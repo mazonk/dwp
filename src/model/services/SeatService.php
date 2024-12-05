@@ -43,7 +43,7 @@ class SeatService {
     public function getAvailableSeatsForShowing(int $showingId, int $selectedVenueId): array {
         try {
             $allSeats = $this->getAllSeatsForShowing($showingId, $selectedVenueId);
-            $bookedTickets = $this->ticketService->getAllTicketsForShowing($showingId, $selectedVenueId);
+            $bookedTickets = $this->ticketService->getAllTicketsForShowing($showingId);
             $bookedSeatsIds = [];
             foreach ($bookedTickets as $ticket) {
                 $bookedSeatsIds[] = $ticket->getSeat()->getSeatId();
@@ -73,13 +73,4 @@ class SeatService {
             return ['error' => true, 'message' => $e->getMessage()];
         }
     }
-
-    // public function selectSeat(int $seatId): array { //TRANSACTION
-    //     try {
-    //         $result = $this->seatRepository->selectSeat($seatId);
-    //         return $result;
-    //     } catch (Exception $e) {
-    //         return ['error' => true, 'message' => $e->getMessage()];
-    //     }
-    // }
 }

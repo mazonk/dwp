@@ -153,7 +153,7 @@ CREATE TABLE TicketType (
 
 CREATE TABLE Booking (
     bookingId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    userId INT NOT NULL,
+    userId INT NULL, -- null so not logged in users can create a temporary booking object, until they are not on the users table
     status ENUM('pending', 'confirmed', 'cancelled') NOT NULL, -- enum?
     FOREIGN KEY (userId) REFERENCES User(userId)
 );

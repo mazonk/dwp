@@ -71,7 +71,7 @@ $selectedVenue = $venueController->getSelectedVenue();
                                 <?php
                                 include_once 'src/controller/OpeningHourController.php';
                                 $openingHourController = new OpeningHourController();
-                                $openingHours = $openingHourController->getOpeningHoursById($_SESSION['selectedVenueId']);
+                                $openingHours = $openingHourController->getCurrentOpeningHours();
 
                                 if(isset($openingHours['errorMessage'])) {
                                 echo "<div class='text-[.875rem] text-textNormal leading-snug'>" . htmlspecialchars($openingHours['errorMessage']) . "</div>";

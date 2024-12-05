@@ -51,4 +51,28 @@ class BookingService {
             return ['error' => true, 'message' => $e->getMessage()];
         }
     }
+
+    public function createEmptyBooking($userId, string $status): int|array {
+        try {
+            $bookingId = $this->bookingRepository->createBooking($userId, Status::from($status));
+            return $bookingId;
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+    }
+
+    public function rollBackBooking(int $bookingId, array $ticketIds): bool {
+        try {
+            foreach ($ticketIds as $ticketId) {
+                $result = $this->ticketService->rollBackTicket($ticketId);
+                if (is_array($result) && isset($result['error']) && $result['error']) {
+                    return false;
+                }
+            }
+            return $this->bookingRepository->rollBackBooking($bookingId);
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
 }
