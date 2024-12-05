@@ -77,4 +77,136 @@ class MovieService {
             $directors
         );
     }
+
+    public function addMovie(array $movieData): array {
+        $errors = [];
+        $this->validateFormInputs($movieData, $errors);
+
+        if (count($errors) == 0) {
+            try {
+                $this->movieRepository->addMovie($movieData);
+                return ['success' => true];
+            } catch (Exception $e) {
+                return ['error' => true, 'message' => $e->getMessage()];
+            }
+        } else {
+            return $errors;
+        }
+    }
+
+    public function editMovie(array $movieData): array {
+        $errors = [];
+        $this->validateFormInputs($movieData, $errors);
+
+        if (count($errors) == 0) {
+            try {
+                $this->movieRepository->editMovie($movieData);
+                return ['success' => true];
+            } catch (Exception $e) {
+                return ['error' => true, 'message' => $e->getMessage()];
+            }
+        } else {
+            return $errors;
+        }
+    }
+
+    public function deleteMovie(int $movieId): array {
+        try {
+            $this->movieRepository->deleteMovie($movieId);
+            return ['success' => true];
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+    }
+
+    public function archiveMovie(int $movieId): array {
+        try {
+            $this->movieRepository->archiveMovie($movieId);
+            return ['success' => true];
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+    }
+
+    public function getAllGenres(): array {
+        try {
+            $result = $this->movieRepository->getAllGenres();
+            return $result;
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+    }
+
+    public function getAllGenresByMovieId(int $movieId): array {
+        try {
+            $result = $this->movieRepository->getAllGenresByMovieId($movieId);
+            return $result;
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+    }
+
+    private function validateFormInputs(array $movieData, array &$errors): void {
+        $regex = "/^[a-zA-Z0-9áéíóöúüűæøåÆØÅ\s\-\.,;:'\"!?]+$/";
+
+    // Perform checks
+    if (empty($movieData['title']) || 
+        empty($movieData['releaseDate']) || 
+        empty($movieData['duration']) || 
+        empty($movieData['language']) || 
+        empty($movieData['description']) || 
+        empty($movieData['rating'])) {
+        $errors['general'] = "All fields are required.";
+    }
+
+    // Title validation
+    if (!preg_match($regex, $movieData['title'])) {
+        $errors['title'] = "Title must only contain letters, numbers, and basic punctuation.";
+    }
+    if (strlen($movieData['title']) < 2) {
+        $errors['title'] = "Title must be at least 2 characters long.";
+    }
+    if (strlen($movieData['title']) > 255) {
+        $errors['title'] = "Title can't be longer than 255 characters.";
+    }
+
+    // Release Date validation
+    if (!strtotime($movieData['releaseDate'])) {
+        $errors['releaseDate'] = "Release date must be a valid date.";
+    }
+
+    // Duration validation
+    if (!is_numeric($movieData['duration']) || intval($movieData['duration']) <= 0) {
+        $errors['duration'] = "Duration must be a positive number.";
+    }
+
+    // Language validation
+    if (!preg_match($regex, $movieData['language'])) {
+        $errors['language'] = "Language must only contain letters, numbers, and basic punctuation.";
+    }
+    if (strlen($movieData['language']) < 2) {
+        $errors['language'] = "Language must be at least 2 characters long.";
+    }
+    if (strlen($movieData['language']) > 50) {
+        $errors['language'] = "Language can't be longer than 50 characters.";
+    }
+
+    // Description validation
+    if (!preg_match($regex, $movieData['description'])) {
+        $errors['description'] = "Description must only contain letters, numbers, and basic punctuation.";
+    }
+    if (strlen($movieData['description']) < 25) {
+        $errors['description'] = "Description must be at least 25 characters long.";
+    }
+    if (strlen($movieData['description']) > 1000) {
+        $errors['description'] = "Description can't be longer than 1000 characters.";
+    }
+
+    // Rating validation
+    if (!is_numeric($movieData['rating']) || 
+        floatval($movieData['rating']) < 0 || 
+        floatval($movieData['rating']) > 10) {
+        $errors['rating'] = "Rating must be a number between 0 and 10.";
+    }
+    }
 }
