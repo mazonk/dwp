@@ -198,11 +198,11 @@ foreach ($booking['ticketIds'] as $ticketId) {
         function handleNavigation(destination) {
             if (!allowedPaths.some(path => destination.includes(path))) {
                 if (confirm('Leaving this page will cancel your booking. Are you sure you want to proceed?')) {
-                        rollbackBooking(false);
-                    } else {
-                        history.pushState(null, '', window.location.pathname);
-                        e.preventDefault();
-                    }
+                    rollbackBooking(false);
+                } else {
+                    history.pushState(null, '', window.location.pathname);
+                    e.preventDefault();
+                }
             }
         }
     });

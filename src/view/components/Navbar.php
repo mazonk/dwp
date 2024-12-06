@@ -91,7 +91,7 @@
 
       <!-- Profile Dropdown -->
       <?php if (!isLoggedIn()): ?>
-        <a href="<?php echo $_SESSION['baseRoute']?>login" class="py-[.625rem] px-[1.25rem] bg-primary text-textDark font-medium leading-tight rounded-[8px] ease-in-out duration-[.15s] hover:bg-primaryHover">
+        <a href="<?php echo $_SESSION['baseRoute']?>login?redirect=<?php echo urlencode($_SERVER['REQUEST_URI']); ?>" class="py-[.625rem] px-[1.25rem] bg-primary text-textDark font-medium leading-tight rounded-[8px] ease-in-out duration-[.15s] hover:bg-primaryHover">
           Login
         </a>
       <?php else: ?>
