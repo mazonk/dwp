@@ -1,8 +1,29 @@
 <?php
+require_once "session_config.php";
 require_once 'third-party/stripe-php/init.php';
 require_once 'loadEnv.php';
 require_once 'src/controller/PaymentController.php';
+require_once 'src/controller/UserController.php';
 
+/* Guest User Handling */
+if (!isset($_SESSION['loggedInUser']['userId'])) {
+  $userController = new UserController();
+  $doesUserExists = $userController->doesUserExistByEmail($_POST['email']);
+
+  if ($doesUserExists) {
+    $user = $userController->getUserByEmail($_POST['email']);
+    
+    echo 'User exists: ' . $user->getEmail();
+  }
+  else if(is_array($doesUserExists) && isset($doesUserExists['error'])) {
+    echo $userExists['errorMessage'];
+  }
+
+} else {
+  echo 'Payment processing...';
+}
+
+/* Stripe Handling */
 // Load environment variables for Stripe API keys
 loadEnv();
 $stripe_secret_key = getenv('STRIPE_SK');
@@ -22,7 +43,7 @@ $paymentData = [
   'bookingId' => 2
 ];
 
-try {
+/* try {
   $checkout_session = \Stripe\Checkout\Session::create([
     "mode" => "payment",
     // TODO: dynamic success and cancel route
@@ -52,9 +73,6 @@ try {
   $payment = $paymentController->addPayment($paymentData);
   
   if(isset($payment['errorMessage'])) {
-    /* foreach ($paymentData as $key => $value) {
-      echo $key . ': ' . $value . '<br>';
-    } */
     echo $payment['errorMessage'];
   } 
   else {
@@ -65,4 +83,4 @@ try {
 } catch (\Stripe\Exception\ApiErrorException $e) {
   // Handle Stripe API errors
   echo 'Stripe error: ' . $e->getMessage();
-}
+} */

@@ -104,37 +104,40 @@ foreach ($booking['ticketIds'] as $ticketId) {
                     ?>
                     <p class="my-2"><strong>Total Price:</strong> $ <?= htmlspecialchars(number_format($totalPrice, 2)); ?></p>
                     <hr>
-                    <div class="mb-6 bg-gray-700">
-                        <h3 class="text-lg font-bold mt-2">User Details</h3>
-                        <?php if (!isLoggedIn()): ?>
-                        <p class="mt-2">You are not logged in.</p>
-                        <a href="<?= htmlspecialchars($_SESSION['baseRoute']); ?>login?redirect=<?= htmlspecialchars(urlencode($_SERVER['REQUEST_URI'])); ?>" class="text-blue-400 underline">Log in</a> or
-                        <button onclick="showGuestForm()" class="text-blue-400 underline">Continue as Guest</button>
-
-                        <div id="guest-form" class="hidden mt-4">
-                            <input type="text" placeholder="First name" class="block w-full p-2 mb-2 border rounded bg-gray-900">
-                            <input type="text" placeholder="Last name" class="block w-full p-2 mb-2 border rounded bg-gray-900">
-                            <input type="email" placeholder="Email" class="block w-full p-2 mb-2 border rounded bg-gray-900">
-                            <input type="date" placeholder="Date of Birth" class="block w-full p-2 mb-2 border rounded bg-gray-900">
-                        </div>
-                        <?php else: ?>
-                        <p>Logged in as: <?= htmlspecialchars($_SESSION['loggedInUser']['firstName']. ' ' . $_SESSION['loggedInUser']['lastName']); ?></p>
-                        <?php endif; ?>
-                    </div>
                     <form action="charge" method="post">
-                        <div class="flex flex-col gap-4 mb-6">
-                            <label class="flex items-center">
-                                <input type="checkbox" name="terms" required class="mr-2"> <a class="text-red-500">*</a>&nbsp;I agree with the terms and conditions
-                            </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" name="invoice" class="mr-2"> Receive invoice by email (optional)
-                            </label>
-                        </div>
+                        <div class="mb-6 bg-gray-700">
+                            <h3 class="text-lg font-bold mt-2">User Details</h3>
+                            <?php if (!isLoggedIn()): ?>
+                            <p class="mt-2">You are not logged in.</p>
+                            <a href="<?= htmlspecialchars($_SESSION['baseRoute']); ?>login?redirect=<?= htmlspecialchars(urlencode($_SERVER['REQUEST_URI'])); ?>" class="text-blue-400 underline">Log in</a> or
+                            <button onclick="showGuestForm()" class="text-blue-400 underline">Continue as Guest</button>
 
-                        <button type="submit" class="w-full py-1 border border-primary bg-bgDark hover:bg-bgSemiDark text-white rounded-lg transition duration-200 flex items-center justify-center">
-                            Pay with
-                            <img src="<?= htmlspecialchars($_SESSION['baseRoute']); ?>src/assets/stripe-logo.png" alt="Stripe" class="mx-2 mt-1 w-12">
-                        </button>
+                            <div id="guest-form" class="hidden mt-4">
+                                <input type="text" name="firstName" required placeholder="First name" class="block w-full p-2 mb-2 border rounded bg-gray-900">
+                                <input type="text" name="lastName" required placeholder="Last name" class="block w-full p-2 mb-2 border rounded bg-gray-900">
+                                <input type="email" name="email" required placeholder="Email" class="block w-full p-2 mb-2 border rounded bg-gray-900">
+                                <input type="date" name="dob" required placeholder="Date of Birth" class="block w-full p-2 mb-2 border rounded bg-gray-900">
+                            </div>
+                            <?php else: ?>
+                            <p>Logged in as: <?= htmlspecialchars($_SESSION['loggedInUser']['firstName']. ' ' . $_SESSION['loggedInUser']['lastName']); ?></p>
+                            <p>Email: <?= htmlspecialchars($_SESSION['loggedInUser']['userEmail']); ?></p>
+                            <?php endif; ?>
+                        </div>
+                        <div>
+                            <div class="flex flex-col gap-4 mb-6">
+                                <label class="flex items-center">
+                                    <input type="checkbox" name="terms" required class="mr-2"> <a class="text-red-500">*</a>&nbsp;I agree with the terms and conditions
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" name="invoice" class="mr-2"> Receive invoice by email (optional)
+                                </label>
+                            </div>
+
+                            <button type="submit" class="w-full py-1 border border-primary bg-bgDark hover:bg-bgSemiDark text-white rounded-lg transition duration-200 flex items-center justify-center">
+                                Pay with
+                                <img src="<?= htmlspecialchars($_SESSION['baseRoute']); ?>src/assets/stripe-logo.png" alt="Stripe" class="mx-2 mt-1 w-12">
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>
