@@ -60,6 +60,18 @@ class UserRepository {
         }
     }
 
+    public function doesUserExistByEmail(string $email): bool {
+        $db = $this->getdb();
+        $query = $db->prepare("SELECT COUNT(*) FROM User WHERE email = :email");
+        try {
+            $query->execute(array(":email" => $email));
+            $result = $query->fetchColumn();
+            return $result > 0;
+        } catch (PDOException $e) {
+            throw new PDOException("Unable to check if user exists by email!");
+        }
+    }
+
     public function updateProfileInfo(int $userId, array $newProfileInfo): void {
         $db = $this->getdb();
         $query = $db->prepare("UPDATE User SET firstName = :firstName, lastName = :lastName, email = :email, dob = :dob WHERE userId = :userId");

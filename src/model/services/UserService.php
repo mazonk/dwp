@@ -53,6 +53,14 @@ class UserService {
         }
     }
 
+    public function doesUserExistByEmail(string $email): bool {
+        try {
+            return $this->userRepository->doesUserExistByEmail($email); 
+        } catch (Exception $e) {
+            return ["error"=> true, "message"=> $e->getMessage()];
+        }
+    }
+
     private function validateProfileInfoInputs(array $formData, array &$errors): void {
         // Define regexes for validation
         $nameRegex = "/^[a-zA-ZáéíóöúüűæøåÆØÅ\s\-']+$/";
