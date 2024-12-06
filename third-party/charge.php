@@ -4,23 +4,64 @@ require_once 'third-party/stripe-php/init.php';
 require_once 'loadEnv.php';
 require_once 'src/controller/PaymentController.php';
 require_once 'src/controller/UserController.php';
+require_once 'src/controller/BookingController.php';
+/* require_once 'src/controller/ShowingController.php'; */
+
 
 /* Guest User Handling */
-if (!isset($_SESSION['loggedInUser']['userId'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $userController = new UserController();
-  $doesUserExists = $userController->doesUserExistByEmail($_POST['email']);
+  $bookingController = new BookingController();
+  
+  // Check if user is logged in
+  if (!isset($_SESSION['loggedInUser']['userId'])) {
+    $formData = [];
+    $formData['email'] = htmlspecialchars(trim($_POST['email']));
+    $formData['firstName'] = htmlspecialchars(trim($_POST['firstName']));
+    $formData['lastName'] = htmlspecialchars(trim($_POST['lastName']));
+    $formData['dob'] = htmlspecialchars(trim($_POST['dob']));
+    $currentRoute = filter_var(trim($_POST['route']), FILTER_SANITIZE_URL); // route where the form was submitted
 
-  if ($doesUserExists) {
-    $user = $userController->getUserByEmail($_POST['email']);
-    
-    echo 'User exists: ' . $user->getEmail();
-  }
-  else if(is_array($doesUserExists) && isset($doesUserExists['error'])) {
-    echo $userExists['errorMessage'];
-  }
+    $doesUserExists = $userController->doesUserExistByEmail($formData['email']);
+    $userId = null;
 
-} else {
-  echo 'Payment processing...';
+    // If user with this email already exists
+    if ($doesUserExists) {
+      $user = $userController->getUserByEmail($formData['email']);
+      $userId = $user->getId();
+    }
+    // If user with this email does not exist yet
+    else if (!$doesUserExists) {
+      $result = $userController->createGuestUser($formData);
+
+      if (isset($result['errorMessage']) && $result['errorMessage'] || isset($result['validationError']) && $result['validationError']) {
+        header("Location: " . $currentRoute);
+        exit;
+      }
+      $userId = $result;
+    }
+    else if (is_array($doesUserExists) && isset($doesUserExists['errorMessage'])) {
+      $_SESSION['guestErrors'] = ['general' => 'An error occurred. ' . $result['errorMessage']];
+      $_SESSION['guestFormData'] = $formData;
+      header("Location: " . $currentRoute);
+      exit;
+    }
+
+    // Update booking with user ID
+    $bookingId = $_SESSION['activeBooking']['id'];
+    $updatedBooking = $bookingController->updateBookingUser($bookingId, $userId);
+    if (isset($updatedBooking['errorMessage']) && $updatedBooking['errorMessage']) {
+      $_SESSION['guestErrors'] = ['general' => 'An error occurred. ' . $updatedBooking['errorMessage']];
+      $_SESSION['guestFormData'] = $formData;
+      header("Location: " . $currentRoute);
+      exit;
+    }
+    echo 'Booking: ' . $bookingId . '<br>';
+    echo 'User: ' . $userId;
+
+  } else {
+    echo 'Payment processing...';
+  }
 }
 
 /* Stripe Handling */
