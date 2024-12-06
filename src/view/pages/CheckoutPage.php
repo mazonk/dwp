@@ -26,6 +26,18 @@ foreach ($booking['ticketIds'] as $ticketId) {
     $ticket = $ticketController->getTicketById($ticketId);
     $tickets[] = $ticket;
 }
+
+// Get input values from the session if available
+$guestFormData = isset($_SESSION['guestFormData']) ? $_SESSION['guestFormData'] : [
+    'firstName' => '',
+    'lastName' => '',
+    'dob' => '',
+    'email' => '',
+];
+$errors = isset($_SESSION['guestErrors']) ? $_SESSION['guestErrors'] : [];
+
+unset($_SESSION['guestFormData']);
+unset($_SESSION['guestErrors']);
 ?>
 
 <!DOCTYPE html>
@@ -105,6 +117,7 @@ foreach ($booking['ticketIds'] as $ticketId) {
                     <p class="my-2"><strong>Total Price:</strong> $ <?= htmlspecialchars(number_format($totalPrice, 2)); ?></p>
                     <hr>
                     <form action="charge" method="post">
+                        <input type="hidden" name="route" value="<?= htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
                         <div class="mb-6 bg-gray-700">
                             <h3 class="text-lg font-bold mt-2">User Details</h3>
                             <?php if (!isLoggedIn()): ?>
@@ -112,14 +125,29 @@ foreach ($booking['ticketIds'] as $ticketId) {
                             <a href="<?= htmlspecialchars($_SESSION['baseRoute']); ?>login?redirect=<?= htmlspecialchars(urlencode($_SERVER['REQUEST_URI'])); ?>" class="text-blue-400 underline">Log in</a> or
                             <button onclick="showGuestForm()" class="text-blue-400 underline">Continue as Guest</button>
 
-                            <div id="guest-form" class="hidden mt-4">
-                                <input type="text" name="firstName" required placeholder="First name" class="block w-full p-2 mb-2 border rounded bg-gray-900">
-                                <input type="text" name="lastName" required placeholder="Last name" class="block w-full p-2 mb-2 border rounded bg-gray-900">
-                                <input type="email" name="email" required placeholder="Email" class="block w-full p-2 mb-2 border rounded bg-gray-900">
-                                <input type="date" name="dob" required placeholder="Date of Birth" class="block w-full p-2 mb-2 border rounded bg-gray-900">
+                            <div id="guest-form" class="mt-4 <?= $guestFormData['email'] ? '' : 'hidden' ?>">
+                                <input type="text" name="firstName" required placeholder="First name" value="<?= htmlspecialchars($guestFormData['firstName'] ?? '') ?>" class="block w-full p-2 mb-2 border rounded bg-gray-900 <?= isset($errors['firstName']) ? 'border-red-500' : '' ?>">
+                                <?php if (isset($errors['firstName'])): ?>
+                                    <p class="mb-2 text-red-500 text-xs"><?= htmlspecialchars($errors['firstName']); ?></p>
+                                <?php endif; ?>
+                                <input type="text" name="lastName" required placeholder="Last name" value="<?= htmlspecialchars($guestFormData['lastName'] ?? '') ?>" class="block w-full p-2 mb-2 border rounded bg-gray-900 <?= isset($errors['lastName']) ? 'border-red-500' : '' ?>">
+                                <?php if (isset($errors['lastName'])): ?>
+                                    <p class="mb-2 text-red-500 text-xs"><?= htmlspecialchars($errors['lastName']); ?></p>
+                                <?php endif; ?>
+                                <input type="email" name="email" required placeholder="Email" value="<?= htmlspecialchars($guestFormData['email'] ?? '') ?>" class="block w-full p-2 mb-2 border rounded bg-gray-900 <?= isset($errors['email']) ? 'border-red-500' : '' ?>">
+                                <?php if (isset($errors['email'])): ?>
+                                    <p class="mb-2 text-red-500 text-xs"><?= htmlspecialchars($errors['email']); ?></p>
+                                <?php endif; ?>
+                                <input type="date" name="dob" required placeholder="Date of Birth" value="<?= htmlspecialchars($guestFormData['dob'] ?? '') ?>" class="block w-full p-2 mb-2 border rounded bg-gray-900 <?= isset($errors['dob']) ? 'border-red-500' : '' ?>">
+                                <?php if (isset($errors['dob'])): ?>
+                                    <p class="mb-2 text-red-500 text-xs"><?= htmlspecialchars($errors['dob']); ?></p>
+                                <?php endif; ?>
+                                <?php if (isset($errors['general'])): ?>
+                                    <p class="mb-2 text-red-500 text-xs"><?= htmlspecialchars($errors['general']); ?></p>
+                                <?php endif; ?>
                             </div>
                             <?php else: ?>
-                            <p>Logged in as: <?= htmlspecialchars($_SESSION['loggedInUser']['firstName']. ' ' . $_SESSION['loggedInUser']['lastName']); ?></p>
+                            <p>Logged in as: <?= htmlspecialchars($_SESSION['loggedInUser']['firstName']. ' ' . htmlspecialchars($_SESSION['loggedInUser']['lastName'])); ?></p>
                             <p>Email: <?= htmlspecialchars($_SESSION['loggedInUser']['userEmail']); ?></p>
                             <?php endif; ?>
                         </div>
