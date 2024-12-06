@@ -171,39 +171,43 @@ foreach ($booking['ticketIds'] as $ticketId) {
             }
         }, 1000);
 
-        const warnBeforeNavigation = (url) => {
-            if (!url.includes('/booking')) {
-                return "Leaving this page will cancel your booking. Are you sure?";
-            }
-            return null;
-        };
+        const allowedPaths = ['/login', '/booking/checkout'];
 
-        // Listen for link clicks to capture the "next" path.
+        // Intercept internal navigation (via clicks, history push)
         document.body.addEventListener('click', function (e) {
-            const link = e.target.closest('a');
-            if (link) {
-                const url = new URL(link.href);
-                const warningMessage = warnBeforeNavigation(url.pathname);
-                if (warningMessage && !confirm(warningMessage)) {
-                    e.preventDefault(); // Prevent navigation if user cancels
+            if (e.target.tagName === 'A' && e.target.href) {
+                const destination = new URL(e.target.href).pathname;
+                handleNavigation(destination);
+            }
+        });
+
+        window.addEventListener('popstate', function () {
+            handleNavigation(window.location.pathname);
+        });
+
+        // Handle all other navigation attempts (address bar, refresh, tab close)
+        window.addEventListener('beforeunload', function (e) {
+            const destination = e.target.activeElement.href || ''; // Extract link, if present
+            const isAllowed = allowedPaths.some(path => destination.includes(path));
+
+            if (!isAllowed) {
+                rollbackBooking(false);
+            }
+        });
+
+        function handleNavigation(destination) {
+            if (!allowedPaths.some(path => destination.includes(path))) {
+                if (confirm('Leaving this page will cancel your booking. Are you sure you want to proceed?')) {
+                    rollbackBooking(false);
                 } else {
-                    rollbackBooking();
+                    history.pushState(null, '', window.location.pathname);
+                    e.preventDefault();
                 }
             }
-        });
-
-        // Handle direct URL entries or external navigation
-        window.addEventListener('beforeunload', function (e) {
-            const nextUrl = e.target.activeElement?.href || '';
-            if (nextUrl && !nextUrl.includes('/booking')) {
-                const message = "Leaving this page will cancel your booking. Are you sure?";
-                e.returnValue = message;
-                return message;
-            }
-        });
+        }
     });
     function cancelBooking(redirectBack = true) {
-        rollbackBooking(true);
+        rollbackBooking(redirectBack);
     }
 
     function showGuestForm() {
