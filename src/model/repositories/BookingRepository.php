@@ -76,6 +76,19 @@ class BookingRepository {
         }
     }
 
+    public function updateBookingUser(int $bookingId, int $userId): void {
+        $db= $this->getdb();
+        $query = $db->prepare("UPDATE Booking SET userId = :userId WHERE bookingId = :bookingId");
+        try {
+            $query->execute(array(
+                'bookingId' => $bookingId,
+                'userId' => $userId
+            ));
+        } catch (PDOException $e) {
+            throw new PDOException('Failed to update userId for booking.');
+        }
+    }
+
     public function updateBookingStatus(int $bookingId, string $status): void {
         $db = $this->getdb();
         $query = $db->prepare("UPDATE Booking SET status = :status WHERE bookingId = :bookingId");

@@ -17,6 +17,13 @@ class BookingController {
         return $bookings;
     }
 
+    public function updateBookingUser(int $bookingId, int $userId): array {
+        $updatedBooking = $this->bookingService->updateBookingUser($bookingId, $userId);
+        if (isset($updatedBooking['error']) && $updatedBooking['error']) {
+            return ['errorMessage'=> $updatedBooking['message']];
+        }
+        return $updatedBooking;
+    }
 
     public function createEmptyBooking($userId, string $status): int|array {
         if (!isset($_SESSION['activeBooking'])) {

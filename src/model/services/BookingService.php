@@ -52,6 +52,15 @@ class BookingService {
         }
     }
 
+    public function updateBookingUser(int $bookingId, int $userId): array {
+        try {
+            $this->bookingRepository->updateBookingUser($bookingId, $userId);
+            return ['success' => true];
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+    }
+
     public function updateBookingStatus(int $bookingId, string $status): array {
         try {
             $this->bookingRepository->updateBookingStatus($bookingId, $status);
