@@ -1,24 +1,20 @@
 <?php
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['image'])) {
-    $image = $_FILES['image'];
+class ImageController {
+    public function upload()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['image'])) {
+            $imageService = new ImageService();
 
-    // Validate the image
-    if ($image['size'] > 5000000) {
-        // Error: file too large
-        exit("File size is too large.");
-    }
-
-    // Save the image temporarily (for now, you may store it locally)
-    $tempImagePath = 'uploads/' . basename($image['name']);
-    if (move_uploaded_file($image['tmp_name'], $tempImagePath)) {
-        // The image is now uploaded temporarily on the server.
-        $cloudinaryResponse = uploadToCloudinary($tempImagePath);
-    } else {
-        exit("Image upload failed.");
+            try {
+                $result = $imageService->uploadImage($_FILES['image']);
+                // Respond with JSON containing the uploaded image URL
+                echo json_encode(['url' => $result['url']]);
+            } catch (\Exception $e) {
+                echo json_encode(['error' => $e->getMessage()]);
+            }
+        } else {
+            echo json_encode(['error' => 'No file uploaded.']);
+        }
     }
 }
-
-
-
-?>

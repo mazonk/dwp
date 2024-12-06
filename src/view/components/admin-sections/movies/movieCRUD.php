@@ -149,6 +149,18 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
                         <input type="text" id="editPosterUrlInput" name="posterURL" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">
                     </div>
 
+                    <!-- Image Upload Section -->
+<div class="mb-4">
+    <label for="image" class="block text-sm font-medium text-textLight">Upload Poster Image</label>
+    <input type="file" name="image" id="image" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" accept="image/*" required>
+    <button type="button" onclick="uploadImage()" class="mt-2 px-4 py-2 bg-buttonColor text-white rounded-md">Upload Image</button>
+</div>
+
+<!-- Show the uploaded image URL -->
+<div id="uploaded-image-url" class="mt-4 text-sm text-textNormal hidden">
+    <p>Uploaded Image URL: <span id="image-url"></span></p>
+</div>
+
                     <!-- Promo URL Field -->
                     <div class="mb-4">
                         <label for="editPromoUrlInput" class="block text-sm font-medium text-textLight">Promo URL</label>
@@ -342,22 +354,6 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
         xhr.send(params);
     });
 
-    /*== Edit Movie ==*/
-    const editMovieIdInput = document.getElementById('editMovieIdInput');
-    const editMovieModal = document.getElementById('editMovieModal');
-    const editMovieForm = document.getElementById('editMovieForm');
-    const editMovieButton = document.getElementById('editMovieButton');
-    const editTitleInput = document.getElementById('editTitleInput');
-    const editDescriptionInput = document.getElementById('editDescriptionInput');
-    const editDurationInput = document.getElementById('editDurationInput');
-    const editLanguageInput = document.getElementById('editLanguageInput');
-    const editReleaseDateInput = document.getElementById('editReleaseDateInput');
-    const editPosterUrlInput = document.getElementById('editPosterUrlInput');
-    const editPromoUrlInput = document.getElementById('editPromoUrlInput');
-    const editTrailerUrlInput = document.getElementById('editTrailerUrlInput');
-    const editRatingInput = document.getElementById('editRatingInput');
-    const errorEditMovieMessageGeneral = document.getElementById('error-edit-movie-general');
-
     window.openEditMovieModal = function(title, description, duration, language, releaseDate, posterUrl, promoURL, trailerUrl, rating, id) {
         editTitleInput.value = title;
         editDescriptionInput.value = description;
@@ -373,8 +369,7 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
     };
 
     editMovieButton.addEventListener('click', () => {
-        editMovieButton.classList.remove('hidden');
-
+        editMovieModal.classList.remove('hidden');
     });
 
     // Close the Edit modal
@@ -383,26 +378,94 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
         clearValues('edit');
     });
 
-    //Edit movie form submission
+    // Edit movie form submission
     editMovieForm.addEventListener('submit', function(event) {
         event.preventDefault();
-        const xhr = new XMLHttpRequest();
-        const baseRoute = '<?php echo $_SESSION['baseRoute']; ?>';
-        xhr.open('PUT', `${baseRoute}movies/edit`, true);
 
-        const editMovieData = {
-            action: 'editMovie',
-            title: editTitleInput.value,
-            description: editDescriptionInput.value,
-            duration: editDurationInput.value,
-            language: editLanguageInput.value,
-            releaseDate: editReleaseDateInput.value,
-            posterURL: editPosterUrlInput.value,
-            promoURL: editPromoUrlInput.value,
-            trailerURL: editTrailerUrlInput.value,
-            rating: editRatingInput.value,
-            movieId: editMovieIdInput.value
-        };
+        const fileInput = document.getElementById("image");
+        const formData = new FormData();
+        formData.append("image", fileInput.files[0]);
+
+        fetch('/upload-image', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.url) {
+                const xhr = new XMLHttpRequest();
+                const baseRoute = '<?php echo $_SESSION['baseRoute']; ?>';
+                xhr.open('PUT', `${baseRoute}movies/edit`, true);
+
+                const editMovieData = {
+                    action: 'editMovie',
+                    title: editTitleInput.value,
+                    description: editDescriptionInput.value,
+                    duration: editDurationInput.value,
+                    language: editLanguageInput.value,
+                    releaseDate: editReleaseDateInput.value,
+                    posterURL: data.url,
+                    promoURL: editPromoUrlInput.value,
+                    trailerURL: editTrailerUrlInput.value,
+                    rating: editRatingInput.value,
+                    movieId: editMovieIdInput.value
+                };
+
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        let response;
+                        try {
+                            console.log(xhr.response);
+                            response = JSON.parse(xhr.response);
+                        } catch (e) {
+                            console.error('Could not parse response as JSON:', e);
+                            return;
+                        }
+                        if (response.success) {
+                            alert('Success! Movie edited successfully.');
+                            window.location.reload();
+                            clearValues('edit');
+                        }
+                    }
+                };
+
+                xhr.send(JSON.stringify(editMovieData));
+            } else {
+                alert("Error uploading image.");
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("An error occurred while uploading the image.");
+        });
+    });
+
+    function uploadImage() {
+        const fileInput = document.getElementById("image");
+        const formData = new FormData();
+        formData.append("image", fileInput.files[0]);
+
+        fetch('/upload-image', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.url) {
+                document.getElementById("editPosterUrlInput").value = data.url;
+                document.getElementById("image-url").textContent = data.url;
+                document.getElementById("uploaded-image-url").classList.remove("hidden");
+            } else {
+                alert("Error uploading image.");
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("An error occurred while uploading the image.");
+        });
+    }
+});
 
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.onreadystatechange = function() {
