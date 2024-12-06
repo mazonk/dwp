@@ -24,7 +24,25 @@ class UserController {
         return $user;
     }
 
-    public function doesUserExistByEmail($email): bool {
+    public function createGuestUser($formData): int|array {
+        $result = $this->userService->createGuestUser($formData);
+
+        // Error while creating the guest user
+        if (is_array($result) && isset($result['error']) && $result['error']) {
+            $_SESSION['guestErrors'] = ['general' => 'An error occurred. ' . $result['message']];
+            $_SESSION['guestFormData'] = $formData;
+            return ['errorMessage' => true];
+        } 
+        // Validation error
+        else if (is_array($result)) {
+            $_SESSION['guestErrors'] = $result;
+            $_SESSION['guestFormData'] = $formData;
+            return ['validationError' => true];
+        }
+        return $result; // Return the user ID
+    }
+
+    public function doesUserExistByEmail($email): bool|array {
         $user = $this->userService->doesUserExistByEmail($email);
         if (is_array($user) && isset($user['error']) && $user['error']) {
             return ['errorMessage' => $user['message']];

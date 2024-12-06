@@ -72,6 +72,23 @@ class UserRepository {
         }
     }
 
+    public function createGuestUser(array $formData, int $roleId): int {
+        $db = $this->getdb();
+        $query = $db->prepare("INSERT INTO User (firstName, lastName, email, dob, roleId) VALUES (:firstName, :lastName, :email, :dob, :roleId)");
+        try {
+            $query->execute(array(
+                ":firstName" => $formData['firstName'],
+                ":lastName" => $formData['lastName'],
+                ":email" => $formData['email'],
+                ":dob" => $formData['dob'],
+                ":roleId" => $roleId
+            ));
+            return $db->lastInsertId();
+        } catch (PDOException $e) {
+            throw new PDOException("Unable to create guest user!");
+        }
+    }
+
     public function updateProfileInfo(int $userId, array $newProfileInfo): void {
         $db = $this->getdb();
         $query = $db->prepare("UPDATE User SET firstName = :firstName, lastName = :lastName, email = :email, dob = :dob WHERE userId = :userId");

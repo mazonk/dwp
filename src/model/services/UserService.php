@@ -39,6 +39,28 @@ class UserService {
             return ["error"=> true, "message"=> $e->getMessage()];
         }
     }
+
+    public function createGuestUser(array $formData): int|array {
+        $errors = [];
+        $this->validateProfileInfoInputs($formData, $errors);
+
+        if (count($errors) == 0) {
+            // Fetch the 'Customer' user role
+            $userRole = $this->userRoleService->getUserRoleByType('Customer');
+            if (is_array($userRole) && isset($userRole['error']) && $userRole['error']) {
+                $errors['general'] = "Couldn't add you as a customer.";
+                return $errors;
+            }
+
+            try {
+                return $this->userRepository->createGuestUser($formData, $userRole->getRoleId());
+            } catch (Exception $e) {
+                return ["error"=> true, "message"=> $e->getMessage()];                
+            }
+        } 
+        return $errors;
+    }
+
     public function updateProfileInfo(int $userId, array $newProfileInfo): array|User {
         try {
             $errors = [];
