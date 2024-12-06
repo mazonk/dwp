@@ -76,6 +76,7 @@ CREATE TABLE User (
 
 CREATE TABLE Movie (
     movieId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    archived BOOLEAN NOT NULL,
     title VARCHAR(100) NOT NULL,
     description TEXT NULL,
     duration INT NULL,
