@@ -38,8 +38,8 @@ class PaymentService {
   }
 
   public function updatePaymentStatus(int $paymentId, int $bookingId, string $paymentStatus): array {
-    $this->db->beginTransaction();
     try {
+      $this->db->beginTransaction();
       $this->paymentRepository->updatePaymentStatus($paymentId, $paymentStatus);
       $this->bookingService->updateBookingStatus($bookingId, $paymentStatus);
       $this->db->commit();
