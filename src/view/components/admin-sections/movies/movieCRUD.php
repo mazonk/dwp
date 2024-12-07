@@ -97,15 +97,7 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
                             <button type="button" id="clearGenres" class="text-sm text-red-500 hover:underline">
                                 Clear All
                             </button>
-
-                    <!-- Genres Field
-                    <div class="mb-4 flex items-center gap-2">
-                        <label class="block text-sm font-medium text-textLight">Genres</label>
-                        <input type="checkbox" id="addGenreCheckbox" name="genres[]" value="" class="hidden">
-                        <div id="genreCheckboxContainer" class="mt-1 space-y-2">
-
-                        </div> -->
-
+                        </div>
                         <div id="genreCheckboxContainer" class="grid grid-cols-2 gap-4">
                             <!-- Genre Item -->
                             <div class="flex items-center gap-2">

@@ -9,6 +9,7 @@ credentials.php
 
 #cloudinary
 .env
+credentials_cloudinary.php
 
 
 # mac binary files ignore
