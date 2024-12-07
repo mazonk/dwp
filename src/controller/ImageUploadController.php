@@ -1,5 +1,5 @@
 <?php
-require_once 'models/Image.php';
+require_once 'src/model/entity/Image.php';
 use Cloudinary\Api\Upload\UploadApi;
 
 class ImageController {

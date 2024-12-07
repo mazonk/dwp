@@ -68,14 +68,14 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
 
                     <!-- Poster URL Field -->
                     <div class="mb-4">
-                        <label for="addPosterUrlInput" class="block text-sm font-medium text-textLight">Poster URL</label>
-                        <input type="text" id="addPosterUrlInput" name="posterURL" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">
+                        <label for="addPosterUrlInput" class="block text-sm font-medium text-textLight">Poster</label>
+                        <input type="file" id="addPosterUrlInput" name="posterURL" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" accept="image/*" required>
                     </div>
 
                     <!-- Promo URL Field -->
                     <div class="mb-4">
-                        <label for="addPromoUrlInput" class="block text-sm font-medium text-textLight">Promo URL</label>
-                        <input type="text" id="addPromoUrlInput" name="promoURL" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">
+                        <label for="addPromoUrlInput" class="block text-sm font-medium text-textLight">Promo</label>
+                        <input type="file" id="addPromoUrlInput" name="promoURL" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" accept="image/*" required>
                     </div>
 
                     <!-- Trailer URL Field -->
@@ -202,33 +202,15 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
 
                 <!-- Poster URL Field -->
                 <div class="mb-4">
-                    <label for="editPosterUrlInput" class="block text-sm font-medium text-textLight">Poster URL</label>
-                    <input type="text" id="editPosterUrlInput" name="posterURL" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">
+                    <label for="editPosterUrlInput" class="block text-sm font-medium text-textLight">Upload Poster Image</label>
+                    <input type="file" name="image" id="image" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" accept="image/*" required>
                 </div>
 
                 <!-- Promo URL Field -->
                 <div class="mb-4">
-                    <label for="editPromoUrlInput" class="block text-sm font-medium text-textLight">Promo URL</label>
-                    <input type="text" id="editPromoUrlInput" name="promoURL" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">
+                    <label for="editPromoUrlInput" class="block text-sm font-medium text-textLight">Upload Promo Image</label>
+                    <input type="file" name="image" id="image" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" accept="image/*" required>
                 </div>
-
-                    <!-- Image Upload Section -->
-<div class="mb-4">
-    <label for="image" class="block text-sm font-medium text-textLight">Upload Poster Image</label>
-    <input type="file" name="image" id="image" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" accept="image/*" required>
-    <button type="button" onclick="uploadImage()" class="mt-2 px-4 py-2 bg-buttonColor text-white rounded-md">Upload Image</button>
-</div>
-
-<!-- Show the uploaded image URL -->
-<div id="uploaded-image-url" class="mt-4 text-sm text-textNormal hidden">
-    <p>Uploaded Image URL: <span id="image-url"></span></p>
-</div>
-
-                    <!-- Promo URL Field -->
-                    <div class="mb-4">
-                        <label for="editPromoUrlInput" class="block text-sm font-medium text-textLight">Promo URL</label>
-                        <input type="text" id="editPromoUrlInput" name="promoURL" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">
-                    </div>
 
                 <!-- Trailer URL Field -->
                 <div class="mb-4">
