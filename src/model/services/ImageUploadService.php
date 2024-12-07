@@ -1,24 +1,21 @@
 <?php
-use Cloudinary\Cloudinary;
-use Cloudinary\Api\Upload\UploadApi;
+class ImageService
+{
+    public function uploadImage($image)
+    {
+        // Validate the file
+        if ($image['error'] !== UPLOAD_ERR_OK) {
+            throw new \Exception("File upload error: " . $image['error']);
+        }
 
-function uploadToCloudinary($imagePath) {
-    $cloudinary = new Cloudinary([
-        'cloud' => [
-            'cloud_name' => getenv('CLOUDINARY_CLOUD_NAME'),
-            'api_key'    => getenv('CLOUDINARY_API_KEY'),
-            'api_secret' => getenv('CLOUDINARY_API_SECRET')
-        ]
-    ]);
+        $filePath = $image['tmp_name'];
+    $uploadResult = (new UploadApi())->upload($filePath, ['folder' => 'my_uploads/']);
 
-    try {
-        // Upload the image to Cloudinary
-        $uploadResponse = $cloudinary->uploadApi()->upload($imagePath);
-        // The image is now uploaded to Cloudinary
-        return $uploadResponse;
-    } catch (Exception $e) {
-        exit('Cloudinary upload failed: ' . $e->getMessage());
-    }
+    // Save to database
+    $repository = new ImageRepository(new PDO('mysql:host=localhost;dbname=your_db', 'user', 'password'));
+    $repository->saveImage($uploadResult['secure_url'], $image['name']);
+
+    return ['url' => $uploadResult['secure_url']];
 }
-
+}
 ?>

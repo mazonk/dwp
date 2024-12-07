@@ -6,7 +6,7 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
 <div>
     <div class="flex justify-between my-[2rem]">
         <h3 class="text-[1.5rem] font-semibold">Movies</h3>
-        <button id="addMovieButton" class="bg-primary text-textDark py-2 px-4 rounded hover:bg-primaryHover">
+        <button id="addMovieButton" class="bg-primary text-textDark font-bold py-2 px-4 rounded hover:bg-primaryHover">
             Add Movie
         </button>
     </div>
@@ -97,7 +97,14 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
                             <button type="button" id="clearGenres" class="text-sm text-red-500 hover:underline">
                                 Clear All
                             </button>
-                        </div>
+
+                    <!-- Genres Field
+                    <div class="mb-4 flex items-center gap-2">
+                        <label class="block text-sm font-medium text-textLight">Genres</label>
+                        <input type="checkbox" id="addGenreCheckbox" name="genres[]" value="" class="hidden">
+                        <div id="genreCheckboxContainer" class="mt-1 space-y-2">
+
+                        </div> -->
 
                         <div id="genreCheckboxContainer" class="grid grid-cols-2 gap-4">
                             <!-- Genre Item -->
@@ -212,6 +219,24 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
                     <label for="editPromoUrlInput" class="block text-sm font-medium text-textLight">Promo URL</label>
                     <input type="text" id="editPromoUrlInput" name="promoURL" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">
                 </div>
+
+                    <!-- Image Upload Section -->
+<div class="mb-4">
+    <label for="image" class="block text-sm font-medium text-textLight">Upload Poster Image</label>
+    <input type="file" name="image" id="image" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" accept="image/*" required>
+    <button type="button" onclick="uploadImage()" class="mt-2 px-4 py-2 bg-buttonColor text-white rounded-md">Upload Image</button>
+</div>
+
+<!-- Show the uploaded image URL -->
+<div id="uploaded-image-url" class="mt-4 text-sm text-textNormal hidden">
+    <p>Uploaded Image URL: <span id="image-url"></span></p>
+</div>
+
+                    <!-- Promo URL Field -->
+                    <div class="mb-4">
+                        <label for="editPromoUrlInput" class="block text-sm font-medium text-textLight">Promo URL</label>
+                        <input type="text" id="editPromoUrlInput" name="promoURL" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">
+                    </div>
 
                 <!-- Trailer URL Field -->
                 <div class="mb-4">
