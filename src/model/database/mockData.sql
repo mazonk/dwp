@@ -348,27 +348,27 @@ INSERT INTO User (firstName, lastName, DoB, email, passwordHash, roleId) VALUES
 ('Clark', 'Kent', '1980-02-29', 'clark@dailyplanet.com', '$2a$12$6RivwA1dH6Yh0RpA4tXFuW4GoFdFlFbmkAgPXYi5yTwgM8ZFbvm.a', 3),
 ('Admin', 'Admin', '1980-01-01', 'adminadmin@example.com', '$2a$12$yA3fjKkOWv9nZT7u6reRa.WQKYFw6fH5uPtYq4ahmQkdF4JdFkgda', 1);
 
-INSERT INTO Movie (title, description, duration, language, releaseDate, posterURL, promoURL, trailerURL, rating) VALUES
-('The Dark Knight', 'Batman faces the Joker in Gotham City.', 152, 'English', '2008-07-18', 'poster_dark_knight.jpg', 'promo_dark_knight.mp4', 'EXeTwQWrcwY', 9.00),
-('Spider-Man: No Way Home', 'Peter Parker deals with multiverse villains.', 148, 'English', '2021-12-17', 'poster_spiderman.jpg', 'promo_spiderman.mp4', 'JfVOs4VSpmA', 8.50),
-('Iron Man', 'Tony Stark becomes the armored superhero.', 126, 'English', '2008-05-02', 'poster_ironman.jpg', 'promo_ironman.mp4', '8ugaeA-nMTc', 8.70),
-('Interstellar', 'A team of explorers travel through a wormhole in space to ensure humanity’s survival.', 169, 'English', '2014-11-07', 'poster_interstellar.jpg', 'promo_interstellar.mp4', 'zSWdZVtXT7E', 8.60),
-('Andre Rieu', 'The renowned violinist and conductor captivates audiences with his classical music performances.', 120, 'English', '2020-10-10', 'poster_andrerieu.jpg', 'promo_andrerieu.mp4', 'el7JKURuIZI', 8.30),
-('En Panda i Afrika', 'An animated adventure about a panda\'s journey to Africa, filled with humor and life lessons.', 95, 'Danish', '2023-02-14', 'poster_enpandaiafrika.jpg', 'promo_enpandaiafrika.mp4', '_VJ2A1iFnGk', 7.20),
-('The Apprentice', 'A young woman navigates the challenges of her apprenticeship in a competitive business environment.', 110, 'English', '2018-06-25', 'poster_apprentice.jpg', 'promo_apprentice.mp4', 'Y3jeNId-b48', 7.80),
-('Deadpool', 'A mercenary with accelerated healing powers seeks revenge while delivering sarcastic humor.', 108, 'English', '2016-02-12', 'poster_deadpool.jpg', 'promo_deadpool.mp4', 'Idh8n5XuYIA', 8.00),
-('It Ends with Us', 'A gripping love story, where difficult decisions must be made in the face of adversity.', 120, 'English', '2024-03-08', 'poster_itendswithus.jpg', 'promo_itendswithus.mp4', 'DLET_u31M4M', 6.50),
-('Robot', 'In a futuristic world, a humanoid robot learns about human emotions and identity.', 135, 'Hindi', '2010-10-01', 'poster_robot.jpg', 'promo_robot.mp4', 'njPNg0A9VpY', 7.10),
-('Joker', 'A gritty character study of Arthur Fleck, a man disregarded by society who becomes the infamous Joker.', 122, 'English', '2019-10-04', 'poster_joker.jpg', 'promo_joker.mp4', '_OKAwz2MsJs', 8.50),
-('Føreren og Forføreren', 'A biographical account of Nazi propaganda chief Joseph Goebbels and his role in the Third Reich.', 110, 'Danish', '2022-10-15', 'poster_foreren_forforeren.jpg', 'promo_foreren_forforeren.mp4', 'Yy9-qbz8Bfc', 7.5),
-('Despicable me 4', 'The story of the yellow Minions as they search for a new evil master to serve.', 91, 'English', '2015-07-10', 'poster_minions.jpg', 'promo_minions.mp4', 'JnynPtxEY5M', 6.40),
-('Star Wars: Episode V - The Empire Strikes Back', 'Luke Skywalker and the Rebel Alliance face the Empire\'s wrath as they plan their next move against Darth Vader.', 124, 'English', '1980-05-21', 'poster_starwars5.jpg', 'promo_starwars5.mp4', 'JnynPtxEY5M', 8.70),
-('Star Wars: Episode VI - Return of the Jedi', 'The Rebel Alliance makes a final stand to defeat the Galactic Empire and save the galaxy.', 131, 'English', '1983-05-25', 'poster_starwars6.jpg', 'promo_starwars6.mp4', 'p4vIFhk621Q', 8.30),
-('Guardians of the Multiverse', 'A group of unlikely heroes band together to save multiple realities from collapse.', 140, 'English', '2025-06-15', 'poster_guardians_multiverse.jpg', 'promo_guardians_multiverse.mp4', 'u3V5KDHRQvk', 8.90),
-('Space Explorers: The Next Journey', 'A new generation of astronauts embarks on a mission to colonize distant planets.', 135, 'English', '2024-12-20', 'poster_space_explorers.jpg', 'promo_space_explorers.mp4', 'UMoyGKgdeo0', 8.70),
-('The Time Jumper', 'A man gains the ability to travel through time, but must decide how much to alter his past.', 118, 'English', '2025-03-15', 'poster_time_jumper.jpg', 'promo_time_jumper.mp4', 'QIsjg1Sb538', 8.40),
-('AI: Awakening', 'An advanced AI system becomes self-aware, leading humanity to confront new ethical dilemmas.', 128, 'English', '2024-11-05', 'poster_ai_awakening.jpg', 'promo_ai_awakening.mp4', '3CCGg6RjssE', 7.90),
-('Rise of the Phoenix', 'A fallen warrior seeks redemption in a war-torn kingdom ruled by a corrupt regime.', 150, 'English', '2024-09-30', 'poster_rise_phoenix.jpg', 'promo_rise_phoenix.mp4', 'DyAsfo6rEz0', 8.50);
+INSERT INTO Movie (title, archived, description, duration, language, releaseDate, posterURL, promoURL, trailerURL, rating) VALUES
+('The Dark Knight', FALSE, 'Batman faces the Joker in Gotham City.', 152, 'English', '2008-07-18', 'poster_dark_knight.jpg', 'promo_dark_knight.mp4', 'EXeTwQWrcwY', 9.00),
+('Spider-Man: No Way Home', FALSE, 'Peter Parker deals with multiverse villains.', 148, 'English', '2021-12-17', 'poster_spiderman.jpg', 'promo_spiderman.mp4', 'JfVOs4VSpmA', 8.50),
+('Iron Man', FALSE, 'Tony Stark becomes the armored superhero.', 126, 'English', '2008-05-02', 'poster_ironman.jpg', 'promo_ironman.mp4', '8ugaeA-nMTc', 8.70),
+('Interstellar', FALSE, 'A team of explorers travel through a wormhole in space to ensure humanity’s survival.', 169, 'English', '2014-11-07', 'poster_interstellar.jpg', 'promo_interstellar.mp4', 'zSWdZVtXT7E', 8.60),
+('Andre Rieu', FALSE, 'The renowned violinist and conductor captivates audiences with his classical music performances.', 120, 'English', '2020-10-10', 'poster_andrerieu.jpg', 'promo_andrerieu.mp4', 'el7JKURuIZI', 8.30),
+('En Panda i Afrika', FALSE, "An animated adventure about a panda\'s journey to Africa, filled with humor and life lessons.", 95, 'Danish', '2023-02-14', 'poster_enpandaiafrika.jpg', 'promo_enpandaiafrika.mp4', '_VJ2A1iFnGk', 7.20),
+('The Apprentice', FALSE, 'A young woman navigates the challenges of her apprenticeship in a competitive business environment.', 110, 'English', '2018-06-25', 'poster_apprentice.jpg', 'promo_apprentice.mp4', 'Y3jeNId-b48', 7.80),
+('Deadpool', FALSE, 'A mercenary with accelerated healing powers seeks revenge while delivering sarcastic humor.', 108, 'English', '2016-02-12', 'poster_deadpool.jpg', 'promo_deadpool.mp4', 'Idh8n5XuYIA', 8.00),
+('It Ends with Us', FALSE, 'A gripping love story, where difficult decisions must be made in the face of adversity.', 120, 'English', '2024-03-08', 'poster_itendswithus.jpg', 'promo_itendswithus.mp4', 'DLET_u31M4M', 6.50),
+('Robot', FALSE, 'In a futuristic world, a humanoid robot learns about human emotions and identity.', 135, 'Hindi', '2010-10-01', 'poster_robot.jpg', 'promo_robot.mp4', 'njPNg0A9VpY', 7.10),
+('Joker', FALSE, 'A gritty character study of Arthur Fleck, a man disregarded by society who becomes the infamous Joker.', 122, 'English', '2019-10-04', 'poster_joker.jpg', 'promo_joker.mp4', '_OKAwz2MsJs', 8.50),
+('Føreren og Forføreren', FALSE, 'A biographical account of Nazi propaganda chief Joseph Goebbels and his role in the Third Reich.', 110, 'Danish', '2022-10-15', 'poster_foreren_forforeren.jpg', 'promo_foreren_forforeren.mp4', 'Yy9-qbz8Bfc', 7.5),
+('Despicable me 4', FALSE, 'The story of the yellow Minions as they search for a new evil master to serve.', 91, 'English', '2015-07-10', 'poster_minions.jpg', 'promo_minions.mp4', 'JnynPtxEY5M', 6.40),
+('Star Wars: Episode V - The Empire Strikes Back', FALSE, "Luke Skywalker and the Rebel Alliance face the Empire\'s wrath as they plan their next move against Darth Vader.", 124, 'English', '1980-05-21', 'poster_starwars5.jpg', 'promo_starwars5.mp4', 'JnynPtxEY5M', 8.70),
+('Star Wars: Episode VI - Return of the Jedi', FALSE, 'The Rebel Alliance makes a final stand to defeat the Galactic Empire and save the galaxy.', 131, 'English', '1983-05-25', 'poster_starwars6.jpg', 'promo_starwars6.mp4', 'p4vIFhk621Q', 8.30),
+('Guardians of the Multiverse', FALSE, 'A group of unlikely heroes band together to save multiple realities from collapse.', 140, 'English', '2025-06-15', 'poster_guardians_multiverse.jpg', 'promo_guardians_multiverse.mp4', 'u3V5KDHRQvk', 8.90),
+('Space Explorers: The Next Journey', FALSE, 'A new generation of astronauts embarks on a mission to colonize distant planets.', 135, 'English', '2024-12-20', 'poster_space_explorers.jpg', 'promo_space_explorers.mp4', 'UMoyGKgdeo0', 8.70),
+('The Time Jumper', FALSE, 'A man gains the ability to travel through time, but must decide how much to alter his past.', 118, 'English', '2025-03-15', 'poster_time_jumper.jpg', 'promo_time_jumper.mp4', 'QIsjg1Sb538', 8.40),
+('AI: Awakening', FALSE, 'An advanced AI system becomes self-aware, leading humanity to confront new ethical dilemmas.', 128, 'English', '2024-11-05', 'poster_ai_awakening.jpg', 'promo_ai_awakening.mp4', '3CCGg6RjssE', 7.90),
+('Rise of the Phoenix', FALSE, 'A fallen warrior seeks redemption in a war-torn kingdom ruled by a corrupt regime.', 150, 'English', '2024-09-30', 'poster_rise_phoenix.jpg', 'promo_rise_phoenix.mp4', 'DyAsfo6rEz0', 8.50);
 
 INSERT INTO Genre (name) VALUES
 ('Action'),
@@ -746,32 +746,12 @@ INSERT INTO TicketType (name, price, description) VALUES
 INSERT INTO Booking (userId, status) VALUES
 (1, 'confirmed'),
 (1, 'pending'),
-(1, 'cancelled');
+(1, 'failed');
 
 INSERT INTO Ticket (seatId, ticketTypeId, showingId, bookingId) VALUES
 (1, 1, 1, 1),
 (2, 2, 2, 2),
 (3, 3, 3, 3);
-
-INSERT INTO PaymentMethod (name) VALUES
-('Credit Card'),
-('PayPal'),
-('Cash');
-
-INSERT INTO Payment (paymentDate, paymentTime, totalPrice, userId, addressId, bookingId, methodId) VALUES
-('2024-10-15', '18:30:00', 10.00, 1, 1, 1, 1),
-('2024-10-16', '19:45:00', 20.00, 2, 2, 2, 2),
-('2024-10-17', '20:30:00', 8.00, 3, 3, 3, 3),
-('2024-10-18', '14:00:00', 15.00, 1, 1, 1, 1),
-('2024-10-19', '16:15:00', 25.00, 2, 2, 2, 2),
-('2024-10-20', '17:30:00', 12.00, 3, 3, 3, 3),
-('2024-10-21', '15:00:00', 30.00, 1, 1, 1, 1),
-('2024-10-22', '18:45:00', 22.50, 2, 2, 2, 2),
-('2024-10-23', '20:00:00', 10.50, 3, 3, 1, 3),
-('2024-10-24', '14:30:00', 28.00, 1, 1, 1, 1),
-('2024-10-25', '16:00:00', 18.75, 2, 2, 1, 2),
-('2024-10-26', '19:15:00', 9.99, 3, 3, 2, 3),
-('2024-10-27', '21:00:00', 14.99, 1, 1, 3, 1);
 
 INSERT INTO News (imageURL, header, content) VALUES
 ('gotham_news.jpg', 'New Batman Movie Showing', 'Join us for the latest Batman movie screening at Gotham Cinema!'),

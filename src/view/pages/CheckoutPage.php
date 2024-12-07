@@ -37,6 +37,7 @@ foreach ($booking['ticketIds'] as $ticketId) {
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com"></script>
     <?php include_once("src/assets/tailwindConfig.php"); ?>
+    <title>Checkout</title>
 </head>
 
 <body class="max-w-[1440px] w-[100%] mx-auto mt-[72px] mb-[2rem] px-[100px] bg-bgDark text-textLight">

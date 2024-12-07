@@ -52,6 +52,15 @@ class BookingService {
         }
     }
 
+    public function updateBookingStatus(int $bookingId, string $status): array {
+        try {
+            $this->bookingRepository->updateBookingStatus($bookingId, $status);
+            return ['success' => true];
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+    }
+
     public function createEmptyBooking($userId, string $status): int|array {
         try {
             $bookingId = $this->bookingRepository->createBooking($userId, Status::from($status));
