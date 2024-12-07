@@ -6,6 +6,7 @@ require_once 'src/controller/ShowingController.php';
 require_once "src/model/services/TicketService.php";
 require_once "src/model/services/SeatService.php";
 require_once "src/controller/BookingController.php";
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

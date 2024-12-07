@@ -86,7 +86,7 @@ unset($_SESSION['guestErrors']);
                         I want different seats!
                     </button>
                 </div>
-                <div class="mb-6 bg-gray-700 p-4 rounded-lg shadow-md">
+                <div class="w-[400px] mb-6 bg-gray-700 p-4 rounded-lg shadow-md">
                     <h3 class="text-lg font-bold mb-2">Ticket Types and Total Price:</h3>
                     <ul class="list-disc list-inside">
                         <?php
@@ -161,7 +161,7 @@ unset($_SESSION['guestErrors']);
                                 </label>
                             </div>
 
-                            <button type="submit" class="w-full py-1 border border-primary bg-bgDark hover:bg-bgSemiDark text-white rounded-lg transition duration-200 flex items-center justify-center">
+                            <button id="submitButton" type="submit" class="w-full py-1 border border-primary bg-bgDark hover:bg-bgSemiDark text-white rounded-lg transition duration-200 flex items-center justify-center">
                                 Pay with
                                 <img src="<?= htmlspecialchars($_SESSION['baseRoute']); ?>src/assets/stripe-logo.png" alt="Stripe" class="mx-2 mt-1 w-12">
                             </button>
@@ -199,7 +199,7 @@ unset($_SESSION['guestErrors']);
             }
         }, 1000);
 
-        const allowedPaths = ['/login', '/booking/checkout'];
+        const allowedPaths = ['/login', '/booking/checkout', '/booking/charge'];
 
         // Intercept internal navigation (via clicks, history push)
         document.body.addEventListener('click', function (e) {
@@ -213,9 +213,18 @@ unset($_SESSION['guestErrors']);
             handleNavigation(window.location.pathname);
         });
 
+        let isSubmittingForm = false;
+
+        document.getElementById('submitButton').addEventListener('click', function () {
+            isSubmittingForm = true; // Mark as a legitimate submission
+        });
+
         // Handle all other navigation attempts (address bar, refresh, tab close)
         window.addEventListener('beforeunload', function (e) {
+            if (isSubmittingForm) return; // Skip rollback logic on form submission
+
             const destination = e.target.activeElement.href || ''; // Extract link, if present
+            console.log('Navigating to:', destination);
             const isAllowed = allowedPaths.some(path => destination.includes(path));
 
             if (!isAllowed) {
