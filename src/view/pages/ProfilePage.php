@@ -32,12 +32,6 @@ if (is_array($user) && isset($user['errorMessage']) && $user['errorMessage']) {
 } else { //else render component
 
     //fetch bookings
-    $bookings = $bookingController->getBookingsByUserId($_SESSION['loggedInUser']['userId']);
-    if (is_array($bookings) && isset($bookings['errorMessage']) && $bookings['errorMessage']) {
-        echo $bookings['errorMessage'] . ' ' . '<a class="underline text-blue-300" href="javascript:window.history.back()"><-Go back!</a>';
-        exit;
-    }
-
     $initialBookings = count($bookings) > 8 ? array_slice($bookings, 0, 8) : $bookings;
 
     $editMode = isset($_GET['edit']) && $_GET['edit'] == "true";
@@ -107,6 +101,10 @@ if (is_array($user) && isset($user['errorMessage']) && $user['errorMessage']) {
                 <h2 class="text-[2rem] leading-snug mb-7 mt-11">Purchase History</h2>
                 <div class="flex flex-wrap">
                     <?php 
+                    if (isset($bookings['errorMessage'])) {
+                        echo "<p>No bookings yet.</p>";
+                        die();
+                    }
                     if ($showMore): 
                         foreach ($bookings as $booking): 
                             foreach ($booking->getTickets() as $ticket) {
