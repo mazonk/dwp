@@ -85,7 +85,7 @@ CREATE TABLE Movie (
     posterURL VARCHAR(255) NULL,
     promoURL VARCHAR(255) NULL,
     trailerURL VARCHAR(255) NULL,
-    rating DECIMAL(2, 2) NULL -- 2 digits and 2 digits after the decimal point 1.00 - 10.00
+    rating DECIMAL(3, 1) NULL
 );
 
 CREATE TABLE Genre (
@@ -201,3 +201,16 @@ CREATE TABLE VenueShowing (
     FOREIGN KEY (venueId) REFERENCES Venue(venueId),
     FOREIGN KEY (showingId) REFERENCES Showing(showingId)
 );
+
+DELIMITER //
+
+CREATE TRIGGER validate_rating
+BEFORE INSERT ON Movie
+FOR EACH ROW
+BEGIN
+    IF NEW.rating < 0 OR NEW.rating > 10 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Rating must be between 0.0 and 10.0';
+    END IF;
+END;
+//
