@@ -229,6 +229,8 @@ CREATE TABLE VenueShowing (
     FOREIGN KEY (showingId) REFERENCES Showing(showingId)
 );
 
+-- Triggers
+
 DELIMITER //
 
 CREATE TRIGGER validate_rating
@@ -238,6 +240,33 @@ BEGIN
     IF NEW.rating < 0 OR NEW.rating > 10 THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Rating must be between 0.0 and 10.0';
+    END IF;
+END;
+//
+
+
+DELIMITER //
+
+CREATE TRIGGER validate_totalprice
+BEFORE INSERT ON Payment
+FOR EACH ROW
+BEGIN
+    IF NEW.totalPrice < 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Total price of payment cannot be less than 0.00';
+    END IF;
+END;
+//
+
+DELIMITER //
+
+CREATE TRIGGER validate_price
+BEFORE INSERT ON TicketType
+FOR EACH ROW
+BEGIN
+    IF NEW.price < 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Ticket price cannot be less than 0.00';
     END IF;
 END;
 //
