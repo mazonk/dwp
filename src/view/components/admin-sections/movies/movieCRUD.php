@@ -322,17 +322,18 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
     const editRatingInput = document.getElementById('editRatingInput');
     const errorEditMovieMessageGeneral = document.getElementById('error-edit-movie-general');
 
-    window.openEditMovieModal = function(title, description, duration, language, releaseDate, posterUrl, promoURL, trailerUrl, rating, id) {
-        editTitleInput.value = title;
-        editDescriptionInput.value = description;
-        editDurationInput.value = duration;
-        editLanguageInput.value = language;        
-        editReleaseDateInput.value = releaseDate;
-        editPosterUrlInput.value = posterUrl;
-        editPromoUrlInput.value = promoURL;
-        editTrailerUrlInput.value = trailerUrl;
-        editRatingInput.value = rating;
-        editMovieIdInput.value = id;
+    window.openEditMovieModal = function(movieData) {
+        const movie = JSON.parse(movieData);
+        editTitleInput.value = movie.title;
+        editDescriptionInput.value = movie.description;
+        editDurationInput.value = movie.duration;
+        editLanguageInput.value = movie.language;        
+        editReleaseDateInput.value = movie.releaseDate;
+        editPosterUrlInput.value = movie.posterURL;
+        editPromoUrlInput.value = movie.promoURL;
+        editTrailerUrlInput.value = movie.trailerUrl;
+        editRatingInput.value = movie.rating;
+        editMovieIdInput.value = movie.id;
         editMovieModal.classList.remove('hidden');
     };
 
