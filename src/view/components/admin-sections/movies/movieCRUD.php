@@ -236,7 +236,7 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
     });
 
     window.openAddMovieModal = function(title, description, duration, language, releaseDate, posterUrl, promoURL, trailerUrl, rating, id) {
-        add.value = title;
+        addTitleInput.value = title;
         addDescriptionInput.value = description;
         addDurationInput.value = duration;
         addLanguageInput.value = language;        
