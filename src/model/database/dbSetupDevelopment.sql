@@ -202,6 +202,38 @@ CREATE TABLE VenueShowing (
     FOREIGN KEY (showingId) REFERENCES Showing(showingId)
 );
 
+-- Views
+
+CREATE OR REPLACE VIEW MoviesWithShowings AS
+SELECT 
+    m.movieId,
+    m.title,
+    COUNT(s.showingId) AS numberOfShowings
+FROM Movie m
+LEFT JOIN Showing s ON m.movieId = s.movieId
+GROUP BY m.movieId, m.title;
+
+CREATE OR REPLACE VIEW ShowingsWithDetails AS
+SELECT 
+    s.showingId,
+    s.showingDate,
+    s.showingTime,
+    m.title,
+    r.roomNumber,
+    COUNT(DISTINCT b.bookingId) AS bookings, -- Total number of bookings
+    COUNT(t.ticketId) AS tickets             -- Total number of tickets
+FROM Showing s
+JOIN Movie m ON s.movieId = m.movieId
+JOIN Room r ON s.roomId = r.roomId
+LEFT JOIN Ticket t ON s.showingId = t.showingId
+LEFT JOIN Booking b ON t.bookingId = b.bookingId
+GROUP BY 
+    s.showingId, 
+    s.showingDate, 
+    s.showingTime, 
+    m.title, 
+    r.roomNumber;
+
 -- Triggers
 
 DELIMITER //
