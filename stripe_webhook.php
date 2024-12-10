@@ -1,7 +1,7 @@
 <?php
 /* ini_set('log_errors', 1); // Enable error logging
 ini_set('error_log', __DIR__ . '/error.log'); // Log errors to 'error.log' in the current directory */
-
+require_once 'session_config.php';
 require_once 'third-party/stripe-php/init.php';
 require_once 'src/controller/PaymentController.php';
 require_once 'src/controller/InvoiceController.php';
@@ -46,6 +46,9 @@ switch ($event->type) {
     $paymentIds = $paymentController->getIdsByCheckoutSessionId($eventData->id);
     $paymentController->updatePaymentStatus($paymentIds['paymentId'], $paymentIds['bookingId'], 'confirmed'); 
     $invoiceController->sendInvoice(); // TODO: Sanitizing, validation, and error handling, and also the actual invoice data
+
+    unset($_SESSION['activeBooking']);
+    unset($_SESSION['checkoutSession']);
     break;
 
   case 'checkout.session.expired':
@@ -60,6 +63,10 @@ switch ($event->type) {
     $paymentController->updatePaymentStatus($paymentIds['paymentId'], $paymentIds['bookingId'], 'failed');
     //Log
     error_log("Payment and booking status updated to 'failed'");
+
+    unset($_SESSION['activeBooking']);
+    unset($_SESSION['checkoutSession']);
+    error_log("Unset active booking and checkout session URL");
     break;
 
   default:
