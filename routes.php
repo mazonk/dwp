@@ -286,15 +286,34 @@ post($baseRoute.'booking/overview', function() {
 post($baseRoute.'booking/rollback', function() {
     require_once 'session_config.php';
     require_once 'src/controller/BookingController.php';
+    require_once 'src/controller/PaymentController.php';
     $bookingController = new BookingController();
-    $result = $bookingController->rollBackBooking($_SESSION['activeBooking']['id'], $_SESSION['activeBooking']['ticketIds']);
-    
-    if ($result && !is_array($result)) {
-        // Return a success response
-        echo json_encode(['success' => $result]);
+
+    if (isset($_SESSION['checkoutSession']) && $_SESSION['checkoutSession']) {
+        $paymentController = new PaymentController();
+        $paymentIds = $paymentController->getIdsByCheckoutSessionId($_SESSION['checkoutSession']['id']);
+
+        $paymentResult = $paymentController->rollbackPayment($paymentIds['paymentId'], $_SESSION['activeBooking']['id'], $_SESSION['activeBooking']['ticketIds']);
+
+        if ($paymentResult['success']) {
+            // Return a success response
+            echo json_encode(['success' => true]);
+            error_log('Payment rolled back successfully.');
+        } else {
+            // Return an error response
+            echo json_encode(['success' => false, 'errorMessage' => $paymentResult['errorMessage']]);
+            error_log('Payment rollback failed: ' . $paymentResult['errorMessage']);
+        }
     } else {
-        // Return an error response
-        echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
+        $bookingResult = $bookingController->rollBackBooking($_SESSION['activeBooking']['id'], $_SESSION['activeBooking']['ticketIds']);
+    
+        if ($bookingResult['success']) {
+            // Return a success response
+            echo json_encode(['success' => true]);
+        } else {
+            // Return an error response
+            echo json_encode(['success' => false, 'errorMessage' => $bookingResult['errorMessage']]);
+        }
     }
 });
 
