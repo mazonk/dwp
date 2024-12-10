@@ -16,23 +16,25 @@ class MovieCardAdmin
                 Rating: <?php echo htmlspecialchars($movie->getRating() . ' / 10'); ?> ⭐
             </p>
             <div class="flex gap-[0.3rem] justify-center">
-                <button onclick="openEditMovieModal(
-                    '<?= htmlspecialchars($movie->getTitle()); ?>',
-                    '<?= htmlspecialchars($movie->getDescription()); ?>',
-                    '<?= htmlspecialchars($movie->getDuration()); ?>',
-                    '<?= htmlspecialchars($movie->getLanguage()); ?>',
-                    '<?= htmlspecialchars($movie->getReleaseDate()->format('Y-m-d')); ?>',
-                    '<?= htmlspecialchars($movie->getPosterURL()); ?>',
-                    '<?= htmlspecialchars($movie->getPromoURL()); ?>',
-                    '<?= htmlspecialchars($movie->getTrailerURL()); ?>',
-                    '<?= htmlspecialchars($movie->getRating()); ?>',
-                    '<?= htmlspecialchars($movie->getMovieId()); ?>'
-)"
-                    id="editMovieButton"
-                    class="py-1 px-2 text-primary text-xs border-[1px] border-primary rounded hover:text-primaryHover hover:border-primaryHover duration-[0.2s] ease-in-out">
+                <button id="editMovieButton"
+                        data-movie='<?= json_encode([
+                            'title' => htmlspecialchars($movie->getTitle()),
+                            'description' => htmlspecialchars($movie->getDescription()),
+                            'duration' => htmlspecialchars($movie->getDuration()),
+                            'language' => htmlspecialchars($movie->getLanguage()),
+                            'releaseDate' => $movie->getReleaseDate() ? htmlspecialchars($movie->getReleaseDate()->format('Y-m-d')) : '',
+                            'posterURL' => htmlspecialchars($movie->getPosterURL()),
+                            'promoURL' => htmlspecialchars($movie->getPromoURL()),
+                            'trailerURL' => htmlspecialchars($movie->getTrailerURL()),
+                            'rating' => htmlspecialchars($movie->getRating()),
+                            'movieId' => htmlspecialchars($movie->getMovieId()),
+                        ]); ?>'
+                        class="py-1 px-2 text-primary text-xs border-[1px] border-primary rounded hover:text-primaryHover hover:border-primaryHover duration-[0.2s] ease-in-out"
+                        onclick="openEditMovieModal(this.dataset.movie)">
                     Edit
                 </button>
-                <button onclick="openArchiveMovieModal('<?= htmlspecialchars($movie->getMovieId()); ?>')"
+
+                <button onclick="openArchiveMovieModal('<?php echo $movie->getMovieId(); ?>')"
                         class="bg-blue-400 text-textDark py-1 px-2 text-xs border-[1px] border-blue-500 rounded hover:bg-blue-600 hover:border-blue-600">
                     Archive
                 </button>

@@ -3,8 +3,7 @@
     <div class="grid grid-cols-2 w-full gap-4">
         <div class="grid grid-cols-1">
             <div class="grid grid-cols-2">
-                <label for="venueId" class="text-white">Venue ID:</label>
-                <input type="text" id="venueId" class="text-black mb-4 rounded-sm" readonly>
+                <input type="hidden" id="venueId" class="text-black mb-4 rounded-sm" readonly>
                 <input type="hidden" id="addressId">
                 <input type="hidden" id="postalCodeId">
             </div>

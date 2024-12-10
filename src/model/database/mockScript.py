@@ -177,8 +177,8 @@ def generate_bookings():
             valid_user_ids = [user[0] for user in cursor.fetchall()]
 
             # Possible statuses
-            statuses = ["confirmed", "pending", "cancelled"]
-            weights = [0.95, 0.02, 0.03]  # Corresponding weights for confirmed, pending, cancelled status appearance
+            statuses = ["confirmed", "failed"]
+            weights = [0.95, 0.05]  # Corresponding weights for confirmed, pending, cancelled status appearance
 
             # Generate 400 bookings
             for _ in range(6000):
