@@ -181,7 +181,7 @@ unset($_SESSION['guestErrors']);
         let bookingExpiry = localStorage.getItem('bookingExpiry');
 
         if (!bookingExpiry) {
-            bookingExpiry = Date.now() + 15 * 60 * 1000; // 15 minutes from now
+            bookingExpiry = Date.now() + 2 * 60 * 1000; // 15 minutes from now
             localStorage.setItem('bookingExpiry', bookingExpiry);
         }
 
@@ -198,8 +198,9 @@ unset($_SESSION['guestErrors']);
                 rollbackBooking(true);
             }
         }, 1000);
+        
 
-        const allowedPaths = ['/login', '/booking/checkout', '/booking/charge'];
+        /* const allowedPaths = ['/login', '/booking/checkout', '/booking/charge'];
 
         // Intercept internal navigation (via clicks, history push)
         document.body.addEventListener('click', function (e) {
@@ -241,7 +242,7 @@ unset($_SESSION['guestErrors']);
                     e.preventDefault();
                 }
             }
-        }
+        }*/
     });
     function cancelBooking(redirectBack = true) {
         rollbackBooking(redirectBack);
@@ -249,12 +250,6 @@ unset($_SESSION['guestErrors']);
 
     function showGuestForm() {
         document.getElementById('guest-form').classList.remove('hidden');
-    }
-
-    function proceedToPayment() {
-        // Validation logic here
-        alert('Proceeding to payment...');
-        // Redirect to payment gateway
     }
 
     function rollbackBooking(redirectBack) {
