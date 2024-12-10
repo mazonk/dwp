@@ -41,10 +41,14 @@ class BookingController {
         }
     }
 
-    public function rollBackBooking(int $bookingId, array $ticketIds): bool {
+    public function rollBackBooking(int $bookingId, array $ticketIds): array {
         $wasRolledBack = $this->bookingService->rollBackBooking($bookingId, $ticketIds);
+        if (isset($wasRolledBack['error']) && $wasRolledBack['error']) {
+            return ['errorMessage' => $wasRolledBack['message']];
+        }
+
         unset($_SESSION['activeBooking']);
-        return $wasRolledBack;
+        return ['success' => true];
     }
 }
 

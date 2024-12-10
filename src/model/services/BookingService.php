@@ -79,17 +79,25 @@ class BookingService {
         }
     }
 
-    public function rollBackBooking(int $bookingId, array $ticketIds): bool {
+    public function rollBackBooking(int $bookingId, array $ticketIds): array {
+        $failedTickets = [];
         try {
             foreach ($ticketIds as $ticketId) {
-                $result = $this->ticketService->rollBackTicket($ticketId);
-                if (is_array($result) && isset($result['error']) && $result['error']) {
-                    return false;
+                $result = $this->ticketService->rollbackTicket($ticketId);
+                if ($result['error']) {
+                    $failedTickets[] = $ticketId;
                 }
             }
-            return $this->bookingRepository->rollBackBooking($bookingId);
+
+            if (!empty($failedTickets)) {
+                return ["error" => true, "message" => "Failed to roll back all the tickets."];
+            }
+
+            $this->bookingRepository->rollBackBooking($bookingId);
+
+            return ['success' => true];
         } catch (Exception $e) {
-            return false;
+            return ["error" => true, "message" => $e->getMessage()];
         }
     }
 
