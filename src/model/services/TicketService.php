@@ -150,4 +150,22 @@ class TicketService {
         }
     }
 
+    public function getAllTicketTypes(): array {
+        try {
+            $result = $this->ticketRepository->getAllTicketTypes();
+            $ticketTypes = [];
+            foreach ($result as $ticketTypeData) {
+                $ticketTypes[] = new TicketType(
+                    $ticketTypeData["ticketTypeId"],
+                    $ticketTypeData["name"],
+                    $ticketTypeData["price"],
+                    $ticketTypeData["description"]
+                );
+            }
+            return $ticketTypes;
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+    }
+
 }
