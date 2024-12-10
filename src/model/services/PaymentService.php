@@ -39,9 +39,38 @@ class PaymentService {
 
   public function updatePaymentStatus(int $paymentId, int $bookingId, string $paymentStatus): array {
     try {
-      $this->db->beginTransaction();
+      // Start the transaction
+      if (!$this->db->inTransaction()) {
+        $this->db->beginTransaction();
+      }
+
       $this->paymentRepository->updatePaymentStatus($paymentId, $paymentStatus);
       $this->bookingService->updateBookingStatus($bookingId, $paymentStatus);
+      $this->db->commit();
+
+      return ['success' => true];
+    } catch (Exception $e) {
+      // If there's any error, roll back the transaction
+      if ($this->db->inTransaction()) {
+        $this->db->rollBack();
+      }
+
+      return ["error" => true, "message" => $e->getMessage()];
+    }
+  }
+
+  public function rollbackPayment(int $paymentId, int $bookingId, array $ticketIds): array {
+    try {
+      $this->db->beginTransaction();
+
+      // Update payment status to failed
+      $this->paymentRepository->updatePaymentStatus($paymentId, 'failed');
+
+      // Roll back booking (and tickets)
+      $bookingResult = $this->bookingService->rollBackBooking($bookingId, $ticketIds);
+      if ($bookingResult['error']) {
+          throw new Exception("Failed to roll back booking: " . $bookingResult['message']);
+      }
       $this->db->commit();
 
       return ['success' => true];
@@ -50,6 +79,4 @@ class PaymentService {
       return ["error" => true, "message" => $e->getMessage()];
     }
   }
-
-  
 }

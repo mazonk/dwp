@@ -34,4 +34,15 @@ class PaymentController {
     }
     return ['success' => true];
   }
+
+  public function rollbackPayment(int $paymentId, int $bookingId, array $ticketIds): array {
+    $payment = $this->paymentService->rollbackPayment($paymentId, $bookingId, $ticketIds);
+    if (isset($payment['error']) && $payment['error']) {
+      return ['errorMessage' => $payment['message']];
+    }
+
+    unset($_SESSION['activeBooking']);
+    unset($_SESSION['checkoutSession']);
+    return ['success' => true];
+  }
 }
