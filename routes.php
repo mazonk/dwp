@@ -559,7 +559,7 @@ put($baseRoute . 'movies/archive', function() {
 post($baseRoute.'upload-image', function() {
     require_once 'src/controller/ImageUploadController.php';
     $imageUploadController = new ImageUploadController();
-    
-    $imageUploadController->uploadImage();
+    $file = $_FILES['file'];
+    $imageUploadController->uploadImage($file);
 });
 

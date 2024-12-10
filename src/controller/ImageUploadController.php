@@ -1,7 +1,8 @@
 <?php
 
 class ImageUploadController {
-    public function uploadImage() {
+    public function uploadImage($file) {
+        error_log(serialize($file));
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Ensure a directory for uploads exists
             $uploadPath = $_POST['upload_path'] ?? 'uploads';

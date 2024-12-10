@@ -15,7 +15,7 @@ class ImageUploadService {
                 throw new Exception("Upload path is not defined.");
             }
 
-            $baseDir = __DIR__ . "/../../assets/";
+            $baseDir = __DIR__ . "../../assets/"; //might be wrong on production!
             $uploadDir = $baseDir . $uploadPath;
 
             // Ensure directory exists
@@ -28,9 +28,9 @@ class ImageUploadService {
                 throw new Exception("File upload error.");
             }
 
-            $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            $allowedTypes = ['image/jpeg','image/jpg', 'image/png'];
             if (!in_array($file['type'], $allowedTypes)) {
-                throw new Exception("Invalid file type. Allowed: JPG, PNG, GIF.");
+                throw new Exception("Invalid file type. Allowed: JPG, JPEG & PNG.");
             }
 
             // Save the file

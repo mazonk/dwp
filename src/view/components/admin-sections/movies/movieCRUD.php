@@ -326,6 +326,37 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
             xhr.open('POST', `${baseRoute}movies/add`, true);
             console.log(`${baseRoute}movies/add`);
 
+            function sendFile(file) {
+                const formData = new FormData();
+                formData.append('file', file); // Add the file to the FormData object
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', `${baseRoute}upload-image`, true);
+
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status === 200) {
+                            console.log("File uploaded successfully:", xhr.responseText);
+                        } else {
+                            console.error("Failed to upload file:", xhr.status, xhr.statusText);
+                        }
+                    }
+                };
+
+                xhr.send(formData); // Send the FormData object
+            }
+
+            let poster = "";
+            if (addPosterUrlInput.files.length == 1) {
+                poster = addPosterUrlInput.files[0].name;
+                sendFile(addPosterUrlInput.files[0]);
+            }
+
+            let promo = "";
+            if (addPromoUrlInput.files.length == 1) {
+                promo = addPromoUrlInput.files[0].name;
+                sendFile(addPromoUrlInput.files[0]);
+            }
+
             const movieData = {
                 action: 'addMovie',
                 title: addTitleInput.value,
@@ -333,8 +364,8 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
                 duration: addDurationInput.value,
                 language: addLanguageInput.value,
                 releaseDate: addReleaseDateInput.value,
-                posterUrl: addPosterUrlInput.value,
-                promoUrl: addPromoUrlInput.value,
+                posterUrl: poster,
+                promoUrl: promo,
                 trailerUrl: addTrailerUrlInput.value,
                 rating: addRatingInput.value
             }
