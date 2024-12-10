@@ -554,3 +554,12 @@ put($baseRoute . 'movies/archive', function() {
         echo json_encode(['success' => false, 'errorMessage' => 'Invalid movie ID.' . $_PUT['movieId']]);
     }
 });
+
+// Post route for image upload
+post($baseRoute.'upload-image', function() {
+    require_once 'src/controller/ImageUploadController.php';
+    $imageUploadController = new ImageUploadController();
+    
+    $imageUploadController->uploadImage();
+});
+

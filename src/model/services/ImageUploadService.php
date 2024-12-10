@@ -1,65 +1,52 @@
 <?php
+include_once "src/model/repositories/ImageUploadRepository.php";
 
-require 'src/model/repositoriesImageUploadRepository.php'; // Assuming you have a repository class for database operations
-require 'vendor/autoload.php'; // For Cloudinary's UploadApi
+class ImageUploadService {
+    private ImageUploadRepository $imageRepository;
 
-use Cloudinary\Api\Upload\UploadApi;
-
-class ImageService
-{
-    private ImageUploadRepository $repository;
-    private $uploadDir;
-
-    public function __construct($pdo, $uploadDir = __DIR__ . '/src/assets/')
-    {
-        $this->repository = new ImageUploadRepository($pdo);
-        $this->uploadDir = $uploadDir;
-
-        // Ensure the upload directory exists (if local fallback is needed)
-        if (!is_dir($this->uploadDir)) {
-            mkdir($this->uploadDir, 0755, true);
-        }
+    public function __construct() {
+        $this->imageRepository = new ImageUploadRepository();
     }
 
-    public function uploadImage($image)
-    {
-        // Validate the uploaded file
-        $this->validateFile($image);
-
-        // Use Cloudinary for the upload
-        $filePath = $image['tmp_name'];
-        $uploadApi = new UploadApi();
-
+    public function uploadImage(array $file, string $uploadPath): array {
         try {
-            // Upload the file to Cloudinary
-            $uploadResult = $uploadApi->upload($filePath, ['folder' => 'my_uploads/']);
-            $imageUrl = $uploadResult['secure_url'];
+            // Validate upload path
+            if (empty($uploadPath)) {
+                throw new Exception("Upload path is not defined.");
+            }
 
-            // Save the image metadata to the database
-            $this->repository->saveImage($imageUrl, $image['name']);
+            $baseDir = __DIR__ . "/../../assets/";
+            $uploadDir = $baseDir . $uploadPath;
 
-            return ['url' => $imageUrl];
-        } catch (\Exception $e) {
-            throw new \Exception("Failed to upload to Cloudinary: " . $e->getMessage());
-        }
-    }
+            // Ensure directory exists
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0777, true);
+            }
 
-    private function validateFile($image)
-    {
-        // Check for upload errors
-        if ($image['error'] !== UPLOAD_ERR_OK) {
-            throw new \Exception("File upload error: " . $image['error']);
-        }
+            // Validate the file
+            if ($file['error'] !== UPLOAD_ERR_OK) {
+                throw new Exception("File upload error.");
+            }
 
-        // Validate file type
-        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-        if (!in_array($image['type'], $allowedTypes)) {
-            throw new \Exception("Invalid file type. Only JPEG, PNG, and GIF are allowed.");
-        }
+            $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            if (!in_array($file['type'], $allowedTypes)) {
+                throw new Exception("Invalid file type. Allowed: JPG, PNG, GIF.");
+            }
 
-        // Validate file size (5MB limit)
-        if ($image['size'] > 5 * 1024 * 1024) {
-            throw new \Exception("File size exceeds the maximum allowed limit of 5MB.");
+            // Save the file
+            $fileName = time() . '-' . basename($file['name']);
+            $targetPath = $uploadDir . '/' . $fileName;
+
+            if (move_uploaded_file($file['tmp_name'], $targetPath)) {
+                // Save metadata to database
+                $this->imageRepository->saveImageMetadata($fileName, "src/assets/$uploadPath/$fileName", $uploadPath);
+
+                return ['success' => true, 'filePath' => "src/assets/$uploadPath/$fileName"];
+            } else {
+                throw new Exception("Failed to save the uploaded file.");
+            }
+        } catch (Exception $e) {
+            return ['success' => false, 'errorMessage' => $e->getMessage()];
         }
     }
 }
