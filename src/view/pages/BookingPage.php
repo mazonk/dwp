@@ -7,6 +7,22 @@ require_once "src/model/services/TicketService.php";
 require_once "src/model/services/SeatService.php";
 require_once "src/controller/BookingController.php";
 
+if (isset($_SESSION['activeBooking'])) {
+    echo "
+    <div class='fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-70 '>
+        <div class='flex items-center justify-center min-h-screen'>
+            <div class='bg-bgSemiDark w-[500px] rounded-lg p-6 border-[1px] border-borderDark'>
+                <h2 class='text-[1.5rem] text-center font-semibold mb-4'>You have an active booking!</h2>
+                <p class='text-textLight text-center'>Do you want to proceed with your current booking or cancel it?</p>
+                <div class='flex justify-center mt-6'>
+                    <button id='proceedCheckout' class='text-primary py-2 px-4 border-[1px] border-primary rounded hover:bg-borderDark ml-2 duration-[.2s] ease-in-out'>Proceed</button>
+                    <button id='cancelBooking' class='text-red-500 py-2 px-4 border-[1px] border-red-500 rounded hover:bg-borderDark ml-2 duration-[.2s] ease-in-out'>Cancel Booking</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    ";
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -102,6 +118,17 @@ require_once "src/controller/BookingController.php";
     </main>
 
     <script>
+        function showModal(message) {
+        // Display modal with message
+        if (confirm(message)) {
+            // Proceed with current booking
+            window.location.href = "/checkout";
+        } else {
+            // Cancel current booking (send request to server to clear booking)
+            console.log('Cancel booking');
+        }
+    }
+
         function proceedToOverview(showingId) {
             const selectedSeatsList = document.getElementById('selected-seats-list');
             const selectedSeats = selectedSeatsList.dataset.selectedSeats;
@@ -265,6 +292,35 @@ require_once "src/controller/BookingController.php";
                 return '';
             }
         });
+
+        /* Active booking handling */
+        const proceedCheckoutButton = document.getElementById('proceedCheckout');
+        const cancelBookingButton = document.getElementById('cancelBooking');
+
+        proceedCheckoutButton.addEventListener('click', function() {
+            window.location.href = '<?php echo $_SESSION['baseRoute']; ?>booking/checkout';
+        });
+
+        cancelBookingButton.addEventListener('click', function() {
+            rollbackBooking(true);
+        });
+
+        function rollbackBooking(redirectBack) {
+            localStorage.removeItem('bookingExpiry');
+
+            const xhr = new XMLHttpRequest();
+            const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
+            xhr.open('POST', `${baseRoute}booking/rollback`, true);
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    if (redirectBack) {
+                        history.back();
+                    }
+                }
+            };
+            xhr.send();
+        }
     </script>
 
     <?php include_once("src/view/components/Footer.php"); ?>
