@@ -12,6 +12,13 @@ require_once 'src/controller/TicketController.php';
 
 /* Guest User Handling */
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  if (isset($_SESSION['checkoutSession']) && $_SESSION['checkoutSession']) {
+    http_response_code(303); 
+    error_log("Redirecting to checkout session URL: " . $_SESSION['checkoutSession']['url']);
+    header("Location: " . $_SESSION['checkoutSession']['url']);
+    exit;
+  }
+  
   $userController = new UserController();
   $bookingController = new BookingController();
 
@@ -184,8 +191,12 @@ function handlePayment(string $userEmail, int $bookingId, array $formData, strin
       exit;
     } 
     else {
+      $_SESSION['checkoutSession'] = [
+        'id' => $checkout_session->id,
+        'url' => $checkout_session->url
+      ];
       // 303 See Other status code, so the form doesn't get resubmitted for example on refresh or when going back to the page
-      http_response_code(303); 
+      http_response_code(303);
       header("Location: " . $checkout_session->url);
     }
   } catch (\Stripe\Exception\ApiErrorException $e) {
