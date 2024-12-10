@@ -5,6 +5,7 @@ include_once "src/controller/NewsController.php";
 include_once "src/controller/ShowingController.php";
 include_once 'src/controller/VenueController.php';
 include_once 'src/controller/CompanyInfoController.php';
+include_once 'src/controller/TicketController.php';
 
 include_once "src/view/components/NewsCard.php";
 include_once "src/view/components/MovieCard.php";
@@ -13,6 +14,7 @@ $venueController = new VenueController();
 $newsController = new NewsController();
 $showingController = new ShowingController();
 $companyInfoController = new CompanyInfoController();
+$ticketController = new TicketController();
 
 $selectedVenue = $_SESSION['selectedVenueName'] ?? $venueController->getVenueById(1)->getName();
 $_SESSION['selectedVenueName'] = $selectedVenue;
@@ -22,6 +24,8 @@ $page = 1; // Set default page number
 $moviesPerPage = 5;
 
 $companyInfo = $companyInfoController->getCompanyInfo();
+
+$ticketTypes = $ticketController->getAllTicketTypes();
 
  //Fetch and render movies playing today based on pagination.
 function renderMovies($showingController, $page, $moviesPerPage) {
@@ -65,16 +69,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 echo '</div>';
             }
         } elseif ($_POST['tab'] === 'company') {
-            echo '<div class="flex items-center mb-4">';
-                echo '<img src="src/assets/'.htmlspecialchars($companyInfo->getLogoUrl()).'" alt="Company Logo" class="w-24 h-24 object-cover rounded-full mr-4">';
-                echo '<div>';
-                    echo '<h2 class="text-xl font-semibold text-white" id="companyNameDisplay">'.htmlspecialchars($companyInfo->getCompanyName()).'</h2>';
-                    echo '<p class="text-lg text-gray-300 mt-4">'. $companyInfo->getCompanyDescription() .'</p>';
+            if (is_array($companyInfo) && isset($companyInfo['errorMessage'])) {
+                echo $companyInfo['errorMessage'];
+            } else {
+                echo '<div class="flex items-center mb-4">';
+                    echo '<img src="src/assets/'.htmlspecialchars($companyInfo->getLogoUrl()).'" alt="Company Logo" class="w-24 h-24 object-cover rounded-full mr-4">';
+                    echo '<div>';
+                        echo '<h2 class="text-xl font-semibold text-white" id="companyNameDisplay">'.htmlspecialchars($companyInfo->getCompanyName()).'</h2>';
+                        echo '<p class="text-lg text-gray-300 mt-4">'. $companyInfo->getCompanyDescription() .'</p>';
+                    echo '</div>';
                 echo '</div>';
-            echo '</div>';
+            }
         } elseif ($_POST['tab'] === 'tickets') {
             echo '<h2 class="text-2xl font-bold text-white">Ticket Prices</h2>';
-            echo '<p class="text-lg text-gray-300 mt-4">Space reserved for ticket prices.</p>';
+            echo '<div class="mt-4 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">';
+            if (isset($ticketTypes['errorMessage'])) {
+                echo $ticketTypes['errorMessage'];
+            } else {
+                foreach ($ticketTypes as $ticketType) {
+                    echo '<div class="bg-gray-800 p-4 rounded-lg shadow-md">';
+                        echo '<h3 class="text-xl font-semibold text-yellow-300">' . htmlspecialchars($ticketType->getName()) . '</h3>';
+                        echo '<p class="text-gray-300 mt-2">Price: $' . number_format($ticketType->getPrice(), 2) . '</p>';
+                        echo '<p class="text-gray-400 mt-2">' . htmlspecialchars($ticketType->getDescription()) . '</p>';
+                    echo '</div>';
+                }
+                echo '</div>';
+            }
         }
         exit;
     }
