@@ -203,13 +203,15 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
                 <!-- Poster URL Field -->
                 <div class="mb-4">
                     <label for="editPosterUrlInput" class="block text-sm font-medium text-textLight">Upload Poster Image</label>
-                    <input type="file" name="image" id="image" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" accept="image/*" required>
+                    <input type="file" name="image" id="editPosterUrlInput" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" accept="image/*" required>
+                    <div id="posterImageNameDisplay" class="mt-2 text-sm text-textLight"></div>
                 </div>
 
                 <!-- Promo URL Field -->
                 <div class="mb-4">
                     <label for="editPromoUrlInput" class="block text-sm font-medium text-textLight">Upload Promo Image</label>
-                    <input type="file" name="image" id="image" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" accept="image/*" required>
+                    <input type="file" name="image" id="editPromoUrlInput" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" accept="image/*" required>
+                    <div id="promoImageNameDisplay" class="mt-2 text-sm text-textLight"></div>
                 </div>
 
                 <!-- Trailer URL Field -->
@@ -258,9 +260,9 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
     <div class="flex items-center justify-center min-h-screen">
         <!-- Modal -->
         <div class="bg-bgSemiDark w-[500px] rounded-lg p-6 border-[1px] border-borderDark">
-        <h2 class="text-[1.5rem] text-center font-semibold mb-4">Restore Movie</h2>
-        <div class="text-center">
-            <p class="text-textLight text-center">Are you sure you want to restore this movie?</p>
+            <h2 class="text-[1.5rem] text-center font-semibold mb-4">Restore Movie</h2>
+            <div class="text-center">
+                <p class="text-textLight text-center">Are you sure you want to restore this movie?</p>
                 <p>This movie will be displayed on the website again.</p>
             </div>
             <input type="hidden" id="restoreMovieIdInput" name="restoreMovieIdInput">
@@ -274,6 +276,27 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
+        function sendFile(file) {
+            const baseRoute = '<?php echo $_SESSION['baseRoute']; ?>';
+            const formData = new FormData();
+            formData.append('file', file); // Add the file to the FormData object
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', `${baseRoute}upload-image`, true);
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    let response;
+                    try {
+                        response = JSON.parse(xhr.response);
+                    } catch (e) {
+                        console.error('Could not parse response as JSON:', e);
+                        return;
+                    }
+                }
+            };
+            xhr.send(formData); // Send the FormData object
+        }
+
         // Add Movie
         const addMovieForm = document.getElementById('addMovieForm');
         const addMovieButton = document.getElementById('addMovieButton');
@@ -324,39 +347,16 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
             event.preventDefault();
             const xhr = new XMLHttpRequest();
             const baseRoute = '<?php echo $_SESSION['baseRoute']; ?>';
-            console.log('<?php echo $_SESSION['baseRoute']; ?>');
             xhr.open('POST', `${baseRoute}movies/add`, true);
-            console.log(`${baseRoute}movies/add`);
-
-            function sendFile(file) {
-                const formData = new FormData();
-                formData.append('file', file); // Add the file to the FormData object
-                const xhr = new XMLHttpRequest();
-                xhr.open('POST', `${baseRoute}upload-image`, true);
-
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === 4) {
-                        if (xhr.status === 200) {
-                            console.log("File uploaded successfully:", xhr.responseText);
-                        } else {
-                            console.error("Failed to upload file:", xhr.status, xhr.statusText);
-                        }
-                    }
-                };
-
-                xhr.send(formData); // Send the FormData object
-            }
 
             let poster = "";
             if (addPosterUrlInput.files.length == 1) {
                 poster = addPosterUrlInput.files[0].name;
-                sendFile(addPosterUrlInput.files[0]);
             }
 
             let promo = "";
             if (addPromoUrlInput.files.length == 1) {
                 promo = addPromoUrlInput.files[0].name;
-                sendFile(addPromoUrlInput.files[0]);
             }
 
             const movieData = {
@@ -378,17 +378,18 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
                 if (xhr.readyState === 4 && xhr.status === 200) {
                     let response
                     try {
-                        console.log(xhr.response);
                         response = JSON.parse(xhr.response); // Parse the JSON response
                     } catch (e) {
                         console.error('Could not parse response as JSON:', e);
                         return;
                     }
-
                     if (response.success) {
+                        sendFile(addPosterUrlInput.files[0]);
+                        sendFile(addPromoUrlInput.files[0]);
                         alert('Success! Movie added successfully.');
                         window.location.reload();
                         clearValues('add');
+
                     } else {
                         // Display error messages
                         const errors = response.errors;
@@ -426,9 +427,22 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
         const editReleaseDateInput = document.getElementById('editReleaseDateInput');
         const editPosterUrlInput = document.getElementById('editPosterUrlInput');
         const editPromoUrlInput = document.getElementById('editPromoUrlInput');
+        const promoImageNameDisplay = document.getElementById('promoImageNameDisplay');
+        const posterImageNameDisplay = document.getElementById('posterImageNameDisplay');
         const editTrailerUrlInput = document.getElementById('editTrailerUrlInput');
         const editRatingInput = document.getElementById('editRatingInput');
         const errorEditMovieMessageGeneral = document.getElementById('error-edit-movie-general');
+
+        editPromoUrlInput.addEventListener("change", function(event) {
+            const fileName = event.target.files[0]?.name || "No file selected";
+            promoImageNameDisplay.textContent = fileName;
+        });
+
+        editPosterUrlInput.addEventListener("change", function(event) {
+            const fileName = event.target.files[0]?.name || "No file selected";
+            posterImageNameDisplay.textContent = fileName;
+        });
+
 
         window.openEditMovieModal = function(title, description, duration, language, releaseDate, posterUrl, promoURL, trailerUrl, rating, id) {
             editTitleInput.value = title;
@@ -436,8 +450,8 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
             editDurationInput.value = duration;
             editLanguageInput.value = language;
             editReleaseDateInput.value = releaseDate;
-            editPosterUrlInput.value = posterUrl;
-            editPromoUrlInput.value = promoURL;
+            posterImageNameDisplay.textContent = posterUrl;
+            promoImageNameDisplay.textContent = promoURL;
             editTrailerUrlInput.value = trailerUrl;
             editRatingInput.value = rating;
             editMovieIdInput.value = id;
@@ -462,6 +476,16 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
             const baseRoute = '<?php echo $_SESSION['baseRoute']; ?>';
             xhr.open('PUT', `${baseRoute}movies/edit`, true);
 
+            let poster = "";
+            if (editPosterUrlInput.files.length == 1) {
+                poster = editPosterUrlInput.files[0].name;
+            }
+
+            let promo = "";
+            if (editPromoUrlInput.files.length == 1) {
+                promo = editPromoUrlInput.files[0].name;
+            }
+
             const editMovieData = {
                 action: 'editMovie',
                 title: editTitleInput.value,
@@ -469,8 +493,8 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
                 duration: editDurationInput.value,
                 language: editLanguageInput.value,
                 releaseDate: editReleaseDateInput.value,
-                posterURL: editPosterUrlInput.value,
-                promoURL: editPromoUrlInput.value,
+                posterURL: poster,
+                promoURL: promo,
                 trailerURL: editTrailerUrlInput.value,
                 rating: editRatingInput.value,
                 movieId: editMovieIdInput.value
@@ -482,13 +506,14 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
                 if (xhr.readyState === 4 && xhr.status === 200) {
                     let response;
                     try {
-                        console.log(xhr.response);
                         response = JSON.parse(xhr.response);
                     } catch (e) {
                         console.error('Could not parse response as JSON:', e);
                         return;
                     }
                     if (response.success) {
+                        sendFile(editPosterUrlInput.files[0]);
+                        sendFile(editPromoUrlInput.files[0]);
                         alert('Success! Movie edited successfully.');
                         window.location.reload();
                         clearValues('edit');
@@ -660,14 +685,12 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
             const xhr = new XMLHttpRequest();
             const baseRoute = '<?php echo $_SESSION['baseRoute']; ?>';
             const movieId = archiveMovieIdInput.value;
-            console.log(movieId);
 
             xhr.open('PUT', `${baseRoute}movies/archive`, true);
 
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4 && xhr.status === 200) {
                     let response
-                    console.log(xhr.response);
                     try {
                         response = JSON.parse(xhr.response);
                     } catch (e) {
@@ -724,7 +747,6 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4 && xhr.status === 200) {
                     let response;
-                    console.log(xhr.response);
                     try {
                         response = JSON.parse(xhr.response);
                     } catch (e) {

@@ -8,45 +8,35 @@ class ImageUploadService {
         $this->imageRepository = new ImageUploadRepository();
     }
 
-    public function uploadImage(array $file, string $uploadPath): array {
+    public function uploadImage($file): array {
         try {
-            // Validate upload path
-            if (empty($uploadPath)) {
-                throw new Exception("Upload path is not defined.");
-            }
+            error_log("File Type: " . $file['type']);
+            error_log("File Size: " . $file['size']);
 
-            $baseDir = __DIR__ . "../../assets/"; //might be wrong on production!
-            $uploadDir = $baseDir . $uploadPath;
+            // Validate file type and size
+            if (in_array($file['type'], ["image/jpeg", "image/pjpeg", "image/png", "image/jpg"]) && 
+                $file['size'] < 3000000) {
+                
+                $filename = basename($file['name']);
+                $destination = "src/assets/" . $filename;
 
-            // Ensure directory exists
-            if (!is_dir($uploadDir)) {
-                mkdir($uploadDir, 0777, true);
-            }
+                // Check if the file already exists
+                if (file_exists($destination)) {
+                    return ['errorMessage' => "File already exists"];
+                }
 
-            // Validate the file
-            if ($file['error'] !== UPLOAD_ERR_OK) {
-                throw new Exception("File upload error.");
-            }
-
-            $allowedTypes = ['image/jpeg','image/jpg', 'image/png'];
-            if (!in_array($file['type'], $allowedTypes)) {
-                throw new Exception("Invalid file type. Allowed: JPG, JPEG & PNG.");
-            }
-
-            // Save the file
-            $fileName = time() . '-' . basename($file['name']);
-            $targetPath = $uploadDir . '/' . $fileName;
-
-            if (move_uploaded_file($file['tmp_name'], $targetPath)) {
-                // Save metadata to database
-                $this->imageRepository->saveImageMetadata($fileName, "src/assets/$uploadPath/$fileName", $uploadPath);
-
-                return ['success' => true, 'filePath' => "src/assets/$uploadPath/$fileName"];
+                // Move uploaded file to the destination
+                if (move_uploaded_file($file['tmp_name'], $destination)) {
+                    return ['successMessage' => "File uploaded successfully"];
+                } else {
+                    return ['errorMessage' => "Failed to upload the file"];
+                }
             } else {
-                throw new Exception("Failed to save the uploaded file.");
+                return ['errorMessage' => "Invalid file type or size"];
             }
         } catch (Exception $e) {
-            return ['success' => false, 'errorMessage' => $e->getMessage()];
+            error_log("Upload Error: " . $e->getMessage());
+            return ['errorMessage' => $e->getMessage()];
         }
     }
 }

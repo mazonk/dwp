@@ -560,7 +560,13 @@ post($baseRoute.'upload-image', function() {
     require_once 'src/controller/ImageUploadController.php';
     $imageUploadController = new ImageUploadController();
     $file = $_FILES['file'];
-    $imageUploadController->uploadImage($file);
+    $result = $imageUploadController->uploadImage($file);
+
+    if (isset($result['successMessage'])) {
+        echo json_encode(['success' => $result['successMessage']]);
+    } else {
+        echo json_encode(['failure' => $result['errorMessage']]);
+    }
 });
 
 // Archive movie route
