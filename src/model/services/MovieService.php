@@ -141,6 +141,15 @@ class MovieService {
         }
     }
 
+    public function restoreMovie(int $movieId): array {
+        try {
+            $this->movieRepository->restoreMovie($movieId);
+            return ['success' => true];
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+    }
+
     public function getAllGenres(): array {
         try {
             $result = $this->movieRepository->getAllGenres();

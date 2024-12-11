@@ -98,6 +98,14 @@ class MovieController {
         return ['success' => true];
     }
 
+    public function restoreMovie(int $movieId): array {
+        $result = $this->movieService->restoreMovie(htmlspecialchars($movieId));
+        if (isset($result['error']) && $result['error']) {
+            return ['errorMessage' => $result['message']];
+        }
+        return ['success' => true];
+    }
+
     public function getAllGenres(): array {
         $genres = $this->movieService->getAllGenres();
         if (isset($genres['error']) && $genres['error']) {

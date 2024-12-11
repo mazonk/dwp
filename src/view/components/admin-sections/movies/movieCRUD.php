@@ -253,21 +253,23 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
     </div>
 </div>
 
-<!-- Delete Movie Modal -->
-<div id="deleteMovieModal" class="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 hidden">
+<!-- Restore Movie Modal -->
+<div id="restoreMovieModal" class="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 hidden">
     <div class="flex items-center justify-center min-h-screen">
         <!-- Modal -->
         <div class="bg-bgSemiDark w-[500px] rounded-lg p-6 border-[1px] border-borderDark">
-            <h2 class="text-[1.5rem] text-center font-semibold mb-4">Delete Movie</h2>
-            <p class="text-textLight text-center">Are you sure you want to delete this movie?</p>
-            <input type="hidden" id="deleteMovieIdInput" name="deleteMovieIdInput">
+        <h2 class="text-[1.5rem] text-center font-semibold mb-4">Restore Movie</h2>
+        <div class="text-center">
+            <p class="text-textLight text-center">Are you sure you want to restore this movie?</p>
+                <p>This movie will be displayed on the website again.</p>
+            </div>
+            <input type="hidden" id="restoreMovieIdInput" name="restoreMovieIdInput">
             <div class="flex justify-center mt-4">
-                <button id="confirmDeleteMovieButton" class="bg-red-500 text-white py-2 px-4 border-[1px] border-transparent rounded hover:bg-red-600 duration-[.2s] ease-in-out">Delete</button>
-                <button id="cancelDeleteMovieButton" class="text-textLight py-2 px-4 border-[1px] border-white rounded hover:bg-borderDark ml-2 duration-[.2s] ease-in-out">Cancel</button>
+                <button id="confirmRestoreMovieButton" class="bg-blue-500 text-white py-2 px-4 border-[1px] border-transparent rounded hover:bg-blue-600 duration-[.2s] ease-in-out">Restore</button>
+                <button id="cancelRestoreMovieButton" class="text-textLight py-2 px-4 border-[1px] border-white rounded hover:bg-borderDark ml-2 duration-[.2s] ease-in-out">Cancel</button>
             </div>
         </div>
     </div>
-</div>
 </div>
 
 <script>
@@ -685,6 +687,62 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
             };
             // Send the request with movieId in URL parameters or form data
             xhr.send(`movieId=${movieId}&action=archiveMovie`);
+        });
+
+        // Restore Movie Modal
+        const restoreMovieModal = document.getElementById('restoreMovieModal');
+        const restoreMovieIdInput = document.getElementById('restoreMovieIdInput');
+        const confirmRestoreMovieButton = document.getElementById('confirmRestoreMovieButton');
+        const cancelRestoreMovieButton = document.getElementById('cancelRestoreMovieButton');
+
+        // Open the restore modal
+        window.openRestoreMovieModal = function(movieId) {
+            if (restoreMovieIdInput && restoreMovieModal) {
+                restoreMovieIdInput.value = movieId;
+                restoreMovieModal.classList.remove('hidden');
+            } else {
+                console.error('Required elements are missing from the DOM.');
+            }
+        };
+
+        // Close the restore modal
+        if (cancelRestoreMovieButton) {
+            cancelRestoreMovieButton.addEventListener('click', () => {
+                restoreMovieModal.classList.add('hidden');
+                restoreMovieIdInput.value = '';
+            });
+        }
+
+        // Confirm restore movie
+        confirmRestoreMovieButton.addEventListener('click', function(event) {
+            const xhr = new XMLHttpRequest();
+            const baseRoute = '<?php echo $_SESSION['baseRoute']; ?>';
+            const movieId = restoreMovieIdInput.value;
+
+            xhr.open('PUT', `${baseRoute}movies/restore`, true);
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    let response;
+                    console.log(xhr.response);
+                    try {
+                        response = JSON.parse(xhr.response);
+                    } catch (e) {
+                        console.error('Could not parse response as JSON:', e);
+                        return;
+                    }
+
+                    if (response.success) {
+                        alert('Success! Movie restored successfully.');
+                        window.location.reload();
+                        restoreMovieModal.classList.add('hidden');
+                    } else {
+                        console.error('Error:', response.errorMessage);
+                    }
+                }
+            };
+            // Send the request with movieId in URL parameters or form data
+            xhr.send(`movieId=${movieId}&action=restoreMovie`);
         });
 
         //Clear error messages and input values

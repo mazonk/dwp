@@ -135,6 +135,16 @@ class MovieRepository {
         }
     }
 
+    public function restoreMovie(int $movieId): void {
+        $db = $this->getdb();
+        $query = $db->prepare("UPDATE Movie SET archived = 0 WHERE movieId = :movieId");
+        try {
+            $query->execute(array(":movieId" => $movieId));
+        } catch (PDOException $e) {
+            throw new PDOException("Unable to restore movie!");
+        }
+    }
+
     public function getAllGenres(): array {
         $db = $this->getdb();
         $query = $db->prepare("SELECT * FROM genre");

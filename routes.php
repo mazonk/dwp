@@ -563,3 +563,26 @@ post($baseRoute.'upload-image', function() {
     $imageUploadController->uploadImage($file);
 });
 
+// Archive movie route
+put($baseRoute . 'movies/restore', function() {
+    require_once 'src/controller/MovieController.php';
+    $movieController = new MovieController();
+    parse_str(file_get_contents("php://input"), $_PUT); // Parse the PUT request
+
+
+    if (isset($_PUT['movieId'])) {
+        $movieId = htmlspecialchars(trim($_PUT['movieId']));
+
+        $result = $movieController->restoreMovie($movieId);
+
+        if (isset($result['success']) && $result['success'] === true) {
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);
+        }
+    } else {
+        echo json_encode(['success' => false, 'errorMessage' => 'Invalid movie ID.' . $_PUT['movieId']]);
+    }
+});
+
+

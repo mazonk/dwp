@@ -39,10 +39,17 @@ class MovieCardAdmin
                     class="py-1 px-2 text-primary font-semibold text-xs border-[1px] border-primary rounded hover:text-primaryHover hover:border-primaryHover duration-[0.2s] ease-in-out">
                     Edit
                 </button>
-                <button onclick="openArchiveMovieModal('<?= htmlspecialchars($movie->getMovieId()); ?>')"
-                        class="bg-blue-400 text-textDark font-semibold py-1 px-2 text-xs border-[1px] border-blue-500 rounded hover:bg-blue-600 hover:border-blue-600">
-                    Archive
-                </button>
+                <?php if ($isArchived): ?>
+                    <button onclick="openRestoreMovieModal('<?= htmlspecialchars($movie->getMovieId()); ?>')"
+                            class="bg-green-400 text-textDark font-semibold py-1 px-2 text-xs border-[1px] border-green-500 rounded hover:bg-green-600 hover:border-green-600">
+                        Restore
+                    </button>
+                <?php else: ?>
+                    <button onclick="openArchiveMovieModal('<?= htmlspecialchars($movie->getMovieId()); ?>')"
+                            class="bg-blue-400 text-textDark font-semibold py-1 px-2 text-xs border-[1px] border-blue-500 rounded hover:bg-blue-600 hover:border-blue-600">
+                        Archive
+                    </button>
+                <?php endif; ?>
             </div>
         </div>
         <?php
