@@ -28,6 +28,14 @@ class TicketController {
         return $insertedTicketIds;
     }
 
+    public function getAllTicketTypes(): array {
+        $ticketTypes = $this->ticketService->getAllTicketTypes();
+        if (is_array($ticketTypes) && isset($ticketTypes['error']) && $ticketTypes['error']) {
+            return ['errorMessage' => $ticketTypes['message']];
+        }
+        return $ticketTypes;
+    }
+
     // public function createTicket(int $seatId, int $ticketTypeId, int $showingId): int|array {
     //     $insertedTicketId = $this->ticketService->createTicket($seatId, $ticketTypeId, $showingId, $_SESSION['activeBooking']['id']);
     //     if (is_array($insertedTicketId) && isset($insertedTicketId["error"]) && $insertedTicketId["error"]) {

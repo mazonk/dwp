@@ -112,7 +112,7 @@ CREATE TABLE Movie (
     posterURL VARCHAR(255) NULL,
     promoURL VARCHAR(255) NULL,
     trailerURL VARCHAR(255) NULL,
-    rating DECIMAL(2, 2) NULL -- 2 digits and 2 digits after the decimal point 1.00 - 10.00
+    rating DECIMAL(3, 1) NULL
 );
 
 CREATE TABLE Genre (
@@ -228,3 +228,77 @@ CREATE TABLE VenueShowing (
     FOREIGN KEY (venueId) REFERENCES Venue(venueId),
     FOREIGN KEY (showingId) REFERENCES Showing(showingId)
 );
+
+-- Views
+
+CREATE OR REPLACE VIEW MoviesWithShowings AS
+SELECT 
+    m.movieId,
+    m.title,
+    COUNT(s.showingId) AS numberOfShowings
+FROM Movie m
+LEFT JOIN Showing s ON m.movieId = s.movieId
+GROUP BY m.movieId, m.title;
+
+CREATE OR REPLACE VIEW ShowingsWithDetails AS
+SELECT 
+    s.showingId,
+    s.showingDate,
+    s.showingTime,
+    m.title,
+    r.roomNumber,
+    COUNT(DISTINCT b.bookingId) AS bookings, -- Total number of bookings
+    COUNT(t.ticketId) AS tickets             -- Total number of tickets
+FROM Showing s
+JOIN Movie m ON s.movieId = m.movieId
+JOIN Room r ON s.roomId = r.roomId
+LEFT JOIN Ticket t ON s.showingId = t.showingId
+LEFT JOIN Booking b ON t.bookingId = b.bookingId
+GROUP BY 
+    s.showingId, 
+    s.showingDate, 
+    s.showingTime, 
+    m.title, 
+    r.roomNumber;
+
+-- Triggers
+
+DELIMITER //
+
+CREATE TRIGGER validate_rating
+BEFORE INSERT ON Movie
+FOR EACH ROW
+BEGIN
+    IF NEW.rating < 0 OR NEW.rating > 10 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Rating must be between 0.0 and 10.0';
+    END IF;
+END;
+//
+
+
+DELIMITER //
+
+CREATE TRIGGER validate_totalprice
+BEFORE INSERT ON Payment
+FOR EACH ROW
+BEGIN
+    IF NEW.totalPrice < 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Total price of payment cannot be less than 0.00';
+    END IF;
+END;
+//
+
+DELIMITER //
+
+CREATE TRIGGER validate_price
+BEFORE INSERT ON TicketType
+FOR EACH ROW
+BEGIN
+    IF NEW.price < 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Ticket price cannot be less than 0.00';
+    END IF;
+END;
+//
