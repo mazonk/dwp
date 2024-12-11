@@ -3,8 +3,15 @@ class MovieCardAdmin
 {
     public static function render(Movie $movie)
     {
+        $movieController = new MovieController();
+        $isArchived = $movieController->isArchived($movie->getMovieId()); // Check if the movie is archived
         ?>
-        <div class="w-[15.75rem] text-center m-[0.5rem] movie-card bg-bgSemiDark rounded-lg p-4 border-[1px] border-borderDark">
+        <div class="w-[15.75rem] text-center m-[0.5rem] movie-card bg-bgSemiDark rounded-lg p-4 border-[1px] border-borderDark relative">
+            <?php if ($isArchived): ?>
+                <div class="absolute top-0 left-0 w-full py-1 bg-red-600 text-white font-bold text-xs uppercase text-center rounded-t-lg">
+                    Archived
+                </div>
+            <?php endif; ?>
             <a href="<?php echo $_SESSION['baseRoute'] ?>movie/<?php echo $movie->getMovieId(); ?>">
                 <img class="w-full h-[18.75rem] mb-2 bg-bgSemiDark border-[1px] rounded-lg shadow-lg border-borderDark bg-center bg-cover"
                      src="src/assets/<?php echo htmlspecialchars($movie->getPosterURL()); ?>" alt="Movie Poster">
@@ -27,7 +34,7 @@ class MovieCardAdmin
                     '<?= htmlspecialchars($movie->getTrailerURL()); ?>',
                     '<?= htmlspecialchars($movie->getRating()); ?>',
                     '<?= htmlspecialchars($movie->getMovieId()); ?>'
-)"
+                )"
                     id="editMovieButton"
                     class="py-1 px-2 text-primary font-semibold text-xs border-[1px] border-primary rounded hover:text-primaryHover hover:border-primaryHover duration-[0.2s] ease-in-out">
                     Edit
@@ -41,3 +48,4 @@ class MovieCardAdmin
         <?php
     }
 }
+?>
