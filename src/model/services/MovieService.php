@@ -37,6 +37,23 @@ class MovieService {
         return $movies;
     }
 
+    public function getMoviesWithShowings(): array {
+        try {
+            $result = $this->movieRepository->getMoviesWithShowings();
+            $movies = [];
+            foreach ($result as $row) {
+                $movies[] = [
+                    'movieId' => $row['movieId'],
+                    'title' => $row['title'],
+                    'numberOfShowings' => $row['numberOfShowings']
+                ];
+            }
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+        return $movies;
+    }
+
     public function getMovieById(int $movieId): array|Movie {
         try {
             $result = $this->movieRepository->getMovieById($movieId);
