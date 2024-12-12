@@ -246,20 +246,25 @@ SELECT
     s.showingDate,
     s.showingTime,
     m.title,
+    m.movieId,
     r.roomNumber,
+    vs.venueId,
     COUNT(DISTINCT b.bookingId) AS bookings, -- Total number of bookings
     COUNT(t.ticketId) AS tickets             -- Total number of tickets
 FROM Showing s
 JOIN Movie m ON s.movieId = m.movieId
 JOIN Room r ON s.roomId = r.roomId
+JOIN VenueShowing vs ON s.showingId = vs.showingId
 LEFT JOIN Ticket t ON s.showingId = t.showingId
 LEFT JOIN Booking b ON t.bookingId = b.bookingId
 GROUP BY 
     s.showingId, 
     s.showingDate, 
     s.showingTime, 
-    m.title, 
-    r.roomNumber;
+    m.title,
+    m.movieId,
+    r.roomNumber,
+    vs.venueId;
 
 -- Triggers
 
