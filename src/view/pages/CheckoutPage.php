@@ -181,7 +181,7 @@ unset($_SESSION['guestErrors']);
         let bookingExpiry = localStorage.getItem('bookingExpiry');
 
         if (!bookingExpiry) {
-            bookingExpiry = Date.now() + 2 * 60 * 1000; // 15 minutes from now
+            bookingExpiry = Date.now() + 15 * 60 * 1000; // 15 minutes from now
             localStorage.setItem('bookingExpiry', bookingExpiry);
         }
 
