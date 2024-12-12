@@ -10,11 +10,10 @@ require_once 'src/controller/VenueController.php';
 require_once 'src/controller/TicketController.php';
 
 
-/* Guest User Handling */
+// User handling
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   if (isset($_SESSION['checkoutSession']) && $_SESSION['checkoutSession']) {
     http_response_code(303); 
-    error_log("Redirecting to checkout session URL: " . $_SESSION['checkoutSession']['url']);
     header("Location: " . $_SESSION['checkoutSession']['url']);
     exit;
   }
@@ -33,46 +32,59 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $formData['lastName'] = htmlspecialchars(trim($_POST['lastName']));
     $formData['dob'] = htmlspecialchars(trim($_POST['dob']));
 
-    $doesUserExists = $userController->doesUserExistByEmail($formData['email']);
+    $doesAccountExists = $userController->doesAccountExistByEmail($formData['email']);
     $userId = null;
 
     // If user with this email already exists
-    if ($doesUserExists) {
-      $_SESSION['guestErrors'] = ['general' => 'It seems there is already an account with this email. Please log in to proceed with your payment.'];
-      $_SESSION['guestFormData'] = $formData;
-      header("Location: " . $currentRoute);
-      exit;
+    if ($doesAccountExists === true) {
+      handleErrorAndRedirect($currentRoute, ['general' => 'It seems there is already an account with this email. Please log in or try another email.'], $formData);
     }
     // If user with this email does not exist yet
-    else if (!$doesUserExists) {
-      $result = $userController->createGuestUser($formData);
+    else if ($doesAccountExists === false) {
+      $guestId = $userController->doesGuestExistByEmail($formData['email'], 'Guest');
 
-      if (isset($result['errorMessage']) && $result['errorMessage'] || isset($result['validationError']) && $result['validationError']) {
-        header("Location: " . $currentRoute);
-        exit;
+      // If guest with this email already exists
+      if ($guestId > 0) {
+        $updatedGuestId = $userController->updateGuestInfo($formData, $guestId);
+
+        if (isset($updatedGuestId['errorMessage']) && $updatedGuestId['errorMessage'] || isset($updatedGuestId['validationError']) && $updatedGuestId['validationError']) {
+          header("Location: " . $currentRoute);
+          exit;
+        }
+        $userId = $updatedGuestId;
       }
-      $userId = $result;
+      // If guest with this email does not exist yet
+      else if ($guestId === 0) {
+        $result = $userController->createGuestUser($formData);
+
+        if (isset($result['errorMessage']) && $result['errorMessage'] || isset($result['validationError']) && $result['validationError']) {
+          header("Location: " . $currentRoute);
+          exit;
+        }
+        $userId = $result;
+      }
+      else if (is_array($guestId) && isset($guestId['errorMessage'])) {
+        handleErrorAndRedirect($currentRoute, ['general' => 'An error occurred. ' . $guestId['errorMessage']], $formData);
+      }
     }
-    else if (is_array($doesUserExists) && isset($doesUserExists['errorMessage'])) {
-      $_SESSION['guestErrors'] = ['general' => 'An error occurred. ' . $result['errorMessage']];
-      $_SESSION['guestFormData'] = $formData;
-      header("Location: " . $currentRoute);
-      exit;
+    else if (is_array($doesAccountExists) && isset($doesAccountExists['errorMessage'])) {
+      handleErrorAndRedirect($currentRoute, ['general' => 'An error occurred. ' . $doesAccountExists['errorMessage']], $formData);
     }
 
     // Update booking with user ID
     $updatedBooking = $bookingController->updateBookingUser($bookingId, $userId);
     if (isset($updatedBooking['errorMessage']) && $updatedBooking['errorMessage']) {
-      $_SESSION['guestErrors'] = ['general' => 'An error occurred. ' . $updatedBooking['errorMessage']];
-      $_SESSION['guestFormData'] = $formData;
-      header("Location: " . $currentRoute);
-      exit;
+      handleErrorAndRedirect($currentRoute, ['general' => 'An error occurred. ' . $updatedBooking['errorMessage']], $formData);
     }
-    handlePayment($formData['email'], $bookingId, $formData, $currentRoute);
 
   } else {
-    handlePayment($_SESSION['loggedInUser']['userEmail'], $bookingId, $formData, $currentRoute);
+    // Update booking with logged in user ID
+    $updatedBooking = $bookingController->updateBookingUser($bookingId, $_SESSION['loggedInUser']['userId']);
+    if (isset($updatedBooking['errorMessage']) && $updatedBooking['errorMessage']) {
+      handleErrorAndRedirect($currentRoute, ['general' => 'An error occurred. ' . $updatedBooking['errorMessage']]);
+    }
   }
+  handlePayment($_SESSION['loggedInUser']['userEmail'] ?? $formData['email'] , $bookingId, $formData, $currentRoute); 
 }
 
 /* Stripe Handling */
@@ -139,14 +151,6 @@ function handlePayment(string $userEmail, int $bookingId, array $formData, strin
   ];
 
   try {
-    // Create a string with seat descriptions
-    /* $seatDescriptions = [];
-    foreach ($tickets as $ticket) {
-      $seat = $ticket->getSeat();
-      $seatDescriptions[] = "Row " . htmlspecialchars($seat->getRow()) . " - Seat " . htmlspecialchars($seat->getSeatNr());
-    }
-    $seatsString = implode(", ", $seatDescriptions); */
-
     // Create line items for the checkout session
     $lineItems = [];
     foreach ($ticketTypes as $ticketType) {
@@ -157,7 +161,7 @@ function handlePayment(string $userEmail, int $bookingId, array $formData, strin
           "unit_amount" => $ticketType['price'] * 100, // Price in cents
           "product_data" => [
               "name" => $movie->getTitle() . " " . $ticketType['name'] . ($ticketType['count'] > 1 ? ' tickets' : ' ticket'),
-              "description" => $showing->getShowingDate()->format('Y-m-d') . " " . $showing->getShowingTime()->format('H:i') . " " . $venue->getName()
+              "description" => $showing->getShowingDate()->format('Y-m-d') . " | " . $showing->getShowingTime()->format('H:i') . " | " . $venue->getName()
           ]
         ]
       ];
@@ -183,12 +187,7 @@ function handlePayment(string $userEmail, int $bookingId, array $formData, strin
     $payment = $paymentController->addPayment($paymentData);
     
     if(isset($payment['errorMessage']) && $payment['errorMessage']) {
-      $_SESSION['guestErrors'] = ['general' => 'An error occurred. ' . $payment['errorMessage']];
-      if (count($formData) > 0) {
-        $_SESSION['guestFormData'] = $formData;
-      }
-      header("Location: " . $currentRoute);
-      exit;
+      handleErrorAndRedirect($currentRoute, ['general' => 'An error occurred. ' . $payment['errorMessage']], $formData);
     } 
     else {
       $_SESSION['checkoutSession'] = [
@@ -205,4 +204,12 @@ function handlePayment(string $userEmail, int $bookingId, array $formData, strin
   }
 }
 
-
+// Redirect with errors and form data
+function handleErrorAndRedirect(string $route, array $errors, array $formData = []): void {
+  $_SESSION['guestErrors'] = $errors;
+  if (count($formData) > 0) {
+    $_SESSION['guestFormData'] = $formData;
+  }
+  header("Location: " . $route);
+  exit;
+}
