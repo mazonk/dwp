@@ -241,8 +241,9 @@ INSERT INTO Seat (`row`, seatNr, roomId) VALUES
 
 INSERT INTO UserRole (type) VALUES
 ('Admin'), 
-('Customer'),
-('Staff');
+('User'),
+('Staff'),
+('Guest');
 
 INSERT INTO User (firstName, lastName, DoB, email, passwordHash, roleId) VALUES
 ('Admin', 'Admin', '2000-01-01', 'admin@admin.com', '$2y$10$Xt53U6KwhZ34mwbsdgVNjetv998rgpvqQ9xMAa4EzwTfH9X2zElK2', 1),
@@ -745,7 +746,7 @@ INSERT INTO TicketType (name, price, description) VALUES
 
 INSERT INTO Booking (userId, status) VALUES
 (1, 'confirmed'),
-(1, 'pending'),
+(1, 'confirmed'),
 (1, 'failed');
 
 INSERT INTO Ticket (seatId, ticketTypeId, showingId, bookingId) VALUES
