@@ -28,10 +28,12 @@ $movies = $movieController->getMoviesWithShowings();
         <!-- Movies List -->
         <div id="moviesList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <?php foreach ($movies as $movie) { ?>
-                <div class="bg-white p-4 rounded-lg shadow-md border border-gray-200">
+                <a 
+                    href="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>&selectedMovie=<?php echo $movie['movieId']; ?>" 
+                    class="bg-white p-4 rounded-lg shadow-md border border-gray-200 block">
                     <h3 class="text-lg font-semibold text-gray-800 mb-2"> <?php echo $movie['title']; ?> </h3>
                     <p class="text-gray-600">Number of Showings: <?php echo $movie['numberOfShowings']; ?></p>
-                </div>
+                </a>
             <?php } ?>
         </div>
 
