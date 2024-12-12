@@ -11,4 +11,3 @@ class ImageUploadController {
        return $this->imageUploadService->uploadImage($file);
     }
 }
-       
