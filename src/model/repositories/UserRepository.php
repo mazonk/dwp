@@ -60,15 +60,36 @@ class UserRepository {
         }
     }
 
-    public function doesUserExistByEmail(string $email): bool {
+    public function doesAccountExistByEmail(string $email): bool {
         $db = $this->getdb();
-        $query = $db->prepare("SELECT COUNT(*) FROM User WHERE email = :email");
+        $query = $db->prepare("SELECT COUNT(*) FROM User WHERE email = :email AND passwordHash IS NOT NULL LIMIT 1");
         try {
             $query->execute(array(":email" => $email));
             $result = $query->fetchColumn();
             return $result > 0;
         } catch (PDOException $e) {
             throw new PDOException("Unable to check if user exists by email!");
+        }
+    }
+
+    public function doesGuestExistByEmail(string $email, string $role): int {
+        $db = $this->getdb();
+        // Modify the query to return the user id
+        $query = $db->prepare("SELECT u.userId FROM User u
+            JOIN UserRole ur ON u.roleId = ur.roleId
+            WHERE u.email = :email
+            AND ur.type = :role 
+            AND u.passwordHash IS NULL");
+        try {
+            $query->execute(array(":email" => $email, ":role" => $role));
+            $result = $query->fetchColumn();
+            if ($result === false) {
+                return 0;
+            } else {
+                return $result;
+            }
+        } catch (PDOException $e) {
+            throw new PDOException("Unable to check if guest exists by email!");
         }
     }
 
@@ -86,6 +107,21 @@ class UserRepository {
             return $db->lastInsertId();
         } catch (PDOException $e) {
             throw new PDOException("Unable to create guest user!");
+        }
+    }
+
+    public function updateGuestInfo(array $formData, int $userId): void {
+        $db = $this->getdb();
+        $query = $db->prepare("UPDATE User SET firstName = :firstName, lastName = :lastName, dob = :dob WHERE userId = :userId");
+        try {
+            $query->execute(array(
+                ":firstName" => $formData['firstName'],
+                ":lastName" => $formData['lastName'],
+                ":dob" => $formData['dob'],
+                ":userId" => $userId
+            ));
+        } catch (PDOException $e) {
+            throw new PDOException("Unable to update guest info!");
         }
     }
 
