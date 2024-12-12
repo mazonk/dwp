@@ -40,6 +40,22 @@ class ShowingRepository {
         return $result;
     }
 
+    public function getShowingsForMovieAdmin(int $movieId, int $selectedVenueId): array {
+        $db = $this->getdb();
+        $query = $db->prepare("SELECT * FROM ShowingsWithDetails as swd WHERE swd.movieId = :movieId AND swd.venueId = :venueId ORDER BY swd.showingDate, swd.showingTime ASC");
+        try {
+            $query->execute(array(":movieId" => $movieId, ":venueId" => $selectedVenueId));
+            $result = $query->fetchAll(PDO::FETCH_ASSOC);
+            if (empty($result)) {
+                throw new Exception("No showings found for this movie!");
+            }
+        } catch (PDOException $e) {
+            throw new Exception("Unable to fetch showings for venue!");
+        }
+
+        return $result;
+    }
+
     /**
      * Gets the movies playing today for the given venue.
      *
