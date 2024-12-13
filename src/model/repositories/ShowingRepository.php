@@ -25,6 +25,7 @@ class ShowingRepository {
 
     public function getShowingsForMovie(int $movieId, int $selectedVenueId): array {
         $db = $this->getdb();
+        $db->exec("SET SQL_BIG_SELECTS=1");
         $query = $db->prepare("SELECT * FROM Showing as s JOIN VenueShowing as vs ON s.showingId = vs.showingId WHERE vs.venueId = :venueId 
         AND s.movieId = :movieId ORDER BY s.showingDate, s.showingTime ASC");
         try {
@@ -42,6 +43,7 @@ class ShowingRepository {
 
     public function getShowingsForMovieAdmin(int $movieId): array {
         $db = $this->getdb();
+        $db->exec("SET SQL_BIG_SELECTS=1");
         $query = $db->prepare("SELECT * FROM ShowingsWithDetails as swd WHERE swd.movieId = :movieId ORDER BY swd.showingDate, swd.showingTime ASC");
         try {
             $query->execute(array(":movieId" => $movieId));
