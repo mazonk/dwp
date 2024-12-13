@@ -17,6 +17,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header("Location: " . $_SESSION['checkoutSession']['url']);
     exit;
   }
+
+  // Update the expiry time for the booking
+  $_SESSION['activeBooking']['expiry'] = time() + 30 * 60; // 30 minutes from now;
   
   $userController = new UserController();
   $bookingController = new BookingController();
@@ -170,13 +173,13 @@ function handlePayment(string $userEmail, int $bookingId, array $formData, strin
     $checkout_session = \Stripe\Checkout\Session::create([
       "mode" => "payment",
       // Localhost URLs for testing
-      "success_url" => "http://localhost/dwp/booking/checkout_success",
-      "cancel_url" => "http://localhost/dwp/home",
-      "customer_email" => $userEmail,
+      /* "success_url" => "http://localhost/dwp/booking/checkout_success",
+      "cancel_url" => "http://localhost/dwp/home", */
       // Production URLs
-      /* "success_url" => "https://spicypisces.eu/booking/checkout_success",
-      "cancel_url" => "https://spicypisces.eu", */
+      "success_url" => "https://spicypisces.eu/booking/checkout_success",
+      "cancel_url" => "https://spicypisces.eu",
       "expires_at" => time() + 1800, // Custom expiration time 30 minutes (minimum)
+      "customer_email" => $userEmail,
       "line_items" => $lineItems
   ]);
 

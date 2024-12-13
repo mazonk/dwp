@@ -116,7 +116,7 @@ unset($_SESSION['guestErrors']);
                     ?>
                     <p class="my-2"><strong>Total Price:</strong> $ <?= htmlspecialchars(number_format($totalPrice, 2)); ?></p>
                     <hr>
-                    <form action="charge" method="post">
+                    <form id="checkoutForm" action="charge" method="post">
                         <input type="hidden" name="route" value="<?= htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
                         <div class="mb-6 bg-gray-700">
                             <h3 class="text-lg font-bold mt-2">User Details</h3>
@@ -198,6 +198,13 @@ unset($_SESSION['guestErrors']);
                 rollbackBooking(true);
             }
         }, 1000);
+
+        // Update booking expiry on checkout creation
+        const checkoutForm = document.getElementById('checkoutForm');
+        checkoutForm.addEventListener('submit', function (e) {
+            bookingExpiry = Date.now() + 30 * 60 * 1000; // 30 minutes from now
+            localStorage.setItem('bookingExpiry', bookingExpiry);
+        });
         
 
         /* const allowedPaths = ['/login', '/booking/checkout', '/booking/charge'];
