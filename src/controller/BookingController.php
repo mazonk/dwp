@@ -17,6 +17,14 @@ class BookingController {
         return $bookings;
     }
 
+    public function updateBookingUser(int $bookingId, int $userId): array {
+        $updatedBooking = $this->bookingService->updateBookingUser($bookingId, $userId);
+        if (isset($updatedBooking['error']) && $updatedBooking['error']) {
+            return ['errorMessage'=> $updatedBooking['message']];
+        }
+        return $updatedBooking;
+    }
+  
     public function getBookingsByShowingId(int $showingId): array {
         $bookings = $this->bookingService->getBookingsByShowingId($showingId);
         if (isset($bookings['error']) && $bookings['error']) {
@@ -41,10 +49,16 @@ class BookingController {
         }
     }
 
-    public function rollBackBooking(int $bookingId, array $ticketIds): bool {
+    public function rollBackBooking(int $bookingId, array $ticketIds): array {
+        if (isset($_SESSION['activeBooking'])) {
+            unset($_SESSION['activeBooking']);
+        }
+        
         $wasRolledBack = $this->bookingService->rollBackBooking($bookingId, $ticketIds);
-        unset($_SESSION['activeBooking']);
-        return $wasRolledBack;
+        if (isset($wasRolledBack['error']) && $wasRolledBack['error']) {
+            return ['errorMessage' => $wasRolledBack['message']];
+        }
+        return ['success' => true];
     }
 }
 

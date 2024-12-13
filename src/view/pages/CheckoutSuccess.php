@@ -1,5 +1,12 @@
 <?php
 require_once 'session_config.php';
+
+if (isset($_SESSION['activeBooking'])) {
+  unset($_SESSION['activeBooking']);
+}
+if (isset($_SESSION['checkoutSession'])) {
+  unset($_SESSION['checkoutSession']);
+}
 ?>
 
 <!DOCTYPE html>
@@ -18,3 +25,10 @@ require_once 'session_config.php';
   </main>
 </body>
 </html>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Clear the bookingExpiry localStorage item
+    localStorage.removeItem('bookingExpiry');
+  });
+</script>

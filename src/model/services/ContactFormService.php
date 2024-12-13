@@ -1,7 +1,6 @@
 <?php
 /* Might not needed */
-require_once 'session_config.php'; 
-session_start();
+require_once 'session_config.php';
 
 class ContactFormService {
   public function sendMail(): array {
