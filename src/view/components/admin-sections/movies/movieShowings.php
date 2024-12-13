@@ -124,7 +124,6 @@ if (!isset($showings['errorMessage'])) {
     dateFilter.addEventListener('change', applyFilters);
 
     clearFilterButton.addEventListener('click', function () {
-        venueFilter.value = '';
         dateFilter.value = '';
         showings.forEach(showing => {
             showing.style.display = "block";
