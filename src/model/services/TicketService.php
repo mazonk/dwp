@@ -10,11 +10,18 @@ class TicketService {
     private TicketRepository $ticketRepository;
     private ?SeatService $seatService;
     private ShowingService $showingService;
+    private PDO $db;
 
     public function __construct() {
         $this->ticketRepository = new TicketRepository();
         $this->seatService = null;
         $this->showingService = new ShowingService();
+        $this->db = $this->getdb();
+    }
+
+    private function getdb() {
+        require_once 'src/model/database/dbcon/DatabaseConnection.php';
+        return DatabaseConnection::getInstance(); // singleton
     }
     
     public function setSeatService(SeatService $seatService): void {
@@ -89,4 +96,67 @@ class TicketService {
             return ['error' => true, 'message' => $e->getMessage()];
         }
     }
+
+    public function getTicketById(int $id): array|Ticket {
+        try {
+            $result = $this->ticketRepository->getTicketById($id);
+            $ticket = $this->mapTicket($result);
+            if (is_array($ticket) && isset($ticket["error"]) && $ticket["error"]) {
+                return $ticket; // Return error array
+            }
+            return $ticket;
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+    }
+
+    public function createTickets(array $seatIds, int $ticketTypeId, int $showingId, int $bookingId): array {
+        try {
+            // Start transaction
+            $this->db->beginTransaction();
+
+            $insertedIds = [];
+            foreach ($seatIds as $seatId) {
+                $insertedId = $this->ticketRepository->createTicket($seatId, $ticketTypeId, $showingId, $bookingId);
+                if ($insertedId === false) {
+                    // Roll back on failed to insert 
+                    $this->db->rollBack();
+                    return ['error' => true, 'message' => "Failed to create ticket for seat {$seatId}"];
+                }
+                $insertedIds[] = $insertedId;
+            }
+            $this->db->commit();
+            return $insertedIds;
+        } catch (Exception $e) {
+            $this->db->rollBack();
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+    }
+
+    public function rollbackTicket(int $ticketId) {
+        try {
+            return $this->ticketRepository->rollbackTicket($ticketId);
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+    }
+
+    public function getAllTicketTypes(): array {
+        try {
+            $result = $this->ticketRepository->getAllTicketTypes();
+            $ticketTypes = [];
+            foreach ($result as $ticketTypeData) {
+                $ticketTypes[] = new TicketType(
+                    $ticketTypeData["ticketTypeId"],
+                    $ticketTypeData["name"],
+                    $ticketTypeData["price"],
+                    $ticketTypeData["description"]
+                );
+            }
+            return $ticketTypes;
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+    }
+
 }

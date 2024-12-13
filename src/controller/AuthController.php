@@ -72,8 +72,10 @@ class AuthController {
             $_SESSION['loggedInUser']['roleType'] = htmlspecialchars($user->getUserRole()->getType());
             $_SESSION['lastGeneration'] = time();
 
-            // Redirect to homepage after successful login
-            header("Location: " . $_SESSION['baseRoute'] . "home");
+            // Check if a redirect URL was provided
+            $redirectUrl = $_GET['redirect'] ?? $_SESSION['baseRoute'] . "home";
+
+            header("Location: " . $redirectUrl);
             exit();
         }
     }

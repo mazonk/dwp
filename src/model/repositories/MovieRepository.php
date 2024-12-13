@@ -36,6 +36,22 @@ class MovieRepository {
         return $result;
     }
 
+    public function getMoviesWithShowings(): array {
+        $db = $this->getdb();
+        $query = $db->prepare("SELECT * FROM MoviesWithShowings");
+        try {
+            $query->execute();
+            $result = $query->fetchAll(PDO::FETCH_ASSOC);
+            if (empty($result)) {
+                throw new Exception("No movies with showings found!");
+            }
+        } catch (PDOException $e) {
+            throw new PDOException("Unable to fetch movies with showings!");
+        }
+
+        return $result;
+    }
+
     public function getActorsByMovieId(int $movieId): array {
         $db = $this->getdb();
         $query = $db->prepare("SELECT a.* FROM Actor as a JOIN MovieActor as ma ON a.actorId = ma.actorId WHERE ma.movieId = :movieId");

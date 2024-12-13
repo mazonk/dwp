@@ -38,6 +38,8 @@ class VenueController {
     if (is_array($venue) && isset($venue['error']) && $venue['error']) {
         return ['errorMessage'=> $venue['message']];
     }
+    require_once 'session_config.php';
+    $_SESSION['selectedVenueName'] = $venue->getName();
     return $venue;
   }
 

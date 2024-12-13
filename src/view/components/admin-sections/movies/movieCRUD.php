@@ -319,10 +319,9 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
         addMovieButton.addEventListener('click', () => {
             addMovieModal.classList.remove('hidden');
             console.log($allGenres);
-
         });
-
-        // Close the modal
+      
+         // Close the modal
         document.getElementById('cancelAddMovieButton').addEventListener('click', () => {
             addMovieModal.classList.add('hidden');
             clearValues('add');

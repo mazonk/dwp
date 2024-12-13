@@ -177,11 +177,11 @@ def generate_bookings():
             valid_user_ids = [user[0] for user in cursor.fetchall()]
 
             # Possible statuses
-            statuses = ["confirmed", "pending", "cancelled"]
-            weights = [0.95, 0.02, 0.03]  # Corresponding weights for confirmed, pending, cancelled status appearance
+            statuses = ["confirmed", "failed"]
+            weights = [0.95, 0.05]  # Corresponding weights for confirmed, pending, cancelled status appearance
 
             # Generate 400 bookings
-            for _ in range(400):
+            for _ in range(6000):
                 user_id = random.choice(valid_user_ids)  # Pick a random user
                 status = random.choices(statuses, weights=weights, k=1)[0]
 
@@ -194,7 +194,7 @@ def generate_bookings():
 
             db_connection.commit()
 
-    print("400 bookings have been generated.")
+    print("6000 bookings have been generated.")
 
 # Method to generate tickets
 def generate_tickets():

@@ -3,17 +3,17 @@
 enum Status: string {
     case CONFIRMED = 'confirmed';
     case PENDING = 'pending';
-    case CANCELLED = 'cancelled';
+    case FAILED = 'failed';
 }
 
 class Booking {
     private int $bookingId;
-    private User $user;
+    private ?User $user;
     private Status $status;
 
     private array $tickets;
 
-    public function __construct(int $bookingId, User $user, Status $status, array $tickets) {
+    public function __construct(int $bookingId, User $user = null, Status $status, array $tickets) {
         $this->bookingId = $bookingId;
         $this->user = $user;
         $this->status = $status;

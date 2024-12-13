@@ -28,7 +28,6 @@ class MovieController {
         }
         return $movies;
     }
-
     public function isArchived(int $movieId): bool {
         $activeMovies = $this->getAllActiveMovies();
     
@@ -43,6 +42,15 @@ class MovieController {
     
         // Return true if the movie ID is NOT in the list of active movie IDs
         return !in_array($movieId, $activeMovieIds);
+
+    public function getMoviesWithShowings(): array {
+        $movies = $this->movieService->getMoviesWithShowings();
+
+        // If the service returns an error, pass it to the frontend
+        if (isset($movies['error']) && $movies['error']) {
+            return ['errorMessage' => $movies['message']];
+        }    
+        return $movies;
     }
 
     public function getMovieById(int $movieId): array|Movie {

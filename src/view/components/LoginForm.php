@@ -2,7 +2,7 @@ class LoginForm {
     public function render(array $formData = [], array $errors = []): void {
         ?>
         <div class="w-full max-w-xs mx-auto flex flex-col ">
-            <form class="space-y-2" action="<?php echo $_SESSION['baseRoute'] ?>login?action=login" method="post">
+        <form method="POST" action="<?php echo $_SESSION['baseRoute']; ?>login?action=login&redirect=<?php echo urlencode($_GET['redirect'] ?? 'home'); ?>">
                 <div>
                     <label for="email">Email:</label>
                     <input type="text" name="email" id="emailInput" 

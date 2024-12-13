@@ -41,6 +41,14 @@ get($baseRoute.'booking', 'src/view/pages/BookingPage.php');
 // The output -> CheckoutPage.php (from pages folder)
 get($baseRoute.'booking/checkout', 'src/view/pages/CheckoutPage.php');
 
+// In the URL -> http://localhost/dwp/booking/charge
+// The output -> charge.php (from third-party folder)
+get($baseRoute.'booking/charge', 'third-party/charge.php');
+
+// In the URL -> http://localhost/dwp/booking/checkout_success
+// The output -> CheckoutSuccess.php (from third-party folder)
+get($baseRoute.'booking/checkout_success', 'src/view/pages/CheckoutSuccess.php');
+
 // In the URL -> http://localhost/dwp/login
 // The output -> LoginPage.php (from pages folder)
 get($baseRoute.'login', 'src/view/pages/LoginPage.php');
@@ -74,6 +82,8 @@ post($baseRoute.'home', 'src/view/pages/LandingPage.php'); // used at toggle dro
 post($baseRoute.'booking', 'src/view/pages/BookingPage.php');
 post($baseRoute.'about', 'src/view/pages/AboutPage.php'); // used at toggle dropdown
 post($baseRoute.'profile', 'src/view/pages/ProfilePage.php'); // used at toggle dropdown
+post($baseRoute.'booking/checkout', 'src/view/pages/CheckoutPage.php'); // used at toggle dropdown
+post($baseRoute.'stripe-webhook', 'stripe_webhook.php'); // used at stripe webhook
 
 // Post route for register
 post($baseRoute.'register', function() {
@@ -253,6 +263,42 @@ post($baseRoute.'news/add', function() {
     } else {
         // Invalid action response
         echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
+    }
+});
+
+// Post route for booking
+post($baseRoute.'booking/overview', function() {
+    require_once 'src/controller/BookingController.php';
+    require_once 'src/controller/TicketController.php';
+    require_once 'session_config.php';
+    $bookingController = new BookingController();
+    $ticketController = new TicketController();
+    
+    $createBookingResult = $bookingController->createEmptyBooking(isset($_SESSION['loggedInUser']) ? $_SESSION['loggedInUser']['userId'] : null, 'pending');
+    $selectedSeatsArray = explode(',', htmlspecialchars($_POST['selectedSeats']));
+    $ticketController->createTickets($selectedSeatsArray, 1, intval($_POST['showingId']), $createBookingResult);
+
+    if ($createBookingResult && !is_array($createBookingResult)) {
+        // Return a success response
+        echo json_encode(['success' => $createBookingResult]);
+    } else {
+        // Return an error response
+        echo json_encode(['success' => false, 'errorMessage' => $createBookingResult['errorMessage']]);
+    }
+});
+
+post($baseRoute.'booking/rollback', function() {
+    require_once 'session_config.php';
+    require_once 'src/controller/BookingController.php';
+    $bookingController = new BookingController();
+    $result = $bookingController->rollBackBooking($_SESSION['activeBooking']['id'], $_SESSION['activeBooking']['ticketIds']);
+    
+    if ($result && !is_array($result)) {
+        // Return a success response
+        echo json_encode(['success' => $result]);
+    } else {
+        // Return an error response
+        echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
     }
 });
 

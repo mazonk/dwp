@@ -2,30 +2,29 @@
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- Drop all tables
-DROP TABLE IF EXISTS PostalCode;
-DROP TABLE IF EXISTS PaymentMethod;
-DROP TABLE IF EXISTS UserRole;
-DROP TABLE IF EXISTS MovieActor;
 DROP TABLE IF EXISTS VenueShowing;
-DROP TABLE IF EXISTS MovieDirector;
-DROP TABLE IF EXISTS MovieGenre;
-DROP TABLE IF EXISTS News;
-DROP TABLE IF EXISTS Payment;
 DROP TABLE IF EXISTS Ticket;
+DROP TABLE IF EXISTS Payment;
 DROP TABLE IF EXISTS Booking;
-DROP TABLE IF EXISTS TicketType;
 DROP TABLE IF EXISTS Showing;
-DROP TABLE IF EXISTS Actor;
-DROP TABLE IF EXISTS Director;
-DROP TABLE IF EXISTS Genre;
-DROP TABLE IF EXISTS Movie;
-DROP TABLE IF EXISTS User;
 DROP TABLE IF EXISTS Seat;
 DROP TABLE IF EXISTS Room;
-DROP TABLE IF EXISTS OpeningHour;
 DROP TABLE IF EXISTS Venue;
 DROP TABLE IF EXISTS CompanyInfo;
 DROP TABLE IF EXISTS Address;
+DROP TABLE IF EXISTS PostalCode;
+DROP TABLE IF EXISTS User;
+DROP TABLE IF EXISTS UserRole;
+DROP TABLE IF EXISTS TicketType;
+DROP TABLE IF EXISTS MovieActor;
+DROP TABLE IF EXISTS MovieDirector;
+DROP TABLE IF EXISTS MovieGenre;
+DROP TABLE IF EXISTS Genre;
+DROP TABLE IF EXISTS Director;
+DROP TABLE IF EXISTS Actor;
+DROP TABLE IF EXISTS Movie;
+DROP TABLE IF EXISTS News;
+DROP TABLE IF EXISTS OpeningHour;
 
 -- Enable foreign key checks
 SET FOREIGN_KEY_CHECKS = 1;
@@ -113,7 +112,7 @@ CREATE TABLE Movie (
     posterURL VARCHAR(255) NULL,
     promoURL VARCHAR(255) NULL,
     trailerURL VARCHAR(255) NULL,
-    rating DECIMAL(2, 2) NULL -- 2 digits and 2 digits after the decimal point 1.00 - 10.00
+    rating DECIMAL(3, 1) NULL
 );
 
 CREATE TABLE Genre (
@@ -153,8 +152,8 @@ CREATE TABLE TicketType (
 
 CREATE TABLE Booking (
     bookingId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    userId INT NOT NULL,
-    status ENUM('pending', 'confirmed', 'cancelled') NOT NULL, -- enum?
+    userId INT NULL, -- null so not logged in users can create a temporary booking object, until they are not on the users table
+    status ENUM('pending', 'confirmed', 'failed') NOT NULL, -- enum?
     FOREIGN KEY (userId) REFERENCES User(userId)
 );
 
@@ -170,22 +169,17 @@ CREATE TABLE Ticket (
     FOREIGN KEY (bookingId) REFERENCES Booking(bookingId)
 );
 
-CREATE TABLE PaymentMethod (
-    methodId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    name VARCHAR(50) NOT NULL
-);
-
 CREATE TABLE Payment (
     paymentId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     paymentDate DATE NOT NULL,
     paymentTime TIME NOT NULL,
     totalPrice DECIMAL(8, 2) NOT NULL, -- 8 digits and 2 digits after the decimal point 0.00 - 999999.99
-    userId INT NOT NULL,
+    currency VARCHAR(3) NOT NULL,
+    paymentMethod VARCHAR(50) NOT NULL,
+    checkoutSessionId VARCHAR(100) NOT NULL,
+    paymentStatus ENUM('pending', 'confirmed', 'failed') NOT NULL,
     addressId INT NOT NULL,
     bookingId INT NOT NULL,
-    methodId INT NOT NULL,
-    FOREIGN KEY (methodId) REFERENCES PaymentMethod(methodId),
-    FOREIGN KEY (userId) REFERENCES User(userId),
     FOREIGN KEY (addressId) REFERENCES Address(addressId),
     FOREIGN KEY (bookingId) REFERENCES Booking(bookingId)
 );
@@ -234,3 +228,82 @@ CREATE TABLE VenueShowing (
     FOREIGN KEY (venueId) REFERENCES Venue(venueId),
     FOREIGN KEY (showingId) REFERENCES Showing(showingId)
 );
+
+-- Views
+
+CREATE OR REPLACE VIEW MoviesWithShowings AS
+SELECT 
+    m.movieId,
+    m.title,
+    COUNT(s.showingId) AS numberOfShowings
+FROM Movie m
+LEFT JOIN Showing s ON m.movieId = s.movieId
+GROUP BY m.movieId, m.title;
+
+CREATE OR REPLACE VIEW ShowingsWithDetails AS
+SELECT 
+    s.showingId,
+    s.showingDate,
+    s.showingTime,
+    m.title,
+    m.movieId,
+    r.roomNumber,
+    vs.venueId,
+    COUNT(DISTINCT b.bookingId) AS bookings, -- Total number of bookings
+    COUNT(t.ticketId) AS tickets             -- Total number of tickets
+FROM Showing s
+JOIN Movie m ON s.movieId = m.movieId
+JOIN Room r ON s.roomId = r.roomId
+JOIN VenueShowing vs ON s.showingId = vs.showingId
+LEFT JOIN Ticket t ON s.showingId = t.showingId
+LEFT JOIN Booking b ON t.bookingId = b.bookingId
+GROUP BY 
+    s.showingId, 
+    s.showingDate, 
+    s.showingTime, 
+    m.title,
+    m.movieId,
+    r.roomNumber,
+    vs.venueId;
+
+-- Triggers
+
+DELIMITER //
+
+CREATE TRIGGER validate_rating
+BEFORE INSERT ON Movie
+FOR EACH ROW
+BEGIN
+    IF NEW.rating < 0 OR NEW.rating > 10 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Rating must be between 0.0 and 10.0';
+    END IF;
+END;
+//
+
+
+DELIMITER //
+
+CREATE TRIGGER validate_totalprice
+BEFORE INSERT ON Payment
+FOR EACH ROW
+BEGIN
+    IF NEW.totalPrice < 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Total price of payment cannot be less than 0.00';
+    END IF;
+END;
+//
+
+DELIMITER //
+
+CREATE TRIGGER validate_price
+BEFORE INSERT ON TicketType
+FOR EACH ROW
+BEGIN
+    IF NEW.price < 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Ticket price cannot be less than 0.00';
+    END IF;
+END;
+//

@@ -178,7 +178,7 @@ class OpeningHourService {
       if (!empty($result)) {
         foreach($result as $openingHourId) {
           try {
-            $this->openingHourRepository->updateIsCurrentById($openingHourId, 0);
+            $this->openingHourRepository->updateIsCurrentById($openingHourId, false);
           } catch (Exception $e) {
             return ['error' => true, 'message' => $e->getMessage()];
           }
