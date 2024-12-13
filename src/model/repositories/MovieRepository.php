@@ -36,6 +36,22 @@ class MovieRepository {
         return $result;
     }
 
+    public function getMoviesWithShowings(): array {
+        $db = $this->getdb();
+        $query = $db->prepare("SELECT * FROM MoviesWithShowings");
+        try {
+            $query->execute();
+            $result = $query->fetchAll(PDO::FETCH_ASSOC);
+            if (empty($result)) {
+                throw new Exception("No movies with showings found!");
+            }
+        } catch (PDOException $e) {
+            throw new PDOException("Unable to fetch movies with showings!");
+        }
+
+        return $result;
+    }
+
     public function getActorsByMovieId(int $movieId): array {
         $db = $this->getdb();
         $query = $db->prepare("SELECT a.* FROM Actor as a JOIN MovieActor as ma ON a.actorId = ma.actorId WHERE ma.movieId = :movieId");
@@ -134,4 +150,46 @@ class MovieRepository {
             throw new PDOException("Unable to archive movie!");
         }
     }
+
+    public function restoreMovie(int $movieId): void {
+        $db = $this->getdb();
+        $query = $db->prepare("UPDATE Movie SET archived = 0 WHERE movieId = :movieId");
+        try {
+            $query->execute(array(":movieId" => $movieId));
+        } catch (PDOException $e) {
+            throw new PDOException("Unable to restore movie!");
+        }
+    }
+
+    public function getAllGenres(): array {
+        $db = $this->getdb();
+        $query = $db->prepare("SELECT * FROM genre");
+        try {
+            $query->execute();
+            $result = $query->fetchAll(PDO::FETCH_ASSOC);
+            if (empty($result)) {
+                throw new Exception("No genres found!");
+            }
+        } catch (PDOException $e) {
+            throw new PDOException("Unable to fetch genres!");
+        }
+
+        return $result;
+    }
+
+    public function getAllGenresByMovieId(int $movieId): array {
+        $db = $this->getdb();
+        $query = $db->prepare("SELECT g.* FROM genre as g JOIN movieGenre as mg ON g.genreId = mg.genreId WHERE mg.movieId = :movieId");
+        try {
+            $query->execute(array(":movieId" => $movieId));
+            $result = $query->fetchAll(PDO::FETCH_ASSOC);
+            if (empty($result)) {
+                return []; // No genres found for this movie
+            }
+        } catch (PDOException $e) {
+            throw new PDOException("Unable to fetch genres!");
+        }
+        return $result;
+    }
 }
+

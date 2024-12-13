@@ -111,15 +111,6 @@ class TicketService {
         }
     }
 
-    // public function createTicket(int $seatId, int $ticketTypeId, int $showingId, int $bookingId): int|array {
-    //     try {
-    //         $insertedId = $this->ticketRepository->createTicket($seatId, $ticketTypeId, $showingId, $bookingId);
-    //         return $insertedId;
-    //     } catch (Exception $e) {
-    //         return ['error' => true, 'message' => $e->getMessage()];
-    //     }
-    // }
-
     public function createTickets(array $seatIds, int $ticketTypeId, int $showingId, int $bookingId): array {
         try {
             // Start transaction
@@ -146,6 +137,24 @@ class TicketService {
     public function rollbackTicket(int $ticketId) {
         try {
             return $this->ticketRepository->rollbackTicket($ticketId);
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+    }
+
+    public function getAllTicketTypes(): array {
+        try {
+            $result = $this->ticketRepository->getAllTicketTypes();
+            $ticketTypes = [];
+            foreach ($result as $ticketTypeData) {
+                $ticketTypes[] = new TicketType(
+                    $ticketTypeData["ticketTypeId"],
+                    $ticketTypeData["name"],
+                    $ticketTypeData["price"],
+                    $ticketTypeData["description"]
+                );
+            }
+            return $ticketTypes;
         } catch (Exception $e) {
             return ['error' => true, 'message' => $e->getMessage()];
         }

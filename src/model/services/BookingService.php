@@ -62,6 +62,50 @@ class BookingService {
             $this->bookingRepository->updateBookingUser($bookingId, $userId);
             return ['success' => true];
         } catch (Exception $e) {
+          return ['error' => true, 'message' => $e->getMessage()];
+        }
+    }
+
+    public function getBookingsByShowingId(int $showingId): array {
+        try {
+            $result = $this->bookingRepository->getBookingsByShowingId($showingId);
+            $bookingIds = array_unique(array_column($result, 'bookingId'));
+            $bookings = [];
+            
+            foreach ($bookingIds as $bookingId) {
+                $bookingDetails = null;
+    
+                foreach ($result as $booking) {
+                    if ($booking['bookingId'] == $bookingId) {
+                        $bookingDetails = $booking;
+                        break; // No need to iterate further once the booking is found
+                    }
+                }
+    
+                if ($bookingDetails === null) {
+                    continue; // Skip if no booking details were found for this ID
+                }
+    
+                $user = $this->userService->getUserById($bookingDetails['userId']);
+                if (is_array($user) && isset($user['error']) && $user['error']) {
+                    return $user;
+                }
+    
+                $tickets = $this->ticketService->getTicketsByBookingId($bookingId);
+                if (isset($tickets['error']) && $tickets['error']) {
+                    return $tickets;
+                }
+    
+                $bookings[] = new Booking(
+                    $bookingId, 
+                    $user, 
+                    Status::from($bookingDetails['status']), 
+                    $tickets
+                );
+            }
+            
+            return $bookings;
+        } catch (Exception $e) {
             return ['error' => true, 'message' => $e->getMessage()];
         }
     }

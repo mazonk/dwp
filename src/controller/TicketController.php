@@ -55,4 +55,12 @@ class TicketController {
     //     }
     //     return $tickets;  
     // }
+
+    public function getAllTicketTypes(): array {
+        $ticketTypes = $this->ticketService->getAllTicketTypes();
+        if (is_array($ticketTypes) && isset($ticketTypes['error']) && $ticketTypes['error']) {
+            return ['errorMessage' => $ticketTypes['message']];
+        }
+        return $ticketTypes;
+    }
 }

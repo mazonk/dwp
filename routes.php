@@ -206,7 +206,8 @@ put($baseRoute.'companyInfo/edit', function() {
             'postalCode' => htmlspecialchars(trim($_PUT['postalCode'])),
             'city' => htmlspecialchars(trim($_PUT['city'])),
             'addressId' => htmlspecialchars(trim($_PUT['addressId'])),
-            'postalCodeId' => htmlspecialchars(trim($_PUT['postalCodeId']))
+            'postalCodeId' => htmlspecialchars(trim($_PUT['postalCodeId'])),
+            'logoUrl' => htmlspecialchars($_PUT['logoUrl']),
         ];        
 
         $result = $companyController->editCompanyInfo($companyId, $companyData);
@@ -524,8 +525,6 @@ delete($baseRoute.'openingHours/delete', function() {
 post($baseRoute.'movies/add', function() {
     require_once 'src/controller/MovieController.php';
     $movieController = new MovieController();
-    parse_str(file_get_contents("php://input"), $_POST); // Parse the PUT request
-
     if (isset($_POST['action']) && $_POST['action'] === 'addMovie') {
         $movieData = [
             'title' => htmlspecialchars(trim($_POST['title'])),
@@ -657,3 +656,41 @@ put($baseRoute . 'movies/archive', function() {
         echo json_encode(['success' => false, 'errorMessage' => 'Invalid movie ID.' . $_PUT['movieId']]);
     }
 });
+
+// Post route for image upload
+post($baseRoute.'upload-image', function() {
+    require_once 'src/controller/ImageUploadController.php';
+    $imageUploadController = new ImageUploadController();
+    $file = $_FILES['file'];
+    $result = $imageUploadController->uploadImage($file);
+
+    if (isset($result['successMessage'])) {
+        echo json_encode(['success' => $result['successMessage']]);
+    } else {
+        echo json_encode(['failure' => $result['errorMessage']]);
+    }
+});
+
+// Archive movie route
+put($baseRoute . 'movies/restore', function() {
+    require_once 'src/controller/MovieController.php';
+    $movieController = new MovieController();
+    parse_str(file_get_contents("php://input"), $_PUT); // Parse the PUT request
+
+
+    if (isset($_PUT['movieId'])) {
+        $movieId = htmlspecialchars(trim($_PUT['movieId']));
+
+        $result = $movieController->restoreMovie($movieId);
+
+        if (isset($result['success']) && $result['success'] === true) {
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);
+        }
+    } else {
+        echo json_encode(['success' => false, 'errorMessage' => 'Invalid movie ID.' . $_PUT['movieId']]);
+    }
+});
+
+

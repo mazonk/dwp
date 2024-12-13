@@ -37,6 +37,23 @@ class MovieService {
         return $movies;
     }
 
+    public function getMoviesWithShowings(): array {
+        try {
+            $result = $this->movieRepository->getMoviesWithShowings();
+            $movies = [];
+            foreach ($result as $row) {
+                $movies[] = [
+                    'movieId' => $row['movieId'],
+                    'title' => $row['title'],
+                    'numberOfShowings' => $row['numberOfShowings']
+                ];
+            }
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+        return $movies;
+    }
+
     public function getMovieById(int $movieId): array|Movie {
         try {
             $result = $this->movieRepository->getMovieById($movieId);
@@ -136,6 +153,33 @@ class MovieService {
         try {
             $this->movieRepository->archiveMovie($movieId);
             return ['success' => true];
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+    }
+
+    public function restoreMovie(int $movieId): array {
+        try {
+            $this->movieRepository->restoreMovie($movieId);
+            return ['success' => true];
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+    }
+
+    public function getAllGenres(): array {
+        try {
+            $result = $this->movieRepository->getAllGenres();
+            return $result;
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+    }
+
+    public function getAllGenresByMovieId(int $movieId): array {
+        try {
+            $result = $this->movieRepository->getAllGenresByMovieId($movieId);
+            return $result;
         } catch (Exception $e) {
             return ['error' => true, 'message' => $e->getMessage()];
         }
