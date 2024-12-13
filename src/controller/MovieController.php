@@ -42,6 +42,7 @@ class MovieController {
     
         // Return true if the movie ID is NOT in the list of active movie IDs
         return !in_array($movieId, $activeMovieIds);
+    }
 
     public function getMoviesWithShowings(): array {
         $movies = $this->movieService->getMoviesWithShowings();
