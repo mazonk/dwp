@@ -7,7 +7,7 @@ $movies = $movieController->getMoviesWithShowings();
 
 <div class="p-6 min-h-screen">
     <div class="w-full">
-        <h1 class="text-2xl font-bold mb-4">Select a movie to navigate to the details:</h1>
+        <h1 class="text-2xl font-bold mb-4">Select a movie to navigate to its showings:</h1>
 
         <?php if (isset($movies['errorMessage']) && $movies['errorMessage']) { ?>
             <div class="text-red-500 bg-red-100 border border-red-300 p-4 rounded-md">
@@ -46,7 +46,7 @@ $movies = $movieController->getMoviesWithShowings();
         const searchBar = document.getElementById('searchBar');
         const filter = searchBar.value.toLowerCase();
         const moviesList = document.getElementById('moviesList');
-        const movies = moviesList.getElementsByTagName('div');
+        const movies = moviesList.getElementsByTagName('a');
 
         Array.from(movies).forEach(movie => {
             const title = movie.querySelector('h3').textContent.toLowerCase();

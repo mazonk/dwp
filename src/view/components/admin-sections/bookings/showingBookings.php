@@ -36,11 +36,15 @@ if (isset($_GET['selectedShowing']) && is_numeric($_GET['selectedShowing'])) {
             if (!empty($tickets)) {
                 $ticketDetails = "";
                 foreach ($tickets as $ticket) {
-                    echo "<div class='>";
-                    $ticketDetails .= "Seat: Row " . htmlspecialchars($ticket->getSeat()->getRow()) . ", ";
-                    $ticketDetails .= "Number " . htmlspecialchars($ticket->getSeat()->getSeatNr()) . ", ";
-                    $ticketDetails .= "Type: " . htmlspecialchars($ticket->getTicketType()->getName()) . "<br>";
-                    echo "</div>";
+                    $ticketDetails.= "<div class='flex flex-col border border-borderLight bg-primary rounded-md items-center justify-center mb-2'>";
+                    $ticketDetails .= "<div class='text-xl text-textDark font-semibold mb-2 text-center'>";
+                    $ticketDetails .= htmlspecialchars($ticket->getTicketType()->getName());
+                    $ticketDetails .= "</div>";
+                    $ticketDetails .= "<div class='text-gray-700'>";
+                    $ticketDetails .= "<p>Row: " . htmlspecialchars($ticket->getSeat()->getRow()) . "</p>";
+                    $ticketDetails .= "<p>Seat: " . htmlspecialchars($ticket->getSeat()->getSeatNr()) . "</p>";
+                    $ticketDetails .= "</div>";
+                    $ticketDetails.= "</div>";
                 }
             }
 
@@ -48,7 +52,7 @@ if (isset($_GET['selectedShowing']) && is_numeric($_GET['selectedShowing'])) {
                     <td class='border border-gray-300 px-4 py-2 text-center'>{$bookingId}</td>
                     <td class='border border-gray-300 px-4 py-2 text-center'>{$userName}</td>
                     <td class='border border-gray-300 px-4 py-2 text-center'>{$status}</td>
-                    <td class='border border-gray-300 px-4 py-2 text-justify'>{$ticketDetails}</td>
+                    <td class='border border-gray-300 px-4 py-2 text-justify grid grid-cols-3 gap-x-4'>{$ticketDetails}</td>
                     <td class='border border-gray-300 px-4 py-2 text-center'>
                         <button class='bg-primary text-black py-2 px-4 border border-borderDark rounded hover:bg-bgSemiDark hover:text-white duration-[.2s] ease-in-out'>
                             Create Invoice
