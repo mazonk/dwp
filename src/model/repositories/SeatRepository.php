@@ -9,6 +9,8 @@ class SeatRepository {
 
     public function getAllSeatsForShowing(int $showingId, int $selectedVenueId): array {
         $db = $this->getdb();
+        $db->exec("SET SQL_BIG_SELECTS=1");
+
         $query = $db->prepare("SELECT s.*
         FROM Seat s, Room r, Showing sh, VenueShowing vs
         WHERE s.roomId = r.roomId

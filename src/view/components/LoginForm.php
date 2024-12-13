@@ -1,4 +1,4 @@
-class LoginForm {
+<?php class LoginForm {
     public function render(array $formData = [], array $errors = []): void {
         ?>
         <div class="w-full max-w-xs mx-auto flex flex-col ">

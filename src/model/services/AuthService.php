@@ -33,7 +33,7 @@ class AuthService {
                 }
     
                 // Fetch the 'User' user role
-                $userRole = $this->userRoleService->getUserRoleByType('User');
+                $userRole = $this->userRoleService->getUserRoleByType('Customer');
                 if (is_array($userRole) && isset($userRole['error']) && $userRole['error']) {
                     $errors['general'] = "Registration failed. Couldn't register you as a user.";
                     return $errors;

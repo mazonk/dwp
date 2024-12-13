@@ -113,7 +113,7 @@ def generate_showings():
     """Generate 21 days of showings, 5 per movie, and associate with venues"""
     faker = Faker()
     today = datetime.today()
-    num_days = 21
+    num_days = 40
 
     with get_db_connection() as db_connection:
         with db_connection.cursor() as cursor:
