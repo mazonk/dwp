@@ -21,11 +21,16 @@ class BookingService {
     public function getBookingById(int $bookingId): Booking|array  {
         try {
             $result = $this->bookingRepository->getBookingById($bookingId);
-            $user = $this->userService->getUserById($result['userId']);
-            if (is_array($user) && isset($user['error']) && $user['error']) {
-                return $user;
+            if ($result['userdId'] === null) {
+                return new Booking($result['bookingId'], null, Status::from($result['status']));
             }
-            return new Booking($result['bookingId'], $user, Status::from($result['status']));
+            else {
+                $user = $this->userService->getUserById($result['userId']);
+                if (is_array($user) && isset($user['error']) && $user['error']) {
+                    return $user;
+                }
+                return new Booking($result['bookingId'], $user, Status::from($result['status']));
+            }
         } catch (Exception $e) {
             return ['error' => true, 'message' => $e->getMessage()];
         }
