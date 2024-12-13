@@ -52,6 +52,10 @@
                     <input type="text" id="city" name="city" class="mt-1 block w-2/6 p-2 border border-gray-300 rounded-md" required>
                 </div>
             </div>
+            <div class="mb-4">
+                <label for="logoUrl" class="block text-sm font-medium text-gray-700">Upload new logo</label>
+                <input type="file" id="logoUrl" name="logoUrl" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+            </div>
             <div class="flex justify-end">
                 <button type="submit" id="saveButtonCI" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">Save</button>
                 <button type="button" id="cancelButton" class="bg-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-400 ml-2">Cancel</button>
@@ -63,12 +67,34 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
+    function sendFile(file) {
+            const baseRoute = '<?php echo $_SESSION['baseRoute']; ?>';
+            const formData = new FormData();
+            formData.append('file', file); // Add the file to the FormData object
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', `${baseRoute}upload-image`, true);
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    let response;
+                    try {
+                        response = JSON.parse(xhr.response);
+                    } catch (e) {
+                        console.error('Could not parse response as JSON:', e);
+                        return;
+                    }
+                }
+            };
+            xhr.send(formData); // Send the FormData object
+        }
+
     const editButton = document.getElementById('editCompanyInfoButton');
     const editForm = document.getElementById('editForm');
     const companyInfoForm = document.getElementById('companyInfoForm');
     const errorMessageElement = document.createElement('p');
     errorMessageElement.classList.add('text-red-500', 'text-center', 'font-medium');
     companyInfoForm.prepend(errorMessageElement);
+    const logoUrl = document.getElementById('logoUrl');
 
     // Toggle visibility and populate form fields on edit button click
     editButton.addEventListener('click', () => {
@@ -95,6 +121,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
         xhr.open('PUT', `${baseRoute}companyInfo/edit`, true);
 
+        let logo = '<?php echo $companyInfo->getLogoUrl();?>';
+        if (logoUrl.files.length == 1) {
+                logo = logoUrl.files[0].name;
+            }
+
         // Gather form data
         const updatedCompanyInfo = {
             action: 'editCompanyInfo',
@@ -107,6 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
             postalCodeId: document.getElementById('postalCodeIdCI').value,
             postalCode: document.getElementById('postalCode').value,
             city: document.getElementById('city').value,
+            logoUrl: logo
         };
 
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -123,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
 
                     if (response.success) {
-                        sendFile(companyLogo.files[0]);
+                        sendFile(logoUrl.files[0]);
                         alert('Success! Company information edited successfully.');
                         window.location.reload();
                         errorMessageElement.style.display = 'none'; // Hide the error message if there's success
