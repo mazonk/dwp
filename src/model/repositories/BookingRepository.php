@@ -17,20 +17,20 @@ class BookingRepository {
     //     $stmt = $db->prepare("INSERT INTO Ticket (seatId, showingId, userId) VALUES (:seatId, :showingId, :userId)");
     //     return $stmt->execute(['seatId' => $seatId, 'showingId' => $showingId, 'userId' => $userId]);
     // }
-    // public function getBookingById(int $bookingId): array {
-    //     $db = $this->getdb();
-    //     try {
-    //     $stmt = $db->prepare("SELECT * FROM Booking WHERE bookingId = :bookingId");
-    //     $stmt->execute(['bookingId' => $bookingId]);
-    //     $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    //     if (empty($result)) {
-    //         throw new Exception("No booking found.");
-    //     }
-    //     return $result;
-    //     } catch (PDOException $e) {
-    //         throw new PDOException("Unable to fetch booking.");
-    //     }
-    // }
+    public function getBookingById(int $bookingId): array {
+        $db = $this->getdb();
+        try {
+            $query = $db->prepare("SELECT * FROM Booking WHERE bookingId = :bookingId");
+            $query->execute(array('bookingId' => $bookingId));
+            $result = $query->fetch(PDO::FETCH_ASSOC);
+            if (empty($result)) {
+                throw new Exception("No booking found.");
+            }
+            return $result;
+        } catch (PDOException $e) {
+            throw new PDOException("Unable to fetch booking.");
+        }
+    }
 
     public function getBookingsByUserId(int $userId): array {
         $db = $this->getdb();
@@ -69,7 +69,7 @@ class BookingRepository {
     public function rollBackBooking($bookingId){
         $db = $this->getdb();
         try {
-            $stmt = $db->prepare("UPDATE Booking SET status = 'failed' WHERE bookingId = :bookingId");
+            $stmt = $db->prepare("UPDATE Booking SET status = 'failed' WHERE bookingId = :bookingId AND status = 'pending'");
             return $stmt->execute(['bookingId' => $bookingId]);
         } catch (PDOException $e) {
             throw new PDOException("Unable to rollback booking.");
@@ -91,7 +91,7 @@ class BookingRepository {
 
     public function updateBookingStatus(int $bookingId, string $status): void {
         $db = $this->getdb();
-        $query = $db->prepare("UPDATE Booking SET status = :status WHERE bookingId = :bookingId");
+        $query = $db->prepare("UPDATE Booking SET status = :status WHERE bookingId = :bookingId AND status = 'pending'");
         
         try {
             $query->execute(array(

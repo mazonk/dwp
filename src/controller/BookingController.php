@@ -47,7 +47,9 @@ class BookingController {
             return ['errorMessage' => $wasRolledBack['message']];
         }
 
-        unset($_SESSION['activeBooking']);
+        if (isset($_SESSION['activeBooking'])) {
+            unset($_SESSION['activeBooking']);
+        }
         return ['success' => true];
     }
 }
