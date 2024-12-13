@@ -52,6 +52,32 @@ class BookingService {
         }
     }
 
+    public function getBookingsByShowingId(int $showingId): array {
+        try {
+            $result = $this->bookingRepository->getBookingsByShowingId($showingId);
+            $bookingIds = array_unique(array_column($result, 'bookingId'));
+            $bookings = [];
+            foreach ($bookingIds as $bookingId) {
+                $booking = array_filter($result, function ($booking) use ($bookingId) {
+                    return $booking['bookingId'] == $bookingId;
+                });
+                $user = $this->userService->getUserById($booking[0]['userId']);
+                if (is_array($user) && isset($user['error']) && $user['error']) {
+                    return $user;
+                }
+                $tickets = $this->ticketService->getTicketsByBookingId($bookingId);
+                if (isset($tickets['error']) && $tickets['error']) {
+                    return $tickets;
+                }
+                $bookings[] = new Booking($bookingId, $user, Status::from($booking[0]['status']), $tickets);
+            }
+            return $bookings;
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+    }
+
+
     public function updateBookingStatus(int $bookingId, string $status): array {
         try {
             $this->bookingRepository->updateBookingStatus($bookingId, $status);

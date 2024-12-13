@@ -35,18 +35,20 @@ if (!isset($showings['errorMessage'])) {
         <!-- Date Filter Dropdown -->
         <div class="mb-6">
             <label for="dateFilter" class="block font-medium mb-2">Filter by Date:</label>
-            <input id="dateFilter" type="date" class="bg-white text-black border border-gray-300 p-2 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-indigo-200 focus:border-indigo-500">
-            <button id="clearFilterButton" class="ml-2 bg-gray-200 text-gray-700 p-2 rounded-md shadow-sm">Clear Filter</button>
+            <input id="dateFilter" type="date" class="bg-bgSemiDark text-white border border-gray-300 p-2 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-indigo-200 focus:border-indigo-500">
+            <button id="clearFilterButton" class="ml-2 bg-red-500 text-gray-100 p-2 rounded-md shadow-sm">Clear Filter</button>
         </div>
 
         <div id="showingsList" class="grid grid-cols-4 gap-6">
             <?php foreach ($showings as $showing) { ?>
-                <div class="bg-white p-4 rounded-lg shadow-md border border-gray-200 showing-item" data-date="<?php echo htmlspecialchars($showing['showingDate']); ?>">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-2"><?php echo $showing['showingDate']; ?> at <?php echo $showing['showingTime']; ?></h3>
-                    <p class="text-gray-600">Room: <?php echo $showing['roomNumber']; ?></p>
-                    <p class="text-gray-600">Bookings: <?php echo $showing['bookings']; ?></p>
-                    <p class="text-gray-600">Tickets: <?php echo $showing['tickets']; ?></p>
-                </div>
+                <a 
+                    href="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>&selectedShowing=<?php echo $showing['showingId']; ?>" 
+                    class="bg-bgSemiDark p-4 rounded-lg shadow-md border border-borderDark showing-item cursor-pointer" data-date="<?php echo htmlspecialchars($showing['showingDate']); ?>">
+                    <h3 class="text-lg font-semibold text-white mb-2"><?php echo $showing['showingDate']; ?> at <?php echo $showing['showingTime']; ?></h3>
+                    <p class="text-gray-400">Room: <?php echo $showing['roomNumber']; ?></p>
+                    <p class="text-gray-400">Bookings: <?php echo $showing['bookings']; ?></p>
+                    <p class="text-gray-400">Tickets: <?php echo $showing['tickets']; ?></p>
+            </a>
             <?php } ?>
         </div>
 

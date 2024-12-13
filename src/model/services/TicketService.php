@@ -110,15 +110,6 @@ class TicketService {
         }
     }
 
-    // public function createTicket(int $seatId, int $ticketTypeId, int $showingId, int $bookingId): int|array {
-    //     try {
-    //         $insertedId = $this->ticketRepository->createTicket($seatId, $ticketTypeId, $showingId, $bookingId);
-    //         return $insertedId;
-    //     } catch (Exception $e) {
-    //         return ['error' => true, 'message' => $e->getMessage()];
-    //     }
-    // }
-
     public function createTickets(array $seatIds, int $ticketTypeId, int $showingId, int $bookingId): array {
         try {
             // Start transaction

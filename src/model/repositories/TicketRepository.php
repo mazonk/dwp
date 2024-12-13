@@ -8,12 +8,6 @@ class TicketRepository {
         return DatabaseConnection::getInstance(); // singleton
     }
 
-//     public function createTicket(Ticket $ticket) {
-//         $pdo = $this->getdb();
-//         $statement = $pdo->prepare("INSERT INTO tickets (bookingId, seatId) VALUES (:bookingId, :seatId)");
-//         $statement->bindValue(':bookingId', $ticket->getBookingId());
-
-// }
 public function getAllTicketsForShowing(int $showingId): array {
     $pdo = $this->getdb();
     $statement = $pdo->prepare("SELECT * FROM Ticket WHERE showingId = :showingId");

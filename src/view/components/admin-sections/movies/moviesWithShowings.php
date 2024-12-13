@@ -22,7 +22,7 @@ $movies = $movieController->getMoviesWithShowings();
                 id="searchBar" 
                 onkeyup="filterMovies()" 
                 placeholder="Search for a movie..." 
-                class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-black"/>
+                class="w-full p-3 border border-gray-400 bg-bgSemiDark rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-black"/>
         </div>
 
         <!-- Movies List -->
@@ -30,9 +30,9 @@ $movies = $movieController->getMoviesWithShowings();
             <?php foreach ($movies as $movie) { ?>
                 <a 
                     href="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>&selectedMovie=<?php echo $movie['movieId']; ?>" 
-                    class="bg-white p-4 rounded-lg shadow-md border border-gray-200 block">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-2"> <?php echo $movie['title']; ?> </h3>
-                    <p class="text-gray-600">Number of Showings: <?php echo $movie['numberOfShowings']; ?></p>
+                    class="bg-bgSemiDark p-4 rounded-lg shadow-md border border-borderLight block">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2 text-white"> <?php echo $movie['title']; ?> </h3>
+                    <p class="text-gray-400">Number of Showings: <?php echo $movie['numberOfShowings']; ?></p>
                 </a>
             <?php } ?>
         </div>
