@@ -169,7 +169,8 @@ put($baseRoute.'companyInfo/edit', function() {
             'postalCode' => htmlspecialchars(trim($_PUT['postalCode'])),
             'city' => htmlspecialchars(trim($_PUT['city'])),
             'addressId' => htmlspecialchars(trim($_PUT['addressId'])),
-            'postalCodeId' => htmlspecialchars(trim($_PUT['postalCodeId']))
+            'postalCodeId' => htmlspecialchars(trim($_PUT['postalCodeId'])),
+            'logoUrl' => htmlspecialchars($_PUT['logoUrl']),
         ];        
 
         $result = $companyController->editCompanyInfo($companyId, $companyData);

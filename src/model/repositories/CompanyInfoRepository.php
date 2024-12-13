@@ -21,12 +21,13 @@ class CompanyInfoRepository {
         }
     }
 
-    public function editCompanyInfo(int $companyInfoId, string $companyName, string $companyDescription): void {
-        $query = $this->db->prepare("UPDATE CompanyInfo SET companyName = :companyName, companyDescription = :companyDescription WHERE companyInfoId = :companyInfoId");
+    public function editCompanyInfo(int $companyInfoId, string $companyName, string $companyDescription, string $logoUrl): void {
+        $query = $this->db->prepare("UPDATE CompanyInfo SET companyName = :companyName, companyDescription = :companyDescription, logoUrl = :logoUrl WHERE companyInfoId = :companyInfoId");
         try {
           $query->execute([
             'companyName' => htmlspecialchars($companyName),
             'companyDescription' => htmlspecialchars($companyDescription),
+            'logoUrl' => $logoUrl,
             'companyInfoId' => $companyInfoId,
           ]);
         } catch (PDOException $e) {

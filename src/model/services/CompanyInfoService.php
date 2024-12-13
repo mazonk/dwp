@@ -39,7 +39,7 @@ class CompanyInfoService {
             $newAddress = new Address($newCompanyInfoData['addressId'], $newCompanyInfoData['street'], $newCompanyInfoData['streetNr'], 
             new PostalCode($newCompanyInfoData['postalCodeId'], $newCompanyInfoData['postalCode'], $newCompanyInfoData['city']));
             $this->addressService->editAddress($newCompanyInfoData['addressId'], $newAddress);
-            $this->companyInfoRepository->editCompanyInfo($companyInfoId, $newCompanyInfoData['companyName'], $newCompanyInfoData['companyDescription']);
+            $this->companyInfoRepository->editCompanyInfo($companyInfoId, $newCompanyInfoData['companyName'], $newCompanyInfoData['companyDescription'], $newCompanyInfoData['logoUrl']);
           $this->db->commit();
           return $this->getCompanyInfo();
         } catch (Exception $e) {

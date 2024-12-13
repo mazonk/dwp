@@ -123,6 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
 
                     if (response.success) {
+                        sendFile(companyLogo.files[0]);
                         alert('Success! Company information edited successfully.');
                         window.location.reload();
                         errorMessageElement.style.display = 'none'; // Hide the error message if there's success
