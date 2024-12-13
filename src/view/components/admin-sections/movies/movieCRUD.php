@@ -482,7 +482,6 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
             }
 
             let promo = promoImageNameDisplay.textContent;
-            console.log(promo);
             if (editPromoUrlInput.files.length == 1) {
                 promo = editPromoUrlInput.files[0].name;
             }
