@@ -1,4 +1,6 @@
 <?php
+ini_set('log_errors', 1); // Enable error logging
+ini_set('error_log', __DIR__ . '/error.log'); // Log errors to 'error.log' in the current directory
 
 require_once __DIR__.'/router.php';
 
@@ -298,6 +300,13 @@ post($baseRoute.'booking/overview', function() {
     $bookingController = new BookingController();
     $ticketController = new TicketController();
     
+    if (isset($_SESSION['activeBooking'])) {
+        unset($_SESSION['activeBooking']);
+    }
+    if (isset($_SESSION['checkoutSession'])) {
+        unset($_SESSION['checkoutSession']);
+    }
+
     $createBookingResult = $bookingController->createEmptyBooking(isset($_SESSION['loggedInUser']) ? $_SESSION['loggedInUser']['userId'] : null, 'pending');
     $selectedSeatsArray = explode(',', htmlspecialchars($_POST['selectedSeats']));
     $ticketController->createTickets($selectedSeatsArray, 1, intval($_POST['showingId']), $createBookingResult);
@@ -338,9 +347,11 @@ post($baseRoute.'booking/rollback', function() {
         if ($bookingResult['success']) {
             // Return a success response
             echo json_encode(['success' => true]);
+            error_log('Booking rolled back successfully.');
         } else {
             // Return an error response
             echo json_encode(['success' => false, 'errorMessage' => $bookingResult['errorMessage']]);
+            error_log('Booking rollback failed: ' . $bookingResult['errorMessage']);
         }
     }
 });
