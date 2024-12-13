@@ -22,14 +22,22 @@ class BookingService {
         try {
             $result = $this->bookingRepository->getBookingById($bookingId);
             if ($result['userdId'] === null) {
-                return new Booking($result['bookingId'], null, Status::from($result['status']));
+                $tickets = $this->ticketService->getTicketsByBookingId($result['bookingId']);
+                if (isset($tickets['error']) && $tickets['error']) {
+                    return $tickets;
+                }
+                return new Booking($result['bookingId'], null, Status::from($result['status']), $tickets);
             }
             else {
                 $user = $this->userService->getUserById($result['userId']);
                 if (is_array($user) && isset($user['error']) && $user['error']) {
                     return $user;
                 }
-                return new Booking($result['bookingId'], $user, Status::from($result['status']));
+                $tickets = $this->ticketService->getTicketsByBookingId($result['bookingId']);
+                if (isset($tickets['error']) && $tickets['error']) {
+                    return $tickets;
+                }
+                return new Booking($result['bookingId'], $user, Status::from($result['status']), $tickets);
             }
         } catch (Exception $e) {
             return ['error' => true, 'message' => $e->getMessage()];
