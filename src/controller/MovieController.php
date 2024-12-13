@@ -26,9 +26,22 @@ class MovieController {
         if (isset($movies['error']) && $movies['error']) {
             return ['errorMessage' => $movies['message']];
         }
-        
         return $movies;
     }
+    public function isArchived(int $movieId): bool {
+        $activeMovies = $this->getAllActiveMovies();
+    
+        // Check if the result contains an error message
+        if (isset($activeMovies['errorMessage'])) {
+            // Handle the error case appropriately here
+            return false; // Default value, or consider throwing an exception
+        }
+    
+        // Extract the IDs of active movies
+        $activeMovieIds = array_map(fn($movie) => $movie->getMovieId(), $activeMovies);
+    
+        // Return true if the movie ID is NOT in the list of active movie IDs
+        return !in_array($movieId, $activeMovieIds);
 
     public function getMoviesWithShowings(): array {
         $movies = $this->movieService->getMoviesWithShowings();
@@ -91,5 +104,29 @@ class MovieController {
             return ['errorMessage' => $result['message']];
         }
         return ['success' => true];
+    }
+
+    public function restoreMovie(int $movieId): array {
+        $result = $this->movieService->restoreMovie(htmlspecialchars($movieId));
+        if (isset($result['error']) && $result['error']) {
+            return ['errorMessage' => $result['message']];
+        }
+        return ['success' => true];
+    }
+
+    public function getAllGenres(): array {
+        $genres = $this->movieService->getAllGenres();
+        if (isset($genres['error']) && $genres['error']) {
+            return ['errorMessage' => $genres['message']];
+        }
+        return $genres;
+    }
+
+    public function getAllGenresByMovieId(int $movieId): array {
+        $genres = $this->movieService->getAllGenresByMovieId(htmlspecialchars($movieId));
+        if (isset($genres['error']) && $genres['error']) {
+            return ['errorMessage' => $genres['message']];
+        }
+        return $genres;
     }
 }

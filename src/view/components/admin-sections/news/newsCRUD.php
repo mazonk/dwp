@@ -39,11 +39,10 @@ include_once "src/view/components/admin-sections/news/NewsCardAdmin.php";
                         <input type="text" id="addHeaderInput" name="addHeaderInput" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required>
                         <p id="error-add-news-header"  class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
                     </div>
-                    <!-- <div class="mb-4">
+                    <div class="mb-4">
                         <label for="addImageURLInput" class="block text-sm font-medium text-text-textLight">Image</label>
-                        <input type="file" id="addImageURLInput" name="addImageURLInput" class="hidden" required>
-                        <label for="addImageURLInput" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">Choose a file</label>
-                    </div> -->
+                        <input type="file" id="addImageURLInput" name="addImageURLInput" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out"accept="image/*" required>
+                    </div>
                     <div class="mb-4">
                         <label for="addContentInput" class="block text-sm font-medium text-text-textLight">Content</label>
                         <textarea id="addContentInput" name="addContentInput" rows="4" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required></textarea>
@@ -72,11 +71,11 @@ include_once "src/view/components/admin-sections/news/NewsCardAdmin.php";
                         <input type="text" id="editHeaderInput" name="editHeaderInput" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required>
                         <p id="error-edit-news-header"  class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
                     </div>
-                    <!-- <div class="mb-4">
+                    <div class="mb-4">
                         <label for="editImageURLInput" class="block text-sm font-medium text-text-textLight">Image</label>
-                        <input type="file" id="editImageURLInput" name="editImageURLInput" class="hidden" required>
-                        <label for="editImageURLInput" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">Choose a file</label>
-                    </div> -->
+                        <input type="file" id="editImageURLInput" name="editImageURLInput" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" accept="image/*" required>
+                        <div id="editImageURLInputDisplay" class="mt-2 text-sm text-textLight"></div>
+                    </div>
                     <div class="mb-4">
                         <label for="editContentInput" class="block text-sm font-medium text-text-textLight">Content</label>
                         <textarea id="editContentInput" name="editContentInput" rows="4" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required></textarea>
@@ -112,6 +111,26 @@ include_once "src/view/components/admin-sections/news/NewsCardAdmin.php";
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
+        function sendFile(file) {
+            const baseRoute = '<?php echo $_SESSION['baseRoute']; ?>';
+            const formData = new FormData();
+            formData.append('file', file); // Add the file to the FormData object
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', `${baseRoute}upload-image`, true);
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    let response;
+                    try {
+                        response = JSON.parse(xhr.response);
+                    } catch (e) {
+                        console.error('Could not parse response as JSON:', e);
+                        return;
+                    }
+                }
+            };
+            xhr.send(formData); // Send the FormData object
+        }
     /*== Add News ==*/
     const addNewsModal = document.getElementById('addNewsModal');
     const addNewsForm = document.getElementById('addNewsForm');
@@ -119,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const errorAddNewsMessageHeader = document.getElementById('error-add-news-header');
     const errorAddNewsMessageContent = document.getElementById('error-add-news-content');
     const errorAddNewsGeneral = document.getElementById('error-add-news-general');
-    /* const addImageURLInput = document.getElementById('addImageURLInput'); */
+    const addImageURLInput = document.getElementById('addImageURLInput');
 
     // Display the modal
     addNewsButton.addEventListener('click', () => {
@@ -138,12 +157,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const xhr = new XMLHttpRequest();
         const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
         xhr.open('POST', `${baseRoute}news/add`, true);
+
+        let image = "";
+        if (addImageURLInput.files.length == 1) {
+            image = addImageURLInput.files[0].name;
+        }
         
         const newsData = {
             action: 'addNews',
             header: document.getElementById('addHeaderInput').value,
-            /* imageURL: imageInput.files[0], */ // TODO: Implement image upload
-            imageURL: 'gotham_news.jpg',
+            imageURL: image,
             content: document.getElementById('addContentInput').value
         }
 
@@ -161,6 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 if (response.success) {
+                    sendFile(addImageURLInput.files[0]);
                     alert('Success! News added successfully.');
                     window.location.reload();
                     clearValues('add');
@@ -198,18 +222,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const editNewsModal = document.getElementById('editNewsModal');
     const editNewsForm = document.getElementById('editNewsForm');
     const editNewsId = document.getElementById('editNewsId');
-    /* const editImageURLInput = document.getElementById('editImageURLInput'); */
+    const editImageURLInput = document.getElementById('editImageURLInput');
     const editHeaderInput = document.getElementById('editHeaderInput');
     const editContentInput = document.getElementById('editContentInput');
     const errorEditNewsMessageHeader = document.getElementById('error-edit-news-header');
     const errorEditNewsMessageContent = document.getElementById('error-edit-news-content');
     const errorEditNewsGeneral = document.getElementById('error-edit-news-general');
 
+    editImageURLInput.addEventListener('change', function(event) {
+        const fileName = event.target.files[0]?.name || "No file selected";
+        editImageURLInputDisplay.textContent = fileName;
+    })
+
     // Open the Edit Modal and populate it with data
     window.openEditModal = function(newsId, header, imageURL, content) {
         editNewsId.value = newsId;
         editHeaderInput.value = header;
-        /* editImageURLInput.value = imageURL; */
+        editImageURLInputDisplay.textContent = imageURL;
         editContentInput.value = content;
         editNewsModal.classList.remove('hidden');
     };
@@ -227,12 +256,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
         xhr.open('PUT', `${baseRoute}news/edit`, true);
 
+        let image = "";
+        if (editImageURLInput.files.length == 1) {
+            image = editImageURLInput.files[0].name;
+        }
+
         const newsData = {
             action: 'editNews',
             newsId: editNewsId.value,
             header: editHeaderInput.value,
-            /* imageURL: editImageURLInput.files[0], */ // TODO: Implement image upload
-            imageURL: 'gotham_news.jpg',
+            imageURL: image,
             content: editContentInput.value
         };
 
@@ -249,6 +282,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 if (response.success) {
+                    sendFile(editImageURLInput.files[0]);
                     alert('Success! News edited successfully.');
                     window.location.reload();
                     clearValues('edit');
@@ -349,4 +383,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
+
+
 </script>

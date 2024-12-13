@@ -158,6 +158,33 @@ class MovieService {
         }
     }
 
+    public function restoreMovie(int $movieId): array {
+        try {
+            $this->movieRepository->restoreMovie($movieId);
+            return ['success' => true];
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+    }
+
+    public function getAllGenres(): array {
+        try {
+            $result = $this->movieRepository->getAllGenres();
+            return $result;
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+    }
+
+    public function getAllGenresByMovieId(int $movieId): array {
+        try {
+            $result = $this->movieRepository->getAllGenresByMovieId($movieId);
+            return $result;
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+    }
+
     private function validateFormInputs(array $movieData, array &$errors): void {
         $regex = "/^[a-zA-Z0-9áéíóöúüűæøåÆØÅ\s\-\.,;:'\"!?]+$/";
 

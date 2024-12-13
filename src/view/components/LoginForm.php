@@ -1,4 +1,3 @@
-<?php
 class LoginForm {
     public function render(array $formData = [], array $errors = []): void {
         ?>

@@ -4,7 +4,8 @@
     "type": "project",
     "require": {
         "php": "^8.1",
-      "ext-pdo": "*"
+      "ext-pdo": "*",
+      "cloudinary/cloudinary_php": "^2"
     },
     "autoload": {
         "psr-4": {
