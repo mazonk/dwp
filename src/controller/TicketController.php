@@ -28,6 +28,34 @@ class TicketController {
         return $insertedTicketIds;
     }
 
+    public function getTicketsByBookingId(int $bookingId): array {
+        $tickets = $this->ticketService->getTicketsByBookingId($bookingId);
+        if (isset($tickets['error']) && $tickets['error']) {
+            return ['errorMessage' => $tickets['message']];
+        }
+        return $tickets;
+    }
+
+    // public function createTicket(int $seatId, int $ticketTypeId, int $showingId): int|array {
+    //     $insertedTicketId = $this->ticketService->createTicket($seatId, $ticketTypeId, $showingId, $_SESSION['activeBooking']['id']);
+    //     if (is_array($insertedTicketId) && isset($insertedTicketId["error"]) && $insertedTicketId["error"]) {
+    //         return ["errorMessage" => $insertedTicketId["message"]];
+    //     }
+    //     $_SESSION['activeBooking']['ticketIds'] += $insertedTicketId;
+    //     echo json_encode($insertedTicketId);
+    //     return $insertedTicketId;
+    // }
+
+    // public function getAllTicketsForShowing(int $showingId, int $venueId): array {
+    //     $tickets = [];
+    //     try {
+    //     $tickets = $this->ticketService->getAllTicketsForShowing($showingId, $venueId);
+    //     } catch (Exception $e) {
+    //         return ['error' => true, 'message' => $e->getMessage()];
+    //     }
+    //     return $tickets;  
+    // }
+
     public function getAllTicketTypes(): array {
         $ticketTypes = $this->ticketService->getAllTicketTypes();
         if (is_array($ticketTypes) && isset($ticketTypes['error']) && $ticketTypes['error']) {

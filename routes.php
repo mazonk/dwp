@@ -1,4 +1,6 @@
 <?php
+ini_set('log_errors', 1); // Enable error logging
+ini_set('error_log', __DIR__ . '/error.log'); // Log errors to 'error.log' in the current directory
 
 require_once __DIR__.'/router.php';
 
@@ -41,10 +43,6 @@ get($baseRoute.'booking', 'src/view/pages/BookingPage.php');
 // The output -> CheckoutPage.php (from pages folder)
 get($baseRoute.'booking/checkout', 'src/view/pages/CheckoutPage.php');
 
-// In the URL -> http://localhost/dwp/booking/charge
-// The output -> charge.php (from third-party folder)
-get($baseRoute.'booking/charge', 'third-party/charge.php');
-
 // In the URL -> http://localhost/dwp/booking/checkout_success
 // The output -> CheckoutSuccess.php (from third-party folder)
 get($baseRoute.'booking/checkout_success', 'src/view/pages/CheckoutSuccess.php');
@@ -83,6 +81,7 @@ post($baseRoute.'booking', 'src/view/pages/BookingPage.php');
 post($baseRoute.'about', 'src/view/pages/AboutPage.php'); // used at toggle dropdown
 post($baseRoute.'profile', 'src/view/pages/ProfilePage.php'); // used at toggle dropdown
 post($baseRoute.'booking/checkout', 'src/view/pages/CheckoutPage.php'); // used at toggle dropdown
+post($baseRoute.'booking/charge', 'third-party/charge.php'); // used at stripe payment
 post($baseRoute.'stripe-webhook', 'stripe_webhook.php'); // used at stripe webhook
 
 // Post route for register
@@ -109,9 +108,37 @@ post($baseRoute.'login', function() {
 
 // Post route for logout
 post($baseRoute.'logout', function() {
+    require_once 'session_config.php';
+    require_once 'src/controller/BookingController.php';
+    require_once 'src/controller/PaymentController.php';
     require_once 'src/controller/AuthController.php';
     $authController = new AuthController();
-    $authController->logout();
+    $bookingController = new BookingController();
+
+    if (isset($_SESSION['checkoutSession']) && $_SESSION['checkoutSession'] && isset($_SESSION['activeBooking']) && $_SESSION['activeBooking']) {
+        $paymentController = new PaymentController();
+        $paymentIds = $paymentController->getIdsByCheckoutSessionId($_SESSION['checkoutSession']['id']);
+
+        $paymentResult = $paymentController->rollbackPayment($paymentIds['paymentId'], $_SESSION['activeBooking']['id'], $_SESSION['activeBooking']['ticketIds']);
+
+        if ($paymentResult['success']) {
+            $authController->logout();
+        } else {
+            // Return an error response
+            echo json_encode(['success' => false, 'errorMessage' => $paymentResult['errorMessage']]);
+        }
+    } else if (isset($_SESSION['activeBooking']) && $_SESSION['activeBooking']) {
+        $bookingResult = $bookingController->rollBackBooking($_SESSION['activeBooking']['id'], $_SESSION['activeBooking']['ticketIds']);
+    
+        if ($bookingResult['success']) {
+            $authController->logout();
+        } else {
+            // Return an error response
+            echo json_encode(['success' => false, 'errorMessage' => $bookingResult['errorMessage']]);
+        }
+    } else {
+        $authController->logout();
+    }
 });    
 
 // Post route for mail contact
@@ -274,6 +301,13 @@ post($baseRoute.'booking/overview', function() {
     $bookingController = new BookingController();
     $ticketController = new TicketController();
     
+    if (isset($_SESSION['activeBooking'])) {
+        unset($_SESSION['activeBooking']);
+    }
+    if (isset($_SESSION['checkoutSession'])) {
+        unset($_SESSION['checkoutSession']);
+    }
+
     $createBookingResult = $bookingController->createEmptyBooking(isset($_SESSION['loggedInUser']) ? $_SESSION['loggedInUser']['userId'] : null, 'pending');
     $selectedSeatsArray = explode(',', htmlspecialchars($_POST['selectedSeats']));
     $ticketController->createTickets($selectedSeatsArray, 1, intval($_POST['showingId']), $createBookingResult);
@@ -290,15 +324,36 @@ post($baseRoute.'booking/overview', function() {
 post($baseRoute.'booking/rollback', function() {
     require_once 'session_config.php';
     require_once 'src/controller/BookingController.php';
+    require_once 'src/controller/PaymentController.php';
     $bookingController = new BookingController();
-    $result = $bookingController->rollBackBooking($_SESSION['activeBooking']['id'], $_SESSION['activeBooking']['ticketIds']);
-    
-    if ($result && !is_array($result)) {
-        // Return a success response
-        echo json_encode(['success' => $result]);
+
+    if (isset($_SESSION['checkoutSession']) && $_SESSION['checkoutSession']) {
+        $paymentController = new PaymentController();
+        $paymentIds = $paymentController->getIdsByCheckoutSessionId($_SESSION['checkoutSession']['id']);
+
+        $paymentResult = $paymentController->rollbackPayment($paymentIds['paymentId'], $_SESSION['activeBooking']['id'], $_SESSION['activeBooking']['ticketIds']);
+
+        if ($paymentResult['success']) {
+            // Return a success response
+            echo json_encode(['success' => true]);
+            error_log('Payment rolled back successfully.');
+        } else {
+            // Return an error response
+            echo json_encode(['success' => false, 'errorMessage' => $paymentResult['errorMessage']]);
+            error_log('Payment rollback failed: ' . $paymentResult['errorMessage']);
+        }
     } else {
-        // Return an error response
-        echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
+        $bookingResult = $bookingController->rollBackBooking($_SESSION['activeBooking']['id'], $_SESSION['activeBooking']['ticketIds']);
+    
+        if ($bookingResult['success']) {
+            // Return a success response
+            echo json_encode(['success' => true]);
+            error_log('Booking rolled back successfully.');
+        } else {
+            // Return an error response
+            echo json_encode(['success' => false, 'errorMessage' => $bookingResult['errorMessage']]);
+            error_log('Booking rollback failed: ' . $bookingResult['errorMessage']);
+        }
     }
 });
 

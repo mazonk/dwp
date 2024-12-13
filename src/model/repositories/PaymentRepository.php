@@ -43,7 +43,7 @@ class PaymentRepository {
   }
 
   public function updatePaymentStatus(int $paymentId, string $paymentStatus): void {
-    $query = $this->db->prepare("UPDATE Payment SET paymentStatus = :paymentStatus WHERE paymentId = :paymentId");
+    $query = $this->db->prepare("UPDATE Payment SET paymentStatus = :paymentStatus WHERE paymentId = :paymentId AND paymentStatus = 'pending'");
 
     try {
       $query->execute(array(
