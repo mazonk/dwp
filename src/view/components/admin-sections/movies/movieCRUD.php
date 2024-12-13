@@ -443,23 +443,23 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
         });
 
 
-        window.openEditMovieModal = function(title, description, duration, language, releaseDate, posterUrl, promoURL, trailerUrl, rating, id) {
-            editTitleInput.value = title;
-            editDescriptionInput.value = description;
-            editDurationInput.value = duration;
-            editLanguageInput.value = language;
-            editReleaseDateInput.value = releaseDate;
-            posterImageNameDisplay.textContent = posterUrl;
-            promoImageNameDisplay.textContent = promoURL;
-            editTrailerUrlInput.value = trailerUrl;
-            editRatingInput.value = rating;
-            editMovieIdInput.value = id;
+        window.openEditMovieModal = function(anotherMovieData) {
+            const movie = JSON.parse(anotherMovieData);
+            editTitleInput.value = movie.title;
+            editDescriptionInput.value = movie.description;
+            editDurationInput.value = movie.duration;
+            editLanguageInput.value = movie.language;
+            editReleaseDateInput.value = movie.releaseDate;
+            posterImageNameDisplay.textContent = movie.posterURL;
+            promoImageNameDisplay.textContent = movie.promoURL;
+            editTrailerUrlInput.value = movie.trailerURL;
+            editRatingInput.value = movie.rating;
+            editMovieIdInput.value = movie.id;
             editMovieModal.classList.remove('hidden');
         };
 
         editMovieButton.addEventListener('click', () => {
             editMovieButton.classList.remove('hidden');
-
         });
 
         // Close the Edit modal
