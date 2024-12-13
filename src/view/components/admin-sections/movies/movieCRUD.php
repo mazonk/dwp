@@ -203,14 +203,14 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
                 <!-- Poster URL Field -->
                 <div class="mb-4">
                     <label for="editPosterUrlInput" class="block text-sm font-medium text-textLight">Upload Poster Image</label>
-                    <input type="file" name="image" id="editPosterUrlInput" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" accept="image/*" required>
+                    <input type="file" name="image" id="editPosterUrlInput" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" accept="image/*">
                     <div id="posterImageNameDisplay" class="mt-2 text-sm text-textLight"></div>
                 </div>
 
                 <!-- Promo URL Field -->
                 <div class="mb-4">
                     <label for="editPromoUrlInput" class="block text-sm font-medium text-textLight">Upload Promo Image</label>
-                    <input type="file" name="image" id="editPromoUrlInput" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" accept="image/*" required>
+                    <input type="file" name="image" id="editPromoUrlInput" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" accept="image/*" >
                     <div id="promoImageNameDisplay" class="mt-2 text-sm text-textLight"></div>
                 </div>
 
@@ -460,6 +460,7 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
 
         editMovieButton.addEventListener('click', () => {
             editMovieButton.classList.remove('hidden');
+
         });
 
         // Close the Edit modal
@@ -475,12 +476,13 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
             const baseRoute = '<?php echo $_SESSION['baseRoute']; ?>';
             xhr.open('PUT', `${baseRoute}movies/edit`, true);
 
-            let poster = "";
+            let poster = posterImageNameDisplay.textContent;
             if (editPosterUrlInput.files.length == 1) {
                 poster = editPosterUrlInput.files[0].name;
             }
 
-            let promo = "";
+            let promo = promoImageNameDisplay.textContent;
+            console.log(promo);
             if (editPromoUrlInput.files.length == 1) {
                 promo = editPromoUrlInput.files[0].name;
             }
