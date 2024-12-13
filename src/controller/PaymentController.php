@@ -41,8 +41,12 @@ class PaymentController {
       return ['errorMessage' => $payment['message']];
     }
 
-    unset($_SESSION['activeBooking']);
-    unset($_SESSION['checkoutSession']);
+    if (isset($_SESSION['activeBooking'])) {
+      unset($_SESSION['activeBooking']);
+    }
+    if (isset($_SESSION['checkoutSession'])) {
+      unset($_SESSION['checkoutSession']);
+    }
     return ['success' => true];
   }
 }
