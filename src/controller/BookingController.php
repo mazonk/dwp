@@ -17,6 +17,13 @@ class BookingController {
         return $bookings;
     }
 
+    public function getBookingsByShowingId(int $showingId): array {
+        $bookings = $this->bookingService->getBookingsByShowingId($showingId);
+        if (isset($bookings['error']) && $bookings['error']) {
+            return ['errorMessage'=> $bookings['message']];
+        }
+        return $bookings;
+    }
 
     public function createEmptyBooking($userId, string $status): int|array {
         if (!isset($_SESSION['activeBooking'])) {

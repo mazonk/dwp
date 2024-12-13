@@ -12,13 +12,11 @@ class ShowingService {
     private ShowingRepository $showingRepository;
     private MovieService $movieService;
     private RoomService $roomService;
-    private VenueService $venueService;
 
     public function __construct() {
         $this->showingRepository = new ShowingRepository();
         $this->movieService = new MovieService();
         $this->roomService = new RoomService();
-        $this->venueService = new VenueService();
     }
 
     public function getShowingById(int $showingId): array|Showing {
@@ -76,6 +74,29 @@ class ShowingService {
                 }
             }
             return $moviesPlayingToday;
+        } catch (Exception $e) {
+            return ['error' => true,'message' => $e->getMessage()];
+        }
+    }
+
+    public function getShowingsForMovieAdmin(int $movieId): array {
+        try {
+            $result = $this->showingRepository->getShowingsForMovieAdmin($movieId);
+            $showings = [];
+            foreach ($result as $showing) {
+                $showings[] = [
+                    'showingId' => $showing['showingId'],
+                    'showingDate' => $showing['showingDate'],
+                    'showingTime' => $showing['showingTime'],
+                    'title' => $showing['title'],
+                    'movieId' => $showing['movieId'],
+                    'roomNumber' => $showing['roomNumber'],
+                    'venueId' => $showing['venueId'],
+                    'bookings' => $showing['bookings'],
+                    'tickets' => $showing['tickets']
+                ];
+            }
+            return $showings;
         } catch (Exception $e) {
             return ['error' => true,'message' => $e->getMessage()];
         }
