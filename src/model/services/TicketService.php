@@ -81,6 +81,7 @@ class TicketService {
     }
 
     public function getTicketsByBookingId(int $bookingId): array {
+        $tickets = [];
         try {
             $result = $this->ticketRepository->getTicketsByBookingId($bookingId);
             foreach ($result as $ticketData) {
