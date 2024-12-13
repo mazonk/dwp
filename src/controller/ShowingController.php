@@ -47,7 +47,7 @@ class ShowingController {
     }
 
     public function getShowingsForMovieAdmin(int $movieId): array {
-        $showings = $this->showingService->getShowingsForMovieAdmin($movieId, $_SESSION['selectedVenueId']);
+        $showings = $this->showingService->getShowingsForMovieAdmin($movieId);
         // If the service returns an error, pass it to the frontend
         if (isset($showings['error']) && $showings['error']) {
             return ['errorMessage' => $showings['message']];

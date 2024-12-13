@@ -79,9 +79,9 @@ class ShowingService {
         }
     }
 
-    public function getShowingsForMovieAdmin(int $movieId, int $selectedVenueId): array {
+    public function getShowingsForMovieAdmin(int $movieId): array {
         try {
-            $result = $this->showingRepository->getShowingsForMovieAdmin($movieId, $selectedVenueId);
+            $result = $this->showingRepository->getShowingsForMovieAdmin($movieId);
             $showings = [];
             foreach ($result as $showing) {
                 $showings[] = [

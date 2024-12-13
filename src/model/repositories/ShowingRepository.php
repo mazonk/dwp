@@ -40,11 +40,11 @@ class ShowingRepository {
         return $result;
     }
 
-    public function getShowingsForMovieAdmin(int $movieId, int $selectedVenueId): array {
+    public function getShowingsForMovieAdmin(int $movieId): array {
         $db = $this->getdb();
-        $query = $db->prepare("SELECT * FROM ShowingsWithDetails as swd WHERE swd.movieId = :movieId AND swd.venueId = :venueId ORDER BY swd.showingDate, swd.showingTime ASC");
+        $query = $db->prepare("SELECT * FROM ShowingsWithDetails as swd WHERE swd.movieId = :movieId ORDER BY swd.showingDate, swd.showingTime ASC");
         try {
-            $query->execute(array(":movieId" => $movieId, ":venueId" => $selectedVenueId));
+            $query->execute(array(":movieId" => $movieId));
             $result = $query->fetchAll(PDO::FETCH_ASSOC);
             if (empty($result)) {
                 throw new Exception("No showings found for this movie!");
