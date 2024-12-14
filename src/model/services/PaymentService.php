@@ -1,22 +1,59 @@
 <?php
 include_once "src/model/entity/Payment.php";
 include_once "src/model/repositories/PaymentRepository.php";
+include_once "src/model/services/AddressService.php";
 include_once "src/model/services/BookingService.php";
 
 class PaymentService {
   private PDO $db;
   private PaymentRepository $paymentRepository;
+  private AddressService $addressService;
   private BookingService $bookingService;
 
   public function __construct() {
     $this->db = $this->getdb();
     $this->paymentRepository = new PaymentRepository($this->db);
+    $this->addressService = new AddressService();
     $this->bookingService = new BookingService();
   }
 
   private function getdb() {
     require_once 'src/model/database/dbcon/DatabaseConnection.php';
     return DatabaseConnection::getInstance(); // singleton
+  }
+
+  public function getPaymentById(int $paymentId): array|Payment {
+    try {
+      $result = $this->paymentRepository->getPaymentById($paymentId);
+
+      // Fetch address details
+      $address = $this->addressService->getAddressById($result['addressId']);
+      if (is_array($address) && isset($address['error']) && $address['error']) {
+        return $address;
+      }
+
+      // Fetch booking details
+      $booking = $this->bookingService->getBookingById($result['bookingId']);
+      if (is_array($booking) && isset($booking['error']) && $booking['error']) {
+        return $booking;
+      }
+
+      // Create and return the Payment object
+      return new Payment(
+        $result['paymentId'],
+        new Datetime($result['paymentDate']),
+        new Datetime($result['paymentTime']),
+        $result['totalPrice'],
+        $result['currency'],
+        $result['paymentMethod'],
+        $result['checkoutSessionId'],
+        PaymentStatus::from($result['paymentStatus']),
+        $address,
+        $booking
+      );
+    } catch (Exception $e) {
+      return ["error" => true, "message" => $e->getMessage()];
+    }
   }
 
   public function getIdsByCheckoutSessionId(string $checkoutSessionId): array {

@@ -6,6 +6,21 @@ class PaymentRepository {
     $this->db = $dbCon;
   }
 
+  public function getPaymentById(int $paymentId): array {
+    $query = $this->db->prepare('SELECT * FROM Payment WHERE paymentId = :paymentId');
+    try {
+      $query->execute(array('paymentId' => $paymentId));
+      $result = $query->fetch(PDO::FETCH_ASSOC);
+
+      if (empty($result)) {
+        throw new Exception('No payment found by payment ID.');
+      }
+      return $result;
+    } catch (PDOException $e) {
+      throw new PDOException('Failed to get payment by payment ID.');
+    }
+  }
+
   public function getIdsByCheckoutSessionId(string $checkoutSessionId): array {
     $query = $this->db->prepare('SELECT paymentId, addressId, bookingId FROM Payment WHERE checkoutSessionId = :checkoutSessionId');
 
