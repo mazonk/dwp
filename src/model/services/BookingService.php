@@ -21,7 +21,7 @@ class BookingService {
     public function getBookingById(int $bookingId): Booking|array  {
         try {
             $result = $this->bookingRepository->getBookingById($bookingId);
-            if ($result['userdId'] === null) {
+            if ($result['userId'] === null) {
                 $tickets = $this->ticketService->getTicketsByBookingId($result['bookingId']);
                 if (isset($tickets['error']) && $tickets['error']) {
                     return $tickets;
