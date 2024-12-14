@@ -98,7 +98,7 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
                                 Clear All
                             </button>
                         </div>
-                        <div id="genreCheckboxContainer" class="grid grid-cols-2 gap-4">
+                        <div id="addGenreCheckboxContainer" class="grid grid-cols-2 gap-4">
                             <!-- Genre Item -->
                             <div class="flex items-center gap-2">
                                 <input type="checkbox" id="genre-1" name="genres[]" value="1" class="mr-2">
@@ -210,7 +210,7 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
                 <!-- Promo URL Field -->
                 <div class="mb-4">
                     <label for="editPromoUrlInput" class="block text-sm font-medium text-textLight">Upload Promo Image</label>
-                    <input type="file" name="image" id="editPromoUrlInput" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" accept="image/*" >
+                    <input type="file" name="image" id="editPromoUrlInput" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" accept="image/*">
                     <div id="promoImageNameDisplay" class="mt-2 text-sm text-textLight"></div>
                 </div>
 
@@ -314,20 +314,50 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
         const addTrailerUrlInput = document.getElementById('addTrailerUrlInput');
         const addRatingInput = document.getElementById('addRatingInput');
         const addGenresContainer = document.getElementById('genreCheckboxContainer');
+        const clearGenresButton = document.getElementById('clearGenres');
+
+        // Array to hold selected genres
+        let selectedGenres = [];
+
+        // Add event listener to checkboxes
+        addGenreCheckboxContainer.addEventListener('change', (event) => {
+            if (event.target.type === 'checkbox') {
+                updateSelectedGenres();
+            }
+        });
+
+        // Function to update selected genres array
+        function updateSelectedGenres() {
+            // Get all checkboxes inside the container
+            const checkboxes = addGenreCheckboxContainer.querySelectorAll('input[type="checkbox"]:checked');
+            // Update the array with the values of checked checkboxes
+            selectedGenres = Array.from(checkboxes).map(checkbox => checkbox.value);
+            console.log(selectedGenres); // Log the selected genres array
+        }
+
+        // Clear all selected genres
+        clearGenresButton.addEventListener('click', () => {
+            // Get all checkboxes inside the container
+            const checkboxes = addGenreCheckboxContainer.querySelectorAll('input[type="checkbox"]');
+            // Uncheck all checkboxes
+            checkboxes.forEach(checkbox => (checkbox.checked = false));
+            // Clear the selected genres array
+            selectedGenres = [];
+            console.log(selectedGenres); // Log the cleared array
+        });
 
         // Display the modal
         addMovieButton.addEventListener('click', () => {
             addMovieModal.classList.remove('hidden');
-            console.log($allGenres);
         });
-      
-         // Close the modal
+
+        // Close the modal
         document.getElementById('cancelAddMovieButton').addEventListener('click', () => {
             addMovieModal.classList.add('hidden');
             clearValues('add');
         });
 
-        window.openAddMovieModal = function(title, description, duration, language, releaseDate, posterUrl, promoURL, trailerUrl, rating, id) {
+        window.openAddMovieModal = function(title, description, duration, language, releaseDate, posterUrl, promoURL, trailerUrl, rating, selectedGenres, id) {
             add.value = title;
             addDescriptionInput.value = description;
             addDurationInput.value = duration;
@@ -337,6 +367,12 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
             addPromoUrlInput.value = promoUrl;
             addTrailerUrlInput.value = trailerUrl;
             addRatingInput.value = rating;
+            selectedGenres.forEach(genre => {
+                const checkbox = addGenreCheckboxContainer.querySelector(`input[value="${genre}"]`);
+                if (checkbox) {
+                    checkbox.checked = true;
+                }
+            })
             addMovieIdInput.value = id;
             addMovieModal.classList.remove('hidden');
         };
@@ -406,13 +442,6 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
                 .join('&');
             xhr.send(params);
         });
-
-        // Clear form values
-        document.getElementById('clearGenres').addEventListener('click', () => {
-            const checkboxes = document.querySelectorAll('#genreCheckboxContainer input[type="checkbox"]');
-            checkboxes.forEach(checkbox => checkbox.checked = false);
-        });
-
 
         /*== Edit Movie ==*/
         const editMovieIdInput = document.getElementById('editMovieIdInput');
