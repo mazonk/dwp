@@ -60,7 +60,7 @@ try {
       error_log("Payment status updated to 'confirmed' for paymentId: {$paymentIds['paymentId']}");
 
       // Send invoice
-      // $invoiceController->sendInvoice(); // TODO: Sanitizing, validation, and error handling, and also the actual invoice data
+      $invoiceController->sendInvoice($paymentIds['paymentId']); // TODO: Sanitizing, validation, and error handling, and also the actual invoice data
 
       break;
 
