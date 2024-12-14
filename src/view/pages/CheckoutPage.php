@@ -156,9 +156,6 @@ unset($_SESSION['guestErrors']);
                                 <label class="flex items-center">
                                     <input type="checkbox" name="terms" required class="mr-2"> <a class="text-red-500">*</a>&nbsp;I agree with the terms and conditions
                                 </label>
-                                <label class="flex items-center">
-                                    <input type="checkbox" name="invoice" class="mr-2"> Receive invoice by email (optional)
-                                </label>
                             </div>
 
                             <button id="submitButton" type="submit" class="w-full py-1 border border-primary bg-bgDark hover:bg-bgSemiDark text-white rounded-lg transition duration-200 flex items-center justify-center">
