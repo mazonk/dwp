@@ -16,21 +16,21 @@ class InvoiceService {
     $this->companyInfoService = new CompanyInfoService();
   }
 
-  public function sendInvoice(array $ticketIds, int $paymentId): array|string {
-    // Get tickets details
-    $tickets = [];
-    foreach ($ticketIds as $ticketId) {
-      $ticket = $this->ticketController->getTicketById($ticketId);
-      if (is_array($ticket) && isset($ticket['error']) && $ticket['error']) {
-        return $ticket;
-      }
-      $tickets[] = $ticket;
-    }
-
+  public function sendInvoice(int $paymentId): array|string {
     // Get payment details
     $payment = $this->paymentService->getPaymentById($paymentId);
     if (is_array($payment) && isset($payment['error']) && $payment['error']) {
       return $payment;
+    }
+
+    // Get tickets details
+    $tickets = [];
+    foreach ($payment->getBooking()->getTickets() as $ticket) {
+      $ticket = $this->ticketController->getTicketById($ticket->getTicketId());
+      if (is_array($ticket) && isset($ticket['error']) && $ticket['error']) {
+        return $ticket;
+      }
+      $tickets[] = $ticket;
     }
 
     // Get compamy info details
