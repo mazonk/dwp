@@ -22,7 +22,7 @@ if (isset($_SESSION['activeBooking']) && $_SESSION['activeBooking']['expiry'] > 
         </div>
     </div>
     ";
-    echo date('H:i', $_SESSION['activeBooking']['expiry']);
+    echo date('H:i', $_SESSION['activeBooking']['expiry']); // TODO: Remove this line after testing
 }
 ?>
 <!DOCTYPE html>

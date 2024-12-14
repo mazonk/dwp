@@ -1,5 +1,5 @@
 <?php
-require_once 'src/model/services/TicketService.php';
+require_once 'src/model/services/TicketService.php'; // TEST: Solve the service problem or leave the TicketController
 require_once 'src/controller/TicketController.php';
 require_once 'src/model/services/PaymentService.php';
 require_once 'src/model/services/CompanyInfoService.php';
@@ -10,13 +10,13 @@ class InvoiceService {
   private $companyInfoService;
 
   public function __construct() {
-    $this->ticketService = new TicketService();
+    $this->ticketService = new TicketService(); // TEST: Solve the service problem or leave the TicketController
     $this->ticketController = new TicketController();
     $this->paymentService = new PaymentService();
     $this->companyInfoService = new CompanyInfoService();
   }
 
-  public function sendInvoice(int $paymentId): array|string {
+  public function sendInvoice(int $paymentId): array|string { // TEST: change return type to array only
     // Get payment details
     $payment = $this->paymentService->getPaymentById($paymentId);
     if (is_array($payment) && isset($payment['error']) && $payment['error']) {
@@ -86,6 +86,6 @@ class InvoiceService {
       return ["error" => true, "message" => "Failed to send invoice."];
     }  */
 
-    return $txt;
+    return $txt; // TEST: Delete after testing
   }
 }
