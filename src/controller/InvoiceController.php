@@ -8,8 +8,8 @@ class InvoiceController {
     $this->invoiceService = new InvoiceService();
   }
 
-  public function sendInvoice(): void {
-    $result = $this->invoiceService->sendInvoice();
+  public function sendInvoice(int $paymentId): void {
+    $result = $this->invoiceService->sendInvoice($paymentId);
 
     if ($result['error']) {
       echo $result['message'];
