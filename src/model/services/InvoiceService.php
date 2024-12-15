@@ -17,7 +17,7 @@ class InvoiceService {
     $this->companyInfoService = new CompanyInfoService();
   }
 
-  public function sendInvoice(int $paymentId): array|string { // TEST: change return type to array only
+  public function sendInvoice(int $paymentId): array {
     // Get payment details
     $payment = $this->paymentService->getPaymentById($paymentId);
     if (is_array($payment) && isset($payment['error']) && $payment['error']) {
@@ -81,12 +81,10 @@ class InvoiceService {
     "Thank you for choosing us! Enjoy your movie!";
 
     // Send email and handle success/failure
-    /* if (mail($mailTo, $subject, $txt, $headers)) {
+    if (mail($mailTo, $subject, $txt, $headers)) {
       return ["success" => true];
     } else {
       return ["error" => true, "message" => "Failed to send invoice."];
-    }  */
-
-    return $txt; // TEST: Delete after testing
+    } 
   }
 }
