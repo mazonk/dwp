@@ -8,6 +8,19 @@ class GenreService {
         $this->genreRepository = new GenreRepository();
     }
 
+    public function getAllGenres(): array {
+        try {
+            $result = $this->genreRepository->getAllGenres();
+            $genres = [];
+            foreach ($result as $genre) {
+                $genres[] = new Genre($genre['genreId'], $genre['name']);
+            }
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+        return $genres;
+    }
+
     public function getAllGenresByMovieId(int $movieId): array {
         try {
             $result = $this->genreRepository->getAllGenresByMovieId($movieId);
@@ -20,4 +33,6 @@ class GenreService {
             }
             return $genres;
         }
+
+
 }

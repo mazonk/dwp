@@ -41,8 +41,7 @@ class GenreRepository
         return $result;
     }
 
-    public function addGenresToMovie(int $movieId, array $genreIds): void
-    {
+    public function addGenresToMovie(int $movieId, array $genreIds): void {
         $db = $this->getdb();
         $query = $db->prepare("INSERT INTO movieGenre (movieId, genreId) VALUES (:movieId, :genreId)");
         try {
