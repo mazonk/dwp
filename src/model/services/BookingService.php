@@ -149,7 +149,7 @@ class BookingService {
             try {
                 foreach ($ticketIds as $ticketId) {
                     $result = $this->ticketService->rollbackTicket($ticketId);
-                    if ($result['error']) {
+                    if (isset($result['error']) && $result['error']) {
                         $failedTickets[] = $ticketId;
                     }
                 }
