@@ -3,12 +3,15 @@ include_once "src/model/entity/Movie.php";
 include_once "src/model/entity/Actor.php";
 include_once "src/model/entity/Director.php";
 include_once "src/model/repositories/MovieRepository.php";
+include_once "src/model/repositories/GenreRepository.php";
 
 class MovieService {
 
     private MovieRepository $movieRepository;
+    private GenreRepository $genreRepository;
     public function __construct() {
         $this->movieRepository = new MovieRepository();
+        $this->genreRepository = new GenreRepository();
     }
 
     public function getAllMovies(): array {
@@ -169,7 +172,7 @@ class MovieService {
 
     public function getAllGenres(): array {
         try {
-            $result = $this->movieRepository->getAllGenres();
+            $result = $this->genreRepository->getAllGenres();
             return $result;
         } catch (Exception $e) {
             return ['error' => true, 'message' => $e->getMessage()];
@@ -178,7 +181,7 @@ class MovieService {
 
     public function getAllGenresByMovieId(int $movieId): array {
         try {
-            $result = $this->movieRepository->getAllGenresByMovieId($movieId);
+            $result = $this->genreRepository->getAllGenresByMovieId($movieId);
             return $result;
         } catch (Exception $e) {
             return ['error' => true, 'message' => $e->getMessage()];
