@@ -47,3 +47,14 @@ unset($_SESSION['errors']);
     </div>
 </body>
 </html>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Clear the bookingExpiry localStorage item
+    let bookingExpiry = localStorage.getItem('bookingExpiry');
+
+    if (bookingExpiry) {
+        localStorage.removeItem('bookingExpiry');
+    }
+  });
+</script>
