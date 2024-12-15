@@ -19,21 +19,6 @@ include_once "src/view/components/ShowingCard.php";
   <!-- Navbar -->
   <?php include_once("src/view/components/Navbar.php"); ?>
 
-  <!-- Test start -->
-  <?php
-  require_once 'src/model/services/InvoiceService.php';
-  $invoiceService = new InvoiceService();
-
-  $testEmail = 'test@test.com';
-
-  $txt = $invoiceService->sendInvoice(1);
-  ?>
-  <div>
-      <h2 class="text-[1.5rem] font-semibold mt-12 mb-4">Test Invoice</h2>
-      <pre class="bg-bgSemiDark p-4 rounded-lg text-textLight text-sm whitespace-pre-wrap"><?php echo $txt; ?></pre>
-  </div>
-  <!-- Test end -->
-
   <main class="mt-[56px] p-4">
     <h1 class="text-[1.875rem] mb-4">All Movies</h1>
     <div class="grid grid-cols-5 gap-16">
