@@ -36,17 +36,15 @@ $guestFormData = isset($_SESSION['guestFormData']) ? $_SESSION['guestFormData'] 
 ];
 $addressFormData = isset($_SESSION['addressFormData']) ? $_SESSION['addressFormData'] : [
     'street' => '',
-    'number' => '',
+    'streetNr' => '',
     'city' => '',
     'postalCode' => '',
 ];
-$errors = isset($_SESSION['guestErrors']) ? $_SESSION['guestErrors'] : [];
-$addressErrors = isset($_SESSION['addressErrors']) ? $_SESSION['addressErrors'] : [];
+$errors = isset($_SESSION['paymentErrors']) ? $_SESSION['paymentErrors'] : [];
 
 unset($_SESSION['guestFormData']);
-unset($_SESSION['guestErrors']);
+unset($_SESSION['paymentErrors']);
 unset($_SESSION['addressFormData']);
-unset($_SESSION['addressErrors']);
 ?>
 
 <!DOCTYPE html>
@@ -160,32 +158,40 @@ unset($_SESSION['addressErrors']);
                             <p>Email: <?= htmlspecialchars($_SESSION['loggedInUser']['userEmail']); ?></p>
                             <?php endif; ?>
                         </div>
-                        <!-- User address -->
+                        <!-- Billing Address -->
                         <div class="mb-6 bg-gray-700">
                             <h3 class="text-lg font-bold mt-2">Billing Address</h3>
                             <div id="address-form" class="mt-4">
                                 <div class="flex gap-2">
-                                    <input type="text" name="street" required placeholder="Street" value="<?= htmlspecialchars($addressFormData['street'] ?? '') ?>" class="block w-full p-2 mb-2 border rounded bg-gray-900 <?= isset($addressErrors['street']) ? 'border-red-500' : '' ?>">
-                                    <?php if (isset($addressErrors['street'])): ?>
-                                        <p class="mb-2 text-red-500 text-xs"><?= htmlspecialchars($addressErrors['street']); ?></p>
-                                    <?php endif; ?>
-                                    <input type="number" name="number" required placeholder="Number" value="<?= htmlspecialchars($addressFormData['number'] ?? '') ?>" class="block w-full p-2 mb-2 border rounded bg-gray-900 <?= isset($addressErrors['number']) ? 'border-red-500' : '' ?>">
-                                    <?php if (isset($addressErrors['number'])): ?>
-                                        <p class="mb-2 text-red-500 text-xs"><?= htmlspecialchars($addressErrors['number']); ?></p>
-                                    <?php endif; ?>
+                                    <div>
+                                        <input type="text" name="street" required placeholder="Street" value="<?= htmlspecialchars($addressFormData['street'] ?? '') ?>" class="block w-full p-2 mb-2 border rounded bg-gray-900 <?= isset($errors['street']) ? 'border-red-500' : '' ?>">
+                                        <?php if (isset($errors['street'])): ?>
+                                            <p class="mb-2 text-red-500 text-xs"><?= htmlspecialchars($errors['street']); ?></p>
+                                        <?php endif; ?>
+                                    </div>
+                                    <div>
+                                        <input type="number" name="streetNr" required placeholder="Street Number" value="<?= htmlspecialchars($addressFormData['streetNr'] ?? '') ?>" class="block w-full p-2 mb-2 border rounded bg-gray-900 <?= isset($errors['streetNr']) ? 'border-red-500' : '' ?>">
+                                        <?php if (isset($errors['streetNr'])): ?>
+                                            <p class="mb-2 text-red-500 text-xs"><?= htmlspecialchars($errors['streetNr']); ?></p>
+                                        <?php endif; ?>
+                                    </div>
                                 </div>
                                 <div class="flex gap-2">
-                                    <input type="text" name="city" required placeholder="City" value="<?= htmlspecialchars($addressFormData['city'] ?? '') ?>" class="block w-full p-2 mb-2 border rounded bg-gray-900 <?= isset($addressErrors['city']) ? 'border-red-500' : '' ?>">
-                                    <?php if (isset($addressErrors['city'])): ?>
-                                        <p class="mb-2 text-red-500 text-xs"><?= htmlspecialchars($addressErrors['city']); ?></p>
-                                    <?php endif; ?>
-                                    <input type="number" name="postalCode" required placeholder="Postal code" value="<?= htmlspecialchars($addressFormData['postalCode'] ?? '') ?>" class="block w-full p-2 mb-2 border rounded bg-gray-900 <?= isset($addressErrors['postalCode']) ? 'border-red-500' : '' ?>">
-                                    <?php if (isset($addressErrors['postalCode'])): ?>
-                                        <p class="mb-2 text-red-500 text-xs"><?= htmlspecialchars($addressErrors['postalCode']); ?></p>
-                                    <?php endif; ?>
+                                    <div>
+                                        <input type="text" name="city" required placeholder="City" value="<?= htmlspecialchars($addressFormData['city'] ?? '') ?>" class="block w-full p-2 mb-2 border rounded bg-gray-900 <?= isset($errors['city']) ? 'border-red-500' : '' ?>">
+                                        <?php if (isset($errors['city'])): ?>
+                                            <p class="mb-2 text-red-500 text-xs"><?= htmlspecialchars($errors['city']); ?></p>
+                                        <?php endif; ?>
+                                    </div>
+                                    <div>
+                                        <input type="number" name="postalCode" required placeholder="Postal code" value="<?= htmlspecialchars($addressFormData['postalCode'] ?? '') ?>" class="block w-full p-2 mb-2 border rounded bg-gray-900 <?= isset($errors['postalCode']) ? 'border-red-500' : '' ?>">
+                                        <?php if (isset($errors['postalCode'])): ?>
+                                            <p class="mb-2 text-red-500 text-xs"><?= htmlspecialchars($errors['postalCode']); ?></p>
+                                        <?php endif; ?>
+                                    </div>
                                 </div>
-                                <?php if (isset($addressErrors['general'])): ?>
-                                    <p class="mb-2 text-red-500 text-xs"><?= htmlspecialchars($addressErrors['general']); ?></p>
+                                <?php if (isset($errors['addressGeneral'])): ?>
+                                    <p class="mb-2 text-red-500 text-xs"><?= htmlspecialchars($errors['addressGeneral']); ?></p>
                                 <?php endif; ?>
                             </div>
                         </div>

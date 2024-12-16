@@ -7,6 +7,8 @@ require_once "src/model/services/TicketService.php";
 require_once "src/model/services/SeatService.php";
 require_once "src/controller/BookingController.php";
 
+
+
 if (isset($_SESSION['activeBooking']) && $_SESSION['activeBooking']['expiry'] > time()) {
     echo "
     <div class='fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-70 '>
