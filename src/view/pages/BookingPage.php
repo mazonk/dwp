@@ -7,8 +7,7 @@ require_once "src/model/services/TicketService.php";
 require_once "src/model/services/SeatService.php";
 require_once "src/controller/BookingController.php";
 
-
-
+// If there is an active booking
 if (isset($_SESSION['activeBooking']) && $_SESSION['activeBooking']['expiry'] > time()) {
     echo "
     <div class='fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-70 '>
@@ -25,6 +24,23 @@ if (isset($_SESSION['activeBooking']) && $_SESSION['activeBooking']['expiry'] > 
     </div>
     ";
     echo date('H:i', $_SESSION['activeBooking']['expiry']); // TODO: Remove this line after testing
+}
+// If the active booking has expired
+else if (isset($_SESSION['activeBooking']) && $_SESSION['activeBooking']['expiry'] <= time()) {
+    // The proceed button is hidden by as it has to be included otherwise the close button will not work
+    echo "
+    <div class='fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-70 '>
+        <div class='flex items-center justify-center min-h-screen'>
+            <div class='bg-bgSemiDark w-[500px] rounded-lg p-6 border-[1px] border-borderDark'>
+                <h2 class='text-[1.5rem] text-center font-semibold mb-4'>You have been expired!</h2>
+                <div class='flex justify-center mt-6'>
+                    <button id='proceedCheckout' class='text-primary py-2 px-4 border-[1px] border-primary rounded hover:bg-borderDark ml-2 duration-[.2s] ease-in-out hidden'>Proceed</button>
+                    <button id='cancelBooking' class='text-red-500 py-2 px-4 border-[1px] border-red-500 rounded hover:bg-borderDark ml-2 duration-[.2s] ease-in-out'>Cancel Booking</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    ";
 }
 ?>
 <!DOCTYPE html>
@@ -121,17 +137,6 @@ if (isset($_SESSION['activeBooking']) && $_SESSION['activeBooking']['expiry'] > 
     </main>
 
     <script>
-        function showModal(message) {
-        // Display modal with message
-        if (confirm(message)) {
-            // Proceed with current booking
-            window.location.href = "/checkout";
-        } else {
-            // Cancel current booking (send request to server to clear booking)
-            console.log('Cancel booking');
-        }
-    }
-
         function proceedToOverview(showingId) {
             const selectedSeatsList = document.getElementById('selected-seats-list');
             const selectedSeats = selectedSeatsList.dataset.selectedSeats;
@@ -305,7 +310,7 @@ if (isset($_SESSION['activeBooking']) && $_SESSION['activeBooking']['expiry'] > 
         });
 
         cancelBookingButton.addEventListener('click', function() {
-            rollbackBooking(true);
+            rollbackBooking(false);
         });
 
         function rollbackBooking(redirectBack) {
@@ -320,6 +325,7 @@ if (isset($_SESSION['activeBooking']) && $_SESSION['activeBooking']['expiry'] > 
                     if (redirectBack) {
                         history.back();
                     }
+                    location.reload();
                 }
             };
             xhr.send();
