@@ -13,12 +13,6 @@ require_once 'src/controller/AddressController.php';
 
 // User handling
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  if (isset($_SESSION['checkoutSession']) && $_SESSION['checkoutSession']) {
-    http_response_code(303); 
-    header("Location: " . $_SESSION['checkoutSession']['url']);
-    exit;
-  }
-
   // Update the expiry time for the booking
   $_SESSION['activeBooking']['expiry'] = time() + 30 * 60; // 30 minutes from now;
   
