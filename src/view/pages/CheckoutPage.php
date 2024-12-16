@@ -34,10 +34,19 @@ $guestFormData = isset($_SESSION['guestFormData']) ? $_SESSION['guestFormData'] 
     'dob' => '',
     'email' => '',
 ];
+$addressFormData = isset($_SESSION['addressFormData']) ? $_SESSION['addressFormData'] : [
+    'street' => '',
+    'number' => '',
+    'city' => '',
+    'postalCode' => '',
+];
 $errors = isset($_SESSION['guestErrors']) ? $_SESSION['guestErrors'] : [];
+$addressErrors = isset($_SESSION['addressErrors']) ? $_SESSION['addressErrors'] : [];
 
 unset($_SESSION['guestFormData']);
 unset($_SESSION['guestErrors']);
+unset($_SESSION['addressFormData']);
+unset($_SESSION['addressErrors']);
 ?>
 
 <!DOCTYPE html>
@@ -150,6 +159,35 @@ unset($_SESSION['guestErrors']);
                             <p>Logged in as: <?= htmlspecialchars($_SESSION['loggedInUser']['firstName']. ' ' . htmlspecialchars($_SESSION['loggedInUser']['lastName'])); ?></p>
                             <p>Email: <?= htmlspecialchars($_SESSION['loggedInUser']['userEmail']); ?></p>
                             <?php endif; ?>
+                        </div>
+                        <!-- User address -->
+                        <div class="mb-6 bg-gray-700">
+                            <h3 class="text-lg font-bold mt-2">Billing Address</h3>
+                            <div id="address-form" class="mt-4">
+                                <div class="flex gap-2">
+                                    <input type="text" name="street" required placeholder="Street" value="<?= htmlspecialchars($addressFormData['street'] ?? '') ?>" class="block w-full p-2 mb-2 border rounded bg-gray-900 <?= isset($addressErrors['street']) ? 'border-red-500' : '' ?>">
+                                    <?php if (isset($addressErrors['street'])): ?>
+                                        <p class="mb-2 text-red-500 text-xs"><?= htmlspecialchars($addressErrors['street']); ?></p>
+                                    <?php endif; ?>
+                                    <input type="number" name="number" required placeholder="Number" value="<?= htmlspecialchars($addressFormData['number'] ?? '') ?>" class="block w-full p-2 mb-2 border rounded bg-gray-900 <?= isset($addressErrors['number']) ? 'border-red-500' : '' ?>">
+                                    <?php if (isset($addressErrors['number'])): ?>
+                                        <p class="mb-2 text-red-500 text-xs"><?= htmlspecialchars($addressErrors['number']); ?></p>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="flex gap-2">
+                                    <input type="text" name="city" required placeholder="City" value="<?= htmlspecialchars($addressFormData['city'] ?? '') ?>" class="block w-full p-2 mb-2 border rounded bg-gray-900 <?= isset($addressErrors['city']) ? 'border-red-500' : '' ?>">
+                                    <?php if (isset($addressErrors['city'])): ?>
+                                        <p class="mb-2 text-red-500 text-xs"><?= htmlspecialchars($addressErrors['city']); ?></p>
+                                    <?php endif; ?>
+                                    <input type="number" name="postalCode" required placeholder="Postal code" value="<?= htmlspecialchars($addressFormData['postalCode'] ?? '') ?>" class="block w-full p-2 mb-2 border rounded bg-gray-900 <?= isset($addressErrors['postalCode']) ? 'border-red-500' : '' ?>">
+                                    <?php if (isset($addressErrors['postalCode'])): ?>
+                                        <p class="mb-2 text-red-500 text-xs"><?= htmlspecialchars($addressErrors['postalCode']); ?></p>
+                                    <?php endif; ?>
+                                </div>
+                                <?php if (isset($addressErrors['general'])): ?>
+                                    <p class="mb-2 text-red-500 text-xs"><?= htmlspecialchars($addressErrors['general']); ?></p>
+                                <?php endif; ?>
+                            </div>
                         </div>
                         <div>
                             <div class="flex flex-col gap-4 mb-6">
