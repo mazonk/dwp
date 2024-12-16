@@ -9,6 +9,11 @@ if (!isset($_SESSION['activeBooking'])) {
     echo  'Start a booking to access this page!' . ' ' . '<a class="underline text-blue-300" href="javascript:window.history.back()"><-Go back!</a>';
     exit();
 }
+else if (isset($_SESSION['activeBooking']) && isset($_SESSION['checkoutSession'])) {
+    header("Location: " . $_SESSION['checkoutSession']['url']);
+    exit;
+}
+
 $booking = $_SESSION['activeBooking'];
 
 // Get showing details from the showing service
