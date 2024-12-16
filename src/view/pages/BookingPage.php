@@ -23,7 +23,6 @@ if (isset($_SESSION['activeBooking']) && $_SESSION['activeBooking']['expiry'] > 
         </div>
     </div>
     ";
-    echo date('H:i', $_SESSION['activeBooking']['expiry']); // TODO: Remove this line after testing
 }
 // If the active booking has expired
 else if (isset($_SESSION['activeBooking']) && $_SESSION['activeBooking']['expiry'] <= time()) {
