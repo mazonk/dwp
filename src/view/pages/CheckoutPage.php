@@ -202,51 +202,6 @@ unset($_SESSION['guestErrors']);
             bookingExpiry = Date.now() + 30 * 60 * 1000; // 30 minutes from now
             localStorage.setItem('bookingExpiry', bookingExpiry);
         });
-        
-
-        /* const allowedPaths = ['/login', '/booking/checkout', '/booking/charge'];
-
-        // Intercept internal navigation (via clicks, history push)
-        document.body.addEventListener('click', function (e) {
-            if (e.target.tagName === 'A' && e.target.href) {
-                const destination = new URL(e.target.href).pathname;
-                handleNavigation(destination);
-            }
-        });
-
-        window.addEventListener('popstate', function () {
-            handleNavigation(window.location.pathname);
-        });
-
-        let isSubmittingForm = false;
-
-        document.getElementById('submitButton').addEventListener('click', function () {
-            isSubmittingForm = true; // Mark as a legitimate submission
-        });
-
-        // Handle all other navigation attempts (address bar, refresh, tab close)
-        window.addEventListener('beforeunload', function (e) {
-            if (isSubmittingForm) return; // Skip rollback logic on form submission
-
-            const destination = e.target.activeElement.href || ''; // Extract link, if present
-            console.log('Navigating to:', destination);
-            const isAllowed = allowedPaths.some(path => destination.includes(path));
-
-            if (!isAllowed) {
-                rollbackBooking(false);
-            }
-        });
-
-        function handleNavigation(destination) {
-            if (!allowedPaths.some(path => destination.includes(path))) {
-                if (confirm('Leaving this page will cancel your booking. Are you sure you want to proceed?')) {
-                    rollbackBooking(false);
-                } else {
-                    history.pushState(null, '', window.location.pathname);
-                    e.preventDefault();
-                }
-            }
-        }*/
     });
     function cancelBooking(redirectBack = true) {
         rollbackBooking(redirectBack);
