@@ -217,7 +217,7 @@ unset($_SESSION['addressFormData']);
         </div>
     </main>
 </body>
-
+<?php include_once("src/view/components/Footer.php"); ?>
 </html>
 
 <script>

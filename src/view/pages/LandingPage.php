@@ -238,4 +238,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </main>
 </body>
+<?php include_once("src/view/components/Footer.php"); ?>
 </html>
