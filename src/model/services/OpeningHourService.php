@@ -53,6 +53,29 @@ class OpeningHourService {
     }
   }
 
+  public function getCurrentOpeningHourByDay(string $day): array|OpeningHour {
+    try {
+      $result = $this->openingHourRepository->getCurrentOpeningHourByDay($day);
+      $day = match ($result['day']) {
+        'Monday' => Day::Monday,
+        'Tuesday' => Day::Tuesday,
+        'Wednesday' => Day::Wednesday,
+        'Thursday' => Day::Thursday,
+        'Friday' => Day::Friday,
+        'Saturday' => Day::Saturday,
+        'Sunday' => Day::Sunday,
+        default => throw new InvalidArgumentException("Invalid day: " . $result['day'])
+      };
+      // Convert strings to DateTime objects
+      $openingTime = new DateTime($result['openingTime']);
+      $closingTime = new DateTime($result['closingTime']);
+
+      return new OpeningHour($result['openingHourId'], $day, $openingTime, $closingTime, $result['isCurrent']);
+    } catch (Exception $e) {
+      return ["error"=> true, "message"=> $e->getMessage()];
+    }
+  }
+
   public function getCurrentOpeningHours(): array {
     try {
       $result = $this->openingHourRepository->getOpeningHours();

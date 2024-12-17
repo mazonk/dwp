@@ -26,6 +26,14 @@ class OpeningHourController {
     return $openingHours;
   }
 
+  public function getCurrentOpeningHourByDay(string $day): array|OpeningHour {
+    $openingHour = $this->openingHourService->getCurrentOpeningHourByDay($day);
+    if (is_array($openingHour) && isset($openingHour['error']) && $openingHour['error']) {
+      return ['errorMessage'=> $openingHour['message']];
+    }
+    return $openingHour;
+  }
+
   public function addOpeningHour(array $openingHourData): array {
     $errors = $this->openingHourService->addOpeningHour($openingHourData);
 
