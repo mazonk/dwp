@@ -1,3 +1,10 @@
+<?php if (isset($_POST['action'])) { //request by xhr
+    if ($_POST['action'] === 'selectVenue') {
+      $selectedVenue = $venueController->selectVenue($venueController->getVenueById($_POST['venueId']));
+    }
+    exit();
+  }
+  ?>
 <header class="w-[100%] fixed top-0 left-0 right-0 bg-bgDark z-[10]">
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -56,15 +63,16 @@
   </script>
   <nav class="max-w-[1440px] w-[100%] flex justify-between items-center gap-[4rem] mx-auto py-[1rem] px-[100px] z-[10]">
     <!-- Logo -->
-    <div>logo</div>
-
+    <a href="<?php echo $_SESSION['baseRoute']?>home">
+      <img src="src/assets/<?php echo htmlspecialchars($companyInfo->getLogoUrl()) ?>" alt="Company Logo" class="w-12 h-12 object-cover rounded-full mr-4">
+    </a>
     <!-- Menu -->
     <div class="flex justify-center items-center gap-[2.5rem] ml-[195px]">
       <a href="<?php echo $_SESSION['baseRoute']?>home" class="font-medium">Home</a>
       <a href="<?php echo $_SESSION['baseRoute']?>movies" class="font-medium">All Movies</a>
       <a href="<?php echo $_SESSION['baseRoute']?>upcoming" class="font-medium">Upcoming Movies</a>
       <a href="<?php echo $_SESSION['baseRoute']?>about" class="font-medium">About us</a>
-      <a href="" class="font-medium">Contact</a>
+      <a href="#contact" class="font-medium">Contact</a>
     </div>
 
     <div class="flex items-center gap-[2rem]">

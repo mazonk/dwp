@@ -125,17 +125,18 @@ class UserRepository {
         }
     }
 
-    public function updateProfileInfo(int $userId, array $newProfileInfo): void {
+    public function updateProfileInfo(int $userId, array $newProfileInfo): bool {
         $db = $this->getdb();
         $query = $db->prepare("UPDATE User SET firstName = :firstName, lastName = :lastName, email = :email, dob = :dob WHERE userId = :userId");
         try {
-            $query->execute(array(
+            $wasUpdated = $query->execute(array(
                 ":firstName" => $newProfileInfo['firstName'],
                 ":lastName" => $newProfileInfo['lastName'],
                 ":email" => $newProfileInfo['email'],
                 ":dob" => $newProfileInfo['dob'],
                 ":userId" => $userId
             ));
+            return $wasUpdated;
         } catch (PDOException $e) {
             throw new PDOException("Unable to update user profile info!");
         }

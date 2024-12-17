@@ -4,17 +4,23 @@ require_once "src/model/entity/Actor.php";
 require_once "src/model/entity/Director.php";
 require_once "src/model/repositories/MovieRepository.php";
 
-class MovieService
-{
-
+class MovieService {
     private MovieRepository $movieRepository;
-    public function __construct()
-    {
-        $this->movieRepository = new MovieRepository();
+    private GenreService $genreService;
+    private PDO $db;
+     
+    public function __construct() {
+        $this->db = $this->getdb();
+        $this->movieRepository = new MovieRepository($this->db);
+        $this->genreService = new GenreService();
     }
 
-    public function getAllMovies(): array
-    {
+    private function getdb() {
+        require_once 'src/model/database/dbcon/DatabaseConnection.php';
+        return DatabaseConnection::getInstance(); // singleton
+      }
+
+    public function getAllMovies(): array {
         try {
             $result = $this->movieRepository->getAllMovies();
             $movies = [];
@@ -121,12 +127,15 @@ class MovieService
     {
         $errors = [];
         $this->validateFormInputs($movieData, $errors);
-
         if (count($errors) == 0) {
             try {
-                $this->movieRepository->addMovie($movieData);
+                $this->db->beginTransaction();
+                $result = $this->movieRepository->addMovie($movieData);
+                $resultResult = $this->genreService->addGenresToMovie($result, $movieData['selectedGenres']);
+                $this->db->commit();
                 return ['success' => true];
             } catch (Exception $e) {
+                $this->db->rollBack();
                 return ['error' => true, 'message' => $e->getMessage()];
             }
         } else {
@@ -138,12 +147,19 @@ class MovieService
     {
         $errors = [];
         $this->validateFormInputs($movieData, $errors);
-
         if (count($errors) == 0) {
             try {
-                $this->movieRepository->editMovie($movieData);
+                $this->db->beginTransaction();
+                $result = $this->movieRepository->editMovie($movieData);
+                $resultResult = $this->genreService->addGenresToMovie($result, $movieData['selectedGenres']);
+                if (!$resultResult['success']) {
+                    $this->db->rollBack();
+                    return ['error' => true, 'message' => 'Couldnt add genres to movie'];
+                }
+                $this->db->commit();
                 return ['success' => true];
             } catch (Exception $e) {
+                $this->db->rollBack();
                 return ['error' => true, 'message' => $e->getMessage()];
             }
         } else {
@@ -151,8 +167,7 @@ class MovieService
         }
     }
 
-    public function archiveMovie(int $movieId): array
-    {
+    public function archiveMovie(int $movieId): array {
         try {
             $this->movieRepository->archiveMovie($movieId);
             return ['success' => true];
@@ -171,42 +186,18 @@ class MovieService
         }
     }
 
-    public function getAllGenres(): array
-    {
-        try {
-            $result = $this->movieRepository->getAllGenres();
-            return $result;
-        } catch (Exception $e) {
-            return ['error' => true, 'message' => $e->getMessage()];
-        }
-    }
-
-    public function getAllGenresByMovieId(int $movieId): array
-    {
-        try {
-            $result = $this->movieRepository->getAllGenresByMovieId($movieId);
-            return $result;
-        } catch (Exception $e) {
-            return ['error' => true, 'message' => $e->getMessage()];
-        }
-    }
-
-    private function validateFormInputs(array $movieData, array &$errors): void
-    {
-        $regex = "/^[a-zA-Z0-9áéíóöúüűæøåÆØÅ\s\-\.,;:'\"!?]+$/";
-
+    private function validateFormInputs(array $movieData, array &$errors): void {
+    $regex = "/^[a-zA-Z0-9áéíóöúüűæøåÆØÅ\s\-\.,;:\'\"’!?]+$/u";
+    
         // Perform checks
-        if (
-            empty($movieData['title']) ||
-            empty($movieData['releaseDate']) ||
-            empty($movieData['duration']) ||
-            empty($movieData['language']) ||
-            empty($movieData['description']) ||
-            empty($movieData['rating'])
-        ) {
-            $errors['general'] = "All fields are required.";
-        }
-
+    if (empty($movieData['title']) || 
+        empty($movieData['releaseDate']) || 
+        empty($movieData['duration']) || 
+        empty($movieData['language']) || 
+        empty($movieData['description']) || 
+        empty($movieData['rating'])) {
+        $errors['general'] = "All fields are required.";
+    }
         // Title validation
         if (!preg_match($regex, $movieData['title'])) {
             $errors['title'] = "Title must only contain letters, numbers, and basic punctuation.";
