@@ -3,7 +3,6 @@
 include_once "src/controller/VenueController.php";
 /* Get the opening hours */
 include_once "src/controller/OpeningHourController.php";
-require_once "src/model/services/captcha/captcha.php";
 
 $errors = isset($_SESSION['contactErrors']) ? $_SESSION['contactErrors'] : [];
 $contactSuccess = isset($_SESSION['contactSuccess']) ? $_SESSION['contactSuccess'] : null;
@@ -94,12 +93,8 @@ unset($_SESSION['contactSuccess']);
               <p class="text-red-500 text-xs mb-[.5rem]"><?= htmlspecialchars($errors['message']) ?></p>
           <?php endif; ?>
 
-          <!-- CAPTCHA Section -->
-          <div class="captcha flex flex-col gap-[.5rem]">
-              <img src="captcha.php?rand=<?php echo rand(); ?>" id="captchaimg">
-              <a href="javascript:refreshCaptcha();" class="text-xs text-blue-500 hover:underline">Click here to refresh the CAPTCHA</a>
-              <input type="text" name="captcha_code" id="captchaInput" placeholder="Enter CAPTCHA code" required="true" class="h-[36px] py-[.5rem] px-[.875rem] bg-bgSemiDark text-[.875rem] text-textNormal leading-snug border-[1px] border-borderDark rounded-[6px] outline-none ease-in-out duration-[.15s] focus:border-textNormal">
-          </div>
+          <div><?php include "captcha.php"; ?></div>
+          <input type="text" name="captcha" id="captcha" placeholder="Enter CAPTCHA" required="true" class="h-[36px] py-[.5rem] px-[.875rem] bg-bgSemiDark text-[.875rem] text-textNormal leading-snug border-[1px] border-borderDark rounded-[6px] outline-none ease-in-out duration-[.15s] focus:border-textNormal">
           <?php if (isset($errors['captcha'])): ?>
               <p class="text-red-500 text-xs mb-[.5rem]"><?= htmlspecialchars($errors['captcha']) ?></p>
           <?php endif; ?>
@@ -109,5 +104,5 @@ unset($_SESSION['contactSuccess']);
     </div>
   </div>
   <!-- TODO: Company name display -->
-  <div class="text-textNormal text-[.875rem]">&copy; company_name all rights reserved</div>
+  <div class="text-textNormal text-[.875rem]">&copy; Spicy pisces all rights reserved</div>
 </footer>
