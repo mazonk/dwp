@@ -1,5 +1,5 @@
 <?php
-include_once "src/model/entity/Address.php";
+require_once "src/model/entity/Address.php";
 
 class Venue {
     private int $venueId;
@@ -56,4 +56,3 @@ class Venue {
         $this->address = $address;
     }
 }
-?>

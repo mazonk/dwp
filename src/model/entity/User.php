@@ -1,6 +1,6 @@
 <?php
 require_once "src/model/entity/Person.php";
-include_once "src/model/entity/UserRole.php";
+require_once "src/model/entity/UserRole.php";
 class User extends Person {
   private ?DateTime $dob;
   private string $email;
@@ -47,5 +47,3 @@ class User extends Person {
     $this->userRole = $userRole;
   }
 }
-
-?>

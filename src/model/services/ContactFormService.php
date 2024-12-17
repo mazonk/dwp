@@ -1,7 +1,4 @@
-<?php
-/* Might not needed */
-require_once 'session_config.php'; 
-session_start();
+<?php require_once 'session_config.php';
 
 class ContactFormService {
   public function sendMail(): array {
@@ -12,6 +9,7 @@ class ContactFormService {
         'name' => $_POST['name'],
         'email' => $_POST['email'],
         'message' => $_POST['message'],
+        'captcha' => $_POST['captcha']
       ];
 
       // Validate the form data inputs
@@ -71,6 +69,13 @@ class ContactFormService {
     }
     if(strlen($formData['message']) > 500) {
         $errors['message'] = "Message can't be longer than 500 characters.";
+    }
+
+    // Validate CAPTCHA
+    if (empty($formData['captcha'])) {
+      $errors['captcha'] = "CAPTCHA is required.";
+    } elseif (!isset($_SESSION['captcha']) || $formData['captcha'] !== $_SESSION['captcha']) {
+        $errors['captcha'] = "Incorrect CAPTCHA. Please try again.";
     }
   }
 }

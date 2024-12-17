@@ -1,5 +1,5 @@
 <?php
-include_once "src/model/repositories/NewsRepository.php";
+require_once "src/model/repositories/NewsRepository.php";
 
 class NewsService {
     private NewsRepository $newsRepository;
@@ -109,6 +109,5 @@ class NewsService {
         if(strlen($newsData['content']) > 5000) {
             $errors['content'] = "Content can't be longer than 5000 characters.";
         }
-    
     }
 }

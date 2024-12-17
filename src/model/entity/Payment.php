@@ -1,36 +1,40 @@
 <?php
-include_once "src/model/entity/User.php";
-include_once "src/model/entity/Address.php";
-include_once "src/model/entity/Booking.php";
-include_once "src/model/entity/PaymentMethod.php";
+require_once "src/model/entity/Address.php";
+require_once "src/model/entity/Booking.php";
+
+enum PaymentStatus: string {
+  case CONFIRMED = 'confirmed';
+  case PENDING = 'pending';
+  case FAILED = 'failed';
+}
 
 class Payment {
   private int $paymentId;
-  private float $totalPrice;
   private DateTime $paymentDate;
   private DateTime $paymentTime;
-  private User $user;
+  private float $totalPrice;
+  private string $currency;
+  private string $paymentMethod;
+  private string $checkoutSessionId;
+  private PaymentStatus $paymentStatus;
   private Address $address;
   private Booking $booking;
-  private PaymentMethod $paymentMethod;
-
-  public function __construct(int $paymentId, float $totalPrice, DateTime $paymentDate, DateTime $paymentTime, User $user, Address $address, Booking $booking, PaymentMethod $paymentMethod) {
+  
+  public function __construct(int $paymentId, DateTime $paymentDate, DateTime $paymentTime, float $totalPrice, string $currency, string $paymentMethod, string $checkoutSessionId, PaymentStatus $paymentStatus, Address $address, Booking $booking) {
     $this->paymentId = $paymentId;
-    $this->totalPrice = $totalPrice;
     $this->paymentDate = $paymentDate;
     $this->paymentTime = $paymentTime;
-    $this->user = $user;
+    $this->totalPrice = $totalPrice;
+    $this->currency = $currency;
+    $this->paymentMethod = $paymentMethod;
+    $this->checkoutSessionId = $checkoutSessionId;
+    $this->paymentStatus = $paymentStatus;
     $this->address = $address;
     $this->booking = $booking;
-    $this->paymentMethod = $paymentMethod;
   }
 
   public function getPaymentId(): int {
     return $this->paymentId;
-  }
-
-  public function getTotalPrice(): float {
-    return $this->totalPrice;
   }
 
   public function getPaymentDate(): DateTime {
@@ -41,8 +45,24 @@ class Payment {
     return $this->paymentTime;
   }
 
-  public function getUser(): User {
-    return $this->user;
+  public function getTotalPrice(): float {
+    return $this->totalPrice;
+  }
+
+  public function getCurrency(): string {
+    return $this->currency;
+  }
+
+  public function getPaymentMethod(): string {
+    return $this->paymentMethod;
+  }
+  
+  public function getCheckoutSessionId(): string {
+    return $this->checkoutSessionId;
+  }
+
+  public function getPaymentStatus(): PaymentStatus {
+    return $this->paymentStatus;
   }
 
   public function getAddress(): Address {
@@ -53,16 +73,8 @@ class Payment {
     return $this->booking;
   }
 
-  public function getPaymentMethod(): PaymentMethod {
-    return $this->paymentMethod;
-  }
-
   public function setPaymentId(int $paymentId): void {
     $this->paymentId = $paymentId;
-  }
-
-  public function setTotalPrice(float $totalPrice): void {
-    $this->totalPrice = $totalPrice;
   }
 
   public function setPaymentDate(DateTime $paymentDate): void {
@@ -73,8 +85,24 @@ class Payment {
     $this->paymentTime = $paymentTime;
   }
 
-  public function setUser(User $user): void {
-    $this->user = $user;
+  public function setTotalPrice(float $totalPrice): void {
+    $this->totalPrice = $totalPrice;
+  }
+
+  public function setCurrency(string $currency): void {
+    $this->currency = $currency;
+  }
+
+  public function setPaymentMethod(string $paymentMethod): void {
+    $this->paymentMethod = $paymentMethod;
+  }
+
+  public function setCheckoutSessionId(string $checkoutSessionId): void {
+    $this->checkoutSessionId = $checkoutSessionId;
+  }
+
+  public function setPaymentStatus(PaymentStatus $paymentStatus): void {
+    $this->paymentStatus = $paymentStatus;
   }
 
   public function setAddress(Address $address): void {
@@ -84,9 +112,4 @@ class Payment {
   public function setBooking(Booking $booking): void {
     $this->booking = $booking;
   }
-
-  public function setPaymentMethod(PaymentMethod $paymentMethod): void {
-    $this->paymentMethod = $paymentMethod;
-  }
 }
-?>

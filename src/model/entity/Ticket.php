@@ -1,21 +1,18 @@
 <?php
-include_once "src/model/entity/Seat.php";
-include_once "src/model/entity/TicketType.php";
-include_once "src/model/entity/Showing.php";
-include_once "src/model/entity/Booking.php";
+require_once "src/model/entity/Seat.php";
+require_once "src/model/entity/TicketType.php";
+require_once "src/model/entity/Showing.php";
 class Ticket {
   private int $ticketId;
   private Seat $seat;
   private TicketType $ticketType;
   private Showing $showing;
-  private Booking $booking;
 
-  public function __construct(int $ticketId, Seat $seat, TicketType $ticketType, Showing $showing, Booking $booking) {
+  public function __construct(int $ticketId, Seat $seat, TicketType $ticketType, Showing $showing) {
     $this->ticketId = $ticketId;
     $this->seat = $seat;
     $this->ticketType = $ticketType;
     $this->showing = $showing;
-    $this->booking = $booking;
 
   }
 
@@ -35,10 +32,6 @@ class Ticket {
     return $this->showing;
   }
 
-  public function getBooking(): Booking {
-    return $this->booking;
-  }
-
   public function setTicketId(int $ticketId): void {
     $this->ticketId = $ticketId;
   }
@@ -54,10 +47,4 @@ class Ticket {
   public function setShowing(Showing $showing): void {
     $this->showing = $showing;
   }
-
-  public function setBooking(Booking $booking): void {
-    $this->booking = $booking;
-  }
-
 }
-?>

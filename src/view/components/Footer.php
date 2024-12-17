@@ -1,8 +1,6 @@
 <?php
-/* Get the venues */
-include_once "src/controller/VenueController.php";
-/* Get the opening hours */
-include_once "src/controller/OpeningHourController.php";
+require_once "src/controller/VenueController.php";
+require_once "src/controller/OpeningHourController.php";
 
 $errors = isset($_SESSION['contactErrors']) ? $_SESSION['contactErrors'] : [];
 $contactSuccess = isset($_SESSION['contactSuccess']) ? $_SESSION['contactSuccess'] : null;
@@ -11,7 +9,7 @@ unset($_SESSION['contactSuccess']);
 ?>
 
 <footer class="flex flex-col gap-[4rem] mt-[8rem]">
-  <div class="flex justify-between gap-[2rem]">
+  <div id="contact" class="flex justify-between gap-[2rem]">
     <!-- Site Links -->
     <div class="min-w-[250px] flex flex-col gap-[1.5rem]">
       <h4 class="text-[1.125rem] font-bold leading-tight">Useful Links</h4>
@@ -56,7 +54,7 @@ unset($_SESSION['contactSuccess']);
         <!-- TODO: Populate opening hours based on selected venue -->
         <?php
         $openingHourController = new OpeningHourController();
-        $openingHours = $openingHourController->getOpeningHoursById($_SESSION['selectedVenueId']);
+        $openingHours = $openingHourController->getCurrentOpeningHours();
 
         if(isset($openingHours['errorMessage'])) {
           echo "<div class='text-[.875rem] text-textNormal leading-snug'>" . htmlspecialchars($openingHours['errorMessage']) . "</div>";
@@ -76,34 +74,33 @@ unset($_SESSION['contactSuccess']);
     <div class="min-w-[250px] flex flex-col gap-[1.5rem]">
       <h4 class="text-[1.125rem] font-bold leading-tight">Contact Us</h4>
       <form action="<?php echo $_SESSION['baseRoute'] ?>mail?action=contact" method="post" class="flex flex-col gap-[.75rem] text-textDark">
-        <input type="hidden" name="route" value="<?php echo $_SERVER['REQUEST_URI']; ?>">
-        <input type="text" name="name" id="emailInput" placeholder="Your name" required="true" class="h-[36px] py-[.5rem] px-[.875rem] bg-bgSemiDark text-[.875rem] text-textNormal leading-snug border-[1px] border-borderDark rounded-[6px] outline-none ease-in-out duration-[.15s] focus:border-textNormal">
-        <!-- Name error message -->
-        <?php if (isset($errors['name'])): ?>
-            <p class="text-red-500 text-xs mt-[-.25rem] mb-[.25rem]"><?= htmlspecialchars($errors['name']) ?></p>
-        <?php endif; ?>
-        <input type="text" name="email" id="emailInput" placeholder="Your email" required="true" class="h-[36px] py-[.5rem] px-[.875rem] bg-bgSemiDark text-[.875rem] text-textNormal leading-snug border-[1px] border-borderDark rounded-[6px] outline-none ease-in-out duration-[.15s] focus:border-textNormal">
-        <!-- Email error message -->
-        <?php if (isset($errors['email'])): ?>
-            <p class="text-red-500 text-xs mb-[.5rem]"><?= htmlspecialchars($errors['email']) ?></p>
-        <?php endif; ?>
-        <textarea name="message" id="messageInput" placeholder="Message" required="true" class="min-h-[100px] py-[.5rem] px-[.875rem] bg-bgSemiDark text-[.875rem] text-textNormal leading-snug border-[1px] border-borderDark rounded-[6px] outline-none ease-in-out duration-[.15s] focus:border-textNormal"></textarea>
-        <!-- Message error message -->
-        <?php if (isset($errors['message'])): ?>
-            <p class="text-red-500 text-xs mb-[.5rem]"><?= htmlspecialchars($errors['message']) ?></p>
-        <?php endif; ?>
-        <!-- General error message -->
-        <?php if (isset($errors['general'])): ?>
-            <p class="text-red-500 text-xs mb-[.5rem]"><?= htmlspecialchars($errors['general']) ?></p>
-        <?php endif; ?>
-        <!-- Successful submission message -->
-        <?php if (isset($contactSuccess)): ?>
-            <p class="text-textNormal text-xs mb-[.5rem]"><?= htmlspecialchars($contactSuccess) ?></p>
-        <?php endif; ?>
-        <button type="submit" name="submit" class="h-[36px] py-[.5rem] px-[1.25rem] bg-primary text-[.875rem] text-textDark font-medium leading-tight rounded-[6px] ease-in-out duration-[.15s] hover:bg-primaryHover">Send</button>
-      </form>
+          <input type="hidden" name="route" value="<?php echo $_SERVER['REQUEST_URI']; ?>">
+
+          <input type="text" name="name" id="nameInput" placeholder="Your name" required="true" class="h-[36px] py-[.5rem] px-[.875rem] bg-bgSemiDark text-[.875rem] text-textNormal leading-snug border-[1px] border-borderDark rounded-[6px] outline-none ease-in-out duration-[.15s] focus:border-textNormal">
+          <?php if (isset($errors['name'])): ?>
+              <p class="text-red-500 text-xs mt-[-.25rem] mb-[.25rem]"><?= htmlspecialchars($errors['name']) ?></p>
+          <?php endif; ?>
+
+          <input type="text" name="email" id="emailInput" placeholder="Your email" required="true" class="h-[36px] py-[.5rem] px-[.875rem] bg-bgSemiDark text-[.875rem] text-textNormal leading-snug border-[1px] border-borderDark rounded-[6px] outline-none ease-in-out duration-[.15s] focus:border-textNormal">
+          <?php if (isset($errors['email'])): ?>
+              <p class="text-red-500 text-xs mb-[.5rem]"><?= htmlspecialchars($errors['email']) ?></p>
+          <?php endif; ?>
+
+          <textarea name="message" id="messageInput" placeholder="Message" required="true" class="min-h-[100px] py-[.5rem] px-[.875rem] bg-bgSemiDark text-[.875rem] text-textNormal leading-snug border-[1px] border-borderDark rounded-[6px] outline-none ease-in-out duration-[.15s] focus:border-textNormal"></textarea>
+          <?php if (isset($errors['message'])): ?>
+              <p class="text-red-500 text-xs mb-[.5rem]"><?= htmlspecialchars($errors['message']) ?></p>
+          <?php endif; ?>
+
+          <div><?php include "captcha.php"; ?></div>
+          <input type="text" name="captcha" id="captcha" placeholder="Enter CAPTCHA" required="true" class="h-[36px] py-[.5rem] px-[.875rem] bg-bgSemiDark text-[.875rem] text-textNormal leading-snug border-[1px] border-borderDark rounded-[6px] outline-none ease-in-out duration-[.15s] focus:border-textNormal">
+          <?php if (isset($errors['captcha'])): ?>
+              <p class="text-red-500 text-xs mb-[.5rem]"><?= htmlspecialchars($errors['captcha']) ?></p>
+          <?php endif; ?>
+
+          <button type="submit" name="submit" class="h-[36px] py-[.5rem] px-[1.25rem] bg-primary text-[.875rem] text-textDark font-medium leading-tight rounded-[6px] ease-in-out duration-[.15s] hover:bg-primaryHover">Send</button>
+        </form>
     </div>
   </div>
   <!-- TODO: Company name display -->
-  <div class="text-textNormal text-[.875rem]">&copy; company_name all rights reserved</div>
+  <div class="text-textNormal text-[.875rem]">&copy; Spicy pisces all rights reserved</div>
 </footer>

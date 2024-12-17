@@ -1,8 +1,6 @@
 <?php
-include_once "src/model/repositories/SeatRepository.php";
-include_once "src/model/services/SeatService.php";
-include_once "src/model/entity/Seat.php";
-include_once "src/controller/BookingController.php";
+require_once "src/model/services/SeatService.php";
+require_once "src/model/services/TicketService.php";
 
 class SeatController {
     private SeatService $seatService;
@@ -11,6 +9,14 @@ class SeatController {
         $ticketService = new TicketService();
         $this->seatService = new SeatService();
         $this->seatService->setTicketService($ticketService);
+    }
+
+    public function getSeatById(int $id): Seat|array {
+        $seat = $this->seatService->getSeatById($id);
+        if (isset($seat['error']) && $seat['error']) {
+            return ['errorMessage' => $seat['message']];
+        }
+        return $seat;
     }
 
     public function getAllSeatsForShowing(int $showingId, int $selectedVenueId): array {
@@ -27,12 +33,4 @@ class SeatController {
         }
         return $availableSeats;
     }
-    // public function selectSeat(int $seatId, int $showingId, int $userId) : array{ //TRANSACTION
-    //     $success = $this->bookingRepository->bookSeat($seatId, $showingId, $userId);
-    //     if ($success) {
-    //         return ['success' => true, 'message' => 'Seat booked successfully!'];
-    //     } else {
-    //         return ['success' => false, 'message' => 'Seat is already booked.'];
-    //     }
-    // }
 }

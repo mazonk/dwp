@@ -1,14 +1,6 @@
-<?php
-require_once 'session_config.php';
-include_once 'src/controller/UserController.php';
-include_once 'src/controller/VenueController.php';
-include_once 'src/model/entity/Booking.php';
-include_once 'src/model/entity/Ticket.php';
-include_once 'src/model/entity/Room.php';
-include_once 'src/model/entity/Seat.php';
-include_once 'src/model/entity/Movie.php';
-include_once 'src/model/entity/TicketType.php';
-include_once 'src/model/entity/Showing.php';
+<?php  require_once 'session_config.php';
+require_once 'src/controller/UserController.php';
+require_once 'src/controller/BookingController.php';
 include_once 'src/view/components/BookingCard.php';
 
 if (!isLoggedIn()) {
@@ -16,51 +8,33 @@ if (!isLoggedIn()) {
     exit;
 }
 
+//controllers
 $userController = new UserController();
+$bookingController = new BookingController();
+
+//state
+$showMore = isset($_SESSION['showMore']) ? $_SESSION['showMore'] : false;
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'enableShowMore') {
+    $_SESSION['showMore'] = !$_SESSION['showMore'];
+
+    // Return a JSON response
+    echo json_encode(['success' => true]);
+    exit;
+}
+
+//fetch user
 $user = $userController->getUserById($_SESSION['loggedInUser']['userId']);
 if (is_array($user) && isset($user['errorMessage']) && $user['errorMessage']) {
     echo $user['errorMessage'] . ' ' . '<a class="underline text-blue-300" href="javascript:window.history.back()"><-Go back!</a>';
     exit;
-} else {
+} else { //else render component
 
-    //TEST DATA 
-    // ################################
-    // Sample Venue
-    $venueController = new VenueController();
-$venue1 = $venueController->getVenueById(3); //how do we get the venue?
+    //fetch bookings
+    $bookings = $bookingController->getBookingsByUserId($_SESSION['loggedInUser']['userId']);
+    $initialBookings = count($bookings) > 8 ? array_slice($bookings, 0, 8) : $bookings;
 
-// Sample Rooms
-$room1 = new Room(1, 1, $venue1);
-$room2 = new Room(2, 2, $venue1);
-
-// Sample Movies
-$movie1 = new Movie(1, "Ironman", "Description for Movie 1", 120, "English", "2024-10-01", "poster1.jpg", "promo1.jpg", 7.5, "trailer1.mp4", [], []);
-$movie2 = new Movie(2, "Interstellar", "Description for Movie 2", 90, "English", "2024-11-01", "poster2.jpg", "promo2.jpg", 8.0, "trailer2.mp4", [], []);
-
-// Sample Ticket Types
-$ticketType1 = new TicketType(1, "Regular", 12.99);
-$ticketType2 = new TicketType(2, "VIP", 25.99);
-$ticketType3 = new TicketType(3, "Student", 9.99);
-
-// Sample Showings
-$showing1 = new Showing(1, $movie1, $room1, new DateTime("2024-10-01 18:00"), new DateTime("2024-10-01 18:00"));
-$showing2 = new Showing(2, $movie2, $room2, new DateTime("2024-10-01 20:00"), new DateTime("2024-10-01 20:00"));
-
-// Sample Seats
-$seat1 = new Seat(1, 1, 1, $room1);
-$seat2 = new Seat(2, 1, 2, $room1);
-$seat3 = new Seat(3, 1, 3, $room2);
-$seat4 = new Seat(4, 2, 1, $room2);
-$seat5 = new Seat(5, 2, 2, $room2);
-$seat6 = new Seat(6, 2, 3, $room1);
-
-$bookings = [];
-
-// ################################
-
-$initialBookings = count($bookings) > 8 ? array_slice($bookings, 0, 8) : $bookings;
-
-$editMode = isset($_GET['edit']) && $_GET['edit'] == "true";
+    $editMode = isset($_GET['edit']) && $_GET['edit'] == "true";
 ?>
 
 <!DOCTYPE html>
@@ -82,7 +56,7 @@ $editMode = isset($_GET['edit']) && $_GET['edit'] == "true";
                     <img src="src/assets/default-profile-picture.png" alt="Profile Picture" class="w-[250px] h-[250px] object-cover rounded-full">
                     <div class="break-words w-[250px] space-y-4">
                         <?php if ($editMode): ?>
-                            <form id="editProfileInfoForm" class="flex flex-col space-y-6">
+                            <form action="<?php echo $_SESSION['baseRoute'] ?>profile" method="put" id="editProfileInfoForm" class="flex flex-col space-y-6">
                                 <input type="hidden" name="userId" id="userId" value="<?php echo htmlspecialchars($user->getId()) ?>" />
                                 <input type="text" required name="firstName" id="firstName" value="<?php echo htmlspecialchars($user->getFirstName()) ?>" 
                                     class="text-[1rem] bg-bgSemiDark border-[1px] border-borderDark text-textNormal focus:border-textNormal w-full rounded-md outline-none leading-snug py-[.5rem] px-[.875rem]" />
@@ -93,7 +67,7 @@ $editMode = isset($_GET['edit']) && $_GET['edit'] == "true";
                                 <input type="date" required name="dob" id="dob" value="<?php echo htmlspecialchars($user->getDob()->format('Y-m-d')) ?>" 
                                     class="text-[1rem] bg-bgSemiDark border-[1px] border-borderDark text-textNormal focus:border-textNormal w-full rounded-md outline-none leading-snug py-[.5rem] px-[.875rem]" />
                                 <div class="flex space-x-0 mt-4 justify-between">
-                                    <button type="submit" 
+                                    <button type="submit" name="submit"
                                         class="text-[1rem] font-semibold bg-primary py-2 w-1/2 text-center border border-borderDark text-textDark hover:bg-primaryHover rounded-[6px]">
                                         Save Changes
                                     </button>
@@ -126,15 +100,33 @@ $editMode = isset($_GET['edit']) && $_GET['edit'] == "true";
             <div class="pl-8 w-full">
                 <h2 class="text-[2rem] leading-snug mb-7 mt-11">Purchase History</h2>
                 <div class="flex flex-wrap">
-                    <?php
-                        foreach ($initialBookings as $booking) {
-                            BookingCard::render($booking->getTickets(), $venue1);
-                        }
+                    <?php 
+                    if (isset($bookings['errorMessage'])) {
+                        echo "<p>No bookings yet.</p>";
+                        die();
+                    }
+                    if ($showMore): 
+                        foreach ($bookings as $booking): 
+                            foreach ($booking->getTickets() as $ticket) {
+                                $venue = $ticket->getShowing()->getRoom()->getVenue();
+                                continue;
+                            }
+                            BookingCard::render($booking->getTickets(), $venue);
+                        endforeach;
+                    else: 
+                        foreach ($initialBookings as $booking): 
+                            foreach ($booking->getTickets() as $ticket) {
+                                $venue = $ticket->getShowing()->getRoom()->getVenue();
+                                continue;
+                            }
+                            BookingCard::render($booking->getTickets(), $venue);
+                        endforeach;
+                    endif;
                     ?>
                 </div>
                 <?php if (count($bookings) > 8): ?>
                     <div id="show-more-btn" class="text-center mt-4 cursor-pointer text-primary">
-                        <span>Show more...</span>
+                        <?php if($showMore): ?>Show less...<?php else: ?>Show more...<?php endif; ?>
                     </div>
                 <?php endif; ?>
             </div>
@@ -148,7 +140,7 @@ $editMode = isset($_GET['edit']) && $_GET['edit'] == "true";
     document.addEventListener('DOMContentLoaded', () => {
         const editProfileInfoForm = document.getElementById('editProfileInfoForm');
         const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
-
+        
         if (editProfileInfoForm) {
             const errorMessageElement = document.createElement('p');
             errorMessageElement.classList.add('text-red-500', 'text-center', 'font-medium');
@@ -171,7 +163,6 @@ $editMode = isset($_GET['edit']) && $_GET['edit'] == "true";
                 xhr.onreadystatechange = () => {
                         if (xhr.readyState === 4 && xhr.status === 200) {
                             let response;
-                            console.log(xhr.response);
                             try {
                                 response = JSON.parse(xhr.response); // Parse the JSON response
                             } catch (e) {
@@ -205,15 +196,44 @@ $editMode = isset($_GET['edit']) && $_GET['edit'] == "true";
                 const params = Object.keys(updatedUserInfo)
                     .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(updatedUserInfo[key])}`)
                     .join('&');
-                    console.log(params);
                 xhr.send(params);
             });
         }
+
+        const cancelButton = document.getElementById('cancelButton');
         // Cancel button hides the form without submitting
-        document.getElementById('cancelButton').addEventListener('click', () => {
-            editProfileInfoForm.classList.add('hidden');
-            window.location.href = `${baseRoute}profile`; //route back to profile (edit false)
-        });
+        if (cancelButton) {
+                cancelButton.addEventListener('click', () => {
+                editProfileInfoForm.classList.add('hidden');
+                window.location.href = `${baseRoute}profile`; //route back to profile (edit false)
+            });
+        }
+
+        document.getElementById('show-more-btn').addEventListener('click', () => {
+            event.preventDefault();
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', ``, true);
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    let response;
+                            try {
+                                response = JSON.parse(xhr.response); // Parse the JSON response
+                            } catch (e) {
+                                console.error('Could not parse response as JSON:', e);
+                                errorMessageElement.textContent = 'An unexpected error occurred. Please try again.';
+                                errorMessageElement.style.display = 'block';
+                                return;
+                            }
+                    if (response.success) {
+                        location.reload(); // Reload the page to show all bookings
+                    } else {
+                        console.error('Error enabling show more:', response.errorMessage);
+                    }
+                }
+            };
+            xhr.send(`action=enableShowMore`);
+        })
     });
     
 </script>

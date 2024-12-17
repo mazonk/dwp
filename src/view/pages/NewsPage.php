@@ -1,6 +1,5 @@
-<?php
-include_once "src/controller/NewsController.php";
-include_once "session_config.php";
+<?php    require_once "session_config.php";
+require_once "src/controller/NewsController.php";
 
 if ($id === null) { // this is from the query string
     // Redirect back if id not found

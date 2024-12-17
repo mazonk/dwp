@@ -34,4 +34,3 @@ class PostalCode {
     $this->city = $city;
   }
 }
-?>

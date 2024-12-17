@@ -24,4 +24,3 @@ class UserRole {
     $this->type = $type;
   }
 }
-?>

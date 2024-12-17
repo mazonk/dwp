@@ -1,4 +1,5 @@
 <?php 
+require_once 'src/model/database/dbcon/DatabaseConnection.php';
 class AuthRepository {
 
     /**
@@ -6,7 +7,6 @@ class AuthRepository {
      * @return PDO The database connection
      */
     private function getdb(): PDO {
-        require_once 'src/model/database/dbcon/DatabaseConnection.php';
         return DatabaseConnection::getInstance(); // singleton
     }
 

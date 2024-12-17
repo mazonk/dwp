@@ -1,8 +1,11 @@
 <?php
-include_once "src/model/entity/Seat.php";
-include_once "src/model/entity/Room.php";
-include_once "src/model/entity/Movie.php";
-include_once "src/model/entity/Showing.php";
+require_once "src/model/entity/Seat.php";
+require_once "src/model/entity/Room.php";
+require_once "src/model/entity/Movie.php";
+require_once "src/model/entity/Showing.php";
+require_once "src/model/services/RoomService.php";
+require_once "src/model/services/TicketService.php";
+require_once "src/model/repositories/SeatRepository.php";
 
 class SeatService {
     private SeatRepository $seatRepository;
@@ -42,7 +45,7 @@ class SeatService {
     public function getAvailableSeatsForShowing(int $showingId, int $selectedVenueId): array {
         try {
             $allSeats = $this->getAllSeatsForShowing($showingId, $selectedVenueId);
-            $bookedTickets = $this->ticketService->getAllTicketsForShowing($showingId, $selectedVenueId);
+            $bookedTickets = $this->ticketService->getAllTicketsForShowing($showingId);
             $bookedSeatsIds = [];
             foreach ($bookedTickets as $ticket) {
                 $bookedSeatsIds[] = $ticket->getSeat()->getSeatId();
@@ -72,13 +75,4 @@ class SeatService {
             return ['error' => true, 'message' => $e->getMessage()];
         }
     }
-
-    // public function selectSeat(int $seatId): array { //TRANSACTION
-    //     try {
-    //         $result = $this->seatRepository->selectSeat($seatId);
-    //         return $result;
-    //     } catch (Exception $e) {
-    //         return ['error' => true, 'message' => $e->getMessage()];
-    //     }
-    // }
 }

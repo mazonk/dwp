@@ -25,4 +25,3 @@ class Genre {
         $this->name = $name;
     }
 }
-?>

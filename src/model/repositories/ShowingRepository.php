@@ -1,9 +1,9 @@
 <?php
-include_once "src/model/entity/Showing.php";
+require_once 'src/model/database/dbcon/DatabaseConnection.php';
+require_once "src/model/entity/Showing.php";
 
 class ShowingRepository {
     private function getdb(): PDO {
-        require_once 'src/model/database/dbcon/DatabaseConnection.php';
         return DatabaseConnection::getInstance(); // singleton
     }
 
@@ -25,10 +25,28 @@ class ShowingRepository {
 
     public function getShowingsForMovie(int $movieId, int $selectedVenueId): array {
         $db = $this->getdb();
+        $db->exec("SET SQL_BIG_SELECTS=1");
         $query = $db->prepare("SELECT * FROM Showing as s JOIN VenueShowing as vs ON s.showingId = vs.showingId WHERE vs.venueId = :venueId 
         AND s.movieId = :movieId ORDER BY s.showingDate, s.showingTime ASC");
         try {
             $query->execute(array(":movieId" => $movieId, ":venueId" => $selectedVenueId));
+            $result = $query->fetchAll(PDO::FETCH_ASSOC);
+            if (empty($result)) {
+                throw new Exception("No showings found for this movie!");
+            }
+        } catch (PDOException $e) {
+            throw new Exception("Unable to fetch showings for venue!");
+        }
+
+        return $result;
+    }
+
+    public function getShowingsForMovieAdmin(int $movieId): array {
+        $db = $this->getdb();
+        $db->exec("SET SQL_BIG_SELECTS=1");
+        $query = $db->prepare("SELECT * FROM ShowingsWithDetails as swd WHERE swd.movieId = :movieId ORDER BY swd.showingDate, swd.showingTime ASC");
+        try {
+            $query->execute(array(":movieId" => $movieId));
             $result = $query->fetchAll(PDO::FETCH_ASSOC);
             if (empty($result)) {
                 throw new Exception("No showings found for this movie!");

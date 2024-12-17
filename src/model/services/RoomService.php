@@ -1,6 +1,6 @@
 <?php
-include_once "src/model/repositories/RoomRepository.php";
-include_once "src/model/entity/Room.php";
+require_once "src/model/repositories/RoomRepository.php";
+require_once "src/model/entity/Room.php";
 
 class RoomService {
     private RoomRepository $roomRepository;

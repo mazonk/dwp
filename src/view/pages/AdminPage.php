@@ -9,13 +9,15 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <?php include_once("src/assets/tailwindConfig.php"); ?>
 </head>
-<body class="w-[100%] mx-auto bg-bgDark text-textLight overflow-hidden max-h-screen">
+<body class="w-[100%] mx-auto bg-bgDark text-textLight max-h-screen">
     <div class="flex">
         <!-- Include the Admin Sidebar -->
-        <?php include 'src/view/components/AdminSidebar.php'; ?>
+        <div class="w-1/6 bg-sidebarColor">
+    <?php include 'src/view/components/AdminSidebar.php'; ?>
+</div>
 
         <!-- Main Content Area -->
-        <main class="flex-1 p-8 bg-bgDark text-gray-100">
+        <main class="flex-1 p-8 bg-bgDark text-gray-100 ml-1/6">
             <?php
                 if (!isLoggedIn() || $_SESSION['loggedInUser']['roleType'] !== "Admin") {
                     http_response_code(403);
@@ -26,7 +28,7 @@
                 }
             ?>
             <?php
-                $validSections = ['company-venues', 'content-management', 'scheduling', 'bookings-invoices'];
+                $validSections = ['company-venues', 'content-management', 'movie-management', 'scheduling', 'bookings-invoices'];
                 $section = isset($_GET['section']) ? (in_array($_GET['section'] ?? 'company-venues', $validSections) ? $_GET['section'] : 'company-venues') : 'company-venues';    
 
                 switch ($section) {
@@ -35,6 +37,9 @@
                         break;
                     case 'content-management':
                         include 'src/view/components/admin-sections/contentManagement.php';
+                        break;
+                    case 'movie-management':
+                        include 'src/view/components/admin-sections/movies/movieManagement.php';
                         break;
                     case 'scheduling':
                         include 'src/view/components/admin-sections/scheduling.php';
@@ -48,6 +53,6 @@
                 }
             ?>
         </main>
-    </div>
-</body>
+        </div>
+        </body>
 </html>

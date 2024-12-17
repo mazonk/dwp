@@ -1,33 +1,25 @@
 <?php
-include_once "src/model/repositories/ShowingRepository.php";
-include_once "src/model/services/MovieService.php";
-include_once "src/model/services/RoomService.php";
-include_once "src/model/services/VenueService.php";
-include_once "src/model/entity/Showing.php";
-include_once "src/model/entity/Movie.php";
-include_once "src/model/entity/Room.php";
-include_once "src/model/entity/Venue.php";
+require_once "src/model/repositories/ShowingRepository.php";
+require_once "src/model/services/MovieService.php";
+require_once "src/model/services/RoomService.php";
+require_once "src/model/entity/Showing.php";
+require_once "src/model/entity/Movie.php";
+require_once "src/model/entity/Room.php";
 
 class ShowingService {
     private ShowingRepository $showingRepository;
     private MovieService $movieService;
     private RoomService $roomService;
-    private VenueService $venueService;
 
     public function __construct() {
         $this->showingRepository = new ShowingRepository();
         $this->movieService = new MovieService();
         $this->roomService = new RoomService();
-        $this->venueService = new VenueService();
     }
 
-    public function getShowingById(int $showingId, int $venueId): array|Showing {
+    public function getShowingById(int $showingId): array|Showing {
         try {
             $showingData = $this->showingRepository->getShowingById($showingId);
-            $venue = $this->venueService->getVenueById($venueId);
-            if (is_array($venue) && isset($venue['error']) && $venue['error']) {
-                return $venue; //return the errors if there are any
-            }
             $room = $this->roomService->getRoomById($showingData['roomId']);
             if (is_array($room) && isset($room['error']) && $room['error']) {
                 return $room; //return the errors if there are any
@@ -53,7 +45,7 @@ class ShowingService {
             $result = $this->showingRepository->getShowingsForMovie($movieId, $selectedVenueId);
             $showings = [];
             foreach ($result as $showing) {
-                $result = $this->getShowingById($showing["showingId"], $showing["venueId"]);
+                $result = $this->getShowingById($showing["showingId"]);
                 if (is_array($result) && isset($result['error']) && $result['error']) {
                     continue;
                 } else {
@@ -80,6 +72,29 @@ class ShowingService {
                 }
             }
             return $moviesPlayingToday;
+        } catch (Exception $e) {
+            return ['error' => true,'message' => $e->getMessage()];
+        }
+    }
+
+    public function getShowingsForMovieAdmin(int $movieId): array {
+        try {
+            $result = $this->showingRepository->getShowingsForMovieAdmin($movieId);
+            $showings = [];
+            foreach ($result as $showing) {
+                $showings[] = [
+                    'showingId' => $showing['showingId'],
+                    'showingDate' => $showing['showingDate'],
+                    'showingTime' => $showing['showingTime'],
+                    'title' => $showing['title'],
+                    'movieId' => $showing['movieId'],
+                    'roomNumber' => $showing['roomNumber'],
+                    'venueId' => $showing['venueId'],
+                    'bookings' => $showing['bookings'],
+                    'tickets' => $showing['tickets']
+                ];
+            }
+            return $showings;
         } catch (Exception $e) {
             return ['error' => true,'message' => $e->getMessage()];
         }

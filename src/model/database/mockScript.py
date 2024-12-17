@@ -4,6 +4,7 @@ import mysql.connector
 from faker import Faker
 import random
 from datetime import datetime, timedelta
+from collections import defaultdict
 
 # Load environment variables from .env file
 load_dotenv('dbcon/.env')
@@ -112,7 +113,7 @@ def generate_showings():
     """Generate 21 days of showings, 5 per movie, and associate with venues"""
     faker = Faker()
     today = datetime.today()
-    num_days = 21
+    num_days = 40
 
     with get_db_connection() as db_connection:
         with db_connection.cursor() as cursor:
@@ -176,11 +177,11 @@ def generate_bookings():
             valid_user_ids = [user[0] for user in cursor.fetchall()]
 
             # Possible statuses
-            statuses = ["confirmed", "pending", "cancelled"]
-            weights = [0.95, 0.02, 0.03]  # Corresponding weights for confirmed, pending, cancelled status appearance
+            statuses = ["confirmed", "failed"]
+            weights = [0.95, 0.05]  # Corresponding weights for confirmed, pending, cancelled status appearance
 
             # Generate 400 bookings
-            for _ in range(400):
+            for _ in range(6000):
                 user_id = random.choice(valid_user_ids)  # Pick a random user
                 status = random.choices(statuses, weights=weights, k=1)[0]
 
@@ -193,12 +194,9 @@ def generate_bookings():
 
             db_connection.commit()
 
-    print("400 bookings have been generated.")
+    print("6000 bookings have been generated.")
 
 # Method to generate tickets
-import random
-from collections import defaultdict
-
 def generate_tickets():
     """Generate mock data for tickets."""
     with get_db_connection() as db_connection:
@@ -224,32 +222,15 @@ def generate_tickets():
 
             ticket_count = 0
 
-            # Ensure each showingId appears between 15-30 times
-            for showing_id, room_id in showing_rooms:
-                num_tickets_for_showing = random.randint(20, 50)
-                for _ in range(num_tickets_for_showing):
-                    booking_id = random.choice(valid_booking_ids)
-                    seat_id = random.choice(seats_by_room[room_id])
-                    ticket_type_id = random.randint(1, 3)
-
-                    query = """
-                    INSERT INTO Ticket (seatId, ticketTypeId, showingId, bookingId)
-                    VALUES (%s, %s, %s, %s)
-                    """
-                    cursor.execute(query, (seat_id, ticket_type_id, showing_id, booking_id))
-                    ticket_count += 1
-
-            # Additional random tickets for each booking, ensuring 1-6 tickets per booking
+            # Generate tickets for each booking, ensuring one showingId per booking
             for booking_id in valid_booking_ids:
+                # Select a random showingId for this booking
+                showing_id, room_id = random.choice(showing_rooms)
+
+                # Generate 1-6 tickets for this booking
                 num_tickets = random.randint(1, 6)
-                showing_id = random.choice([sr[0] for sr in showing_rooms])
-
-                # Select seats for the room associated with the showing
-                room_id_for_showing = next(room_id for show, room_id in showing_rooms if show == showing_id)
-                valid_seat_ids_for_showing = seats_by_room[room_id_for_showing]
-
                 for _ in range(num_tickets):
-                    seat_id = random.choice(valid_seat_ids_for_showing)
+                    seat_id = random.choice(seats_by_room[room_id])
                     ticket_type_id = random.randint(1, 3)
 
                     query = """
@@ -262,6 +243,7 @@ def generate_tickets():
             db_connection.commit()
 
     print(f"{ticket_count} tickets have been inserted.")
+
 
 
 # Call the function when the file is run

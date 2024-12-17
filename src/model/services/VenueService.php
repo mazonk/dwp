@@ -1,7 +1,8 @@
 <?php
-include_once "src/model/repositories/VenueRepository.php";
-include_once "src/model/services/AddressService.php";
-include_once "src/model/entity/Venue.php";
+require_once 'src/model/database/dbcon/DatabaseConnection.php';
+require_once "src/model/repositories/VenueRepository.php";
+require_once "src/model/services/AddressService.php";
+require_once "src/model/entity/Venue.php";
 
 class VenueService {
   private VenueRepository $venueRepository;
@@ -15,7 +16,6 @@ class VenueService {
   }
 
   private function getdb(): PDO {
-    require_once 'src/model/database/dbcon/DatabaseConnection.php';
     return DatabaseConnection::getInstance(); // singleton
   }
 
@@ -57,6 +57,19 @@ class VenueService {
       }
     } catch (Exception $e) {
       return ["error"=> true, "message"=> $e->getMessage()];
+    }
+  }
+
+  public function doesVenueExist(int $venueId): bool {
+    try {
+      $result = $this->venueRepository->getVenueById($venueId);
+      return true;
+    } catch (Exception $e) {
+      if ($e->getMessage() == "Venue not found") {
+        return false;
+      } else {
+        return ["error"=> true, "message"=> $e->getMessage()];
+      }
     }
   }
 

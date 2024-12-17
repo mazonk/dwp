@@ -1,4 +1,6 @@
 <?php
+ini_set('log_errors', 1); // Enable error logging
+ini_set('error_log', __DIR__ . '/error.log'); // Log errors to 'error.log' in the current directory
 
 require_once __DIR__.'/router.php';
 
@@ -41,6 +43,10 @@ get($baseRoute.'booking', 'src/view/pages/BookingPage.php');
 // The output -> CheckoutPage.php (from pages folder)
 get($baseRoute.'booking/checkout', 'src/view/pages/CheckoutPage.php');
 
+// In the URL -> http://localhost/dwp/booking/checkout_success
+// The output -> CheckoutSuccess.php (from third-party folder)
+get($baseRoute.'booking/checkout_success', 'src/view/pages/CheckoutSuccess.php');
+
 // In the URL -> http://localhost/dwp/login
 // The output -> LoginPage.php (from pages folder)
 get($baseRoute.'login', 'src/view/pages/LoginPage.php');
@@ -74,6 +80,9 @@ post($baseRoute.'home', 'src/view/pages/LandingPage.php'); // used at toggle dro
 post($baseRoute.'booking', 'src/view/pages/BookingPage.php');
 post($baseRoute.'about', 'src/view/pages/AboutPage.php'); // used at toggle dropdown
 post($baseRoute.'profile', 'src/view/pages/ProfilePage.php'); // used at toggle dropdown
+post($baseRoute.'booking/checkout', 'src/view/pages/CheckoutPage.php'); // used at toggle dropdown
+post($baseRoute.'booking/charge', 'third-party/charge.php'); // used at stripe payment
+post($baseRoute.'stripe-webhook', 'stripe_webhook.php'); // used at stripe webhook
 
 // Post route for register
 post($baseRoute.'register', function() {
@@ -99,9 +108,37 @@ post($baseRoute.'login', function() {
 
 // Post route for logout
 post($baseRoute.'logout', function() {
+    require_once 'session_config.php';
+    require_once 'src/controller/BookingController.php';
+    require_once 'src/controller/PaymentController.php';
     require_once 'src/controller/AuthController.php';
     $authController = new AuthController();
-    $authController->logout();
+    $bookingController = new BookingController();
+
+    if (isset($_SESSION['checkoutSession']) && $_SESSION['checkoutSession'] && isset($_SESSION['activeBooking']) && $_SESSION['activeBooking']) {
+        $paymentController = new PaymentController();
+        $paymentIds = $paymentController->getIdsByCheckoutSessionId($_SESSION['checkoutSession']['id']);
+
+        $paymentResult = $paymentController->rollbackPayment($paymentIds['paymentId'], $_SESSION['activeBooking']['id'], $_SESSION['activeBooking']['ticketIds']);
+
+        if ($paymentResult['success']) {
+            $authController->logout();
+        } else {
+            // Return an error response
+            echo json_encode(['success' => false, 'errorMessage' => $paymentResult['errorMessage']]);
+        }
+    } else if (isset($_SESSION['activeBooking']) && $_SESSION['activeBooking']) {
+        $bookingResult = $bookingController->rollBackBooking($_SESSION['activeBooking']['id'], $_SESSION['activeBooking']['ticketIds']);
+    
+        if ($bookingResult['success']) {
+            $authController->logout();
+        } else {
+            // Return an error response
+            echo json_encode(['success' => false, 'errorMessage' => $bookingResult['errorMessage']]);
+        }
+    } else {
+        $authController->logout();
+    }
 });    
 
 // Post route for mail contact
@@ -112,6 +149,32 @@ post($baseRoute.'mail', function() {
         $contactFormController = new ContactFormController();
 
         $contactFormController->sendMail();
+    }
+});
+
+// Post route for invoice creator 
+post($baseRoute.'invoice', function() {
+    if (isset($_POST['action']) && $_POST['action'] === 'sendInvoice') {
+        require_once 'src/controller/InvoiceController.php';
+        require_once 'src/controller/PaymentController.php';
+        $paymentController = new PaymentController();
+        $invoiceController = new InvoiceController();
+
+        $bookingId = htmlspecialchars(trim($_POST['bookingId']));
+
+        $paymentId = $paymentController->getPaymentIdByBookingId($bookingId);
+
+        if (isset($paymentId['errorMessage']) && $paymentId['errorMessage']) {
+            echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($paymentId['errorMessage'])]);
+        } else {
+            $invoice = $invoiceController->sendInvoice($paymentId);
+    
+            if (isset($invoice['errorMessage']) && $invoice['errorMessage']) {
+                echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($invoice['errorMessage'])]);
+            } else {
+                echo json_encode(['success' => true, 'successMessage' => htmlspecialchars($invoice['successMessage'])]);
+            }
+        }
     }
 });
 
@@ -169,7 +232,8 @@ put($baseRoute.'companyInfo/edit', function() {
             'postalCode' => htmlspecialchars(trim($_PUT['postalCode'])),
             'city' => htmlspecialchars(trim($_PUT['city'])),
             'addressId' => htmlspecialchars(trim($_PUT['addressId'])),
-            'postalCodeId' => htmlspecialchars(trim($_PUT['postalCodeId']))
+            'postalCodeId' => htmlspecialchars(trim($_PUT['postalCodeId'])),
+            'logoUrl' => htmlspecialchars($_PUT['logoUrl']),
         ];        
 
         $result = $companyController->editCompanyInfo($companyId, $companyData);
@@ -216,9 +280,9 @@ put($baseRoute.'profile/edit', function() {
     }
 });
 
-// Add news put route
+require_once 'src/controller/NewsController.php';
+// Add news post route
 post($baseRoute.'news/add', function() {
-    require_once 'src/controller/NewsController.php';
     $newsController = new NewsController();
 
     if (isset($_POST['action']) && $_POST['action'] === 'addNews') {
@@ -235,10 +299,19 @@ post($baseRoute.'news/add', function() {
             echo json_encode(['success' => true]);
         } else if (isset($result['errorMessage'])) {
             // Return an error response
-            echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
+            echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);
         } else {
-            // Return validation errors
-            echo json_encode(['success' => false, 'errors' => $result]);
+            if (is_array($result)) {
+                // Sanitize the array of errors
+                $sanitizedErrors = array_map(function($error) {
+                    return htmlspecialchars($error);
+                }, $result);
+
+                echo json_encode(['success' => false, 'errors' => $sanitizedErrors]);
+            } else {
+                // Return a single error response
+                echo json_encode(['success' => false, 'errors' => htmlspecialchars($result)]);
+            }
         }
     } else {
         // Invalid action response
@@ -246,9 +319,72 @@ post($baseRoute.'news/add', function() {
     }
 });
 
+// Post route for booking
+post($baseRoute.'booking/overview', function() {
+    require_once 'src/controller/BookingController.php';
+    require_once 'src/controller/TicketController.php';
+    require_once 'session_config.php';
+    $bookingController = new BookingController();
+    $ticketController = new TicketController();
+    
+    if (isset($_SESSION['activeBooking'])) {
+        unset($_SESSION['activeBooking']);
+    }
+    if (isset($_SESSION['checkoutSession'])) {
+        unset($_SESSION['checkoutSession']);
+    }
+
+    $createBookingResult = $bookingController->createEmptyBooking(isset($_SESSION['loggedInUser']) ? $_SESSION['loggedInUser']['userId'] : null, 'pending');
+    $selectedSeatsArray = explode(',', htmlspecialchars($_POST['selectedSeats']));
+    $ticketController->createTickets($selectedSeatsArray, 1, intval($_POST['showingId']), $createBookingResult);
+
+    if ($createBookingResult && !is_array($createBookingResult)) {
+        // Return a success response
+        echo json_encode(['success' => $createBookingResult]);
+    } else {
+        // Return an error response
+        echo json_encode(['success' => false, 'errorMessage' => $createBookingResult['errorMessage']]);
+    }
+});
+
+post($baseRoute.'booking/rollback', function() {
+    require_once 'session_config.php';
+    require_once 'src/controller/BookingController.php';
+    require_once 'src/controller/PaymentController.php';
+    $bookingController = new BookingController();
+
+    if (isset($_SESSION['checkoutSession']) && $_SESSION['checkoutSession']) {
+        $paymentController = new PaymentController();
+        $paymentIds = $paymentController->getIdsByCheckoutSessionId($_SESSION['checkoutSession']['id']);
+
+        $paymentResult = $paymentController->rollbackPayment($paymentIds['paymentId'], $_SESSION['activeBooking']['id'], $_SESSION['activeBooking']['ticketIds']);
+
+        if ($paymentResult['success']) {
+            // Return a success response
+            echo json_encode(['success' => true]);
+            error_log('Payment rolled back successfully.');
+        } else {
+            // Return an error response
+            echo json_encode(['success' => false, 'errorMessage' => $paymentResult['errorMessage']]);
+            error_log('Payment rollback failed: ' . $paymentResult['errorMessage']);
+        }
+    } else {
+        $bookingResult = $bookingController->rollBackBooking($_SESSION['activeBooking']['id'], $_SESSION['activeBooking']['ticketIds']);
+    
+        if ($bookingResult['success']) {
+            // Return a success response
+            echo json_encode(['success' => true]);
+            error_log('Booking rolled back successfully.');
+        } else {
+            // Return an error response
+            echo json_encode(['success' => false, 'errorMessage' => $bookingResult['errorMessage']]);
+            error_log('Booking rollback failed: ' . $bookingResult['errorMessage']);
+        }
+    }
+});
+
 // Edit news put route
 put($baseRoute.'news/edit', function() {
-    require_once 'src/controller/NewsController.php';
     $newsController = new NewsController();
     parse_str(file_get_contents("php://input"), $_PUT); // Parse the PUT request
 
@@ -267,10 +403,19 @@ put($baseRoute.'news/edit', function() {
             echo json_encode(['success' => true]);
         } else if (isset($result['errorMessage'])) {
             // Return an error response
-            echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
+            echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);
         } else {
-            // Return validation errors
-            echo json_encode(['success' => false, 'errors' => $result]);
+            if (is_array($result)) {
+                // Sanitize the array of errors
+                $sanitizedErrors = array_map(function($error) {
+                    return htmlspecialchars($error);
+                }, $result);
+
+                echo json_encode(['success' => false, 'errors' => $sanitizedErrors]);
+            } else {
+                // Return a single error response
+                echo json_encode(['success' => false, 'errors' => htmlspecialchars($result)]);
+            }
         }
     } else {
         // Invalid action response
@@ -278,9 +423,8 @@ put($baseRoute.'news/edit', function() {
     }
 });
 
-// Delete news put route
+// Delete news delete route
 delete($baseRoute.'news/delete', function() {
-    require_once 'src/controller/NewsController.php';
     $newsController = new NewsController();
 
     if (isset($_GET['action']) && $_GET['action'] === 'deleteNews') {
@@ -293,10 +437,285 @@ delete($baseRoute.'news/delete', function() {
             echo json_encode(['success' => true]);
         } else {
             // Return an error response
-            echo json_encode(['success' => false, 'errorMessage' => $result['errorMessage']]);
+            echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);
         }
     } else {
         // Invalid action response
         echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
     }
 });
+
+require_once 'src/controller/OpeningHourController.php';
+// Add opening hour post route
+post($baseRoute.'openingHours/add', function() {
+    $openingHourController = new OpeningHourController();
+
+    if (isset($_POST['action']) && $_POST['action'] === 'addOpeningHour') {
+        $openingHourData = [
+            'day' => htmlspecialchars(trim($_POST['day'])),
+            'openingTime' => htmlspecialchars(trim($_POST['openingTime'])),
+            'closingTime' => htmlspecialchars(trim($_POST['closingTime'])),
+            'isCurrent' => htmlspecialchars(trim($_POST['isCurrent']))
+        ];
+
+        $result = $openingHourController->addOpeningHour($openingHourData);
+
+        if (isset($result['success']) && $result['success'] === true) {
+            // Return a success response
+            echo json_encode(['success' => true]);
+        } else if (isset($result['errorMessage'])) {
+            // Return an error response
+            echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);
+        } else {
+            if (is_array($result)) {
+                // Sanitize the array of errors
+                $sanitizedErrors = array_map(function($error) {
+                    return htmlspecialchars($error);
+                }, $result);
+
+                echo json_encode(['success' => false, 'errors' => $sanitizedErrors]);
+            } else {
+                // Return a single error response
+                echo json_encode(['success' => false, 'errors' => htmlspecialchars($result)]);
+            }
+        }
+    } else {
+        // Invalid action response
+        echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
+    }
+});
+
+put($baseRoute.'openingHours/edit', function() {
+    $openingHourController = new OpeningHourController();
+    parse_str(file_get_contents("php://input"), $_PUT); // Parse the PUT request
+
+    if (isset($_PUT['action']) && $_PUT['action'] === 'editOpeningHour') {
+        $openingHourData = [
+            'openingHourId' => htmlspecialchars(trim($_PUT['openingHourId'])),
+            'day' => htmlspecialchars(trim($_PUT['day'])),
+            'openingTime' => htmlspecialchars(trim($_PUT['openingTime'])),
+            'closingTime' => htmlspecialchars(trim($_PUT['closingTime'])),
+            'isCurrent' => htmlspecialchars(trim($_PUT['isCurrent']))
+        ];
+
+        $result = $openingHourController->editOpeningHour($openingHourData);
+
+        if (isset($result['success']) && $result['success'] === true) {
+            // Return a success response
+            echo json_encode(['success' => true]);
+        } else if (isset($result['errorMessage'])) {
+            // Return an error response
+            echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);
+        } else {
+            if (is_array($result)) {
+                // Sanitize the array of errors
+                $sanitizedErrors = array_map(function($error) {
+                    return htmlspecialchars($error);
+                }, $result);
+
+                echo json_encode(['success' => false, 'errors' => $sanitizedErrors]);
+            } else {
+                // Return a single error response
+                echo json_encode(['success' => false, 'errors' => htmlspecialchars($result)]);
+            }
+        }
+    } else {
+        // Invalid action response
+        echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
+    }
+});
+
+// Delete opening hour delete route
+delete($baseRoute.'openingHours/delete', function() {
+    $openingHourController = new OpeningHourController();
+
+    if (isset($_GET['action']) && $_GET['action'] === 'deleteOpeningHour') {
+       $openingHourId = htmlspecialchars(trim($_GET['openingHourId']));
+       
+       $result = $openingHourController->deleteOpeningHour($openingHourId);
+
+       if (isset($result['success']) && $result['success'] === true) {
+           // Return a success response
+           echo json_encode(['success' => true]);
+       } else {
+           // Return an error response
+           echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);
+       }
+    } else {
+        // Invalid action response
+        echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
+    }
+});
+
+// Add movie post route
+post($baseRoute . 'movies/add', function() {
+    require_once 'src/controller/MovieController.php';
+    require_once 'src/controller/GenreController.php';
+    $movieController = new MovieController();
+    $genreController = new GenreController();
+
+    if (isset($_POST['action']) && $_POST['action'] === 'addMovie') {
+        $postGenres = [];
+
+        if (!empty($_POST['genres'])) {
+            $genresArray = explode(',', $_POST['genres']);
+            foreach ($genresArray as $genre) {
+                $postGenres[] = htmlspecialchars(trim($genre));
+            }
+        }
+                $movieData = [
+            'title' => htmlspecialchars(trim($_POST['title'])),
+            'releaseDate' => htmlspecialchars(trim($_POST['releaseDate'])),
+            'duration' => htmlspecialchars(trim($_POST['duration'])),
+            'language' => htmlspecialchars(trim($_POST['language'])),
+            'description' => htmlspecialchars(trim($_POST['description'])),
+            'posterURL' => htmlspecialchars(trim($_POST['posterUrl'])),
+            'promoURL' => htmlspecialchars(trim($_POST['promoUrl'])),
+            'trailerURL' => htmlspecialchars(trim($_POST['trailerUrl'])),
+            'rating' => htmlspecialchars(trim($_POST['rating'])),
+            'selectedGenres' => array_map('intval',  $postGenres)
+        ];
+        $result = $movieController->addMovie($movieData);
+
+        // If the movie was added successfully
+        if (isset($result['success']) && $result['success'] === true) {
+            echo json_encode(['success' => true]);
+        } else if (isset($result['errorMessage'])) {
+            // Return an error response if movie adding failed
+            echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);
+        } else {
+            // Handle any errors from the `addMovie` method
+            if (is_array($result)) {
+                // Sanitize the array of errors
+                $sanitizedErrors = array_map(function($error) {
+                    return htmlspecialchars($error);
+                }, $result);
+
+                echo json_encode(['success' => false, 'errors' => $sanitizedErrors]);
+            } else {
+                // Return a single error response
+                echo json_encode(['success' => false, 'errors' => htmlspecialchars($result)]);
+            }
+        }
+    } else {
+        // Invalid action response
+        echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
+    }
+});
+
+put($baseRoute . 'movies/edit', function() {
+    require_once 'src/controller/MovieController.php';
+    parse_str(file_get_contents("php://input"), $_PUT); // Parse the PUT request
+    $movieController = new MovieController();
+
+    if (isset($_PUT['action']) && $_PUT['action'] === 'editMovie') {
+        $putGenres = [];
+
+        // Parse and sanitize genres
+        if (!empty($_PUT['genres'])) {
+            $genresArray = explode(',', $_PUT['genres']); // Split genres string into an array
+            foreach ($genresArray as $genre) {
+                $putGenres[] = htmlspecialchars(trim($genre)); // Sanitize each genre
+            }
+        }
+
+        $movieData = [
+            'title' => htmlspecialchars(trim($_PUT['title'])),
+            'releaseDate' => htmlspecialchars(trim($_PUT['releaseDate'])),
+            'duration' => htmlspecialchars(trim($_PUT['duration'])),
+            'language' => htmlspecialchars(trim($_PUT['language'])),
+            'description' => htmlspecialchars(trim($_PUT['description'])),
+            'posterURL' => htmlspecialchars(trim($_PUT['posterURL'])),
+            'promoURL' => htmlspecialchars(trim($_PUT['promoURL'])),
+            'trailerURL' => htmlspecialchars(trim($_PUT['trailerURL'])),
+            'rating' => htmlspecialchars(trim($_PUT['rating'])),
+            'movieId' => htmlspecialchars(trim($_PUT['movieId'])),
+            'selectedGenres' => array_map('intval', $putGenres) // Convert genres to integers
+        ];
+
+        $result = $movieController->editMovie($movieData);
+
+        if (isset($result['success']) && $result['success'] === true) {
+            // Return a success response
+            echo json_encode(['success' => true]);
+        } else if (isset($result['errorMessage'])) {
+            // Return an error response
+            echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);
+        } else {
+            if (is_array($result)) {
+                // Sanitize the array of errors
+                $sanitizedErrors = array_map(function($error) {
+                    return htmlspecialchars($error);
+                }, $result);
+
+                echo json_encode(['success' => false, 'errors' => $sanitizedErrors]);
+            } else {
+                // Return a single error response
+                echo json_encode(['success' => false, 'errors' => htmlspecialchars($result)]);
+            }
+        }
+    } else {
+        // Invalid action response
+        echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
+    }
+});
+
+// Archive movie route
+put($baseRoute . 'movies/archive', function() {
+    require_once 'src/controller/MovieController.php';
+    $movieController = new MovieController();
+    parse_str(file_get_contents("php://input"), $_PUT); // Parse the PUT request
+
+
+    if (isset($_PUT['movieId'])) {
+        $movieId = htmlspecialchars(trim($_PUT['movieId']));
+
+        $result = $movieController->archiveMovie($movieId);
+
+        if (isset($result['success']) && $result['success'] === true) {
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);
+        }
+    } else {
+        echo json_encode(['success' => false, 'errorMessage' => 'Invalid movie ID.' . $_PUT['movieId']]);
+    }
+});
+
+// Post route for image upload
+post($baseRoute.'upload-image', function() {
+    require_once 'src/controller/ImageUploadController.php';
+    $imageUploadController = new ImageUploadController();
+    $file = $_FILES['file'];
+    $result = $imageUploadController->uploadImage($file);
+
+    if (isset($result['successMessage'])) {
+        echo json_encode(['success' => $result['successMessage']]);
+    } else {
+        echo json_encode(['failure' => $result['errorMessage']]);
+    }
+});
+
+// Archive movie route
+put($baseRoute . 'movies/restore', function() {
+    require_once 'src/controller/MovieController.php';
+    $movieController = new MovieController();
+    parse_str(file_get_contents("php://input"), $_PUT); // Parse the PUT request
+
+
+    if (isset($_PUT['movieId'])) {
+        $movieId = htmlspecialchars(trim($_PUT['movieId']));
+
+        $result = $movieController->restoreMovie($movieId);
+
+        if (isset($result['success']) && $result['success'] === true) {
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);
+        }
+    } else {
+        echo json_encode(['success' => false, 'errorMessage' => 'Invalid movie ID.' . $_PUT['movieId']]);
+    }
+});
+
+

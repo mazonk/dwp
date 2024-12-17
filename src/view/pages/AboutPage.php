@@ -1,7 +1,7 @@
-<?php
-require_once 'session_config.php';
-include_once 'src/controller/CompanyInfoController.php';
-include_once 'src/controller/VenueController.php';
+<?php require_once 'session_config.php';
+require_once 'src/controller/CompanyInfoController.php';
+require_once 'src/controller/VenueController.php';
+require_once 'src/controller/OpeningHourController.php';
 
 $companyInfoController = new CompanyInfoController();
 $companyInfo = $companyInfoController->getCompanyInfo();
@@ -69,9 +69,8 @@ $selectedVenue = $venueController->getSelectedVenue();
                             <h4 class="text-[1.125rem] font-bold leading-tight">Opening Hours</h4>
                             <div class="flex flex-col gap-[.75rem]">
                                 <?php
-                                include_once 'src/controller/OpeningHourController.php';
                                 $openingHourController = new OpeningHourController();
-                                $openingHours = $openingHourController->getOpeningHoursById($_SESSION['selectedVenueId']);
+                                $openingHours = $openingHourController->getCurrentOpeningHours();
 
                                 if(isset($openingHours['errorMessage'])) {
                                 echo "<div class='text-[.875rem] text-textNormal leading-snug'>" . htmlspecialchars($openingHours['errorMessage']) . "</div>";
