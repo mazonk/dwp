@@ -206,12 +206,6 @@ unset($_SESSION['addressFormData']);
                                     <input type="checkbox" name="terms" required class="mr-2"> <a class="text-red-500">*</a>&nbsp;I agree with the terms and conditions
                                 </label>
                             </div>
-
-                            <div class="border border-borderLight mb-2"><?php include "captcha.php"; ?></div>
-                            <input type="text" name="captcha" id="captcha" placeholder="Enter CAPTCHA" required="true" class="mb-2 h-[36px] w-full py-[.5rem] px-[.875rem] bg-bgSemiDark text-[.875rem] text-textNormal leading-snug border-[1px] border-borderDark rounded-[6px] outline-none ease-in-out duration-[.15s] focus:border-textNormal">
-                            <?php if (isset($errors['captcha'])): ?>
-                                <p class="text-red-500 text-xs mb-[.5rem]"><?= htmlspecialchars($errors['captcha']) ?></p>
-                            <?php endif; ?>
                             <button id="submitButton" type="submit" class="w-full py-1 border border-primary bg-bgDark hover:bg-bgSemiDark text-white rounded-lg transition duration-200 flex items-center justify-center">
                                 Pay with
                                 <img src="<?= htmlspecialchars($_SESSION['baseRoute']); ?>src/assets/stripe-logo.png" alt="Stripe" class="mx-2 mt-1 w-12">
