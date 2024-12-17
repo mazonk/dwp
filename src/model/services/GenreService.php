@@ -35,13 +35,15 @@ class GenreService {
     }
 
     public function addGenresToMovie(int $movieId, array $genreIds): array {
-            try {
-                $variable = $this->genreRepository->addGenresToMovie($movieId, $genreIds);
-                error_log($variable);
-                return ['success' => true];
-            } catch (Exception $e) {
-                error_log($e->getMessage());
-                return ['success' => false, 'message' => $e->getMessage()];
+        try {
+            $wasRemoved = $this->genreRepository->removeGenresForMovieId($movieId);
+            if (!$wasRemoved) {
+                return ['success' => false, 'message' => "No genres removed for this movie"];
             }
+            $this->genreRepository->addGenresToMovie($movieId, $genreIds);
+            return ['success' => true];
+        } catch (Exception $e) {
+            return ['success' => false, 'message' => $e->getMessage()];
+        }
     }
 }

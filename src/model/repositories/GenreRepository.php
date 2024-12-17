@@ -2,6 +2,10 @@
 
 class GenreRepository
 {
+
+    public function __construct() {
+    }
+
     private function getdb(): PDO
     {
         require_once 'src/model/database/dbcon/DatabaseConnection.php';
@@ -21,6 +25,17 @@ class GenreRepository
             throw new PDOException("Unable to fetch genres!");
         }
         return $result;
+    }
+
+    public function removeGenresForMovieId(int $movieId): bool {
+        $db = $this->getdb();
+        $query = $db->prepare("DELETE FROM MovieGenre WHERE movieId = :movieId");
+        try {
+            $wasRemoved = $query->execute(array(":movieId" => $movieId));
+            return $wasRemoved;
+        } catch (PDOException $e) {
+            throw new PDOException("Unable to remove genres!");
+        }
     }
 
     public function getAllGenres(): array

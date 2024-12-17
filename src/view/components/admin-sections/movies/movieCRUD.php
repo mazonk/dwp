@@ -496,13 +496,13 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
             promoImageNameDisplay.textContent = movie.promoURL;
             editTrailerUrlInput.value = movie.trailerURL;
             editRatingInput.value = movie.rating;
-            genres: movie.genres.forEach(genre => {
+            genres = movie.genres.forEach(genre => {
                 const checkbox = document.getElementById(`editGenre-${genre}`);
                 if (checkbox) {
                     checkbox.checked = true;
                 }
-            }),
-                editMovieIdInput.value = movie.id;
+            });
+                editMovieIdInput.value = movie.movieId;
             editMovieModal.classList.remove('hidden');
         };
 
@@ -548,6 +548,7 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
                 movieId: editMovieIdInput.value,
                 genres: selectedEditGenres
             };
+            console.log(editMovieData);
 
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             xhr.onreadystatechange = function() {

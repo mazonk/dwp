@@ -109,7 +109,7 @@ class MovieRepository {
         $query = $this->db->prepare("UPDATE Movie SET title = :title, description = :description, duration = :duration, language = :language, releaseDate = :releaseDate, posterURL = :posterURL, promoURL = :promoURL, trailerURL = :trailerURL, rating = :rating WHERE movieId = :movieId");
         try {
             $query->execute(array(":title" => $movieData['title'],":description"=> $movieData['description'], ":duration" => $movieData['duration'], ":language" => $movieData['language'], ":releaseDate" => $movieData['releaseDate'], ":posterURL" => $movieData['posterURL'], ":promoURL" => $movieData['promoURL'], ":trailerURL" => $movieData['trailerURL'], ":rating" => $movieData['rating'] , ":movieId" => $movieData['movieId']));
-            return $this->db->lastInsertId();
+            return intval($movieData['movieId']);
         } catch (PDOException $e) {
             throw new PDOException("Unable to edit movie!");
         }

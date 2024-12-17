@@ -145,6 +145,10 @@ class MovieService {
                 $this->db->beginTransaction();
                 $result = $this->movieRepository->editMovie($movieData);
                 $resultResult = $this->genreService->addGenresToMovie($result, $movieData['selectedGenres']);
+                if (!$resultResult['success']) {
+                    $this->db->rollBack();
+                    return ['error' => true, 'message' => 'Couldnt add genres to movie'];
+                }
                 $this->db->commit();
                 return ['success' => true];
             } catch (Exception $e) {
