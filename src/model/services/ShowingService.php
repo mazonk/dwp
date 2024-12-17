@@ -42,6 +42,21 @@ class ShowingService {
         }
     }
 
+    public function getUnavailableTimeslotsForMovie(int $venueId, int $movieId, string $showingDate): array {
+        try {
+            $result = $this->showingRepository->getUnavailableTimeslotsForMovie($venueId, $movieId, $showingDate);
+            $unavailableTimeslots = [];
+            foreach ($result as $showing) {
+                $unavailableTimeslots[] = [
+                    'showingTime' => $showing['showingTime']
+                ];
+            }
+            return $unavailableTimeslots;
+        } catch (Exception $e) {
+            return ['error' => true,'message' => $e->getMessage()];
+        }
+    }
+
     public function getAllShowingsForMovie(int $movieId, int $selectedVenueId): array {
         try {
             $result = $this->showingRepository->getShowingsForMovie($movieId, $selectedVenueId);
