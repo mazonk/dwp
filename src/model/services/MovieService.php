@@ -175,9 +175,9 @@ class MovieService {
     }
 
     private function validateFormInputs(array $movieData, array &$errors): void {
-        $regex = "/^[a-zA-Z0-9áéíóöúüűæøåÆØÅ\s\-\.,;:'\"!?]+$/";
-
-    // Perform checks
+    $regex = "/^[a-zA-Z0-9áéíóöúüűæøåÆØÅ\s\-\.,;:\'\"’!?]+$/u";
+    
+        // Perform checks
     if (empty($movieData['title']) || 
         empty($movieData['releaseDate']) || 
         empty($movieData['duration']) || 
