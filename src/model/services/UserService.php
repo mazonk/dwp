@@ -65,6 +65,10 @@ class UserService {
         try {
             $errors = [];
             $this->validateProfileInfoInputs($newProfileInfo, $errors);
+            $checkUser = $this->getUserByEmail($newProfileInfo['email']);
+            if (!is_array($checkUser) && $checkUser->getId() != $userId) { //if we found a user!
+                $errors['email'] = "This email is already in use.";
+            }
             if (count($errors) > 0) {
                 return ["error"=> true, "message"=> $errors];
             }
