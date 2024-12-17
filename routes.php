@@ -547,12 +547,23 @@ delete($baseRoute.'openingHours/delete', function() {
     }
 });
 
-//Add movie post route
-post($baseRoute.'movies/add', function() {
+// Add movie post route
+post($baseRoute . 'movies/add', function() {
     require_once 'src/controller/MovieController.php';
+    require_once 'src/controller/GenreController.php';
     $movieController = new MovieController();
+    $genreController = new GenreController();
+
     if (isset($_POST['action']) && $_POST['action'] === 'addMovie') {
-        $movieData = [
+        $postGenres = [];
+
+        if (!empty($_POST['genres'])) {
+            $genresArray = explode(',', $_POST['genres']);
+            foreach ($genresArray as $genre) {
+                $postGenres[] = htmlspecialchars(trim($genre));
+            }
+        }
+                $movieData = [
             'title' => htmlspecialchars(trim($_POST['title'])),
             'releaseDate' => htmlspecialchars(trim($_POST['releaseDate'])),
             'duration' => htmlspecialchars(trim($_POST['duration'])),
@@ -561,18 +572,19 @@ post($baseRoute.'movies/add', function() {
             'posterURL' => htmlspecialchars(trim($_POST['posterUrl'])),
             'promoURL' => htmlspecialchars(trim($_POST['promoUrl'])),
             'trailerURL' => htmlspecialchars(trim($_POST['trailerUrl'])),
-            'rating' => htmlspecialchars(trim($_POST['rating']))
+            'rating' => htmlspecialchars(trim($_POST['rating'])),
+            'selectedGenres' => array_map('intval',  $postGenres)
         ];
-
         $result = $movieController->addMovie($movieData);
 
+        // If the movie was added successfully
         if (isset($result['success']) && $result['success'] === true) {
-            // Return a success response
             echo json_encode(['success' => true]);
         } else if (isset($result['errorMessage'])) {
-            // Return an error response
+            // Return an error response if movie adding failed
             echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);
         } else {
+            // Handle any errors from the `addMovie` method
             if (is_array($result)) {
                 // Sanitize the array of errors
                 $sanitizedErrors = array_map(function($error) {
@@ -591,24 +603,34 @@ post($baseRoute.'movies/add', function() {
     }
 });
 
-// Edit movie route
 put($baseRoute . 'movies/edit', function() {
     require_once 'src/controller/MovieController.php';
-    $movieController = new MovieController();
     parse_str(file_get_contents("php://input"), $_PUT); // Parse the PUT request
+    $movieController = new MovieController();
 
     if (isset($_PUT['action']) && $_PUT['action'] === 'editMovie') {
+        $putGenres = [];
+
+        // Parse and sanitize genres
+        if (!empty($_PUT['genres'])) {
+            $genresArray = explode(',', $_PUT['genres']); // Split genres string into an array
+            foreach ($genresArray as $genre) {
+                $putGenres[] = htmlspecialchars(trim($genre)); // Sanitize each genre
+            }
+        }
+
         $movieData = [
             'title' => htmlspecialchars(trim($_PUT['title'])),
             'releaseDate' => htmlspecialchars(trim($_PUT['releaseDate'])),
-            'duration' => htmlspecialchars($_PUT['duration']),
+            'duration' => htmlspecialchars(trim($_PUT['duration'])),
             'language' => htmlspecialchars(trim($_PUT['language'])),
             'description' => htmlspecialchars(trim($_PUT['description'])),
             'posterURL' => htmlspecialchars(trim($_PUT['posterURL'])),
             'promoURL' => htmlspecialchars(trim($_PUT['promoURL'])),
             'trailerURL' => htmlspecialchars(trim($_PUT['trailerURL'])),
-            'rating' => htmlspecialchars($_PUT['rating']),
-            'movieId' => htmlspecialchars($_PUT['movieId'])
+            'rating' => htmlspecialchars(trim($_PUT['rating'])),
+            'movieId' => htmlspecialchars(trim($_PUT['movieId'])),
+            'selectedGenres' => array_map('intval', $putGenres) // Convert genres to integers
         ];
 
         $result = $movieController->editMovie($movieData);
@@ -631,29 +653,6 @@ put($baseRoute . 'movies/edit', function() {
                 // Return a single error response
                 echo json_encode(['success' => false, 'errors' => htmlspecialchars($result)]);
             }
-        }
-    } else {
-        // Invalid action response
-        echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
-    }
-});
-
-// Delete movie route
-delete($baseRoute . 'movies/delete', function() {
-    require_once 'src/controller/MovieController.php';
-    $movieController = new MovieController();
-
-    if (isset($_GET['action']) && $_GET['action'] === 'deleteMovie') {
-        $movieId = htmlspecialchars(trim($_GET['movieId']));
-
-        $result = $movieController->deleteMovie($movieId);
-
-        if (isset($result['success']) && $result['success'] === true) {
-            // Return a success response
-            echo json_encode(['success' => "true"]);
-        } else {
-            // Return an error response
-            echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);
         }
     } else {
         // Invalid action response

@@ -3,13 +3,23 @@ include_once "src/model/entity/Movie.php";
 include_once "src/model/entity/Actor.php";
 include_once "src/model/entity/Director.php";
 include_once "src/model/repositories/MovieRepository.php";
+include_once "src/model/services/GenreService.php";
 
 class MovieService {
-
     private MovieRepository $movieRepository;
+    private GenreService $genreService;
+    private PDO $db;
+     
     public function __construct() {
-        $this->movieRepository = new MovieRepository();
+        $this->db = $this->getdb();
+        $this->movieRepository = new MovieRepository($this->db);
+        $this->genreService = new GenreService();
     }
+
+    private function getdb() {
+        require_once 'src/model/database/dbcon/DatabaseConnection.php';
+        return DatabaseConnection::getInstance(); // singleton
+      }
 
     public function getAllMovies(): array {
         try {
@@ -111,12 +121,15 @@ class MovieService {
     public function addMovie(array $movieData): array {
         $errors = [];
         $this->validateFormInputs($movieData, $errors);
-
         if (count($errors) == 0) {
             try {
-                $this->movieRepository->addMovie($movieData);
+                $this->db->beginTransaction();
+                $result = $this->movieRepository->addMovie($movieData);
+                $resultResult = $this->genreService->addGenresToMovie($result, $movieData['selectedGenres']);
+                $this->db->commit();
                 return ['success' => true];
             } catch (Exception $e) {
+                $this->db->rollBack();
                 return ['error' => true, 'message' => $e->getMessage()];
             }
         } else {
@@ -127,25 +140,23 @@ class MovieService {
     public function editMovie(array $movieData): array {
         $errors = [];
         $this->validateFormInputs($movieData, $errors);
-
         if (count($errors) == 0) {
             try {
-                $this->movieRepository->editMovie($movieData);
+                $this->db->beginTransaction();
+                $result = $this->movieRepository->editMovie($movieData);
+                $resultResult = $this->genreService->addGenresToMovie($result, $movieData['selectedGenres']);
+                if (!$resultResult['success']) {
+                    $this->db->rollBack();
+                    return ['error' => true, 'message' => 'Couldnt add genres to movie'];
+                }
+                $this->db->commit();
                 return ['success' => true];
             } catch (Exception $e) {
+                $this->db->rollBack();
                 return ['error' => true, 'message' => $e->getMessage()];
             }
         } else {
             return $errors;
-        }
-    }
-
-    public function deleteMovie(int $movieId): array {
-        try {
-            $this->movieRepository->deleteMovie($movieId);
-            return ['success' => true];
-        } catch (Exception $e) {
-            return ['error' => true, 'message' => $e->getMessage()];
         }
     }
 
@@ -167,28 +178,10 @@ class MovieService {
         }
     }
 
-    public function getAllGenres(): array {
-        try {
-            $result = $this->movieRepository->getAllGenres();
-            return $result;
-        } catch (Exception $e) {
-            return ['error' => true, 'message' => $e->getMessage()];
-        }
-    }
-
-    public function getAllGenresByMovieId(int $movieId): array {
-        try {
-            $result = $this->movieRepository->getAllGenresByMovieId($movieId);
-            return $result;
-        } catch (Exception $e) {
-            return ['error' => true, 'message' => $e->getMessage()];
-        }
-    }
-
     private function validateFormInputs(array $movieData, array &$errors): void {
-        $regex = "/^[a-zA-Z0-9áéíóöúüűæøåÆØÅ\s\-\.,;:'\"!?]+$/";
-
-    // Perform checks
+    $regex = "/^[a-zA-Z0-9áéíóöúüűæøåÆØÅ\s\-\.,;:\'\"’!?]+$/u";
+    
+        // Perform checks
     if (empty($movieData['title']) || 
         empty($movieData['releaseDate']) || 
         empty($movieData['duration']) || 

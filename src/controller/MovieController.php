@@ -1,11 +1,14 @@
 <?php
 include_once "src/model/services/MovieService.php";
+include_once "src/model/services/GenreService.php";
 
 class MovieController {
     private MovieService $movieService;
+    private GenreService $genreService;
 
     public function __construct() {
         $this->movieService = new MovieService();
+        $this->genreService = new GenreService();
     }
 
     public function getAllMovies(): array {
@@ -15,7 +18,6 @@ class MovieController {
         if (isset($movies['error']) && $movies['error']) {
             return ['errorMessage' => $movies['message']];
         }
-        
         return $movies;
     }
 
@@ -28,9 +30,9 @@ class MovieController {
         }
         return $movies;
     }
+
     public function isArchived(int $movieId): bool {
         $activeMovies = $this->getAllActiveMovies();
-    
         // Check if the result contains an error message
         if (isset($activeMovies['errorMessage'])) {
             // Handle the error case appropriately here
@@ -46,7 +48,6 @@ class MovieController {
 
     public function getMoviesWithShowings(): array {
         $movies = $this->movieService->getMoviesWithShowings();
-
         // If the service returns an error, pass it to the frontend
         if (isset($movies['error']) && $movies['error']) {
             return ['errorMessage' => $movies['message']];
@@ -56,12 +57,10 @@ class MovieController {
 
     public function getMovieById(int $movieId): array|Movie {
         $movie = $this->movieService->getMovieById(htmlspecialchars($movieId));
-        
         // If the service returns an error, pass it to the frontend
         if (is_array($movie) && isset($movie['error']) && $movie['error']) {
             return ['errorMessage' => $movie['message']];
         }
-        
         return $movie;
     }
 
@@ -91,14 +90,6 @@ class MovieController {
         }
     }
 
-    public function deleteMovie(int $movieId): array {
-        $result = $this->movieService->deleteMovie(htmlspecialchars($movieId));
-        if (isset($result['error']) && $result['error']) {
-            return ['errorMessage' => $result['message']];
-        }
-        return ['success' => true];
-    }
-
     public function archiveMovie(int $movieId): array {
         $result = $this->movieService->archiveMovie(htmlspecialchars($movieId));
         if (isset($result['error']) && $result['error']) {
@@ -113,21 +104,5 @@ class MovieController {
             return ['errorMessage' => $result['message']];
         }
         return ['success' => true];
-    }
-
-    public function getAllGenres(): array {
-        $genres = $this->movieService->getAllGenres();
-        if (isset($genres['error']) && $genres['error']) {
-            return ['errorMessage' => $genres['message']];
-        }
-        return $genres;
-    }
-
-    public function getAllGenresByMovieId(int $movieId): array {
-        $genres = $this->movieService->getAllGenresByMovieId(htmlspecialchars($movieId));
-        if (isset($genres['error']) && $genres['error']) {
-            return ['errorMessage' => $genres['message']];
-        }
-        return $genres;
     }
 }
