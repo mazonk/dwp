@@ -56,6 +56,14 @@ class PaymentService {
     }
   }
 
+  public function getPaymentIdByBookingId(int $bookingId): int|array {
+    try {
+      return $this->paymentRepository->getPaymentIdByBookingId($bookingId);
+    } catch (Exception $e) {
+      return ["error" => true, "message" => $e->getMessage()];
+    }
+  }
+
   public function getIdsByCheckoutSessionId(string $checkoutSessionId): array {
     try {
       return $this->paymentRepository->getIdsByCheckoutSessionId($checkoutSessionId);

@@ -8,6 +8,15 @@ class PaymentController {
     $this->paymentService = new PaymentService();
   }
 
+  public function getPaymentIdByBookingId(int $bookingId): int|array {
+    $paymentId = $this->paymentService->getPaymentIdByBookingId($bookingId);
+
+    if (isset($paymentId['error']) && $paymentId['error']) {
+      return ['errorMessage' => $paymentId['message']];
+    }
+    return $paymentId;
+  }
+
   public function getIdsByCheckoutSessionId(string $checkoutSessionId): array {
     $paymentIds = $this->paymentService->getIdsByCheckoutSessionId($checkoutSessionId);
 

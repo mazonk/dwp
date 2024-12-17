@@ -21,6 +21,21 @@ class PaymentRepository {
     }
   }
 
+  public function getPaymentIdByBookingId(int $bookingId): int {
+    $query = $this->db->prepare('SELECT paymentId FROM Payment WHERE bookingId = :bookingId');
+    try {
+      $query->execute(array('bookingId' => $bookingId));
+      $result = $query->fetchColumn();
+      if ($result === false) {
+          return 0;
+      } else {
+          return $result;
+      }
+    } catch (PDOException $e) {
+      throw new PDOException('Failed to get payment by booking ID.');
+    }
+  }
+
   public function getIdsByCheckoutSessionId(string $checkoutSessionId): array {
     $query = $this->db->prepare('SELECT paymentId, addressId, bookingId FROM Payment WHERE checkoutSessionId = :checkoutSessionId');
 
