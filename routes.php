@@ -152,6 +152,32 @@ post($baseRoute.'mail', function() {
     }
 });
 
+// Post route for invoice creator 
+post($baseRoute.'invoice', function() {
+    if (isset($_POST['action']) && $_POST['action'] === 'sendInvoice') {
+        require_once 'src/controller/InvoiceController.php';
+        require_once 'src/controller/PaymentController.php';
+        $paymentController = new PaymentController();
+        $invoiceController = new InvoiceController();
+
+        $bookingId = htmlspecialchars(trim($_POST['bookingId']));
+
+        $paymentId = $paymentController->getPaymentIdByBookingId($bookingId);
+
+        if (isset($paymentId['errorMessage']) && $paymentId['errorMessage']) {
+            echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($paymentId['errorMessage'])]);
+        } else {
+            $invoice = $invoiceController->sendInvoice($paymentId);
+    
+            if (isset($invoice['errorMessage']) && $invoice['errorMessage']) {
+                echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($invoice['errorMessage'])]);
+            } else {
+                echo json_encode(['success' => true, 'successMessage' => htmlspecialchars($invoice['successMessage'])]);
+            }
+        }
+    }
+});
+
 // Query string routes
 get($baseRoute.'movies/$id', 'src/view/pages/MovieDetailsPage.php');
 get($baseRoute.'news/$id', 'src/view/pages/NewsPage.php');
