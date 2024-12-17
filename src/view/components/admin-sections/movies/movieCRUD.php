@@ -130,30 +130,35 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
                     <!-- Title Field -->
                     <label for="editTitleInput" class="block text-sm font-medium text-textLight">Title</label>
                     <input type="text" id="editTitleInput" name="title" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required>
+                    <p id="errorEditMovieMessageTitle" class="hidden text-red-500 font-semibold"></p>
                 </div>
 
                 <!-- Description Field -->
                 <div class="mb-4">
                     <label for="editDescriptionInput" class="block text-sm font-medium text-textLight">Description</label>
                     <textarea id="editDescriptionInput" name="description" rows="3" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out"></textarea>
+                    <p id="errorEditMovieMessageDescription" class="hidden text-red-500  font-semibold"></p>
                 </div>
 
                 <!-- Duration Field -->
                 <div class="mb-4">
                     <label for="editDurationInput" class="block text-sm font-medium text-textLight">Duration (minutes)</label>
                     <input type="number" id="editDurationInput" name="duration" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">
+                    <p id="errorEditMovieMessageDuration" class="hidden text-red-500  font-semibold"></p>
                 </div>
 
                 <!-- Language Field -->
                 <div class="mb-4">
                     <label for="editLanguageInput" class="block text-sm font-medium text-textLight">Language</label>
                     <input type="text" id="editLanguageInput" name="language" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">
+                    <p id="errorEditMovieMessageLanguage" class="hidden text-red-500  font-semibold"></p>
                 </div>
 
                 <!-- Release Date Field -->
                 <div class="mb-4">
                     <label for="editReleaseDateInput" class="block text-sm font-medium text-textLight">Release Date</label>
                     <input type="date" id="editReleaseDateInput" name="releaseDate" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">
+                    <p id="errorEditMovieMessageReleaseDate" class="hidden text-red-500  font-semibold"></p>
                 </div>
 
                 <!-- Poster URL Field -->
@@ -161,6 +166,7 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
                     <label for="editPosterUrlInput" class="block text-sm font-medium text-textLight">Upload Poster Image</label>
                     <input type="file" name="image" id="editPosterUrlInput" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" accept="image/*">
                     <div id="posterImageNameDisplay" class="mt-2 text-sm text-textLight"></div>
+                    <p id="errorEditMovieMessagePosterUrl" class="hidden text-red-500  font-semibold"></p>
                 </div>
 
                 <!-- Promo URL Field -->
@@ -168,18 +174,21 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
                     <label for="editPromoUrlInput" class="block text-sm font-medium text-textLight">Upload Promo Image</label>
                     <input type="file" name="image" id="editPromoUrlInput" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" accept="image/*">
                     <div id="promoImageNameDisplay" class="mt-2 text-sm text-textLight"></div>
+                    <p id="errorEditMovieMessagePromoUrl" class="hidden text-red-500  font-semibold"></p>
                 </div>
 
                 <!-- Trailer URL Field -->
                 <div class="mb-4">
                     <label for="editTrailerUrlInput" class="block text-sm font-medium text-textLight">Trailer URL</label>
                     <input type="text" id="editTrailerUrlInput" name="trailerURL" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">
+                    <p id="errorEditMovieMessageTrailerUrl" class="hidden text-red-500 font-semibold"></p>
                 </div>
 
                 <!-- Rating Field -->
                 <div class="mb-4">
                     <label for="editRatingInput" class="block text-sm font-medium text-textLight">Rating</label>
                     <input type="number" step="0.01" max="10" min="0" id="editRatingInput" name="rating" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">
+                    <p id="errorEditMovieMessageRating" class="hidden text-red-500  font-semibold"></p>
                 </div>
                 <!-- Genres Field -->
                 <div class="mb-4">
@@ -197,6 +206,8 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
                             </div>
                         <?php endforeach; ?>
                     </div>
+
+                    <p id="errorEditMovieMessageGenres" class="hidden text-red-500  font-semibold"></p>
 
                     <!-- Submit and Cancel Buttons -->
                     <div class="flex justify-end">
