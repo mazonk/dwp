@@ -1,5 +1,5 @@
 <?php 
-include_once "src/model/database/dbcon/DatabaseConnection.php";
+require_once "src/model/database/dbcon/DatabaseConnection.php";
 
 class BookingRepository {
     private function getdb(): PDO {

@@ -1,5 +1,4 @@
-<?php 
-require_once 'session_config.php';
+<?php  require_once 'session_config.php';
 
 if (isLoggedIn()) {
     header("Location: " . $_SESSION['baseRoute'] . "home");

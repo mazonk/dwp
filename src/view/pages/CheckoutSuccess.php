@@ -1,5 +1,4 @@
-<?php
-require_once 'session_config.php';
+<?php  require_once 'session_config.php';
 
 // Get booking details from session
 if (!isset($_SESSION['activeBooking']) && !isset($_SESSION['checkoutSession'])) {

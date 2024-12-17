@@ -1,5 +1,5 @@
-<?php
-include_once "src/model/services/VenueService.php";
+<?php     require_once 'session_config.php';
+require_once "src/model/services/VenueService.php";
 
 class VenueController {
   private VenueService $venueService;
@@ -38,7 +38,6 @@ class VenueController {
     if (is_array($venue) && isset($venue['error']) && $venue['error']) {
         return ['errorMessage'=> $venue['message']];
     }
-    require_once 'session_config.php';
     $_SESSION['selectedVenueName'] = $venue->getName();
     return $venue;
   }
@@ -121,4 +120,3 @@ class VenueController {
   }
 
 }
-?>

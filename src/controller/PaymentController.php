@@ -1,5 +1,5 @@
 <?php
-include_once "src/model/services/PaymentService.php";
+require_once "src/model/services/PaymentService.php";
 
 class PaymentController {
   private PaymentService $paymentService;

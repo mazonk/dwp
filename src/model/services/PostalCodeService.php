@@ -1,5 +1,5 @@
 <?php
-include_once "src/model/repositories/PostalCodeRepository.php";
+require_once "src/model/repositories/PostalCodeRepository.php";
 
 class PostalCodeService {
   private PostalCodeRepository $postalCodeRepository;

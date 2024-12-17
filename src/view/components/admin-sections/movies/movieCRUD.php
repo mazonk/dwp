@@ -1,6 +1,6 @@
 <?php
-include_once "src/controller/MovieController.php";
-include_once "src/controller/GenreController.php";
+require_once "src/controller/GenreController.php";
+require_once "src/controller/MovieController.php";
 include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
 ?>
 

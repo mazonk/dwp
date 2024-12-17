@@ -1,8 +1,9 @@
 <?php
-include_once "src/model/entity/Payment.php";
-include_once "src/model/repositories/PaymentRepository.php";
-include_once "src/model/services/AddressService.php";
-include_once "src/model/services/BookingService.php";
+require_once 'src/model/database/dbcon/DatabaseConnection.php';
+require_once "src/model/entity/Payment.php";
+require_once "src/model/repositories/PaymentRepository.php";
+require_once "src/model/services/AddressService.php";
+require_once "src/model/services/BookingService.php";
 
 class PaymentService {
   private PDO $db;
@@ -18,7 +19,6 @@ class PaymentService {
   }
 
   private function getdb() {
-    require_once 'src/model/database/dbcon/DatabaseConnection.php';
     return DatabaseConnection::getInstance(); // singleton
   }
 

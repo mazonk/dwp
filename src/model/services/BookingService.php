@@ -1,9 +1,9 @@
 <?php
-include_once "src/model/entity/Booking.php";
-include_once "src/model/services/UserService.php";
-include_once "src/model/services/TicketService.php";
-include_once "src/model/services/SeatService.php";
-include_once "src/model/repositories/BookingRepository.php";
+require_once "src/model/entity/Booking.php";
+require_once "src/model/services/UserService.php";
+require_once "src/model/services/TicketService.php";
+require_once "src/model/services/SeatService.php";
+require_once "src/model/repositories/BookingRepository.php";
 
 class BookingService {
     private BookingRepository $bookingRepository;

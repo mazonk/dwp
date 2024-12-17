@@ -1,14 +1,11 @@
 <?php
-include_once "src/model/services/MovieService.php";
-include_once "src/model/services/GenreService.php";
+require_once "src/model/services/MovieService.php";
 
 class MovieController {
     private MovieService $movieService;
-    private GenreService $genreService;
 
     public function __construct() {
         $this->movieService = new MovieService();
-        $this->genreService = new GenreService();
     }
 
     public function getAllMovies(): array {

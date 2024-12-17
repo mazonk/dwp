@@ -1,7 +1,7 @@
 <?php 
-include_once "src/model/repositories/UserRepository.php";
-include_once "src/model/services/UserRoleService.php";
-include_once "src/model/entity/User.php";
+require_once "src/model/repositories/UserRepository.php";
+require_once "src/model/services/UserRoleService.php";
+require_once "src/model/entity/User.php";
 
 class UserService {
     private UserRepository $userRepository;

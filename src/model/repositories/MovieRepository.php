@@ -1,4 +1,5 @@
 <?php
+require_once 'src/model/database/dbcon/DatabaseConnection.php';
 class MovieRepository {
     private PDO $db;
 
@@ -34,7 +35,7 @@ class MovieRepository {
 
         return $result;
     }
-
+  
     public function getMoviesWithShowings(): array {
         $query = $this->db->prepare("SELECT * FROM MoviesWithShowings");
         try {
@@ -53,13 +54,12 @@ class MovieRepository {
     public function getActorsByMovieId(int $movieId): array {
         $query = $this->db->prepare("SELECT a.* FROM Actor as a JOIN MovieActor as ma ON a.actorId = ma.actorId WHERE ma.movieId = :movieId");
         try {
-            $query->execute(array(":movieId" => $movieId)  );
+            $query->execute(array(":movieId" => $movieId));
             $result = $query->fetchAll(PDO::FETCH_ASSOC);
             if (empty($result)) {
                 return []; // No actors found for this movie
             }
-        }
-        catch (PDOException $e) {
+        } catch (PDOException $e) {
             throw new PDOException("Unable to fetch actors!");
         }
         return $result;
@@ -78,7 +78,7 @@ class MovieRepository {
         }
         return $result;
     }
-
+  
     public function getMovieById(int $movieId): array {
         $query =$this->db->prepare("SELECT * FROM Movie as m WHERE m.movieId = :movieId");
         try{
@@ -87,8 +87,7 @@ class MovieRepository {
             if (empty($result)) {
                 throw new Exception("No movie found!");
             }
-        }
-        catch (PDOException $e) {
+        } catch (PDOException $e) {
             throw new PDOException("Unable to fetch movie!");
         }
         return $result;
@@ -133,4 +132,3 @@ class MovieRepository {
         }
     }
 }
-

@@ -1,5 +1,5 @@
 <?php
-include_once "src/controller/BookingController.php";
+require_once "src/controller/BookingController.php";
 
 if (isset($_GET['selectedShowing']) && is_numeric($_GET['selectedShowing'])) {
     $showingId = intval($_GET['selectedShowing']);
@@ -53,13 +53,15 @@ if (isset($_GET['selectedShowing']) && is_numeric($_GET['selectedShowing'])) {
                     <td class='border border-gray-300 px-4 py-2 text-center'>{$userName}</td>
                     <td class='border border-gray-300 px-4 py-2 text-center'>{$status}</td>
                     <td class='border border-gray-300 px-4 py-2 text-justify grid grid-cols-3 gap-x-4'>{$ticketDetails}</td>
-                    <td class='border border-gray-300 px-4 py-2 text-center'>
-                        <button data-bookingId='${bookingId}' class='createInvoiceButton bg-primary text-textDark font-semibold py-1 px-2 text-xs border-[1px] border-primary rounded hover:bg-primaryHover hover:border-primaryHover duration-[0.2s] ease-in-out'>
-                            Create Invoice
-                        </button>
-                    </td>
-                  </tr>";
-        }
+                    <td class='border border-gray-300 px-4 py-2 text-center'>";                  
+                    if ($status === 'confirmed') {
+                        echo "<button data-bookingId='{$bookingId}' class='createInvoiceButton bg-primary text-textDark font-semibold py-1 px-2 text-s border-[1px] border-primary rounded hover:bg-primaryHover hover:border-primaryHover duration-[0.2s] ease-in-out'>
+                        Create Invoice
+                        </button>";
+                    }
+                echo "</td>
+                </tr>";
+            }
 
         echo "</tbody>";
         echo "</table>";
@@ -92,8 +94,6 @@ if (isset($_GET['selectedShowing']) && is_numeric($_GET['selectedShowing'])) {
                     // If the request is done and successful
                     if (xhr.readyState === 4 && xhr.status === 200) {
                         let response;
-
-                        console.log(xhr.response);
 
                         try {
                             response = JSON.parse(xhr.response); // Parse the JSON response

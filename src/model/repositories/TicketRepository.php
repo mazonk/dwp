@@ -1,10 +1,10 @@
 <?php
-include_once "src/model/entity/Ticket.php";
-include_once "src/model/entity/Showing.php";
+require_once 'src/model/database/dbcon/DatabaseConnection.php';
+require_once "src/model/entity/Ticket.php";
+require_once "src/model/entity/Showing.php";
 
 class TicketRepository {
     private function getdb(): PDO {
-        require_once 'src/model/database/dbcon/DatabaseConnection.php';
         return DatabaseConnection::getInstance(); // singleton
     }
 

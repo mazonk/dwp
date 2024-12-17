@@ -1,4 +1,3 @@
-<!-- Company Info Display -->
 <?php
     require_once "src/controller/CompanyInfoController.php";
     require_once "src/model/entity/CompanyInfo.php";

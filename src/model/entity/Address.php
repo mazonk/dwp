@@ -1,5 +1,5 @@
 <?php
-include_once "src/model/entity/PostalCode.php";
+require_once "src/model/entity/PostalCode.php";
 class  Address {
   private int $addressId;
   private string $street;
@@ -45,5 +45,3 @@ class  Address {
     $this->postalCode = $postalCode;
   }
 }
-
-?>

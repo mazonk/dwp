@@ -1,7 +1,6 @@
-<?php
-include_once "src/controller/MovieController.php";
+<?php       require_once 'session_config.php';
+require_once "src/controller/MovieController.php";
 include_once "src/view/components/MovieCard.php";
-require_once 'session_config.php';
 
 // Get the current date
 $currentDate = new DateTime();

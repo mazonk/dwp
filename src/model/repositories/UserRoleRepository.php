@@ -1,8 +1,8 @@
 <?php
-include_once "src/model/entity/UserRole.php";
+require_once 'src/model/database/dbcon/DatabaseConnection.php';
+require_once "src/model/entity/UserRole.php";
 class UserRoleRepository {
     private function getdb(): PDO {
-        require_once 'src/model/database/dbcon/DatabaseConnection.php';
         return DatabaseConnection::getInstance(); // singleton
     }
 

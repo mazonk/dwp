@@ -1,9 +1,9 @@
 <?php
-include_once "src/model/entity/Seat.php";
+require_once 'src/model/database/dbcon/DatabaseConnection.php';
+require_once "src/model/entity/Seat.php";
 
 class SeatRepository {
     private function getdb(): PDO {
-        require_once 'src/model/database/dbcon/DatabaseConnection.php';
         return DatabaseConnection::getInstance(); // singleton
     }
 
@@ -44,14 +44,4 @@ class SeatRepository {
             throw new Exception("Unable to fetch seat with ID.");
         }
     }
-
-    // public function selectSeat(int $seatId): void { //TRANSACTION
-    //     $db = $this->getdb();
-    //     $query = $db->prepare("UPDATE Seat SET selected = 1 WHERE seatId = :seatId");
-    //     try {
-    //         $query->execute(array(":seatId" => $seatId));
-    //     } catch (PDOException $e) {
-    //         throw new Exception("Unable to select seat. ");
-    //     }
-    // }
 }

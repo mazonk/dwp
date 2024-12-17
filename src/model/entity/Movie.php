@@ -1,7 +1,6 @@
 <?php
 
-class Movie
-{
+class Movie {
     private int $movieId;
     private string $title;
     private ?string $description; // ? = Nullable field
@@ -141,4 +140,3 @@ class Movie
         $this->directors = $directors;
     }
 }
-?>

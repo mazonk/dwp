@@ -1,5 +1,4 @@
 <?php
-
 require_once 'src/model/entity/Address.php';
 
 class CompanyInfo
@@ -69,4 +68,3 @@ class CompanyInfo
         $this->address = $address;
     }
 }
-
