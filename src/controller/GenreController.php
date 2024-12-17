@@ -18,7 +18,7 @@ class GenreController {
 
     public function addGenresToMovie(int $movieId, array $genreIds) {
         $errors = $this->genreService->addGenresToMovie($movieId, $genreIds);
-        if (isset($errors['error']) && $errors['error']) {
+        if (!isset($errors['error'])) {
             return ['success' => true];
         } else {
             return $errors;

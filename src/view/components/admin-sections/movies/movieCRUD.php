@@ -1,5 +1,6 @@
 <?php
 include_once "src/controller/MovieController.php";
+include_once "src/controller/GenreController.php";
 include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
 ?>
 
@@ -14,8 +15,9 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
     <div id="tab-content" class="grid grid-cols-1 gap-4">
         <?php
         $movieController = new MovieController();
+        $genreController = new GenreController();
         $allMovies = $movieController->getAllMovies();
-        $allGenres = $movieController->getAllGenres();
+        $allGenres = $genreController->getAllGenres();
 
         if (isset($allMovies['errorMessage'])) {
             echo htmlspecialchars($allMovies['errorMessage']);
@@ -100,59 +102,12 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
                             </button>
                         </div>
                         <div id="addGenreCheckboxContainer" class="grid grid-cols-2 gap-4">
-                            <!-- Genre Item -->
-                            <div class="flex items-center gap-2">
-                                <input type="checkbox" id="genre-1" name="genres[]" value="1" class="mr-2">
-                                <label for="genre-1" class="text-[1rem] leading-tight">Action</label>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <input type="checkbox" id="genre-2" name="genres[]" value="2" class="mr-2">
-                                <label for="genre-2" class="text-[1rem] leading-tight">Drama</label>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <input type="checkbox" id="genre-3" name="genres[]" value="3" class="mr-2">
-                                <label for="genre-3" class="text-[1rem] leading-tight">Sci-fi</label>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <input type="checkbox" id="genre-4" name="genres[]" value="4" class="mr-2">
-                                <label for="genre-4" class="text-[1rem] leading-tight">Comedy</label>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <input type="checkbox" id="genre-5" name="genres[]" value="5" class="mr-2">
-                                <label for="genre-5" class="text-[1rem] leading-tight">Horror</label>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <input type="checkbox" id="genre-6" name="genres[]" value="6" class="mr-2">
-                                <label for="genre-6" class="text-[1rem] leading-tight">Fantasy</label>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <input type="checkbox" id="genre-7" name="genres[]" value="7" class="mr-2">
-                                <label for="genre-7" class="text-[1rem] leading-tight">Thriller</label>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <input type="checkbox" id="genre-8" name="genres[]" value="8" class="mr-2">
-                                <label for="genre-8" class="text-[1rem] leading-tight">Animation</label>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <input type="checkbox" id="genre-9" name="genres[]" value="9" class="mr-2">
-                                <label for="genre-9" class="text-[1rem] leading-tight">Mystery</label>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <input type="checkbox" id="genre-10" name="genres[]" value="10" class="mr-2">
-                                <label for="genre-10" class="text-[1rem] leading-tight">Romance</label>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <input type="checkbox" id="genre-11" name="genres[]" value="11" class="mr-2">
-                                <label for="genre-11" class="text-[1rem] leading-tight">Adventure</label>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <input type="checkbox" id="genre-12" name="genres[]" value="12" class="mr-2">
-                                <label for="genre-12" class="text-[1rem] leading-tight">Documentary</label>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <input type="checkbox" id="genre-13" name="genres[]" value="13" class="mr-2">
-                                <label for="genre-13" class="text-[1rem] leading-tight">Musical</label>
-                            </div>
+                            <?php foreach ($allGenres as $genre) : ?>
+                                <div class="flex items-center gap-2">
+                                    <input type="checkbox" id="genre-<?= $genre->getGenreId() ?>" name="genres[]" value="<?= $genre->getGenreId() ?>" class="mr-2">
+                                    <label for="genre-<?= $genre->getGenreId() ?>" class="text-[1rem] leading-tight"><?= $genre->getName() ?></label>
+                                </div>
+                            <?php endforeach; ?>
                         </div>
                     </div> <!-- Submit and Cancel Buttons -->
                     <div class="flex justify-end">
@@ -226,12 +181,28 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
                     <label for="editRatingInput" class="block text-sm font-medium text-textLight">Rating</label>
                     <input type="number" step="0.01" max="10" min="0" id="editRatingInput" name="rating" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out">
                 </div>
+                <!-- Genres Field -->
+                <div class="mb-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="block text-sm font-medium text-textLight mb-2">Genres</label>
+                        <button type="button" id="clearEditGenres" class="text-sm text-red-500 hover:underline">
+                            Clear All
+                        </button>
+                    </div>
+                    <div id="editGenreCheckboxContainer" class="grid grid-cols-2 gap-4">
+                        <?php foreach ($allGenres as $genre) : ?>
+                            <div class="flex items-center gap-2">
+                                <input type="checkbox" id="editGenre-<?= $genre->getGenreId() ?>" name="genres[]" value="<?= $genre->getGenreId() ?>" class="mr-2">
+                                <label for="genre-<?= $genre->getGenreId() ?>" class="text-[1rem] leading-tight"><?= $genre->getName() ?></label>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
 
-                <!-- Submit and Cancel Buttons -->
-                <div class="flex justify-end">
-                    <button type="submit" id="saveEditMovieButton" class="bg-primary text-textDark py-2 px-4 rounded border border-transparent hover:bg-primaryHover duration-[.2s] ease-in-out">Save</button>
-                    <button type="button" id="cancelEditMovieButton" class="text-textLight py-2 px-4 border-[1px] border-white rounded hover:bg-borderDark ml-2 duration-[.2s] ease-in-out">Cancel</button>
-                </div>
+                    <!-- Submit and Cancel Buttons -->
+                    <div class="flex justify-end">
+                        <button type="submit" id="saveEditMovieButton" class="bg-primary text-textDark py-2 px-4 rounded border border-transparent hover:bg-primaryHover duration-[.2s] ease-in-out">Save</button>
+                        <button type="button" id="cancelEditMovieButton" class="text-textLight py-2 px-4 border-[1px] border-white rounded hover:bg-borderDark ml-2 duration-[.2s] ease-in-out">Cancel</button>
+                    </div>
             </form>
         </div>
     </div>
@@ -320,7 +291,7 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
         // Array to hold selected genres
         let selectedGenres = [];
 
-        
+
         // Add event listener to checkboxes
         addGenreCheckboxContainer.addEventListener('change', (event) => {
             if (event.target.type === 'checkbox') {
@@ -334,7 +305,6 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
             const checkboxes = addGenreCheckboxContainer.querySelectorAll('input[type="checkbox"]:checked');
             // Update the array with the values of checked checkboxes
             selectedGenres = Array.from(checkboxes).map(checkbox => checkbox.value);
-            console.log(selectedGenres); // Log the selected genres array
         }
 
         // Clear all selected genres
@@ -345,7 +315,6 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
             checkboxes.forEach(checkbox => (checkbox.checked = false));
             // Clear the selected genres array
             selectedGenres = [];
-            console.log(selectedGenres); // Log the cleared array
         });
 
         // Display the modal
@@ -369,6 +338,7 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
             addPromoUrlInput.value = promoUrl;
             addTrailerUrlInput.value = trailerUrl;
             addRatingInput.value = rating;
+            console.log(selectedGenres);
             selectedGenres.forEach(genre => {
                 const checkbox = addGenreCheckboxContainer.querySelector(`input[value="${genre}"]`);
                 if (checkbox) {
@@ -407,7 +377,7 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
                 promoUrl: promo,
                 trailerUrl: addTrailerUrlInput.value,
                 rating: addRatingInput.value,
-                genres: selectedGenres 
+                genres: selectedGenres,
             }
 
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -415,7 +385,6 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
                 // If the request is done and successful
                 if (xhr.readyState === 4 && xhr.status === 200) {
                     let response
-                    console.log(xhr.response);
                     try {
                         response = JSON.parse(xhr.response); // Parse the JSON response
                     } catch (e) {
@@ -463,7 +432,44 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
         const posterImageNameDisplay = document.getElementById('posterImageNameDisplay');
         const editTrailerUrlInput = document.getElementById('editTrailerUrlInput');
         const editRatingInput = document.getElementById('editRatingInput');
+        const clearEditGenres = document.getElementById('clearEditGenres');
+        const editGenreCheckboxContainer = document.getElementById('editGenreCheckboxContainer');
         const errorEditMovieMessageGeneral = document.getElementById('error-edit-movie-general');
+
+        $genres = $genreController.getAllGenresByMovieId($movieId);
+        if (!isset($genres['error'])) {
+            $encodedGenres = json_encode($genres);
+        } else {
+            $encodedGenres = '[]'; // Default empty array if there’s an error
+        }
+
+        // Array to hold selected genres
+        let selectEditGenres = "<?php echo $encodedGenres; ?>";
+
+        // Add event listener to checkboxes
+        addGenreCheckboxContainer.addEventListener('change', (event) => {
+            if (event.target.type === 'checkbox') {
+                updateSelectedGenres();
+            }
+        });
+
+        // Function to update selected genres array
+        function updateSelectedGenres() {
+            // Get all checkboxes inside the container
+            const checkboxes = addGenreCheckboxContainer.querySelectorAll('input[type="checkbox"]:checked');
+            // Update the array with the values of checked checkboxes
+            selectEditGenres = Array.from(checkboxes).map(checkbox => checkbox.value);
+        }
+
+        // Clear all selected genres
+        clearGenresButton.addEventListener('click', () => {
+            // Get all checkboxes inside the container
+            const checkboxes = addGenreCheckboxContainer.querySelectorAll('input[type="checkbox"]');
+            // Uncheck all checkboxes
+            checkboxes.forEach(checkbox => (checkbox.checked = false));
+            // Clear the selected genres array
+            selectEditGenres = [];
+        });
 
         editPromoUrlInput.addEventListener("change", function(event) {
             const fileName = event.target.files[0]?.name || "No file selected";
@@ -487,7 +493,8 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
             promoImageNameDisplay.textContent = movie.promoURL;
             editTrailerUrlInput.value = movie.trailerURL;
             editRatingInput.value = movie.rating;
-            editMovieIdInput.value = movie.id;
+            genres: selectedEditGenres,
+                editMovieIdInput.value = movie.id;
             editMovieModal.classList.remove('hidden');
         };
 

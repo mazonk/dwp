@@ -77,19 +77,6 @@ class MovieController {
         }
     }
 
-    public function addGenresToMovie(int $movieId, array $genreIds): array {
-        $errors = $this->genreService->addGenresToMovie(htmlspecialchars($movieId), $genreIds);
-        if(count($errors) == 0) {
-            // Check if there are any errors from adding the news
-            if (isset($errors['error']) && $errors['error']) {
-                return ['errorMessage' => $errors['message']];
-            }
-            return ['success' => true];
-        } else {
-            return $errors;
-        }
-    }
-
     public function editMovie(array $movieData): array {
         $errors = $this->movieService->editMovie($movieData);
         if(count($errors) == 0) {
@@ -101,14 +88,6 @@ class MovieController {
         } else {
             return $errors;
         }
-    }
-
-    public function deleteMovie(int $movieId): array {
-        $result = $this->movieService->deleteMovie(htmlspecialchars($movieId));
-        if (isset($result['error']) && $result['error']) {
-            return ['errorMessage' => $result['message']];
-        }
-        return ['success' => true];
     }
 
     public function archiveMovie(int $movieId): array {
@@ -125,21 +104,5 @@ class MovieController {
             return ['errorMessage' => $result['message']];
         }
         return ['success' => true];
-    }
-
-    public function getAllGenres(): array {
-        $genres = $this->movieService->getAllGenres();
-        if (isset($genres['error']) && $genres['error']) {
-            return ['errorMessage' => $genres['message']];
-        }
-        return $genres;
-    }
-
-    public function getAllGenresByMovieId(int $movieId): array {
-        $genres = $this->movieService->getAllGenresByMovieId(htmlspecialchars($movieId));
-        if (isset($genres['error']) && $genres['error']) {
-            return ['errorMessage' => $genres['message']];
-        }
-        return $genres;
     }
 }

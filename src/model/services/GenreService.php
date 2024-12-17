@@ -35,16 +35,13 @@ class GenreService {
     }
 
     public function addGenresToMovie(int $movieId, array $genreIds): array {
-        $errors = [];
-        if (count($errors) == 0) {
             try {
-            $this->genreRepository->addGenresToMovie($movieId, $genreIds);
-            return ['success' => true];
+                $variable = $this->genreRepository->addGenresToMovie($movieId, $genreIds);
+                error_log($variable);
+                return ['success' => true];
             } catch (Exception $e) {
-            return ['error' => true, 'message' => $e->getMessage()];
+                error_log($e->getMessage());
+                return ['success' => false, 'message' => $e->getMessage()];
             }
-        } else {
-         return $errors;    
-        }
     }
 }

@@ -11,7 +11,7 @@ class GenreRepository
     public function getAllGenresByMovieId(int $movieId): array
     {
         $db = $this->getdb();
-        $query = $db->prepare("SELECT g.* FROM genre as g JOIN movieGenre as mg ON g.genreId = mg.genreId WHERE mg.movieId = :movieId");
+        $query = $db->prepare("SELECT g.* FROM Genre as g JOIN MovieGenre as mg ON g.genreId = mg.genreId WHERE mg.movieId = :movieId");
         try {
             $query->execute(array(":movieId" => $movieId));
             $result = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -27,7 +27,7 @@ class GenreRepository
     public function getAllGenres(): array
     {
         $db = $this->getdb();
-        $query = $db->prepare("SELECT * FROM genre");
+        $query = $db->prepare("SELECT * FROM Genre");
         try {
             $query->execute();
             $result = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -37,17 +37,17 @@ class GenreRepository
         } catch (PDOException $e) {
             throw new PDOException("Unable to fetch genres!");
         }
-
         return $result;
     }
 
-    public function addGenresToMovie(int $movieId, array $genreIds): void {
+    public function addGenresToMovie(int $movieId, array $genreIds): bool {
         $db = $this->getdb();
-        $query = $db->prepare("INSERT INTO movieGenre (movieId, genreId) VALUES (:movieId, :genreId)");
+        $query = $db->prepare("INSERT INTO MovieGenre (movieId, genreId) VALUES (:movieId, :genreId)");
         try {
             foreach ($genreIds as $genreId) {
                 $query->execute(array(":movieId" => $movieId, ":genreId" => $genreId));
-            }
+            }                 
+            return true;
         } catch (PDOException $e) {
             throw new PDOException("Unable to add genres to movie!");
         } 
