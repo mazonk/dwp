@@ -6,7 +6,7 @@ include_once "src/view/components/admin-sections/news/NewsCardAdmin.php";
 <div>
     <div class="flex justify-between my-[2rem]">
         <h3 class="text-[1.5rem] font-semibold">News</h3>
-        <button id="addNewsButton" class="bg-primary text-textDark py-2 px-4 rounded hover:bg-primaryHover">
+        <button id="addNewsButton" class="bg-primary font-bold text-textDark py-2 px-4 rounded hover:bg-primaryHover">
             Add News
         </button>
     </div>
