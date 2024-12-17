@@ -15,4 +15,13 @@ class GenreController {
     public function getAllGenresByMovieId(int $movieId) {
         return $this->genreService->getAllGenresByMovieId($movieId);
     }
+
+    public function addGenresToMovie(int $movieId, array $genreIds) {
+        $errors = $this->genreService->addGenresToMovie($movieId, $genreIds);
+        if (isset($errors['error']) && $errors['error']) {
+            return ['success' => true];
+        } else {
+            return $errors;
+        }
+    }
 }

@@ -50,6 +50,6 @@ class GenreRepository
             }
         } catch (PDOException $e) {
             throw new PDOException("Unable to add genres to movie!");
-        }
+        } 
     }
 }

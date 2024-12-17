@@ -521,11 +521,13 @@ delete($baseRoute.'openingHours/delete', function() {
     }
 });
 
-//Add movie post route
-post($baseRoute.'movies/add', function() {
+// Add movie post route
+post($baseRoute . 'movies/add', function() {
     require_once 'src/controller/MovieController.php';
     $movieController = new MovieController();
+
     if (isset($_POST['action']) && $_POST['action'] === 'addMovie') {
+        // Sanitize and collect the movie data
         $movieData = [
             'title' => htmlspecialchars(trim($_POST['title'])),
             'releaseDate' => htmlspecialchars(trim($_POST['releaseDate'])),
@@ -538,15 +540,35 @@ post($baseRoute.'movies/add', function() {
             'rating' => htmlspecialchars(trim($_POST['rating']))
         ];
 
+        // Add selected genres
+        $selectedGenres = isset($_POST['selectedGenres']) ? array_map('intval', $_POST['selectedGenres']) : [];
+
+        // Add the movie
         $result = $movieController->addMovie($movieData);
 
+        // If the movie was added successfully
         if (isset($result['success']) && $result['success'] === true) {
-            // Return a success response
+            // Assuming the movieController should return a movieId if successful
+            $movieId = isset($result['movieId']) ? $result['movieId'] : null;
+
+            // If a movie ID was returned, proceed to add genres
+            if ($movieId && !empty($selectedGenres)) {
+                // Call addGenresToMovie with the movieId and selected genres
+                $genreResult = $movieController->addGenresToMovie($movieId, $selectedGenres);
+
+                if (isset($genreResult['error'])) {
+                    // Handle any error in adding genres
+                    echo json_encode(['success' => true, 'warning' => $genreResult['message']]);
+                    return;
+                }
+            }
+            // Return a success response if movie and genres were added
             echo json_encode(['success' => true]);
         } else if (isset($result['errorMessage'])) {
-            // Return an error response
+            // Return an error response if movie adding failed
             echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);
         } else {
+            // Handle any errors from the `addMovie` method
             if (is_array($result)) {
                 // Sanitize the array of errors
                 $sanitizedErrors = array_map(function($error) {

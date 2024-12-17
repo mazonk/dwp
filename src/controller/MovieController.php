@@ -1,11 +1,14 @@
 <?php
 include_once "src/model/services/MovieService.php";
+include_once "src/model/services/GenreService.php";
 
 class MovieController {
     private MovieService $movieService;
+    private GenreService $genreService;
 
     public function __construct() {
         $this->movieService = new MovieService();
+        $this->genreService = new GenreService();
     }
 
     public function getAllMovies(): array {
@@ -15,7 +18,6 @@ class MovieController {
         if (isset($movies['error']) && $movies['error']) {
             return ['errorMessage' => $movies['message']];
         }
-        
         return $movies;
     }
 
@@ -28,9 +30,9 @@ class MovieController {
         }
         return $movies;
     }
+
     public function isArchived(int $movieId): bool {
         $activeMovies = $this->getAllActiveMovies();
-    
         // Check if the result contains an error message
         if (isset($activeMovies['errorMessage'])) {
             // Handle the error case appropriately here
@@ -46,7 +48,6 @@ class MovieController {
 
     public function getMoviesWithShowings(): array {
         $movies = $this->movieService->getMoviesWithShowings();
-
         // If the service returns an error, pass it to the frontend
         if (isset($movies['error']) && $movies['error']) {
             return ['errorMessage' => $movies['message']];
@@ -56,17 +57,28 @@ class MovieController {
 
     public function getMovieById(int $movieId): array|Movie {
         $movie = $this->movieService->getMovieById(htmlspecialchars($movieId));
-        
         // If the service returns an error, pass it to the frontend
         if (is_array($movie) && isset($movie['error']) && $movie['error']) {
             return ['errorMessage' => $movie['message']];
         }
-        
         return $movie;
     }
 
     public function addMovie(array $movieData): array {
         $errors = $this->movieService->addMovie($movieData);
+        if(count($errors) == 0) {
+            // Check if there are any errors from adding the news
+            if (isset($errors['error']) && $errors['error']) {
+                return ['errorMessage' => $errors['message']];
+            }
+            return ['success' => true];
+        } else {
+            return $errors;
+        }
+    }
+
+    public function addGenresToMovie(int $movieId, array $genreIds): array {
+        $errors = $this->genreService->addGenresToMovie(htmlspecialchars($movieId), $genreIds);
         if(count($errors) == 0) {
             // Check if there are any errors from adding the news
             if (isset($errors['error']) && $errors['error']) {

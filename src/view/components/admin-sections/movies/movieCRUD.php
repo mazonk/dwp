@@ -69,7 +69,8 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
                     <!-- Poster URL Field -->
                     <div class="mb-4">
                         <label for="addPosterUrlInput" class="block text-sm font-medium text-textLight">Poster</label>
-                        <input type="file" id="addPosterUrlInput" name="posterURL" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" accept="image/*" required>
+                        <input type="file" id="addPosterUrlInput" name="posterURL" class="mt-1 block w-full p-2 bg-bgDark 
+                        border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" accept="image/*" required>
                     </div>
 
                     <!-- Promo URL Field -->
@@ -319,6 +320,7 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
         // Array to hold selected genres
         let selectedGenres = [];
 
+        
         // Add event listener to checkboxes
         addGenreCheckboxContainer.addEventListener('change', (event) => {
             if (event.target.type === 'checkbox') {
@@ -404,7 +406,8 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
                 posterUrl: poster,
                 promoUrl: promo,
                 trailerUrl: addTrailerUrlInput.value,
-                rating: addRatingInput.value
+                rating: addRatingInput.value,
+                genres: selectedGenres 
             }
 
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -412,6 +415,7 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
                 // If the request is done and successful
                 if (xhr.readyState === 4 && xhr.status === 200) {
                     let response
+                    console.log(xhr.response);
                     try {
                         response = JSON.parse(xhr.response); // Parse the JSON response
                     } catch (e) {
