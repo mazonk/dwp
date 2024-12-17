@@ -206,7 +206,6 @@ unset($_SESSION['addressFormData']);
                                     <input type="checkbox" name="terms" required class="mr-2"> <a class="text-red-500">*</a>&nbsp;I agree with the terms and conditions
                                 </label>
                             </div>
-
                             <button id="submitButton" type="submit" class="w-full py-1 border border-primary bg-bgDark hover:bg-bgSemiDark text-white rounded-lg transition duration-200 flex items-center justify-center">
                                 Pay with
                                 <img src="<?= htmlspecialchars($_SESSION['baseRoute']); ?>src/assets/stripe-logo.png" alt="Stripe" class="mx-2 mt-1 w-12">
