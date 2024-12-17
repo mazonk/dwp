@@ -8,13 +8,13 @@ class InvoiceController {
     $this->invoiceService = new InvoiceService();
   }
 
-  public function sendInvoice(int $paymentId): void {
+  public function sendInvoice(int $paymentId): array {
     $result = $this->invoiceService->sendInvoice($paymentId);
 
-    if ($result['error']) {
-      echo $result['message'];
+    if (isset($result['error']) && $result['error']) {
+      return ["errorMessage" => $result['message']];
     } else {
-      echo "Invoice sent successfully.";
+      return ["successMessage" => "Invoice sent successfully."];
     }
   }
 }
