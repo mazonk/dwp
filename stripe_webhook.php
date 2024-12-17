@@ -60,15 +60,14 @@ try {
       error_log("Payment status updated to 'confirmed' for paymentId: {$paymentIds['paymentId']}");
 
       // Send invoice
-      // $invoiceController->sendInvoice(); // TODO: Sanitizing, validation, and error handling, and also the actual invoice data
+      $invoice = $invoiceController->sendInvoice($paymentIds['paymentId']);
+      if (isset($invoice['errorMessage']) && $invoice['errorMessage']) {
+        throw new Exception("Failed to send invoice for payment ID: {$paymentIds['paymentId']}");
+      }
 
       break;
 
     case 'checkout.session.expired':
-      //Log
-      error_log("Handling 'checkout.session.expired' event.");
-      error_log("Processing event: " . $event->id . " at " . date('Y-m-d H:i:s'));
-
       $eventData = $event->data->object;
 
       // Get payment IDs by checkout session ID
@@ -76,8 +75,6 @@ try {
       if (isset($paymentIds['errorMessage']) && $paymentIds['errorMessage']) {
         throw new Exception("Payment IDs not found for checkout session ID: {$eventData->id}");
       }
-      //Log
-      error_log("Retrieved payment IDs for expired event: " . json_encode($paymentIds));
 
       // Get tickets by booking ID
       $tickets = $ticketController->getTicketsByBookingId($paymentIds['bookingId']);
@@ -85,8 +82,6 @@ try {
         throw new Exception("Tickets not found for booking ID: {$paymentIds['bookingId']}");
       }
       $ticketIds = $ticketIds = array_map(fn($ticket) => $ticket->getTicketId(), $tickets);
-      //Log
-      error_log("Retrieved ticket IDs for expired event: " . json_encode($ticketIds));
 
       // Rollback payment, booking, and tickets 
       $paymentResult = $paymentController->rollbackPayment($paymentIds['paymentId'], $paymentIds['bookingId'], $ticketIds);

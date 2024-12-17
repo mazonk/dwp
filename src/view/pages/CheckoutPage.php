@@ -9,6 +9,11 @@ if (!isset($_SESSION['activeBooking'])) {
     echo  'Start a booking to access this page!' . ' ' . '<a class="underline text-blue-300" href="javascript:window.history.back()"><-Go back!</a>';
     exit();
 }
+else if (isset($_SESSION['activeBooking']) && isset($_SESSION['checkoutSession'])) {
+    header("Location: " . $_SESSION['checkoutSession']['url']);
+    exit;
+}
+
 $booking = $_SESSION['activeBooking'];
 
 // Get showing details from the showing service
@@ -34,10 +39,17 @@ $guestFormData = isset($_SESSION['guestFormData']) ? $_SESSION['guestFormData'] 
     'dob' => '',
     'email' => '',
 ];
-$errors = isset($_SESSION['guestErrors']) ? $_SESSION['guestErrors'] : [];
+$addressFormData = isset($_SESSION['addressFormData']) ? $_SESSION['addressFormData'] : [
+    'street' => '',
+    'streetNr' => '',
+    'city' => '',
+    'postalCode' => '',
+];
+$errors = isset($_SESSION['paymentErrors']) ? $_SESSION['paymentErrors'] : [];
 
 unset($_SESSION['guestFormData']);
-unset($_SESSION['guestErrors']);
+unset($_SESSION['paymentErrors']);
+unset($_SESSION['addressFormData']);
 ?>
 
 <!DOCTYPE html>
@@ -151,13 +163,47 @@ unset($_SESSION['guestErrors']);
                             <p>Email: <?= htmlspecialchars($_SESSION['loggedInUser']['userEmail']); ?></p>
                             <?php endif; ?>
                         </div>
+                        <!-- Billing Address -->
+                        <div class="mb-6 bg-gray-700">
+                            <h3 class="text-lg font-bold mt-2">Billing Address</h3>
+                            <div id="address-form" class="mt-4">
+                                <div class="flex gap-2">
+                                    <div>
+                                        <input type="text" name="street" required placeholder="Street" value="<?= htmlspecialchars($addressFormData['street'] ?? '') ?>" class="block w-full p-2 mb-2 border rounded bg-gray-900 <?= isset($errors['street']) ? 'border-red-500' : '' ?>">
+                                        <?php if (isset($errors['street'])): ?>
+                                            <p class="mb-2 text-red-500 text-xs"><?= htmlspecialchars($errors['street']); ?></p>
+                                        <?php endif; ?>
+                                    </div>
+                                    <div>
+                                        <input type="number" name="streetNr" required placeholder="Street Number" value="<?= htmlspecialchars($addressFormData['streetNr'] ?? '') ?>" class="block w-full p-2 mb-2 border rounded bg-gray-900 <?= isset($errors['streetNr']) ? 'border-red-500' : '' ?>">
+                                        <?php if (isset($errors['streetNr'])): ?>
+                                            <p class="mb-2 text-red-500 text-xs"><?= htmlspecialchars($errors['streetNr']); ?></p>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                                <div class="flex gap-2">
+                                    <div>
+                                        <input type="text" name="city" required placeholder="City" value="<?= htmlspecialchars($addressFormData['city'] ?? '') ?>" class="block w-full p-2 mb-2 border rounded bg-gray-900 <?= isset($errors['city']) ? 'border-red-500' : '' ?>">
+                                        <?php if (isset($errors['city'])): ?>
+                                            <p class="mb-2 text-red-500 text-xs"><?= htmlspecialchars($errors['city']); ?></p>
+                                        <?php endif; ?>
+                                    </div>
+                                    <div>
+                                        <input type="number" name="postalCode" required placeholder="Postal code" value="<?= htmlspecialchars($addressFormData['postalCode'] ?? '') ?>" class="block w-full p-2 mb-2 border rounded bg-gray-900 <?= isset($errors['postalCode']) ? 'border-red-500' : '' ?>">
+                                        <?php if (isset($errors['postalCode'])): ?>
+                                            <p class="mb-2 text-red-500 text-xs"><?= htmlspecialchars($errors['postalCode']); ?></p>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                                <?php if (isset($errors['addressGeneral'])): ?>
+                                    <p class="mb-2 text-red-500 text-xs"><?= htmlspecialchars($errors['addressGeneral']); ?></p>
+                                <?php endif; ?>
+                            </div>
+                        </div>
                         <div>
                             <div class="flex flex-col gap-4 mb-6">
                                 <label class="flex items-center">
                                     <input type="checkbox" name="terms" required class="mr-2"> <a class="text-red-500">*</a>&nbsp;I agree with the terms and conditions
-                                </label>
-                                <label class="flex items-center">
-                                    <input type="checkbox" name="invoice" class="mr-2"> Receive invoice by email (optional)
                                 </label>
                             </div>
 
@@ -210,51 +256,6 @@ unset($_SESSION['guestErrors']);
             bookingExpiry = Date.now() + 30 * 60 * 1000; // 30 minutes from now
             localStorage.setItem('bookingExpiry', bookingExpiry);
         });
-        
-
-        /* const allowedPaths = ['/login', '/booking/checkout', '/booking/charge'];
-
-        // Intercept internal navigation (via clicks, history push)
-        document.body.addEventListener('click', function (e) {
-            if (e.target.tagName === 'A' && e.target.href) {
-                const destination = new URL(e.target.href).pathname;
-                handleNavigation(destination);
-            }
-        });
-
-        window.addEventListener('popstate', function () {
-            handleNavigation(window.location.pathname);
-        });
-
-        let isSubmittingForm = false;
-
-        document.getElementById('submitButton').addEventListener('click', function () {
-            isSubmittingForm = true; // Mark as a legitimate submission
-        });
-
-        // Handle all other navigation attempts (address bar, refresh, tab close)
-        window.addEventListener('beforeunload', function (e) {
-            if (isSubmittingForm) return; // Skip rollback logic on form submission
-
-            const destination = e.target.activeElement.href || ''; // Extract link, if present
-            console.log('Navigating to:', destination);
-            const isAllowed = allowedPaths.some(path => destination.includes(path));
-
-            if (!isAllowed) {
-                rollbackBooking(false);
-            }
-        });
-
-        function handleNavigation(destination) {
-            if (!allowedPaths.some(path => destination.includes(path))) {
-                if (confirm('Leaving this page will cancel your booking. Are you sure you want to proceed?')) {
-                    rollbackBooking(false);
-                } else {
-                    history.pushState(null, '', window.location.pathname);
-                    e.preventDefault();
-                }
-            }
-        }*/
     });
     function cancelBooking(redirectBack = true) {
         rollbackBooking(redirectBack);

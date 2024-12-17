@@ -29,13 +29,13 @@ class UserController {
 
         // Error while creating the guest user
         if (is_array($result) && isset($result['error']) && $result['error']) {
-            $_SESSION['guestErrors'] = ['general' => 'An error occurred. ' . $result['message']];
+            $_SESSION['paymentErrors'] = ['general' => 'An error occurred. ' . $result['message']];
             $_SESSION['guestFormData'] = $formData;
             return ['errorMessage' => true];
         } 
         // Validation error
         else if (is_array($result)) {
-            $_SESSION['guestErrors'] = $result;
+            $_SESSION['paymentErrors'] = $result;
             $_SESSION['guestFormData'] = $formData;
             return ['validationError' => true];
         }
@@ -63,13 +63,13 @@ class UserController {
 
         // Error while creating the guest user
         if (is_array($result) && isset($result['error']) && $result['error']) {
-            $_SESSION['guestErrors'] = ['general' => 'An error occurred. ' . $result['message']];
+            $_SESSION['paymentErrors'] = ['general' => 'An error occurred. ' . $result['message']];
             $_SESSION['guestFormData'] = $formData;
             return ['errorMessage' => true];
         }
         // Validation error
         else if (is_array($result)) {
-            $_SESSION['guestErrors'] = $result;
+            $_SESSION['paymentErrors'] = $result;
             $_SESSION['guestFormData'] = $formData;
             return ['validationError' => true];
         }

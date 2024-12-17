@@ -1,12 +1,14 @@
 <?php
 require_once 'session_config.php';
 
-if (isset($_SESSION['activeBooking'])) {
-  unset($_SESSION['activeBooking']);
+// Get booking details from session
+if (!isset($_SESSION['activeBooking']) && !isset($_SESSION['checkoutSession'])) {
+  echo  'Page is unavailable as you have not made any purchase!' . ' ' . '<a class="underline text-blue-300" href="javascript:window.history.back()"><-Go back!</a>';
+  exit();
 }
-if (isset($_SESSION['checkoutSession'])) {
-  unset($_SESSION['checkoutSession']);
-}
+
+unset($_SESSION['activeBooking']);
+unset($_SESSION['checkoutSession']);
 ?>
 
 <!DOCTYPE html>
@@ -21,7 +23,11 @@ if (isset($_SESSION['checkoutSession'])) {
 </head>
 <body class="max-w-[1440px] w-[100%] mx-auto mt-[72px] mb-[2rem] px-[100px] bg-bgDark text-textLight">
   <main class="p-4"> <!-- mt-[56px] needed if there is a navbar -->
-    <h2>Thank you for booking a ticket.</h2>
+    <div class="flex flex-col items-center justify-center gap-[1rem]">
+      <h1 class="text-4xl font-bold text-center">Thank you for booking a ticket!</h1>
+      <p class="text-lg text-center">The invoice of your purchase has been sent to you in email.</p>
+      <a href="<?php echo $_SESSION['baseRoute']?>home" class="mt-[1rem] py-[.625rem] px-[1.25rem] bg-primary text-textDark font-medium leading-tight rounded-[8px] ease-in-out duration-[.15s] hover:bg-primaryHover">Return to homepage</a>
+    </div>
   </main>
 </body>
 </html>
