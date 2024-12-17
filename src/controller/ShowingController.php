@@ -55,4 +55,46 @@ class ShowingController {
         
         return $showings;
     }
+
+    public function addShowingByMovieIdAndRoomId(array $showingData): array {
+        $errors = $this->showingService->addShowingByMovieIdAndRoomId($showingData);
+        if(count($errors) == 0) {
+            // Check if there are any errors from adding the news
+            if (isset($errors['error']) && $errors['error']) {
+                return ['errorMessage' => $errors['message']];
+            }
+            return ['success' => true];
+        } else {
+            return $errors;
+        }
+    }
+
+    public function editShowing(array $showingData): array {
+        $errors = $this->showingService->editShowing($showingData);
+        if(count($errors) == 0) {
+            // Check if there are any errors from adding the news
+            if (isset($errors['error']) && $errors['error']) {
+                return ['errorMessage' => $errors['message']];
+            }
+            return ['success' => true];
+        } else {
+            return $errors;
+        }
+    }
+
+    public function archiveShowing(int $showingId): array {
+        $result = $this->showingService->archiveShowing(htmlspecialchars($showingId));
+        if (isset($result['error']) && $result['error']) {
+            return ['errorMessage' => $result['message']];
+        }
+        return ['success' => true];
+    }
+
+    public function restoreShowing(int $showingId): array {
+        $result = $this->showingService->restoreShowing(htmlspecialchars($showingId));
+        if (isset($result['error']) && $result['error']) {
+            return ['errorMessage' => $result['message']];
+        }
+        return ['success' => true];
+    }
 }

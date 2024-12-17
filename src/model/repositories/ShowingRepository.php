@@ -119,4 +119,47 @@ class ShowingRepository {
 
         return $result;
     }
+
+    public function addShowingByMovieIdAndRoomId(array $showingData) {
+        $db = $this->getdb();
+        $query = $db->prepare("INSERT INTO Showing (showingDate, showingTime, movieId, roomId) VALUES (:showingDate, :showingTime, :movieId, :roomId)");
+        try {
+            $query->execute(array( ":showingDate" =>$showingData['showingDate'],":showingTime" => $showingData['showingTime'], ":movieId" => $showingData['movieId'],
+             ":roomId" => $showingData['roomId']));
+            } catch (PDOException $e) {
+                throw new PDOException("Unable to add showing!");
+        }
+    }
+
+    public function editShowing(array $showingData) {
+        $db = $this->getdb();
+        $query = $db->prepare("UPDATE Showing SET showingDate = :showingDate, showingTime = :showingTime, movieId = :movieId, roomId = :roomId 
+        WHERE showingId = :showingId");
+        try {
+            $query->execute(array( ":showingDate" =>$showingData['showingDate'],":showingTime" => $showingData['showingTime'], ":movieId" => $showingData['movieId'], 
+            ":roomId" => $showingData['roomId'], ":showingId" => $showingData['showingId']));
+            } catch (PDOException $e) {
+                throw new PDOException("Unable to edit showing!");
+        }
+    }
+
+    public function archiveShowing (int $showingId) {
+        $db = $this->getdb();
+        $query = $db->prepare("UPDATE Showing SET isActive = 0 WHERE showingId = :showingId");
+        try {
+            $query->execute(array(":showingId" => $showingId));
+            } catch (PDOException $e) {
+                throw new PDOException("Unable to archive showing!");
+        }
+    }
+
+    public function restoreShowing (int $showingId) {
+        $db = $this->getdb();
+        $query = $db->prepare("UPDATE Showing SET isActive = 1 WHERE showingId = :showingId");
+        try {
+            $query->execute(array(":showingId" => $showingId));
+            } catch (PDOException $e) {
+                throw new PDOException("Unable to restore showing!");
+        }
+    }
 }

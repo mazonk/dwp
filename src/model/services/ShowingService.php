@@ -101,4 +101,63 @@ class ShowingService {
             return ['error' => true,'message' => $e->getMessage()];
         }
     }
+
+    public function addShowingByMovieIdAndRoomId(int $showingData): array {
+        $errors = [];
+        $this->validateFormInputs($showingData, $errors);
+
+        if (count($errors) == 0) {
+            try {
+                $this->showingRepository->addShowingByMovieIdAndRoomId($showingData);
+                return ['success' => true];
+            } catch (Exception $e) {
+                return ['error' => true, 'message' => $e->getMessage()];
+            }
+        } else {
+            return $errors;
+        }
+    }
+
+    public function editShowing(array $showingData): array {
+        $errors = [];
+        $this->validateFormInputs($showingData, $errors);
+
+        if (count($errors) == 0) {
+            try {
+                $this->showingRepository->editShowing($showingData);
+                return ['success' => true];
+            } catch (Exception $e) {
+                return ['error' => true, 'message' => $e->getMessage()];
+            }
+        } else {
+            return $errors;
+        }
+    }
+
+    public function archiveShowing(int $showingId): array {
+        try {
+            $this->showingRepository->archiveShowing($showingId);
+            return ['success' => true];
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        } 
+    }
+
+    public function restoreShowing (int $showingId): array {
+        try {
+            $this->showingRepository->restoreShowing($showingId);
+            return ['success' => true];
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+    }
+
+    private function validateFormInputs(array $showingData, array &$errors): void {
+        if (empty($showingData['movieId']) ||
+            empty($showingData['roomId'])||
+            empty($showingData['showingDate']) ||
+            empty($showingData['showingTime'])) {
+            $errors['general'] = "All fields are required.";
+        }
+    }
 }
