@@ -54,7 +54,7 @@ if (isset($_GET['selectedShowing']) && is_numeric($_GET['selectedShowing'])) {
                     <td class='border border-gray-300 px-4 py-2 text-center'>{$status}</td>
                     <td class='border border-gray-300 px-4 py-2 text-justify grid grid-cols-3 gap-x-4'>{$ticketDetails}</td>
                     <td class='border border-gray-300 px-4 py-2 text-center'>
-                        <button class='bg-primary text-black py-2 px-4 border border-borderDark rounded hover:bg-bgSemiDark hover:text-white duration-[.2s] ease-in-out'>
+                        <button data-bookingId='${bookingId}' class='createInvoiceButton bg-primary text-textDark font-semibold py-1 px-2 text-xs border-[1px] border-primary rounded hover:bg-primaryHover hover:border-primaryHover duration-[0.2s] ease-in-out'>
                             Create Invoice
                         </button>
                     </td>
@@ -69,3 +69,53 @@ if (isset($_GET['selectedShowing']) && is_numeric($_GET['selectedShowing'])) {
     echo "<p class='text-center text-red-500'>Please select a valid showing.</p>";
 }
 ?>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const createInvoiceButtons = document.querySelectorAll('.createInvoiceButton');
+
+        createInvoiceButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const xhr = new XMLHttpRequest();
+                const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
+                xhr.open('POST', `${baseRoute}invoice`, true);
+
+                const bookingId = button.getAttribute('data-bookingId');
+
+                const invoiceData = {
+                    action: 'sendInvoice',
+                    bookingId: bookingId
+                }
+
+                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                xhr.onreadystatechange = function() {
+                    // If the request is done and successful
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        let response;
+
+                        console.log(xhr.response);
+
+                        try {
+                            response = JSON.parse(xhr.response); // Parse the JSON response
+                        } catch (e) {
+                            console.error('Could not parse response as JSON:', e);
+                            return;
+                        }
+
+                        if (response.success) {
+                            alert(response.successMessage);
+                        } else {
+                            alert(response.errorMessage);
+                        }
+                    }
+                };
+
+                // Send data as URL-encoded string
+                const params = Object.keys(invoiceData)
+                    .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(invoiceData[key])}`)
+                    .join('&');
+                xhr.send(params);
+            });
+        });
+    });
+</script>

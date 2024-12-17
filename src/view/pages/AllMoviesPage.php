@@ -18,6 +18,7 @@ include_once "src/view/components/ShowingCard.php";
 <body class="max-w-[1440px] w-[100%] mx-auto mt-[72px] mb-[2rem] px-[100px] bg-bgDark text-textLight">
   <!-- Navbar -->
   <?php include_once("src/view/components/Navbar.php"); ?>
+
   <main class="mt-[56px] p-4">
     <h1 class="text-[1.875rem] mb-4">All Movies</h1>
     <div class="grid grid-cols-5 gap-16">
