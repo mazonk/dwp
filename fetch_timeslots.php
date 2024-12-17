@@ -57,7 +57,7 @@ if (isset($_POST['venueId'], $_POST['showingDate'], $_POST['movieId'], $_POST['t
         // Round the current start time
         $currentTime = roundToNextSlot(clone $currentTime);
 
-        // Calculate the end time of the slot
+        // Calculate the end time of the slot by adding the duration of the movie
         $endSlotTime = clone $currentTime;
         $endSlotTime->modify("+{$duration} minutes");
 
