@@ -83,6 +83,8 @@ post($baseRoute.'profile', 'src/view/pages/ProfilePage.php'); // used at toggle 
 post($baseRoute.'booking/checkout', 'src/view/pages/CheckoutPage.php'); // used at toggle dropdown
 post($baseRoute.'booking/charge', 'third-party/charge.php'); // used at stripe payment
 post($baseRoute.'stripe-webhook', 'stripe_webhook.php'); // used at stripe webhook
+post($baseRoute.'fetch-timeslots', 'fetch_timeslots.php'); // used at showing crud
+post($baseRoute.'fetch-rooms', 'fetch_rooms.php'); // used at showing crud
 
 // Post route for register
 post($baseRoute.'register', function() {
