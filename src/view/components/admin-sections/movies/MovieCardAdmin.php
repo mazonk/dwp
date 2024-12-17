@@ -1,9 +1,13 @@
 <?php
+include_once "src/controller/MovieController.php";
+include_once "src/controller/GenreController.php";
+include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
 class MovieCardAdmin
 {
     public static function render(Movie $movie)
     {
         $movieController = new MovieController();
+        $genreController = new GenreController();
         $isArchived = $movieController->isArchived($movie->getMovieId()); // Check if the movie is archived
         ?>
         <div class="w-[15.75rem] text-center m-[0.5rem] movie-card bg-bgSemiDark rounded-lg p-4 border-[1px] border-borderDark relative">
@@ -35,6 +39,7 @@ class MovieCardAdmin
                             'trailerURL' => htmlspecialchars($movie->getTrailerURL()),
                             'rating' => htmlspecialchars($movie->getRating()),
                             'movieId' => htmlspecialchars($movie->getMovieId()),
+                            'genres' => array_map(fn(Genre $genre) => $genre->getGenreId(), $genreController->getAllGenresByMovieId($movie->getMovieId())),
                         ]); ?>'
                         class="py-1 px-2 text-primary text-xs border-[1px] border-primary rounded hover:text-primaryHover hover:border-primaryHover duration-[0.2s] ease-in-out"
                         onclick="openEditMovieModal(this.dataset.movie)">

@@ -8,8 +8,7 @@ class GenreRepository
         return DatabaseConnection::getInstance(); // singleton
     }
 
-    public function getAllGenresByMovieId(int $movieId): array
-    {
+    public function getAllGenresByMovieId(int $movieId): array {
         $db = $this->getdb();
         $query = $db->prepare("SELECT g.* FROM Genre as g JOIN MovieGenre as mg ON g.genreId = mg.genreId WHERE mg.movieId = :movieId");
         try {

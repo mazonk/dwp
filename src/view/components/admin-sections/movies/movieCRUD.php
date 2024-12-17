@@ -436,29 +436,21 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
         const editGenreCheckboxContainer = document.getElementById('editGenreCheckboxContainer');
         const errorEditMovieMessageGeneral = document.getElementById('error-edit-movie-general');
 
-        $genres = $genreController.getAllGenresByMovieId($movieId);
-        if (!isset($genres['error'])) {
-            $encodedGenres = json_encode($genres);
-        } else {
-            $encodedGenres = '[]'; // Default empty array if there’s an error
-        }
-
-        // Array to hold selected genres
-        let selectEditGenres = "<?php echo $encodedGenres; ?>";
+        let selectedEditGenres = [];
 
         // Add event listener to checkboxes
-        addGenreCheckboxContainer.addEventListener('change', (event) => {
+        editGenreCheckboxContainer.addEventListener('change', (event) => {
             if (event.target.type === 'checkbox') {
-                updateSelectedGenres();
+                updateSelectedEditGenres();
             }
         });
 
         // Function to update selected genres array
-        function updateSelectedGenres() {
+        function updateSelectedEditGenres() {
             // Get all checkboxes inside the container
-            const checkboxes = addGenreCheckboxContainer.querySelectorAll('input[type="checkbox"]:checked');
+            const checkboxes = editGenreCheckboxContainer.querySelectorAll('input[type="checkbox"]:checked');
             // Update the array with the values of checked checkboxes
-            selectEditGenres = Array.from(checkboxes).map(checkbox => checkbox.value);
+            selectedEditGenres = Array.from(checkboxes).map(checkbox => checkbox.value);
         }
 
         // Clear all selected genres
@@ -493,7 +485,12 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
             promoImageNameDisplay.textContent = movie.promoURL;
             editTrailerUrlInput.value = movie.trailerURL;
             editRatingInput.value = movie.rating;
-            genres: selectedEditGenres,
+            genres: movie.genres.forEach(genre => {
+                const checkbox = document.getElementById(`editGenre-${genre}`);
+                if (checkbox) {
+                    checkbox.checked = true;
+                }
+            }),
                 editMovieIdInput.value = movie.id;
             editMovieModal.classList.remove('hidden');
         };
@@ -525,7 +522,7 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
             if (editPromoUrlInput.files.length == 1) {
                 promo = editPromoUrlInput.files[0].name;
             }
-
+                console.log(selectedEditGenres);
             const editMovieData = {
                 action: 'editMovie',
                 title: editTitleInput.value,
@@ -537,7 +534,8 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
                 promoURL: promo,
                 trailerURL: editTrailerUrlInput.value,
                 rating: editRatingInput.value,
-                movieId: editMovieIdInput.value
+                movieId: editMovieIdInput.value,
+                genres: selectedEditGenres
             };
 
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -545,6 +543,7 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
                 // If the request is done and successful
                 if (xhr.readyState === 4 && xhr.status === 200) {
                     let response;
+                    console.log(xhr.response);
                     try {
                         response = JSON.parse(xhr.response);
                     } catch (e) {

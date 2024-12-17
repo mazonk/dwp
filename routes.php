@@ -583,13 +583,13 @@ put($baseRoute . 'movies/edit', function() {
     $movieController = new MovieController();
 
     if (isset($_PUT['action']) && $_PUT['action'] === 'editMovie') {
-        $postGenres = [];
+        $putGenres = [];
 
         // Parse and sanitize genres
         if (!empty($_PUT['genres'])) {
             $genresArray = explode(',', $_PUT['genres']); // Split genres string into an array
             foreach ($genresArray as $genre) {
-                $postGenres[] = htmlspecialchars(trim($genre)); // Sanitize each genre
+                $putGenres[] = htmlspecialchars(trim($genre)); // Sanitize each genre
             }
         }
 
@@ -604,7 +604,7 @@ put($baseRoute . 'movies/edit', function() {
             'trailerURL' => htmlspecialchars(trim($_PUT['trailerURL'])),
             'rating' => htmlspecialchars(trim($_PUT['rating'])),
             'movieId' => htmlspecialchars(trim($_PUT['movieId'])),
-            'selectedGenres' => array_map('intval', $postGenres) // Convert genres to integers
+            'selectedGenres' => array_map('intval', $putGenres) // Convert genres to integers
         ];
 
         $result = $movieController->editMovie($movieData);
