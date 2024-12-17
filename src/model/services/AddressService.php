@@ -1,8 +1,9 @@
 <?php
-include_once "src/model/repositories/AddressRepository.php";
-include_once "src/model/services/PostalCodeService.php";
-include_once "src/model/entity/Address.php";
-include_once "src/model/entity/PostalCode.php";
+require_once 'src/model/database/dbcon/DatabaseConnection.php';
+require_once "src/model/repositories/AddressRepository.php";
+require_once "src/model/services/PostalCodeService.php";
+require_once "src/model/entity/Address.php";
+require_once "src/model/entity/PostalCode.php";
 
 class AddressService {
   private AddressRepository $addressRepository;
@@ -16,7 +17,6 @@ class AddressService {
   }
 
   private function getdb() {
-    require_once 'src/model/database/dbcon/DatabaseConnection.php';
     return DatabaseConnection::getInstance(); // singleton
   }
 

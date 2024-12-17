@@ -1,8 +1,6 @@
 <?php
-/* Get the venues */
-include_once "src/controller/VenueController.php";
-/* Get the opening hours */
-include_once "src/controller/OpeningHourController.php";
+require_once "src/controller/VenueController.php";
+require_once "src/controller/OpeningHourController.php";
 
 $errors = isset($_SESSION['contactErrors']) ? $_SESSION['contactErrors'] : [];
 $contactSuccess = isset($_SESSION['contactSuccess']) ? $_SESSION['contactSuccess'] : null;

@@ -1,5 +1,5 @@
 <?php
-include_once "src/controller/MovieController.php";
+require_once "src/controller/MovieController.php";
 include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
 ?>
 
@@ -575,74 +575,6 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
                 .join('&');
             xhr.send(params);
         });
-
-        // const deleteMovieModal = document.getElementById('deleteMovieModal');
-        // const deleteMovieIdInput = document.getElementById('deleteMovieIdInput');
-        // const confirmDeleteMovieButton = document.getElementById('confirmDeleteMovieButton');
-        // const cancelDeleteMovieButton = document.getElementById('cancelDeleteMovieButton');
-
-        // //Open the delete modal
-        // window.openDeleteMovieModal = function(movieId) {
-        //     if (deleteMovieIdInput && deleteMovieModal) { //not necessary??
-        //         deleteMovieIdInput.value = movieId;
-        //         deleteMovieModal.classList.remove('hidden');
-        //     } else {
-        //         console.error('Required elements are missing from the DOM.');
-        //     }
-        // };
-
-        // //Close the delete modal
-        // if (cancelDeleteMovieButton) {
-        //     cancelDeleteMovieButton.addEventListener('click', () => {
-        //         deleteMovieModal.classList.add('hidden');
-        //     });
-        // }
-
-        // // Add click event listener for confirm delete movie button
-        // document.addEventListener('click', (event) => {
-        //     if (event.target.classList.contains('confirmDeleteMovieButton')) {
-        //         const movieId = event.target.dataset.movieId;
-        //         deleteMovieIdInput.value = movieId;
-        //         deleteMovieModal.classList.remove('hidden');
-        //     }
-        // });
-
-        // // Close the delete modal and clear the input value
-        // cancelDeleteMovieButton.addEventListener('click', () => {
-        //     deleteMovieModal.classList.add('hidden');
-        //     deleteMovieIdInput.value = '';
-        // });
-
-        // //Delete movie
-        // confirmDeleteMovieButton.addEventListener('click', () => {
-        //     const xhr = new XMLHttpRequest();
-        //     const baseRoute = '<?php echo $_SESSION['baseRoute']; ?>';
-        //     const movieId = deleteMovieIdInput.value;
-        //     console.log(xhr);
-
-        //     xhr.open('DELETE', `${baseRoute}movies/delete?movieId=${encodeURIComponent(movieId)}&action=deleteMovie`, true);
-
-        //     xhr.onreadystatechange = function() {
-        //         // If the request is done and successful
-        //         if (xhr.readyState === 4 && xhr.status === 200) {
-
-        //             let response;
-        //             try {
-        //                 response = JSON.parse(xhr.response);
-        //             } catch (e) {
-        //                 console.error('Could not parse response as JSON:', e);
-        //                 return;
-        //             }
-        //             if (response.success) {
-        //                 alert('Success! Movie deleted successfully.');
-        //                 window.location.reload();
-        //             } else {
-        //                 console.error('Error:', response.errorMessage);
-        //             }
-        //         }
-        //     };
-        //     xhr.send();
-        // });
 
         const archiveMovieModal = document.getElementById('archiveMovieModal');
         const archiveMovieIdInput = document.getElementById('archiveMovieIdInput');

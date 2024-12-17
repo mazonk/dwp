@@ -1,5 +1,4 @@
-<?php
-require_once 'session_config.php';
+<?php  require_once 'session_config.php';
 include_once "src/view/components/SeatCard.php";
 require_once 'src/controller/SeatController.php';
 require_once 'src/controller/ShowingController.php';
@@ -330,8 +329,6 @@ else if (isset($_SESSION['activeBooking']) && $_SESSION['activeBooking']['expiry
             xhr.send();
         }
     </script>
-
     <?php include_once("src/view/components/Footer.php"); ?>
 </body>
-
 </html>

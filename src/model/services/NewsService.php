@@ -1,5 +1,5 @@
 <?php
-include_once "src/model/repositories/NewsRepository.php";
+require_once "src/model/repositories/NewsRepository.php";
 
 class NewsService {
     private NewsRepository $newsRepository;

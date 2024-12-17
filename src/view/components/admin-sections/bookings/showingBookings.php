@@ -1,5 +1,5 @@
 <?php
-include_once "src/controller/BookingController.php";
+require_once "src/controller/BookingController.php";
 
 if (isset($_GET['selectedShowing']) && is_numeric($_GET['selectedShowing'])) {
     $showingId = intval($_GET['selectedShowing']);

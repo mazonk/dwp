@@ -1,4 +1,6 @@
-<!-- Venue details container -->
+<?php
+require_once "src/controller/VenueController.php";
+?>
 <div id="venueDetails" class="flex flex-col items-start hidden my-8 mx-4">
     <div class="grid grid-cols-2 w-full gap-4">
         <div class="grid grid-cols-1">
@@ -45,7 +47,6 @@
 </div>
 
 <?php
-require_once "src/controller/VenueController.php";
 $venueController = new VenueController();
 $allVenues = $venueController->getAllVenues();
 ?>

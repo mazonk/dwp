@@ -1,10 +1,10 @@
 <?php
-include_once "src/model/entity/Room.php";
-include_once "src/model/entity/Venue.php";
+require_once 'src/model/database/dbcon/DatabaseConnection.php';
+require_once "src/model/entity/Room.php";
+require_once "src/model/entity/Venue.php";
 
 class RoomRepository {
     private function getdb() {
-        require_once 'src/model/database/dbcon/DatabaseConnection.php';
         return DatabaseConnection::getInstance(); // singleton
     }
 

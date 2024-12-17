@@ -52,4 +52,3 @@ class Booking {
         $this->tickets = $tickets;
     }
 }
-?>

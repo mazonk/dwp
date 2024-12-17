@@ -1,5 +1,5 @@
 <?php
-include_once "src/model/services/OpeningHourService.php";
+require_once "src/model/services/OpeningHourService.php";
 
 class OpeningHourController {
   private OpeningHourService $openingHourService;

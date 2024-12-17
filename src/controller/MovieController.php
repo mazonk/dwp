@@ -1,5 +1,5 @@
 <?php
-include_once "src/model/services/MovieService.php";
+require_once "src/model/services/MovieService.php";
 
 class MovieController {
     private MovieService $movieService;
@@ -89,14 +89,6 @@ class MovieController {
         } else {
             return $errors;
         }
-    }
-
-    public function deleteMovie(int $movieId): array {
-        $result = $this->movieService->deleteMovie(htmlspecialchars($movieId));
-        if (isset($result['error']) && $result['error']) {
-            return ['errorMessage' => $result['message']];
-        }
-        return ['success' => true];
     }
 
     public function archiveMovie(int $movieId): array {

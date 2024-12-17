@@ -1,7 +1,7 @@
 <?php
-include "src/model/entity/OpeningHour.php";
-include_once "src/model/repositories/OpeningHourRepository.php";
-include_once "src/model/services/VenueService.php";
+require_once "src/model/entity/OpeningHour.php";
+require_once "src/model/repositories/OpeningHourRepository.php";
+require_once "src/model/services/VenueService.php";
 
 class OpeningHourService {
   private OpeningHourRepository $openingHourRepository;

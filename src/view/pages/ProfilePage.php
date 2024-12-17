@@ -1,7 +1,6 @@
-<?php
-require_once 'session_config.php';
-include_once 'src/controller/UserController.php';
-include_once 'src/controller/BookingController.php';
+<?php  require_once 'session_config.php';
+require_once 'src/controller/UserController.php';
+require_once 'src/controller/BookingController.php';
 include_once 'src/view/components/BookingCard.php';
 
 if (!isLoggedIn()) {

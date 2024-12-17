@@ -44,4 +44,3 @@ class TicketType {
     $this->description = $description;
   }
 }
-?>

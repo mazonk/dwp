@@ -1,5 +1,5 @@
 <?php
-include_once "src/model/services/AddressService.php";
+require_once "src/model/services/AddressService.php";
 
 class AddressController {
   private AddressService $addressService;

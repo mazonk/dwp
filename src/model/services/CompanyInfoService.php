@@ -1,4 +1,5 @@
 <?php 
+require_once 'src/model/database/dbcon/DatabaseConnection.php';
 require_once 'src/model/repositories/CompanyInfoRepository.php';
 require_once 'src/model/services/AddressService.php';
 require_once 'src/model/entity/CompanyInfo.php';
@@ -14,7 +15,6 @@ class CompanyInfoService {
     }
 
     private function getdb(): PDO {
-        require_once 'src/model/database/dbcon/DatabaseConnection.php';
         return DatabaseConnection::getInstance(); // singleton
     }
 

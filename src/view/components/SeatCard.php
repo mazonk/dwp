@@ -17,4 +17,3 @@ class SeatCard {
         return $output;
     }
 }
-?>

@@ -1,14 +1,8 @@
 <?php
-include_once "src/model/repositories/ShowingRepository.php";
-include_once "src/model/entity/Movie.php";
-include_once "src/model/entity/Room.php";
-include_once "src/model/entity/Showing.php";
-include_once "src/model/entity/Venue.php";
-include_once "src/model/services/ShowingService.php";
+require_once "src/model/services/ShowingService.php";
 
 class ShowingController {
     private ShowingService $showingService;
-
 
     public function __construct() {
         $this->showingService = new ShowingService();
@@ -20,7 +14,6 @@ class ShowingController {
         if (isset($showings['error']) && $showings['error']) {
             return ['errorMessage' => $showings['message']];
         }
-        
         return $showings;
     }
 
@@ -31,7 +24,6 @@ class ShowingController {
         if (isset($showing['error']) && $showing['error']) {
             return ['errorMessage' => $showing['message']];
         }
-        
         return $showing;
     }
     
@@ -42,7 +34,6 @@ class ShowingController {
         if (is_array($showing) && isset($showing['error']) && $showing['error']) {
             return ['errorMessage' => $showing['message']];
         }
-        
         return $showing;
     }
 
@@ -52,7 +43,6 @@ class ShowingController {
         if (isset($showings['error']) && $showings['error']) {
             return ['errorMessage' => $showings['message']];
         }
-        
         return $showings;
     }
 }

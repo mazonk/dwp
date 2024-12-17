@@ -34,4 +34,3 @@ class Room {
     $this->venue = $venue;
   }
 }
-?>

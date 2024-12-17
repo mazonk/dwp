@@ -1,7 +1,7 @@
 <?php
-include_once "src/controller/MovieController.php";
-include_once "src/controller/ShowingController.php";
-include_once "src/controller/VenueController.php";
+require_once "src/controller/MovieController.php";
+require_once "src/controller/ShowingController.php";
+require_once "src/controller/VenueController.php";
 
 if (isset($_GET['selectedMovie']) && is_numeric($_GET['selectedMovie'])) {
     $movieId = intval($_GET['selectedMovie']);

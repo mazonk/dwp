@@ -638,29 +638,6 @@ put($baseRoute . 'movies/edit', function() {
     }
 });
 
-// Delete movie route
-delete($baseRoute . 'movies/delete', function() {
-    require_once 'src/controller/MovieController.php';
-    $movieController = new MovieController();
-
-    if (isset($_GET['action']) && $_GET['action'] === 'deleteMovie') {
-        $movieId = htmlspecialchars(trim($_GET['movieId']));
-
-        $result = $movieController->deleteMovie($movieId);
-
-        if (isset($result['success']) && $result['success'] === true) {
-            // Return a success response
-            echo json_encode(['success' => "true"]);
-        } else {
-            // Return an error response
-            echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);
-        }
-    } else {
-        // Invalid action response
-        echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
-    }
-});
-
 // Archive movie route
 put($baseRoute . 'movies/archive', function() {
     require_once 'src/controller/MovieController.php';
