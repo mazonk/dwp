@@ -721,4 +721,44 @@ put($baseRoute . 'movies/restore', function() {
     }
 });
 
+require_once 'src/controller/ShowingController.php';
+// Add Showing post route
+post($baseRoute.'showing/add', function() {
+    $showingController = new ShowingController();
+
+    if (isset($_POST['action']) && $_POST['action'] === 'addShowing') {
+        $showingData = [
+            'venueId' => htmlspecialchars(trim($_POST['venueId'])),
+            'showingDate' => htmlspecialchars(trim($_POST['showingDate'])),
+            'showingTime' => htmlspecialchars(trim($_POST['showingTime'])),
+            'movieId' => htmlspecialchars(trim($_POST['movieId'])),
+            'roomId' => htmlspecialchars(trim($_POST['roomId'])),
+        ];
+
+        $result = $showingController->addShowing($showingData);
+
+        if (isset($result['success']) && $result['success'] === true) {
+            // Return a success response
+            echo json_encode(['success' => true]);
+        } else if (isset($result['errorMessage'])) {
+            // Return an error response
+            echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);
+        } else {
+            if (is_array($result)) {
+                // Sanitize the array of errors
+                $sanitizedErrors = array_map(function($error) {
+                    return htmlspecialchars($error);
+                }, $result);
+
+                echo json_encode(['success' => false, 'errors' => $sanitizedErrors]);
+            } else {
+                // Return a single error response
+                echo json_encode(['success' => false, 'errors' => htmlspecialchars($result)]);
+            }
+        }
+    } else {
+        // Invalid action response
+        echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
+    }
+});
 
