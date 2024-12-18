@@ -97,6 +97,11 @@ if (isset($_POST['venueId'], $_POST['showingDate'], $_POST['movieId'], $_POST['w
         $currentTime->modify("+{$duration} minutes");
     }
 
+    if(empty($availableTimes)) {
+        echo json_encode(['success' => false, 'message' => 'No available timeslots found.']);
+        exit;
+    }
+
     // Return available times as JSON
     echo json_encode(['success' => true, 'availableTimes' => $availableTimes]);
     exit;

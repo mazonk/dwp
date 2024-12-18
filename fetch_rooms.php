@@ -1,6 +1,4 @@
 <?php
-ini_set('log_errors', 1); // Enable error logging
-ini_set('error_log', __DIR__ . '/error.log'); // Log errors to 'error.log' in the current directory
 include_once "src/controller/ShowingController.php";
 include_once "src/controller/RoomController.php";
 
@@ -64,6 +62,11 @@ if (isset($_POST['venueId'], $_POST['showingDate'], $_POST['showingTime'])) {
                 'roomNumber' => $room->getRoomNumber(),
             ];
         }
+    }
+
+    if (empty($availableRooms)) {
+        echo json_encode(['success' => false, 'message' => 'No available rooms for this timeslot.']);
+        exit;
     }
 
     // Return available rooms
