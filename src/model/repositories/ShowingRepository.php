@@ -1,15 +1,13 @@
 <?php
-include_once "src/model/entity/Showing.php";
-
 class ShowingRepository {
-    private function getdb(): PDO {
-        require_once 'src/model/database/dbcon/DatabaseConnection.php';
-        return DatabaseConnection::getInstance(); // singleton
+    private PDO $db;
+
+    public function __construct($dbCon) {
+        $this->db = $dbCon;
     }
 
     public function getShowingById(int $showingId): array {
-        $db = $this->getdb();
-        $query = $db->prepare("SELECT * FROM Showing as s WHERE s.showingId = :showingId");
+        $query = $this->db->prepare("SELECT * FROM Showing as s WHERE s.showingId = :showingId");
         try {
             $query->execute(array(":showingId" => $showingId));
             $result = $query->fetch(PDO::FETCH_ASSOC);
@@ -24,9 +22,8 @@ class ShowingRepository {
     }
 
     public function getShowingsForMovie(int $movieId, int $selectedVenueId): array {
-        $db = $this->getdb();
-        $db->exec("SET SQL_BIG_SELECTS=1");
-        $query = $db->prepare("SELECT * FROM Showing as s JOIN VenueShowing as vs ON s.showingId = vs.showingId WHERE vs.venueId = :venueId 
+        $this->db->exec("SET SQL_BIG_SELECTS=1");
+        $query = $this->db->prepare("SELECT * FROM Showing as s JOIN VenueShowing as vs ON s.showingId = vs.showingId WHERE vs.venueId = :venueId 
         AND s.movieId = :movieId ORDER BY s.showingDate, s.showingTime ASC");
         try {
             $query->execute(array(":movieId" => $movieId, ":venueId" => $selectedVenueId));
@@ -42,9 +39,8 @@ class ShowingRepository {
     }
 
     public function getShowingsForMovieAdmin(int $movieId): array {
-        $db = $this->getdb();
-        $db->exec("SET SQL_BIG_SELECTS=1");
-        $query = $db->prepare("SELECT * FROM ShowingsWithDetails as swd WHERE swd.movieId = :movieId ORDER BY swd.showingDate, swd.showingTime ASC");
+        $this->db->exec("SET SQL_BIG_SELECTS=1");
+        $query = $this->db->prepare("SELECT * FROM ShowingsWithDetails as swd WHERE swd.movieId = :movieId ORDER BY swd.showingDate, swd.showingTime ASC");
         try {
             $query->execute(array(":movieId" => $movieId));
             $result = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -59,8 +55,7 @@ class ShowingRepository {
     }
 
     public function getUnavailableTimeslotsForMovie(int $venueId, int $movieId, string $showingDate): array {
-        $db = $this->getdb();
-        $query = $db->prepare("SELECT s.showingTime FROM Showing as s
+        $query = $this->db->prepare("SELECT s.showingTime FROM Showing as s
         JOIN VenueShowing as vs ON s.showingId = vs.showingId
         WHERE vs.venueId = :venueId 
         AND s.movieId = :movieId
@@ -75,8 +70,7 @@ class ShowingRepository {
     }
 
     public function getUnavailableRoomsForAVenueAndDay(int $venueId, string $showingDate): array {
-        $db = $this->getdb();
-        $query = $db->prepare("SELECT s.roomId, s.showingTime, m.duration FROM Showing as s
+        $query = $this->db->prepare("SELECT s.roomId, s.showingTime, m.duration FROM Showing as s
         JOIN VenueShowing as vs ON s.showingId = vs.showingId
         JOIN Movie as m ON s.movieId = m.movieId
         WHERE vs.venueId = :venueId 
@@ -98,7 +92,6 @@ class ShowingRepository {
      * @return array An array of movie IDs that are playing today at the given venue.
      */
     public function getMoviesPlayingToday(int $venueId): array {
-        $db = $this->getdb();
         $today = date('Y-m-d');
         try {
             $showingIds = $this->getShowingIdsForVenue($venueId);
@@ -116,7 +109,7 @@ class ShowingRepository {
         try {
             // Join array elements with a separator string, it'll look sg like this: (1,2,3,4)
             $placeholders = implode(',', array_fill(0, count($showingIdsList), '?'));
-            $query = $db->prepare(
+            $query = $this->db->prepare(
                 "SELECT DISTINCT s.movieId 
             FROM Showing as s 
             WHERE s.showingId IN ($placeholders) 
@@ -137,8 +130,7 @@ class ShowingRepository {
     }
 
     private function getShowingIdsForVenue(int $venueId): array {
-        $db = $this->getdb();
-        $query = $db->prepare("SELECT * FROM VenueShowing as vs WHERE vs.venueId = :venueId");
+        $query = $this->db->prepare("SELECT * FROM VenueShowing as vs WHERE vs.venueId = :venueId");
         try {
             $query->execute(array(":venueId" => $venueId));
             $result = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -152,20 +144,44 @@ class ShowingRepository {
         return $result;
     }
 
-    public function addShowingByMovieIdAndRoomId(array $showingData) {
-        $db = $this->getdb();
-        $query = $db->prepare("INSERT INTO Showing (showingDate, showingTime, movieId, roomId) VALUES (:showingDate, :showingTime, :movieId, :roomId)");
+    public function getRelevantShowingsForMovie(int $movieId): array {
+        $this->db->exec("SET SQL_BIG_SELECTS=1");
+        $query = $this->db->prepare("SELECT * FROM Showing as s
+        JOIN VenueShowing as vs ON s.showingId = vs.showingId
+        AND s.movieId = :movieId
+        AND s.showingDate >= :today
+        ORDER BY s.showingDate, s.showingTime ASC");
         try {
-            $query->execute(array( ":showingDate" =>$showingData['showingDate'],":showingTime" => $showingData['showingTime'], ":movieId" => $showingData['movieId'],
-             ":roomId" => $showingData['roomId']));
-            } catch (PDOException $e) {
-                throw new PDOException("Unable to add showing!");
+            $query->execute(array(":movieId" => $movieId, ":today" => date('Y-m-d')));
+            $result = $query->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+        } catch (PDOException $e) {
+            throw new Exception("Unable to fetch showings for venue!");
+        }
+    }
+
+    public function addShowing(array $showingData): void {
+        $showingQuery = $this->db->prepare("INSERT INTO Showing (showingDate, showingTime, movieId, roomId) VALUES (:showingDate, :showingTime, :movieId, :roomId)");
+        $venueShowingQuery = $this->db->prepare("INSERT INTO VenueShowing (venueId, showingId) VALUES (:venueId, :showingId)");
+        try {
+            $this->db->beginTransaction();
+            $showingQuery->execute(array(
+                ":showingDate" => $showingData['showingDate'],
+                ":showingTime" => $showingData['showingTime'],
+                ":movieId" => $showingData['movieId'],
+                ":roomId" => $showingData['roomId']
+            ));
+            $showingId = $this->db->lastInsertId(); // Get the ID of the last inserted showing
+            $venueShowingQuery->execute(array(":venueId" => $showingData['venueId'], ":showingId" => $showingId));
+            $this->db->commit();
+        } catch (PDOException $e) {
+            $this->db->rollBack();
+            throw new PDOException("Failed to add showing!");
         }
     }
 
     public function editShowing(array $showingData) {
-        $db = $this->getdb();
-        $query = $db->prepare("UPDATE Showing SET showingDate = :showingDate, showingTime = :showingTime, movieId = :movieId, roomId = :roomId 
+        $query = $this->db->prepare("UPDATE Showing SET showingDate = :showingDate, showingTime = :showingTime, movieId = :movieId, roomId = :roomId 
         WHERE showingId = :showingId");
         try {
             $query->execute(array( ":showingDate" =>$showingData['showingDate'],":showingTime" => $showingData['showingTime'], ":movieId" => $showingData['movieId'], 
@@ -176,8 +192,7 @@ class ShowingRepository {
     }
 
     public function archiveShowing (int $showingId) {
-        $db = $this->getdb();
-        $query = $db->prepare("UPDATE Showing SET isActive = 0 WHERE showingId = :showingId");
+        $query = $this->db->prepare("UPDATE Showing SET isActive = 0 WHERE showingId = :showingId");
         try {
             $query->execute(array(":showingId" => $showingId));
             } catch (PDOException $e) {
@@ -186,8 +201,7 @@ class ShowingRepository {
     }
 
     public function restoreShowing (int $showingId) {
-        $db = $this->getdb();
-        $query = $db->prepare("UPDATE Showing SET isActive = 1 WHERE showingId = :showingId");
+        $query = $this->db->prepare("UPDATE Showing SET isActive = 1 WHERE showingId = :showingId");
         try {
             $query->execute(array(":showingId" => $showingId));
             } catch (PDOException $e) {

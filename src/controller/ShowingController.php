@@ -75,16 +75,27 @@ class ShowingController {
         return $unavailableRooms;
     }
 
-    public function addShowingByMovieIdAndRoomId(array $showingData): array {
-        $errors = $this->showingService->addShowingByMovieIdAndRoomId($showingData);
+    public function getRelevantShowingsForMovie(int $movieId): array {
+        $showings = $this->showingService->getRelevantShowingsForMovie($movieId);
+        if (isset($showings['error']) && $showings['error']) {
+            return ['errorMessage' => $showings['message']];
+        }
+        
+        return $showings;
+    }
+
+    public function addShowing(array $showingData): array {
+        $errors = $this->showingService->addShowing($showingData);
+
+        // Check if there are any validation errors
         if(count($errors) == 0) {
-            // Check if there are any errors from adding the news
+            // Check if there are any errors from adding the showing
             if (isset($errors['error']) && $errors['error']) {
                 return ['errorMessage' => $errors['message']];
             }
             return ['success' => true];
         } else {
-            return $errors;
+            return $errors; // Return the validation errors
         }
     }
 

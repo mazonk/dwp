@@ -9,14 +9,21 @@ include_once "src/model/entity/Room.php";
 include_once "src/model/entity/Venue.php";
 
 class ShowingService {
+    private PDO $db;
     private ShowingRepository $showingRepository;
     private MovieService $movieService;
     private RoomService $roomService;
 
     public function __construct() {
-        $this->showingRepository = new ShowingRepository();
+        $this->db = $this->getdb();
+        $this->showingRepository = new ShowingRepository($this->db);
         $this->movieService = new MovieService();
         $this->roomService = new RoomService();
+    }
+
+    private function getdb() {
+        require_once 'src/model/database/dbcon/DatabaseConnection.php';
+        return DatabaseConnection::getInstance(); // singleton
     }
 
     public function getShowingById(int $showingId): array|Showing {
@@ -134,19 +141,39 @@ class ShowingService {
         }
     }
 
-    public function addShowingByMovieIdAndRoomId(int $showingData): array {
-        $errors = [];
-        $this->validateFormInputs($showingData, $errors);
+    public function getRelevantShowingsForMovie(int $movieId): array {
+        try {
+            $result = $this->showingRepository->getRelevantShowingsForMovie($movieId);
+            $showings = [];
+            foreach ($result as $showing) {
+                $showings[] = [
+                    'showingId' => $showing['showingId'],
+                    'showingDate' => $showing['showingDate'],
+                    'showingTime' => $showing['showingTime'],
+                    'movieId' => $showing['movieId'],
+                    'roomId' => $showing['roomId'],
+                    'venueId' => $showing['venueId']
+                ];
+            }
+            return $showings;
+        } catch (Exception $e) {
+            return ['error' => true,'message' => $e->getMessage()];
+        }
+    }
 
-        if (count($errors) == 0) {
+    public function addShowing(array $showingData): array {
+        $errors = [];
+        $this->validateShowingFormInputs($showingData, $errors);
+
+        if (count($errors) == 0) { // If there are no validation errors, add the showing
             try {
-                $this->showingRepository->addShowingByMovieIdAndRoomId($showingData);
+                $this->showingRepository->addShowing($showingData);
                 return ['success' => true];
             } catch (Exception $e) {
                 return ['error' => true, 'message' => $e->getMessage()];
             }
         } else {
-            return $errors;
+            return $errors; // If there are validation errors, return them
         }
     }
 
@@ -184,12 +211,23 @@ class ShowingService {
         }
     }
 
-    private function validateFormInputs(array $showingData, array &$errors): void {
-        if (empty($showingData['movieId']) ||
-            empty($showingData['roomId'])||
+    private function validateShowingFormInputs(array $showingData, array &$errors): void {
+        // Define regexes for validation
+        $dateRegex = "/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/";
+        $timeRegex = "/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/";
+
+        if (empty($showingData['venueId']) ||
             empty($showingData['showingDate']) ||
-            empty($showingData['showingTime'])) {
+            empty($showingData['showingTime'])||
+            empty($showingData['movieId']) ||
+            empty($showingData['roomId'])) {
             $errors['general'] = "All fields are required.";
+        }
+        if (!preg_match($dateRegex, $showingData['showingDate'])) {
+            $errors['showingDate'] = "Invalid date format. Please use the format YYYY-MM-DD.";
+        }
+        if (!preg_match($timeRegex, $showingData['showingTime'])) {
+            $errors['showingTime'] = "Invalid time format. Please use the format HH:MM.";
         }
     }
 }
