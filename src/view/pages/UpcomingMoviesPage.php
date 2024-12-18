@@ -19,7 +19,7 @@ $currentDate = new DateTime();
 <body class="max-w-[1440px] w-[100%] mx-auto mt-[72px] mb-[2rem] px-[100px] bg-bgDark text-textLight">
 <?php include_once("src/view/components/Navbar.php"); ?>
 <main class="mt-[56px] p-4">
-  <h1 class="text-[1.875rem] font-bold mb-6">Upcoming Movies</h1>
+  <h1 class="text-[1.875rem] font-bold mb-6">Coming soon</h1>
   <div class="grid grid-cols-5 gap-16">
     <?php
     $movieController = new MovieController();

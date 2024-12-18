@@ -1,4 +1,4 @@
-<?php     require_once 'session_config.php';
+<?php
 require_once "src/model/services/VenueService.php";
 
 class VenueController {

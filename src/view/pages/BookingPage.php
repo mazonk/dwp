@@ -103,15 +103,15 @@ else if (isset($_SESSION['activeBooking']) && $_SESSION['activeBooking']['expiry
                 <h3 class="text-lg font-semibold mb-2">Color Legend:</h3>
                 <div class="flex space-x-4">
                     <div class="flex items-center">
-                        <div class="w-4 h-4 bg-lime-600 mr-2 rounded"></div>
+                        <div class="w-4 h-4 bg-blue-600 mr-2 rounded"></div>
                         <span>Available</span>
                     </div>
                     <div class="flex items-center">
-                        <div class="w-4 h-4 bg-red-500 mr-2 rounded"></div>
+                        <div class="w-4 h-4 bg-lime-600 mr-2 rounded"></div>
                         <span>Selected</span>
                     </div>
                     <div class="flex items-center">
-                        <div class="w-4 h-4 bg-purple-500 mr-2 rounded"></div>
+                        <div class="w-4 h-4 bg-red-500 mr-2 rounded"></div>
                         <span>Unavailable</span>
                     </div>
                 </div>
@@ -185,8 +185,10 @@ else if (isset($_SESSION['activeBooking']) && $_SESSION['activeBooking']['expiry
                             if (errorMessage === '') {
                                 // If validation passes, deselect the seat
                                 selectedSeats = tempSeats;
-                                this.classList.remove('bg-red-500');
-                                this.classList.add('bg-lime-600');
+
+                                this.classList.remove('bg-lime-600');
+                                this.classList.add('bg-blue-600');
+
                             } else {
                                 // Show error message if deselecting causes invalid gaps
                                 showError(errorMessage, this);
@@ -204,8 +206,10 @@ else if (isset($_SESSION['activeBooking']) && $_SESSION['activeBooking']['expiry
                             if (errorMessage === '') {
                                 // If validation passes, select the seat
                                 selectedSeats.push(seatId);
-                                this.classList.remove('bg-lime-600');
-                                this.classList.add('bg-red-500');
+
+                                this.classList.remove('bg-blue-600');
+                                this.classList.add('bg-lime-600');
+
                             } else {
                                 // Show error message if adding the seat causes invalid gaps
                                 showError(errorMessage, this);

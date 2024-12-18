@@ -1,6 +1,7 @@
 <?php
 require_once 'src/model/database/dbcon/DatabaseConnection.php';
 require_once "src/model/entity/Showing.php";
+
 class ShowingRepository {
     private PDO $db;
 

@@ -31,7 +31,14 @@ if (is_array($user) && isset($user['errorMessage']) && $user['errorMessage']) {
 } else { //else render component
 
     //fetch bookings
-    $bookings = $bookingController->getBookingsByUserId($_SESSION['loggedInUser']['userId']);
+    $bookings = $bookingController->getBookingsByUserId($user->getId());
+
+    if (!empty($bookings) && is_array($bookings) && (!isset($bookings['errorMessage']) || !$bookings['errorMessage'])) {
+        $bookings = array_filter($bookingController->getBookingsByUserId($_SESSION['loggedInUser']['userId']), function($booking) {
+            return $booking->getStatus()->value !== 'pending';
+        });
+    }
+    
     $initialBookings = count($bookings) > 8 ? array_slice($bookings, 0, 8) : $bookings;
 
     $editMode = isset($_GET['edit']) && $_GET['edit'] == "true";

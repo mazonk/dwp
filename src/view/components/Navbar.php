@@ -1,9 +1,15 @@
-<?php if (isset($_POST['action'])) { //request by xhr
+<?php
+  require_once "src/controller/CompanyInfoController.php";
+
+  if (isset($_POST['action'])) { //request by xhr
     if ($_POST['action'] === 'selectVenue') {
       $selectedVenue = $venueController->selectVenue($venueController->getVenueById($_POST['venueId']));
     }
     exit();
   }
+
+  $companyInfoController = new CompanyInfoController();
+  $companyInfo = $companyInfoController->getCompanyInfo();
   ?>
 <header class="w-[100%] fixed top-0 left-0 right-0 bg-bgDark z-[10]">
   <script>
@@ -66,19 +72,22 @@
     <a href="<?php echo $_SESSION['baseRoute']?>home">
       <img src="src/assets/<?php echo htmlspecialchars($companyInfo->getLogoUrl()) ?>" alt="Company Logo" class="w-12 h-12 object-cover rounded-full mr-4">
     </a>
+    <p class="absolute left ml-[12%] transform -translate-x-1/2 text-2xl font-bold text-yellow-400">
+    SpicyPisces Cinema
+  </p>
     <!-- Menu -->
     <div class="flex justify-center items-center gap-[2.5rem] ml-[195px]">
-      <a href="<?php echo $_SESSION['baseRoute']?>home" class="font-medium">Home</a>
-      <a href="<?php echo $_SESSION['baseRoute']?>movies" class="font-medium">All Movies</a>
-      <a href="<?php echo $_SESSION['baseRoute']?>upcoming" class="font-medium">Upcoming Movies</a>
-      <a href="<?php echo $_SESSION['baseRoute']?>about" class="font-medium">About us</a>
-      <a href="#contact" class="font-medium">Contact</a>
+      <a href="<?php echo $_SESSION['baseRoute']?>home" class="font-medium hover:text-yellow-400 transition duration-300">Home</a>
+      <a href="<?php echo $_SESSION['baseRoute']?>movies" class="font-medium hover:text-yellow-400 transition duration-300">All Movies</a>
+      <a href="<?php echo $_SESSION['baseRoute']?>upcoming" class="font-medium hover:text-yellow-400 transition duration-300">Upcoming Movies</a>
+      <a href="<?php echo $_SESSION['baseRoute']?>about" class="font-medium hover:text-yellow-400 transition duration-300">About us</a>
+      <a href="#contact" class="font-medium hover:text-yellow-400 transition duration-300">Contact</a>
     </div>
 
     <div class="flex items-center gap-[2rem]">
       <!-- Venue Dropdown -->
       <div class="relative">
-        <button id="venueDropdownToggler" type="button" class="flex gap-[.375rem]">
+        <button id="venueDropdownToggler" type="button" class="flex gap-[.375rem] hover:text-yellow-400">
           <i class="ri-map-pin-2-fill h-[18px] text-[18px]"></i>
           <span class="translate-y-[.5px]"><?= $_SESSION['selectedVenueName'] ?></span>
         </button>

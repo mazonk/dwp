@@ -131,7 +131,9 @@ function handlePayment(string $userEmail, int $bookingId, int $addressId, array 
   $venue = $venueController->getVenueById($venueId);
 
   // Load environment variables for Stripe API keys
+  if ($_SERVER['HTTP_HOST'] == 'localhost') {
   loadEnv();
+  }
   $stripe_secret_key = getenv('STRIPE_SK');
 
   \Stripe\Stripe::setApiKey($stripe_secret_key);

@@ -113,7 +113,7 @@ class PaymentService {
 
       // Roll back booking (and tickets)
       $bookingResult = $this->bookingService->rollBackBooking($bookingId, $ticketIds);
-      if ($bookingResult['error']) {
+      if (isset($bookingResult['error']) && $bookingResult['error']) {
           throw new Exception("Failed to roll back booking: " . $bookingResult['message']);
       }
       $this->db->commit();
