@@ -62,7 +62,7 @@
     <div class="flex justify-center items-center gap-[2.5rem] ml-[195px]">
       <a href="<?php echo $_SESSION['baseRoute']?>home" class="font-medium">Home</a>
       <a href="<?php echo $_SESSION['baseRoute']?>movies" class="font-medium">All Movies</a>
-      <a href="<?php echo $_SESSION['baseRoute']?>upcoming" class="font-medium">Upcoming Movies</a>
+      <a href="<?php echo $_SESSION['baseRoute']?>upcoming" class="font-medium">Coming soon</a>
       <a href="<?php echo $_SESSION['baseRoute']?>about" class="font-medium">About us</a>
       <a href="" class="font-medium">Contact</a>
     </div>

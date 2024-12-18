@@ -180,6 +180,7 @@ post($baseRoute.'invoice', function() {
 
 // Query string routes
 get($baseRoute.'movies/$id', 'src/view/pages/MovieDetailsPage.php');
+get($baseRoute.'movies/$id', 'src/view/pages/LandingPage.php');
 get($baseRoute.'news/$id', 'src/view/pages/NewsPage.php');
 
 //put routes
