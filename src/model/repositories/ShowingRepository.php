@@ -74,6 +74,22 @@ class ShowingRepository {
         }
     }
 
+    public function getUnavailableRoomsForAVenueAndDay(int $venueId, string $showingDate): array {
+        $db = $this->getdb();
+        $query = $db->prepare("SELECT s.roomId, s.showingTime, m.duration FROM Showing as s
+        JOIN VenueShowing as vs ON s.showingId = vs.showingId
+        JOIN Movie as m ON s.movieId = m.movieId
+        WHERE vs.venueId = :venueId 
+        AND s.showingDate = :showingDate");
+        try {
+            $query->execute(array(":venueId" => $venueId, ":showingDate" => $showingDate));
+            $result = $query->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+        } catch (PDOException $e) {
+            throw new Exception("Unable to fetch showings for this movie in this venue for this date!");
+        }
+    }
+
     /**
      * Gets the movies playing today for the given venue.
      *

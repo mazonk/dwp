@@ -57,6 +57,23 @@ class ShowingService {
         }
     }
 
+    public function getUnavailableRoomsForAVenueAndDay(int $venueId, string $showingDate): array {
+        try {
+            $result = $this->showingRepository->getUnavailableRoomsForAVenueAndDay($venueId, $showingDate);
+            $unavailableRooms = [];
+            foreach ($result as $room) {
+                $unavailableRooms[] = [
+                    'roomId' => $room['roomId'],
+                    'showingTime' => $room['showingTime'],
+                    'duration' => $room['duration'],
+                ];
+            }
+            return $unavailableRooms;
+        } catch (Exception $e) {
+            return ['error' => true,'message' => $e->getMessage()];
+        }
+    }
+
     public function getAllShowingsForMovie(int $movieId, int $selectedVenueId): array {
         try {
             $result = $this->showingRepository->getShowingsForMovie($movieId, $selectedVenueId);

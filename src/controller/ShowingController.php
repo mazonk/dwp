@@ -66,6 +66,15 @@ class ShowingController {
         return $unavailableTimeslots;
     }
 
+    public function getUnavailableRoomsForAVenueAndDay(int $venueId, string $showingDate): array {
+        $unavailableRooms = $this->showingService->getUnavailableRoomsForAVenueAndDay($venueId, $showingDate);
+        if (isset($unavailableRooms['error']) && $unavailableRooms['error']) {
+            return ['errorMessage' => $unavailableRooms['message']];
+        }
+        
+        return $unavailableRooms;
+    }
+
     public function addShowingByMovieIdAndRoomId(array $showingData): array {
         $errors = $this->showingService->addShowingByMovieIdAndRoomId($showingData);
         if(count($errors) == 0) {
