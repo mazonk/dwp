@@ -158,7 +158,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === 4 && xhr.status === 200) {
                         document.getElementById('dailyShowingsList').innerHTML = xhr.responseText;
-                        console.log(currentPage);
                         prevPageButton.disabled = currentPage === 1;
                         const totalPages = Math.ceil(totalMovies / moviesPerPage);
                         nextPageButton.disabled = currentPage >= totalPages;

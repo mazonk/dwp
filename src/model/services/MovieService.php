@@ -3,6 +3,7 @@ require_once "src/model/entity/Movie.php";
 require_once "src/model/entity/Actor.php";
 require_once "src/model/entity/Director.php";
 require_once "src/model/repositories/MovieRepository.php";
+require_once "src/model/services/GenreService.php";
 
 class MovieService {
     private MovieRepository $movieRepository;

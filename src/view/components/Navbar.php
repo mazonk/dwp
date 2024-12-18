@@ -1,9 +1,15 @@
-<?php if (isset($_POST['action'])) { //request by xhr
+<?php
+  require_once "src/controller/CompanyInfoController.php";
+
+  if (isset($_POST['action'])) { //request by xhr
     if ($_POST['action'] === 'selectVenue') {
       $selectedVenue = $venueController->selectVenue($venueController->getVenueById($_POST['venueId']));
     }
     exit();
   }
+
+  $companyInfoController = new CompanyInfoController();
+  $companyInfo = $companyInfoController->getCompanyInfo();
   ?>
 <header class="w-[100%] fixed top-0 left-0 right-0 bg-bgDark z-[10]">
   <script>
