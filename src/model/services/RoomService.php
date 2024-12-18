@@ -26,4 +26,22 @@ class RoomService {
             return ['error' => true,'message' => $e->getMessage()];
         }
     }
+
+    public function getRoomsByVenueId(int $venueId): array {
+        try {
+            $results = $this->roomRepository->getRoomsByVenueId($venueId);
+            $rooms = [];
+            foreach ($results as $result) {
+                $venue = $this->venueService->getVenueById($result['venueId']);
+                if (is_array($venue) && isset($venue['error']) && $venue['error']) {
+                    return $venue; //return the errors if there are any
+                } else {
+                    $rooms[] = new Room($result['roomId'], $result['roomNumber'], $venue);
+                }
+            }
+            return $rooms;
+        } catch (Exception $e) {
+            return ['error' => true,'message' => $e->getMessage()];
+        }
+    }
 }
