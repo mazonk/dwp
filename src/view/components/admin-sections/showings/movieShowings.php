@@ -33,8 +33,7 @@ if (!isset($showings['errorMessage'])) {
 
 $addShowingData = [
     'movieId' => $movieId,
-    'duration' => $movie->getDuration(),
-    'todayDay' => date('l')
+    'duration' => $movie->getDuration()
 ];
 ?>
 
@@ -153,6 +152,7 @@ $addShowingData = [
                             <option value="" disabled selected>Select a venue, date, and time first</option>
                         </select>
                         <p id="error-add-showing-room" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
+                    </div>
                     <!-- Buttons -->
                     <div class="flex justify-end">
                         <button type="submit" id="saveAddShowingButton" class="bg-primary text-textDark py-2 px-4 rounded border border-transparent hover:bg-primaryHover duration-[.2s] ease-in-out">Add</button>
@@ -237,40 +237,24 @@ $addShowingData = [
         const addShowingRoomInput = document.getElementById('addShowingRoomInput');
         const addShowingRoomError = document.getElementById('error-add-showing-room');
 
-        function fetchAvailableShowings() {
-            const venueId = addShowingVenueInput.value;
-            const showingDate = addShowingDateInput.value;
-            const showingTime = addShowingTimeInput.value;
-            
-            if (!venueId || !showingDate) {
-                return;
-            }
-            else if (!showingTime) {
-                const xhr = new XMLHttpRequest();
-                const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
-                xhr.open('POST', `${baseRoute}fetch-timeslots`, true);
+        function fetchRequest(route, data) {
+            const xhr = new XMLHttpRequest();
+            const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
+            xhr.open('POST', `${baseRoute}fetch-${route}`, true);
 
-                const { duration, movieId, todayDay } = showingData;
-                const data = {
-                    venueId: venueId,
-                    showingDate: showingDate,
-                    duration: duration,
-                    movieId: movieId,
-                    todayDay: todayDay
-                };
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    let response;
+                    try {
+                        response = JSON.parse(xhr.response);
+                    } catch (e) {
+                        console.error('Could not parse response as JSON:', e);
+                        return;
+                    }
 
-                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === 4 && xhr.status === 200) {
-                        let response;
-                        try {
-                            response = JSON.parse(xhr.response);
-                        } catch (e) {
-                            console.error('Could not parse response as JSON:', e);
-                            return;
-                        }
-
-                        if (response.success) {
+                    if (response.success) {
+                        if (route == "timeslots") {
                             addShowingTimeInput.innerHTML = '<option value="" disabled selected>Select a time slot</option>';
                             response.availableTimes.forEach((timeSlot) => {
                                 const option = document.createElement('option');
@@ -278,44 +262,8 @@ $addShowingData = [
                                 option.textContent = `${timeSlot.startTime} - ${timeSlot.endTime}`;
                                 addShowingTimeInput.appendChild(option);
                             });
-                        } else {
-                            addShowingTimeInput.innerHTML = '<option value="" disabled>No available slots</option>';
-                        }
-                    }
-                };
-                // Send data as URL-encoded string
-                const params = Object.keys(data)
-                    .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)
-                    .join('&');
-                xhr.send(params);
-            }
-            else {
-                const xhr = new XMLHttpRequest();
-                const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
-                xhr.open('POST', `${baseRoute}fetch-rooms`, true);
-
-                /* const { duration, movieId, todayDay } = showingData;
-                const data = {
-                    venueId: venueId,
-                    showingDate: showingDate,
-                    duration: duration,
-                    movieId: movieId,
-                    todayDay: todayDay
-                }; */
-
-                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === 4 && xhr.status === 200) {
-                        let response;
-                        console.log(xhr.response);
-                        try {
-                            response = JSON.parse(xhr.response);
-                        } catch (e) {
-                            console.error('Could not parse response as JSON:', e);
-                            return;
-                        }
-
-                        if (response.success) {
+                        } 
+                        else if (route == "rooms") {
                             addShowingRoomInput.innerHTML = '<option value="" disabled selected>Select a room</option>';
                             response.availableRooms.forEach((room) => {
                                 const option = document.createElement('option');
@@ -323,20 +271,83 @@ $addShowingData = [
                                 option.textContent = `Room ${room.roomNumber}`;
                                 addShowingRoomInput.appendChild(option);
                             });
-                        } else {
+                        }
+                        
+                    } else {
+                        if (route == "timeslots") {
+                            addShowingTimeInput.innerHTML = '<option value="" disabled>No available slots</option>';
+                        }
+                        else if (route == "rooms") {
                             addShowingRoomInput.innerHTML = '<option value="" disabled>No available rooms for this timeslot</option>';
                         }
                     }
-                };
-                // Send data as URL-encoded string
-                const params = Object.keys(data)
-                    .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)
-                    .join('&');
-                xhr.send(params);
-            }            
+                }
+            };
+            // Send data as URL-encoded string
+            const params = Object.keys(data)
+                .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)
+                .join('&');
+            xhr.send(params);
         }
 
-        addShowingVenueInput.addEventListener('change', fetchAvailableShowings);
-        addShowingDateInput.addEventListener('change', fetchAvailableShowings);
+        function fetchAvailableTimeslots() {
+            const venueId = addShowingVenueInput.value;
+            const showingDate = addShowingDateInput.value;
+
+            if (!venueId || !showingDate) {
+                return;
+            } 
+            const { duration, movieId } = showingData;
+
+            // Create a Date object
+            const date = new Date(showingDate);
+            // Get the weekday as a number (0 for Sunday, 1 for Monday, etc.)
+            const dayNumber = date.getDay();
+            // Map the day number to weekday names
+            const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            const weekday = weekdays[dayNumber];
+
+            const data = {
+                venueId: venueId,
+                showingDate: showingDate,
+                duration: duration,
+                movieId: movieId,
+                weekday: weekday
+            };
+
+            fetchRequest('timeslots', data);
+        }
+
+        function fetchAvailableRooms() {
+            const venueId = addShowingVenueInput.value;
+            const showingDate = addShowingDateInput.value;
+            const showingTime = addShowingTimeInput.value;
+
+            if (!venueId || !showingDate) {
+                return;
+            } 
+            const { duration, movieId } = showingData;
+
+            // Create a Date object
+            const date = new Date(showingDate);
+            // Get the weekday as a number (0 for Sunday, 1 for Monday, etc.)
+            const dayNumber = date.getDay();
+            // Map the day number to weekday names
+            const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            const weekday = weekdays[dayNumber];
+
+            const data = {
+                venueId: venueId,
+                showingDate: showingDate,
+                duration: duration,
+                movieId: movieId,
+                weekday: weekday
+            };
+
+            fetchRequest('timeslots', data);
+        }
+
+        addShowingVenueInput.addEventListener('change', fetchAvailableTimeslots);
+        addShowingDateInput.addEventListener('change', fetchAvailableTimeslots);
     });
 </script>
