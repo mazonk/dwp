@@ -189,11 +189,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         });
     </script>
 </head>
-<body class="max-w-[1440px] w-[100%] mx-auto px-[100px] bg-bgDark text-textLight overflow-y-auto">
+<body class="max-w-[1440px] w-[100%] mx-auto px-[100px] bg-bgDark text-textLight overflow-y-auto pt-[80px]">
     <!-- Navbar -->
-    <?php include_once("src/view/components/Navbar.php"); ?>
-
-    <main class="mt-16 p-4">
+    <nav class="fixed top-0 left-0 w-full z-10 bg-bgDark">
+        <?php include_once("src/view/components/Navbar.php"); ?>
+    </nav>
+    <div class="w-full">
+        <?php include_once("src/view/components/PromoImage.php"); ?>
+    </div>
+    <main class="mt-2 p-4">
         <div class="flex items-center justify-between">
             <!-- Left Arrow - Previous -->  
             <!-- Set button to disable, so they can't navigate to page < 1 -->
