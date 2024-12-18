@@ -84,7 +84,7 @@
     <div class="flex items-center gap-[2rem]">
       <!-- Venue Dropdown -->
       <div class="relative">
-        <button id="venueDropdownToggler" type="button" class="flex gap-[.375rem]">
+        <button id="venueDropdownToggler" type="button" class="flex gap-[.375rem] hover:text-yellow-400">
           <i class="ri-map-pin-2-fill h-[18px] text-[18px]"></i>
           <span class="translate-y-[.5px]"><?= $_SESSION['selectedVenueName'] ?></span>
         </button>
