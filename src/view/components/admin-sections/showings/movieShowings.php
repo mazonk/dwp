@@ -85,20 +85,34 @@ $movieData = [
                 ?>
                 <div  
                     class="bg-bgSemiDark p-4 rounded-lg shadow-md border border-borderDark showing-item cursor-pointer">
-                    <!-- Today label -->
-                    <?php if ($showing['showingDate'] == date('Y-m-d')) { ?>
-                        <span class="bg-primary text-textDark text-xs font-semibold px-2 py-1 rounded-full mb-2 inline-block">Today</span>
-                    <?php } ?>
-                    <h3 class="text-lg font-semibold text-white mb-2">
+                    <div class="flex justify-between items-center mb-2">
+                        <!-- Today label -->
+                        <?php if ($showing['showingDate'] == date('Y-m-d')) { ?>
+                            <span class="bg-primary text-textDark text-xs font-semibold px-2 py-1 rounded-full mb-2 inline-block">Today</span>
+                        <?php } ?>
+                        <!-- Archived label -->
+                        <?php if ($showing['archived'] == 1) { ?>
+                            <span class="bg-red-500 text-textDark text-xs font-semibold px-2 py-1 rounded-full mb-2 inline-block">Archived</span>
+                        <?php } ?>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white mb-4">
                         <?php echo $showing['showingDate']; ?> at <?php echo $showing['showingTime']; ?>
                     </h3>
                     <!-- Edit and delete button -->
                     <button data-edit-showing="<?php echo htmlspecialchars(json_encode($editShowingData)); ?>" class='openEditShowingModalButton py-1 px-2 text-primary border-[1px] border-primary rounded hover:text-primaryHover hover:border-primaryHover duration-[.2s] ease-in-out'>
                         Edit
                     </button>
-                    <button class='openDeleteShowingModalButton bg-red-500 text-textDark py-1 px-2 border-[1px] border-red-500 rounded hover:bg-red-600 hover:border-red-600'>
-                        Delete
-                    </button>
+                    <?php if ($showing['archived'] == 1) { 
+                        
+                        ?>
+                        <button data-restore-id="<?php echo htmlspecialchars($showing['showingId']); ?>" class='openRestoreModalButton text-white py-1 px-2 border-[1px] border-white rounded hover:bg-white hover:text-bgSemiDark'>
+                            Restore
+                        </button>
+                    <?php } else { ?>
+                        <button data-archive-id="<?php echo htmlspecialchars($showing['showingId']); ?>" class='openArchiveModalButton bg-red-500 text-textDark py-1 px-2 border-[1px] border-red-500 rounded hover:bg-red-600 hover:border-red-600'>
+                            Archive
+                        </button>
+                    <?php } ?>
                 </div>
 
             <?php } ?>
@@ -221,6 +235,37 @@ $movieData = [
         </div>
     </div>
 
+    <!-- Archive showing modal -->
+    <div id="archiveShowingModal" class="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 hidden">
+        <div class="flex items-center justify-center min-h-screen">
+            <!-- Modal -->
+            <div class="bg-bgSemiDark w-[400px] rounded-lg p-6 border-[1px] border-borderDark">
+                <h2 class="text-[1.5rem] text-center font-semibold mb-4">Archive Showing</h2>
+                <p class="text-textLight text-center mb-4">Are you sure you want to archive this showing?</p>
+                <input type="hidden" id="archiveShowingId">
+                <div class="flex justify-center">
+                    <button id="confirmArchiveButton" class="bg-red-500 text-textDark py-2 px-4 rounded border border-transparent hover:bg-red-600 duration-[.2s] ease-in-out">Archive</button>
+                    <button id="cancelArchiveButton" class="text-textLight py-2 px-4 border-[1px] border-white rounded hover:bg-borderDark ml-2 duration-[.2s] ease-in-out">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Restore showing modal -->
+    <div id="restoreShowingModal" class="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 hidden">
+        <div class="flex items-center justify-center min-h-screen">
+            <!-- Modal -->
+            <div class="bg-bgSemiDark w-[400px] rounded-lg p-6 border-[1px] border-borderDark">
+                <h2 class="text-[1.5rem] text-center font-semibold mb-4">Restore Showing</h2>
+                <p class="text-textLight text-center mb-4">Are you sure you want to restore this showing?</p>
+                <input type="hidden" id="restoreShowingId">
+                <div class="flex justify-center">
+                    <button id="confirmRestoreButton" class="bg-primary text-textDark py-2 px-4 rounded border border-transparent hover:bg-primaryHover duration-[.2s] ease-in-out">Restore</button>
+                    <button id="cancelRestoreButton" class="text-textLight py-2 px-4 border-[1px] border-white rounded hover:bg-borderDark ml-2 duration-[.2s] ease-in-out">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -718,6 +763,122 @@ $movieData = [
         editShowingVenueInput.addEventListener('change', editFetchAvailableTimeslots);
         editShowingDateInput.addEventListener('change', editFetchAvailableTimeslots);
         editShowingTimeInput.addEventListener('change', editFetchAvailableRooms);
+
+        /*== Archive Showing ==*/
+        const archiveShowingModal = document.getElementById('archiveShowingModal');
+        const openArchiveModalButton = document.querySelectorAll('.openArchiveModalButton');
+        const confirmArchiveButton = document.getElementById('confirmArchiveButton');
+        const cancelArchiveButton = document.getElementById('cancelArchiveButton');
+        const archiveShowingId = document.getElementById('archiveShowingId');
+
+
+
+        openArchiveModalButton.forEach(button => {
+            button.addEventListener('click', () => {
+                archiveShowingModal.classList.remove('hidden');
+                archiveShowingId.value = button.dataset.archiveId;
+            });
+        });
+
+        cancelArchiveButton.addEventListener('click', () => {
+            archiveShowingModal.classList.add('hidden');
+            archiveShowingId.value = '';
+        });
+
+        confirmArchiveButton.addEventListener('click', () => {
+            const xhr = new XMLHttpRequest();
+            const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
+            xhr.open('PUT', `${baseRoute}showing/archive`, true);
+
+            const archiveShowingData = {
+                action: 'archiveShowing',
+                showingId: archiveShowingId.value
+            }
+
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    let response;
+                    try {
+                        response = JSON.parse(xhr.response);
+                    } catch (e) {
+                        console.error('Could not parse response as JSON:', e);
+                        return;
+                    }
+
+                    if (response.success) {
+                        alert('Success! Showing archived successfully.');
+                        window.location.reload();
+                    } else {
+                        console.error('Error:', response.errorMessage);
+                    }
+                }
+            };
+
+            const params = Object.keys(archiveShowingData)
+                .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(archiveShowingData[key])}`)
+                .join('&');
+            xhr.send(params);
+        });
+
+        /*== Restore Showing ==*/
+        const restoreShowingModal = document.getElementById('restoreShowingModal');
+        const openRestoreModalButton = document.querySelectorAll('.openRestoreModalButton');
+        const confirmRestoreButton = document.getElementById('confirmRestoreButton');
+        const cancelRestoreButton = document.getElementById('cancelRestoreButton');
+        const restoreShowingId = document.getElementById('restoreShowingId');
+
+        openRestoreModalButton.forEach(button => {
+            button.addEventListener('click', () => {
+                restoreShowingModal.classList.remove('hidden');
+                restoreShowingId.value = button.dataset.restoreId;
+            });
+        });
+
+        cancelRestoreButton.addEventListener('click', () => {
+            restoreShowingModal.classList.add('hidden');
+            restoreShowingId.value = '';
+        });
+
+        confirmRestoreButton.addEventListener('click', () => {
+            const xhr = new XMLHttpRequest();
+            const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
+            xhr.open('PUT', `${baseRoute}showing/restore`, true);
+
+            const restoreShowingData = {
+                action: 'restoreShowing',
+                showingId: restoreShowingId.value
+            }
+
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    let response;
+                    console.log(xhr.response);
+                    console.log(xhr.response);
+                    try {
+                        response = JSON.parse(xhr.response);
+                    } catch (e) {
+                        console.error('Could not parse response as JSON:', e);
+                        return;
+                    }
+
+                    if (response.success) {
+                        alert('Success! Showing restored successfully.');
+                        window.location.reload();
+                    } else {
+                        console.error('Error:', response.errorMessage);
+                    }
+                }
+            };
+
+            const params = Object.keys(restoreShowingData)
+                .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(restoreShowingData[key])}`)
+                .join('&');
+            xhr.send(params);
+        });
+
+
 
         // Clear error messages and input values
         function clearValues(action) {
