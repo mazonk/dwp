@@ -45,13 +45,13 @@ if (is_array($movie) && isset($movie['errorMessage'])) {
         <?php
         // Display the genres in a list below the poster
         foreach ($genres as $genre) {
-            echo '<span class="inline-block mr-2 bg-blue-600 text-s text-white rounded-md px-2 py-1 mb-2">' . htmlspecialchars($genre->getName()) . '</span>';
+            echo '<span class="inline-block mr-2 bg-blue-600 text-s text-white font-semibold rounded-md px-2 py-1 mb-2">' . htmlspecialchars($genre->getName()) . '</span>';
         }
         ?>
     </div>
 </div>
     <div class="ml-[20px]">
-      <div class="text-[2.5rem] font-bold mb-2.5">
+      <div class="text-[3rem] font-bold mb-2.5">
         <?php echo htmlspecialchars($movie->getTitle()); ?>
       </div>
       <div class="text-[1.2rem] mb-5">
@@ -108,7 +108,7 @@ if (is_array($movie) && isset($movie['errorMessage'])) {
           $currentDay = clone $today;
           $currentDay->modify("+$i day");
           $formatedDay = $currentDay->format('l d, M');
-          echo '<div class="bg-bgLight text-white py-2 px-4 my-2 rounded-md w-full text-center">';
+          echo '<div class="bg-bgLight text-white font-semibold py-2 px-4 my-2 rounded-md w-full text-center">';
           echo "$formatedDay";
           echo '<div class="flex flex-col items-center">';
           foreach ($showingsForMovie as $showing) {

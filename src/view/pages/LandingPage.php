@@ -178,9 +178,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     // Update tab classes to reflect the active tab with underlining
                     tabs.forEach((t) => {
                         if (t.dataset.tab === tab) {
-                            t.classList.add('underline', 'font-semibold');
+                            t.classList.add('underline', 'text-yellow-400' , 'font-semibold');
                         } else {
-                            t.classList.remove('underline', 'font-semibold');
+                            t.classList.remove('underline', 'text-yellow-400' ,'font-semibold');
                         }
                     });
                 };
@@ -189,15 +189,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         });
     </script>
 </head>
-<body class="max-w-[1440px] w-[100%] mx-auto px-[100px] bg-bgDark text-textLight overflow-y-auto pt-[80px]">
+<body class="max-w-[1440px] w-[100%] mx-auto px-[100px] bg-bgDark text-textLight overflow-y-auto">
     <!-- Navbar -->
-    <nav class="fixed top-0 left-0 w-full z-10 bg-bgDark">
-        <?php include_once("src/view/components/Navbar.php"); ?>
-    </nav>
-    <div class="w-full">
-        <?php include_once("src/view/components/PromoImage.php"); ?>
-    </div>
-    <main class="mt-2 p-4">
+    <?php include_once("src/view/components/Navbar.php"); ?>
+
+    <main class="mt-16 p-4">
         <div class="flex items-center justify-between">
             <!-- Left Arrow - Previous -->  
             <!-- Set button to disable, so they can't navigate to page < 1 -->
@@ -207,7 +203,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <!-- Daily showings -->
             <div id="dailyShowingsList" class="grid grid-cols-5 gap-4 w-full">
-            <div class="col-span-5 text-center text-2xl font-semibold">Playing today:</div>
                 <?php
                 renderMovies($showingController, $page, $moviesPerPage);
                 ?>
@@ -222,7 +217,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <!-- News/companyinfo/prices -->
         <!-- Tab Navigation -->
         <div class="flex space-x-4 justify-center mt-8 mb-8">
-            <a data-tab="news" class="tab text-white cursor-pointer <?php echo $tab === 'news' ? 'underline font-semibold' : ''; ?>">News & Articles</a>
+            <a data-tab="news" class="tab text-white cursor-pointer <?php echo $tab === 'news' ? 'underline text-yellow-400 font-semibold' : ''; ?>">News & Articles</a>
             <a data-tab="company" class="tab text-white cursor-pointer">Company Information</a>
             <a data-tab="tickets" class="tab text-white cursor-pointer">Ticket Prices</a>
         </div>
