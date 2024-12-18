@@ -45,4 +45,77 @@ class ShowingController {
         }
         return $showings;
     }
+
+    public function getUnavailableTimeslotsForMovie(int $venueId, int $movieId, string $showingDate): array {
+        $unavailableTimeslots = $this->showingService->getUnavailableTimeslotsForMovie($venueId, $movieId, $showingDate);
+        // If the service returns an error, pass it to the frontend
+        if (isset($unavailableTimeslots['error']) && $unavailableTimeslots['error']) {
+            return ['errorMessage' => $unavailableTimeslots['message']];
+        }
+        
+        return $unavailableTimeslots;
+    }
+
+    public function getUnavailableRoomsForAVenueAndDay(int $venueId, string $showingDate): array {
+        $unavailableRooms = $this->showingService->getUnavailableRoomsForAVenueAndDay($venueId, $showingDate);
+        if (isset($unavailableRooms['error']) && $unavailableRooms['error']) {
+            return ['errorMessage' => $unavailableRooms['message']];
+        }
+        
+        return $unavailableRooms;
+    }
+
+    public function getRelevantShowingsForMovie(int $movieId): array {
+        $showings = $this->showingService->getRelevantShowingsForMovie($movieId);
+        if (isset($showings['error']) && $showings['error']) {
+            return ['errorMessage' => $showings['message']];
+        }
+        
+        return $showings;
+    }
+
+    public function addShowing(array $showingData): array {
+        $errors = $this->showingService->addShowing($showingData);
+
+        // Check if there are any validation errors
+        if(count($errors) == 0) {
+            // Check if there are any errors from adding the showing
+            if (isset($errors['error']) && $errors['error']) {
+                return ['errorMessage' => $errors['message']];
+            }
+            return ['success' => true];
+        } else {
+            return $errors; // Return the validation errors
+        }
+    }
+
+    public function editShowing(array $showingData): array {
+        $errors = $this->showingService->editShowing($showingData);
+
+        if(count($errors) == 0) {
+            // Check if there are any errors from adding the news
+            if (isset($errors['error']) && $errors['error']) {
+                return ['errorMessage' => $errors['message']];
+            }
+            return ['success' => true];
+        } else {
+            return $errors;
+        }
+    }
+
+    public function archiveShowing(int $showingId): array {
+        $result = $this->showingService->archiveShowing($showingId);
+        if (isset($result['error']) && $result['error']) {
+            return ['errorMessage' => $result['message']];
+        }
+        return ['success' => true];
+    }
+
+    public function restoreShowing(int $showingId): array {
+        $result = $this->showingService->restoreShowing($showingId);
+        if (isset($result['error']) && $result['error']) {
+            return ['errorMessage' => $result['message']];
+        }
+        return ['success' => true];
+    }
 }

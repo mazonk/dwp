@@ -24,6 +24,23 @@ class OpeningHourRepository {
     }
   }
 
+  public function getCurrentOpeningHourByDay(string $day): array {
+    $db = $this->getdb();
+    $query = $db->prepare("SELECT * FROM OpeningHour WHERE day = :day AND isCurrent = 1");
+
+    try {
+      $query->execute(array('day' => $day));
+      $result = $query->fetch(PDO::FETCH_ASSOC);
+
+      if (empty($result)) {
+        throw new Exception("No current opening hour found for this day.");
+      }
+      return $result;
+    } catch (PDOException $e) {
+      throw new PDOException("Unable to fetch current opening hour by day.");
+    }
+  }
+
   public function getCurrentOpeningHoursIdByDay(array $openingHourData): array {
     $db = $this->getdb();
     $query = $db->prepare("SELECT openingHourId FROM OpeningHour WHERE day = :day AND isCurrent = 1");
