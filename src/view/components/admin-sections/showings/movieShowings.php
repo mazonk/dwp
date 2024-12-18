@@ -25,7 +25,7 @@ if (!isset($showings['errorMessage'])) {
     sort($dates);
 }
 
-$addShowingData = [
+$movieData = [
     'movieId' => $movieId,
     'duration' => $movie->getDuration()
 ];
@@ -66,19 +66,26 @@ $addShowingData = [
 
             <!-- Add Showing Button -->
             <div class="ml-auto flex items-center">
-                <button id="addShowingButton" data-addshowing="<?php echo htmlspecialchars(json_encode($addShowingData)); ?>" class="bg-primary text-textDark py-2 px-4 rounded border border-transparent hover:bg-primaryHover duration-[.2s] ease-in-out">Add Showing</button>
+                <button id="addShowingButton" data-add-showing="<?php echo htmlspecialchars(json_encode($movieData)); ?>" class="bg-primary text-textDark py-2 px-4 rounded border border-transparent hover:bg-primaryHover duration-[.2s] ease-in-out">Add Showing</button>
             </div>
         </div>
 
         <div id="showingsList" class="grid grid-cols-4 gap-6">
-            <?php foreach ($showings as $showing) { ?>
+            <?php foreach ($showings as $showing) { 
+                $editShowingData = [
+                    'showingId' => $showing['showingId'],
+                    'venueId' => $showing['venueId'],
+                    'showingDate' => $showing['showingDate'],
+                    'showingTime' => $showing['showingTime'],
+                    'movieData' => $movieData,
+                    'roomId' => $showing['roomId'],
+                    'roomNumber' => $showing['roomNumber']
+                ];
+                
+                ?>
                 <div  
-                    class="bg-bgSemiDark p-4 rounded-lg shadow-md border border-borderDark showing-item cursor-pointer" 
-                    data-date="<?php echo htmlspecialchars($showing['showingDate']); ?>" 
-                    data-venue="<?php echo htmlspecialchars($showing['venueId']); ?>"
-                    data-movie="<?php echo htmlspecialchars($showing['movieId']); ?>">
-                    
-                    <!-- today label -->
+                    class="bg-bgSemiDark p-4 rounded-lg shadow-md border border-borderDark showing-item cursor-pointer">
+                    <!-- Today label -->
                     <?php if ($showing['showingDate'] == date('Y-m-d')) { ?>
                         <span class="bg-primary text-textDark text-xs font-semibold px-2 py-1 rounded-full mb-2 inline-block">Today</span>
                     <?php } ?>
@@ -86,10 +93,10 @@ $addShowingData = [
                         <?php echo $showing['showingDate']; ?> at <?php echo $showing['showingTime']; ?>
                     </h3>
                     <!-- Edit and delete button -->
-                    <button onclick="openEditShowingModal" class='py-1 px-2 text-primary border-[1px] border-primary rounded hover:text-primaryHover hover:border-primaryHover duration-[.2s] ease-in-out'>
+                    <button data-edit-showing="<?php echo htmlspecialchars(json_encode($editShowingData)); ?>" class='openEditShowingModalButton py-1 px-2 text-primary border-[1px] border-primary rounded hover:text-primaryHover hover:border-primaryHover duration-[.2s] ease-in-out'>
                         Edit
                     </button>
-                    <button onclick="openDeleteShowingModal" class='bg-red-500 text-textDark py-1 px-2 border-[1px] border-red-500 rounded hover:bg-red-600 hover:border-red-600'>
+                    <button class='openDeleteShowingModalButton bg-red-500 text-textDark py-1 px-2 border-[1px] border-red-500 rounded hover:bg-red-600 hover:border-red-600'>
                         Delete
                     </button>
                 </div>
@@ -158,6 +165,62 @@ $addShowingData = [
         </div>
     </div>
 
+    <!-- Edit showing modal -->
+    <div id="editShowingModal" class="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 hidden">
+        <div class="flex items-center justify-center min-h-screen">
+            <!-- Modal -->
+            <div class="bg-bgSemiDark w-[600px] rounded-lg p-6 border-[1px] border-borderDark">
+                <h2 class="text-[1.5rem] text-center font-semibold mb-4">Edit Showing</h2>
+                <form id="editShowingForm" class="text-textLight">
+                    <input type="hidden" id="editShowingId" name="editShowingId">
+                    <!-- Venue -->
+                    <div class="mb-4">
+                        <label for="editShowingVenueInput" class="block text-sm font-medium text-textLight">Venue</label>
+                        </label>
+                        <select id="editShowingVenueInput" name="editShowingVenueInput" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required>
+                            <option value="" disabled selected>Select a venue</option>
+                            <?php foreach ($allVenues as $venue) { ?>
+                                <option value="<?php echo htmlspecialchars($venue->getVenueId()); ?>">
+                                    <?php echo htmlspecialchars($venue->getName()); ?>
+                                </option>
+                            <?php } ?>
+                        </select>
+                        <p id="error-edit-showing-venue" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
+                    </div>
+                    <!-- Date -->
+                    <div class="mb-4">
+                        <label for="editShowingDateInput" class="block text-sm font-medium text-textLight">Date</label>
+                        </label>
+                        <input type="date" id="editShowingDateInput" name="editShowingDateInput" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required>
+                        <p id="error-edit-showing-date" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
+                    </div>
+                    <!-- Time -->
+                    <div class="mb-4">
+                        <label for="editShowingTimeInput" class="block text-sm font-medium text-textLight">Time</label>
+                        <select id="editShowingTimeInput" name="editShowingTimeInput" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required>
+                            <option value="" disabled selected>Select a venue and date first</option>
+                        </select>
+                        <p id="error-edit-showing-time" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
+                    </div>
+                    <!-- Room -->
+                    <div class="mb-4">
+                        <label for="editShowingRoomInput" class="block text-sm font-medium text-textLight">Room</label>
+                        <select id="editShowingRoomInput" name="editShowingRoomInput" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" required>
+                            <option value="" disabled selected>Select a venue, date, and time first</option>
+                        </select>
+                        <p id="error-edit-showing-room" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
+                    </div>
+                    <p id="error-edit-showing-general" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
+                    <!-- Buttons -->
+                    <div class="flex justify-end">
+                        <button type="submit" id="saveEditShowingButton" class="bg-primary text-textDark py-2 px-4 rounded border border-transparent hover:bg-primaryHover duration-[.2s] ease-in-out">Save</button>
+                        <button type="button" id="cancelEditShowingButton" class="text-textLight py-2 px-4 border-[1px] border-white rounded hover:bg-borderDark ml-2 duration-[.2s] ease-in-out">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <script>
@@ -222,12 +285,13 @@ $addShowingData = [
         const addShowingRoomInput = document.getElementById('addShowingRoomInput');
         const addShowingRoomError = document.getElementById('error-add-showing-room');
         const addShowingGeneralError = document.getElementById('error-add-showing-general');
-        let showingData;
+        let movieData;
 
         // Open modal
         addShowingButton.addEventListener('click', () => {
-            showingData = addShowingButton.dataset.addshowing;
-            showingData = JSON.parse(showingData);
+            movieData = addShowingButton.dataset.addShowing;
+            movieData = JSON.parse(movieData);
+
             addShowingModal.classList.remove('hidden');
         });
 
@@ -250,7 +314,7 @@ $addShowingData = [
                 venueId: addShowingVenueInput.value,
                 showingDate: addShowingDateInput.value,
                 showingTime: addShowingTimeInput.value.split('-')[0], // Get the start time
-                movieId: showingData.movieId,
+                movieId: movieData.movieId,
                 roomId: addShowingRoomInput.value
 			}
 
@@ -303,7 +367,7 @@ $addShowingData = [
 
         
 
-        function fetchRequest(route, data) {
+        function addFetchRequest(route, data) {
             const xhr = new XMLHttpRequest();
             const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
             xhr.open('POST', `${baseRoute}fetch-${route}`, true);
@@ -356,7 +420,7 @@ $addShowingData = [
             xhr.send(params);
         }
 
-        function fetchAvailableTimeslots() {
+        function addFetchAvailableTimeslots() {
             const venueId = addShowingVenueInput.value;
             let showingDate = addShowingDateInput.value;
 
@@ -381,7 +445,7 @@ $addShowingData = [
                 addShowingDateError.classList.add('hidden');
             }
 
-            const { duration, movieId } = showingData;
+            const { duration, movieId } = movieData;
 
             // Create a Date object
             const date = new Date(showingDate);
@@ -399,10 +463,10 @@ $addShowingData = [
                 weekday: weekday
             };
 
-            fetchRequest('timeslots', data);
+            addFetchRequest('timeslots', data);
         }
 
-        function fetchAvailableRooms() {
+        function addFetchAvailableRooms() {
             const venueId = addShowingVenueInput.value;
             const showingDate = addShowingDateInput.value;
             const showingTime = addShowingTimeInput.value;
@@ -417,22 +481,253 @@ $addShowingData = [
                 showingTime: showingTime
             };
 
-            fetchRequest('rooms', data);
+            addFetchRequest('rooms', data);
         }
 
-        addShowingVenueInput.addEventListener('change', fetchAvailableTimeslots);
-        addShowingDateInput.addEventListener('change', fetchAvailableTimeslots);
-        addShowingTimeInput.addEventListener('change', fetchAvailableRooms);
+        addShowingVenueInput.addEventListener('change', addFetchAvailableTimeslots);
+        addShowingDateInput.addEventListener('change', addFetchAvailableTimeslots);
+        addShowingTimeInput.addEventListener('change', addFetchAvailableRooms);
+
+        /*== Edit Showing ==*/
+        const editShowingModal = document.getElementById('editShowingModal');
+        const editShowingForm = document.getElementById('editShowingForm');
+        const openEditShowingModalButton = document.querySelectorAll('.openEditShowingModalButton');
+        const cancelEditShowingButton = document.getElementById('cancelEditShowingButton');
+
+        const editShowingId = document.getElementById('editShowingId');
+        const editShowingVenueInput = document.getElementById('editShowingVenueInput');
+        const editShowingVenueError = document.getElementById('error-edit-showing-venue');
+        const editShowingDateInput = document.getElementById('editShowingDateInput');
+        const editShowingDateError = document.getElementById('error-edit-showing-date');
+        const editShowingTimeInput = document.getElementById('editShowingTimeInput');
+        const editShowingTimeError = document.getElementById('error-edit-showing-time');
+        const editShowingRoomInput = document.getElementById('editShowingRoomInput');
+        const editShowingRoomError = document.getElementById('error-edit-showing-room');
+        const editShowingGeneralError = document.getElementById('error-edit-showing-general');
+
+        // Open modal
+        openEditShowingModalButton.forEach(button => {
+            button.addEventListener('click', () => {
+                editShowingModal.classList.remove('hidden');
+                let editShowingData = button.dataset.editShowing;
+                editShowingData = JSON.parse(editShowingData);
+
+                editShowingId.value = editShowingData.showingId;
+                editShowingVenueInput.value = editShowingData.venueId;
+                editShowingDateInput.value = editShowingData.showingDate;
+
+                movieData = editShowingData.movieData;
+
+                // Convert showing time and duration to start and end time
+                const startTime = editShowingData.showingTime.split(':')[0] + ':' + editShowingData.showingTime.split(':')[1];
+                const endTime = new Date(new Date(`01/01/2007 ${startTime}`).getTime() + movieData.duration * 60000).toLocaleTimeString('en-GB', {hour: '2-digit', minute: '2-digit'});
+
+                editShowingTimeInput.innerHTML = `<option value="${startTime}-${endTime}" selected>${startTime} - ${endTime}</option>`;
+
+                // Set the room number as selected
+                editShowingRoomInput.innerHTML = `<option value="${editShowingData.roomId}" selected>Room ${editShowingData.roomNumber}</option>`;
+            });
+        });
+
+        // Close modal
+        cancelEditShowingButton.addEventListener('click', () => {
+            editShowingModal.classList.add('hidden');
+            clearValues('edit');
+        });
+
+        // Submit the edit form
+        editShowingForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+            const xhr = new XMLHttpRequest();
+            const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
+            xhr.open('PUT', `${baseRoute}showing/edit`, true);
+
+            const editShowingData = {
+                action: 'editShowing',
+                showingId: editShowingId.value,
+                venueId: editShowingVenueInput.value,
+                showingDate: editShowingDateInput.value,
+                showingTime: editShowingTimeInput.value.split('-')[0], // Get the start time
+                movieId: movieData.movieId,
+                roomId: editShowingRoomInput.value
+            }
+
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function() {
+                // If the request is done and successful
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    let response;
+                    try {
+                        response = JSON.parse(xhr.response); // Parse the JSON response
+                    } catch (e) {
+                        console.error('Could not parse response as JSON:', e);
+                        return;
+                    }
+
+                    if (response.success) {
+                        alert('Success! Showing edited successfully.');
+                        window.location.reload();
+                        clearValues('edit');
+                    } else {
+                        // Display error messages
+                        if (response.errors['showingDate']) {
+                            editShowingDateError.textContent = response.errors['showingDate'];
+                            editShowingDateError.classList.remove('hidden');
+                        }
+                        if (response.errors['showingTime']) {
+                            editShowingTimeError.textContent = response.errors['showingTime'];
+                            editShowingTimeError.classList.remove('hidden');
+                        }
+                        if (response.errors['general']) {
+                            editShowingGeneralError.textContent = response.errors['general'];
+                            editShowingGeneralError.classList.remove('hidden');
+                        }
+                        if (response.errorMessage) {
+                            console.error('Error:', response.errorMessage);
+                        } else {
+                            console.error('Error:', response.errors);
+                        }
+                    }
+                }
+            };
+
+            // Send data as URL-encoded string
+            const params = Object.keys(editShowingData)
+                .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(editShowingData[key])}`)
+                .join('&');
+            xhr.send(params);
+        });
+
+        function editFetchRequest(route, data) {
+            const xhr = new XMLHttpRequest();
+            const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
+            xhr.open('POST', `${baseRoute}fetch-${route}`, true);
+
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    let response;
+                    try {
+                        response = JSON.parse(xhr.response);
+                    } catch (e) {
+                        console.error('Could not parse response as JSON:', e);
+                        return;
+                    }
+
+                    if (response.success) {
+                        if (route == "timeslots") {
+                            editShowingTimeInput.innerHTML = '<option value="" disabled selected>Select a time slot</option>';
+                            response.availableTimes.forEach((timeSlot) => {
+                                const option = document.createElement('option');
+                                option.value = `${timeSlot.startTime}-${timeSlot.endTime}`;
+                                option.textContent = `${timeSlot.startTime} - ${timeSlot.endTime}`;
+                                editShowingTimeInput.appendChild(option);
+                            });
+                        } 
+                        else if (route == "rooms") {
+                            editShowingRoomInput.innerHTML = '<option value="" disabled selected>Select a room</option>';
+                            response.availableRooms.forEach((room) => {
+                                const option = document.createElement('option');
+                                option.value = room.roomId;
+                                option.textContent = `Room ${room.roomNumber}`;
+                                editShowingRoomInput.appendChild(option);
+                            });
+                        }
+                        
+                    } else {
+                        if (route == "timeslots") {
+                            editShowingTimeInput.innerHTML = `<option value="">${response.message}</option>`;
+                        }
+                        else if (route == "rooms") {
+                            editShowingRoomInput.innerHTML = `<option value="">${response.message}</option>`;
+                        }
+                    }
+                }
+            };
+            // Send data as URL-encoded string
+            const params = Object.keys(data)
+                .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)
+                .join('&');
+            xhr.send(params);
+        }
+
+        function editFetchAvailableTimeslots() {
+            const venueId = editShowingVenueInput.value;
+            let showingDate = editShowingDateInput.value;
+
+            if (!venueId || !showingDate) {
+                return;
+            } 
+
+            // Check if the selected date is today or later
+            const selectedDate = new Date(showingDate);
+            const today = new Date();
+            // Reset time components to midnight (start of the day)
+            selectedDate.setHours(0, 0, 0, 0);
+            today.setHours(0, 0, 0, 0);
+
+            if (selectedDate < today) {
+                editShowingDateError.textContent = 'Please select a date that is today or a later date.';
+                editShowingDateError.classList.remove('hidden');
+                return;
+            }
+            else if (selectedDate >= today) {
+                editShowingDateError.textContent = '';
+                editShowingDateError.classList.add('hidden');
+            }
+
+            const { duration, movieId } = movieData;
+
+            // Create a Date object
+            const date = new Date(showingDate);
+            // Get the weekday as a number (0 for Sunday, 1 for Monday, etc.)
+            const dayNumber = date.getDay();
+            // Map the day number to weekday names
+            const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            const weekday = weekdays[dayNumber];
+
+            const data = {
+                venueId: venueId,
+                showingDate: showingDate,
+                duration: duration,
+                movieId: movieId,
+                weekday: weekday
+            };
+
+            editFetchRequest('timeslots', data);
+        }
+
+        function editFetchAvailableRooms() {
+            const venueId = editShowingVenueInput.value;
+            const showingDate = editShowingDateInput.value;
+            const showingTime = editShowingTimeInput.value;
+
+            if (!venueId || !showingDate || !showingTime) {
+                return;
+            }
+
+            const data = {
+                venueId: venueId,
+                showingDate: showingDate,
+                showingTime: showingTime
+            };
+
+            editFetchRequest('rooms', data);
+        }
+
+        editShowingVenueInput.addEventListener('change', editFetchAvailableTimeslots);
+        editShowingDateInput.addEventListener('change', editFetchAvailableTimeslots);
+        editShowingTimeInput.addEventListener('change', editFetchAvailableRooms);
 
         // Clear error messages and input values
         function clearValues(action) {
             if (action === 'edit') {
-                /* errorEditOpeningHourDay.classList.add('hidden');
-                errorEditOpeningHourOpeningTime.classList.add('hidden');
-                errorEditOpeningHourClosingTime.classList.add('hidden');
-                errorEditOpeningHourIsCurrent.classList.add('hidden');
-                errorEditOpeningHourGeneral.classList.add('hidden');
-                editOpeningHourForm.reset(); */
+                editShowingVenueError.classList.add('hidden');
+                editShowingDateError.classList.add('hidden');
+                editShowingTimeError.classList.add('hidden');
+                editShowingRoomError.classList.add('hidden');
+                editShowingGeneralError.classList.add('hidden');
+                editShowingForm.reset();
             }
             else if (action === 'add') {
                 addShowingVenueError.classList.add('hidden');
