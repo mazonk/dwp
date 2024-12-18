@@ -109,12 +109,52 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
                                 </div>
                             <?php endforeach; ?>
                         </div>
+                        <div id="error-add-movie" class="hidden text-red-500  font-semibold mt-2"></div>
+                        
                     </div> <!-- Submit and Cancel Buttons -->
                     <div class="flex justify-end">
                         <button type="submit" id="saveAddMovieButton" class="bg-primary text-textDark py-2 px-4 rounded border border-transparent hover:bg-primaryHover duration-[.2s] ease-in-out">Add</button>
                         <button type="button" id="cancelAddMovieButton" class="text-textLight py-2 px-4 border-[1px] border-white rounded hover:bg-borderDark ml-2 duration-[.2s] ease-in-out">Cancel</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Archive Movie Modal -->
+<div id="archiveMovieModal" class="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 hidden">
+    <div class="flex items-center justify-center min-h-screen">
+        <!-- Modal -->
+        <div class="bg-bgSemiDark w-[500px] rounded-lg p-6 border-[1px] border-borderDark">
+            <h2 class="text-[1.5rem] text-center font-semibold mb-4">Archive Movie</h2>
+            <div class="text-center">
+                <p class="text-textLight text-center">Are you sure you want to archive this movie?</p>
+                <p>This movie will not be displayed on the website.</p>
+            </div>
+            <input type="hidden" id="archiveMovieIdInput" name="archiveMovieIdInput">
+            <div class="flex justify-center mt-4">
+                <button id="confirmArchiveMovieButton" class="bg-blue-500 text-white py-2 px-4 border-[1px] border-transparent rounded hover:bg-blue-600 duration-[.2s] ease-in-out">Archive</button>
+                <button id="cancelArchiveMovieButton" class="text-textLight py-2 px-4 border-[1px] border-white rounded hover:bg-borderDark ml-2 duration-[.2s] ease-in-out">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Restore Movie Modal -->
+<div id="restoreMovieModal" class="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 hidden">
+    <div class="flex items-center justify-center min-h-screen">
+        <!-- Modal -->
+        <div class="bg-bgSemiDark w-[500px] rounded-lg p-6 border-[1px] border-borderDark">
+            <h2 class="text-[1.5rem] text-center font-semibold mb-4">Restore Movie</h2>
+            <div class="text-center">
+                <p class="text-textLight text-center">Are you sure you want to restore this movie?</p>
+                <p>This movie will be displayed on the website again.</p>
+            </div>
+            <input type="hidden" id="restoreMovieIdInput" name="restoreMovieIdInput">
+            <div class="flex justify-center mt-4">
+                <button id="confirmRestoreMovieButton" class="bg-blue-500 text-white py-2 px-4 border-[1px] border-transparent rounded hover:bg-blue-600 duration-[.2s] ease-in-out">Restore</button>
+                <button id="cancelRestoreMovieButton" class="text-textLight py-2 px-4 border-[1px] border-white rounded hover:bg-borderDark ml-2 duration-[.2s] ease-in-out">Cancel</button>
             </div>
         </div>
     </div>
@@ -217,45 +257,9 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
             </form>
         </div>
     </div>
+    
 </div>
 
-<!-- Archive Movie Modal -->
-<div id="archiveMovieModal" class="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 hidden">
-    <div class="flex items-center justify-center min-h-screen">
-        <!-- Modal -->
-        <div class="bg-bgSemiDark w-[500px] rounded-lg p-6 border-[1px] border-borderDark">
-            <h2 class="text-[1.5rem] text-center font-semibold mb-4">Archive Movie</h2>
-            <div class="text-center">
-                <p class="text-textLight text-center">Are you sure you want to archive this movie?</p>
-                <p>This movie will not be displayed on the website.</p>
-            </div>
-            <input type="hidden" id="archiveMovieIdInput" name="archiveMovieIdInput">
-            <div class="flex justify-center mt-4">
-                <button id="confirmArchiveMovieButton" class="bg-blue-500 text-white py-2 px-4 border-[1px] border-transparent rounded hover:bg-blue-600 duration-[.2s] ease-in-out">Archive</button>
-                <button id="cancelArchiveMovieButton" class="text-textLight py-2 px-4 border-[1px] border-white rounded hover:bg-borderDark ml-2 duration-[.2s] ease-in-out">Cancel</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Restore Movie Modal -->
-<div id="restoreMovieModal" class="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 hidden">
-    <div class="flex items-center justify-center min-h-screen">
-        <!-- Modal -->
-        <div class="bg-bgSemiDark w-[500px] rounded-lg p-6 border-[1px] border-borderDark">
-            <h2 class="text-[1.5rem] text-center font-semibold mb-4">Restore Movie</h2>
-            <div class="text-center">
-                <p class="text-textLight text-center">Are you sure you want to restore this movie?</p>
-                <p>This movie will be displayed on the website again.</p>
-            </div>
-            <input type="hidden" id="restoreMovieIdInput" name="restoreMovieIdInput">
-            <div class="flex justify-center mt-4">
-                <button id="confirmRestoreMovieButton" class="bg-blue-500 text-white py-2 px-4 border-[1px] border-transparent rounded hover:bg-blue-600 duration-[.2s] ease-in-out">Restore</button>
-                <button id="cancelRestoreMovieButton" class="text-textLight py-2 px-4 border-[1px] border-white rounded hover:bg-borderDark ml-2 duration-[.2s] ease-in-out">Cancel</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -349,7 +353,6 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
             addPromoUrlInput.value = promoUrl;
             addTrailerUrlInput.value = trailerUrl;
             addRatingInput.value = rating;
-            console.log(selectedGenres);
             selectedGenres.forEach(genre => {
                 const checkbox = addGenreCheckboxContainer.querySelector(`input[value="${genre}"]`);
                 if (checkbox) {
@@ -413,7 +416,7 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
                         // Display error messages
                         const errors = response.errors;
                         Object.keys(errors).forEach(key => {
-                            const errorElement = document.getElementById(`error-add-movie-${key}`);
+                            const errorElement = document.getElementById(`error-add-movie`);
                             errorElement.textContent = errors[key];
                             errorElement.classList.remove('hidden');
                         });
@@ -533,7 +536,6 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
             if (editPromoUrlInput.files.length == 1) {
                 promo = editPromoUrlInput.files[0].name;
             }
-                console.log(selectedEditGenres);
             const editMovieData = {
                 action: 'editMovie',
                 title: editTitleInput.value,
@@ -548,14 +550,12 @@ include_once "src/view/components/admin-sections/movies/MovieCardAdmin.php";
                 movieId: editMovieIdInput.value,
                 genres: selectedEditGenres
             };
-            console.log(editMovieData);
 
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             xhr.onreadystatechange = function() {
                 // If the request is done and successful
                 if (xhr.readyState === 4 && xhr.status === 200) {
                     let response;
-                    console.log(xhr.response);
                     try {
                         response = JSON.parse(xhr.response);
                     } catch (e) {
