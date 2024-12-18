@@ -1,11 +1,10 @@
-<?php
-require_once 'session_config.php';
+<?php  require_once 'session_config.php';
 
-include_once "src/controller/NewsController.php";
-include_once "src/controller/ShowingController.php";
-include_once 'src/controller/VenueController.php';
-include_once 'src/controller/CompanyInfoController.php';
-include_once 'src/controller/TicketController.php';
+require_once "src/controller/NewsController.php";
+require_once "src/controller/ShowingController.php";
+require_once 'src/controller/VenueController.php';
+require_once 'src/controller/CompanyInfoController.php';
+require_once 'src/controller/TicketController.php';
 
 include_once "src/view/components/NewsCard.php";
 include_once "src/view/components/MovieCard.php";
@@ -76,7 +75,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     echo '<img src="src/assets/'.htmlspecialchars($companyInfo->getLogoUrl()).'" alt="Company Logo" class="w-24 h-24 object-cover rounded-full mr-4">';
                     echo '<div>';
                         echo '<h2 class="text-xl font-semibold text-white" id="companyNameDisplay">'.htmlspecialchars($companyInfo->getCompanyName()).'</h2>';
-                        echo '<p class="text-lg text-gray-300 mt-4">'. $companyInfo->getCompanyDescription() .'</p>';
+                        echo '<p class="text-lg text-gray-300 mt-4 mb-4">'. $companyInfo->getCompanyDescription() .'</p>';
+                        echo '<div class="flex flex-row space-x-1.5 text-white mb-2">';
+                            $companyAddress = $companyInfo->getAddress();
+                            echo '<p id="companyStreetNrDisplay">'.htmlspecialchars($companyAddress->getStreetNr()).'</p>';
+                            echo '<p id="companyStreetDisplay">'.htmlspecialchars($companyAddress->getStreet()).',</p>';
+                            echo '<p id="companyPostalCodeDisplay">'.htmlspecialchars($companyAddress->getPostalCode()->getPostalCode()).'</p>';
+                            echo '<p id="companyCityDisplay">'.htmlspecialchars($companyAddress->getPostalCode()->getCity()).'</p>';
+                        echo '</div>';
                     echo '</div>';
                 echo '</div>';
             }
@@ -238,4 +244,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </main>
 </body>
+<?php include_once("src/view/components/Footer.php"); ?>
 </html>

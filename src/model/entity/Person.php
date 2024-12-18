@@ -36,4 +36,3 @@ class Person {
         $this->lastName = $lastName;
     }
 }
-?>

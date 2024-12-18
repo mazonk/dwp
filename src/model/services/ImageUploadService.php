@@ -1,5 +1,5 @@
 <?php
-include_once "src/model/repositories/ImageUploadRepository.php";
+require_once "src/model/repositories/ImageUploadRepository.php";
 
 class ImageUploadService {
         public function uploadImage($file): array {

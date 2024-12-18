@@ -1,7 +1,7 @@
 <?php
-include_once "src/controller/MovieController.php";
-include_once "src/controller/ShowingController.php";
-include_once "src/controller/VenueController.php";
+require_once "src/controller/MovieController.php";
+require_once "src/controller/ShowingController.php";
+require_once "src/controller/VenueController.php";
 
 if (isset($_GET['selectedMovie']) && is_numeric($_GET['selectedMovie'])) {
     $movieId = intval($_GET['selectedMovie']);
@@ -56,7 +56,7 @@ if (!isset($showings['errorMessage'])) {
             <div class="mb-6">
                 <label for="dateFilter" class="block font-medium mb-2">Filter by Date:</label>
                 <input id="dateFilter" type="date" class="bg-bgSemiDark text-white border border-gray-300 p-2 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-indigo-200 focus:border-indigo-500">
-                <button id="clearFilterButton" class="ml-2 bg-red-500 text-gray-100 p-2 rounded-md shadow-sm">Clear date</button>
+                <button id="clearFilterButton" class="ml-2 bg-red-500 font-bold text-gray-100 p-2 rounded-md shadow-sm">Clear date</button>
             </div>
         </div>
 

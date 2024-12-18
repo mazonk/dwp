@@ -1,9 +1,9 @@
 <?php 
-include_once "src/model/entity/News.php";
+require_once 'src/model/database/dbcon/DatabaseConnection.php';
+require_once "src/model/entity/News.php";
 class NewsRepository {
 
     private function getdb(): PDO {
-        require_once 'src/model/database/dbcon/DatabaseConnection.php';
         return DatabaseConnection::getInstance();
     }
 

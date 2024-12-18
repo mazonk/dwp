@@ -16,10 +16,14 @@ class ContactFormController {
 
     if(count($errors) == 0) {
        $_SESSION['contactSuccess'] = "Email sent successfully.";
-       header("Location: " . $currentRoute . "?status=success");
+       $queryStr = parse_url($currentRoute, PHP_URL_QUERY);
+       $queryStr = empty($queryStr) ? '?status=success' : "&status=success";
+       header("Location: " . $currentRoute . $queryStr);
      } else {
       $_SESSION['contactErrors'] = $errors;
-      header("Location: " . $currentRoute . "?status=failed");
+      $queryStr = parse_url($currentRoute, PHP_URL_QUERY);
+       $queryStr = empty($queryStr) ? '?status=failed' : "&status=failed";
+       header("Location: " . $currentRoute . $queryStr);
      }      
   }
 }

@@ -1,10 +1,9 @@
-<?php
-require_once 'session_config.php';
-include_once "src/controller/MovieController.php";
+<?php   require_once 'session_config.php';
+require_once "src/controller/MovieController.php";
+require_once "src/controller/ShowingController.php";
+require_once "src/model/entity/Showing.php";
 include_once "src/view/components/MovieCard.php";
-include_once "src/controller/ShowingController.php";
 include_once "src/view/components/ShowingCard.php";
-include_once "src/model/entity/Showing.php";
 
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
@@ -32,35 +31,10 @@ if (is_array($movie) && isset($movie['errorMessage'])) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Movie Details</title>
-  <style>
-    .movie-header {
-      display: flex;
-      align-items: flex-start;
-      gap: 20px;
-    }
-
-    .movie-actions {
-      margin-top: 30px;
-    }
-
-    .movie-actions a {
-      text-decoration: none;
-      background-color: #fabb2c;
-      color: black;
-      font-weight: bold;
-      padding: 10px 20px;
-      border-radius: 5vw;
-      margin-right: 10px;
-    }
-
-    .movie-actions a:hover {
-      background-color: #123A6B;
-    }
-  </style>
 </head>
 <body class="max-w-[90rem] w-[100%] mx-auto mt-[4.5rem] px-[6.25rem] font-sans bg-[#0d0101] text-white m-0 p-[2vw]">
   <?php include_once("src/view/components/Navbar.php"); ?>
-  <div class="flex flex-row justify-start movie-header">
+  <div class="flex flex-row justify-start movie-header gap-[1.25rem]">
     <img class="w-[300px] h-auto rounded-[0.625rem] m-[0.625rem] bg-center bg-cover" src="../src/assets/<?php echo $movie->getPosterURL(); ?>" alt="Movie Poster">
     <div class="ml-[20px]">
       <div class="text-[2.5rem] font-bold mb-2.5">
@@ -148,6 +122,5 @@ if (is_array($movie) && isset($movie['errorMessage'])) {
         </div>
     </div>
   </div>
-  
   <?php include_once("src/view/components/Footer.php"); ?>
 </body>

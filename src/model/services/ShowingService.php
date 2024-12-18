@@ -1,12 +1,10 @@
 <?php
-include_once "src/model/repositories/ShowingRepository.php";
-include_once "src/model/services/MovieService.php";
-include_once "src/model/services/RoomService.php";
-include_once "src/model/services/VenueService.php";
-include_once "src/model/entity/Showing.php";
-include_once "src/model/entity/Movie.php";
-include_once "src/model/entity/Room.php";
-include_once "src/model/entity/Venue.php";
+require_once "src/model/repositories/ShowingRepository.php";
+require_once "src/model/services/MovieService.php";
+require_once "src/model/services/RoomService.php";
+require_once "src/model/entity/Showing.php";
+require_once "src/model/entity/Movie.php";
+require_once "src/model/entity/Room.php";
 
 class ShowingService {
     private PDO $db;

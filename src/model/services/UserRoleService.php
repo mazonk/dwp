@@ -1,6 +1,6 @@
 <?php 
-include_once "src/model/repositories/UserRoleRepository.php";
-include_once "src/model/entity/UserRole.php";
+require_once "src/model/repositories/UserRoleRepository.php";
+require_once "src/model/entity/UserRole.php";
 
 class UserRoleService {
     private UserRoleRepository $userRoleRepository;

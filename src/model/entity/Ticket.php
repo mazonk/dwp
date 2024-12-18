@@ -1,7 +1,7 @@
 <?php
-include_once "src/model/entity/Seat.php";
-include_once "src/model/entity/TicketType.php";
-include_once "src/model/entity/Showing.php";
+require_once "src/model/entity/Seat.php";
+require_once "src/model/entity/TicketType.php";
+require_once "src/model/entity/Showing.php";
 class Ticket {
   private int $ticketId;
   private Seat $seat;
@@ -48,4 +48,3 @@ class Ticket {
     $this->showing = $showing;
   }
 }
-?>

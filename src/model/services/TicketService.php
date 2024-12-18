@@ -1,10 +1,10 @@
 <?php
-include_once "src/model/repositories/TicketRepository.php";
-include_once "src/model/services/SeatService.php";
-include_once "src/model/services/BookingService.php";
-include_once "src/model/services/ShowingService.php";
-include_once "src/model/entity/Ticket.php";
-include_once "src/model/entity/TicketType.php";
+require_once 'src/model/database/dbcon/DatabaseConnection.php';
+require_once "src/model/repositories/TicketRepository.php";
+require_once "src/model/services/SeatService.php";
+require_once "src/model/services/ShowingService.php";
+require_once "src/model/entity/Ticket.php";
+require_once "src/model/entity/TicketType.php";
 
 class TicketService {
     private TicketRepository $ticketRepository;
@@ -20,7 +20,6 @@ class TicketService {
     }
 
     private function getdb() {
-        require_once 'src/model/database/dbcon/DatabaseConnection.php';
         return DatabaseConnection::getInstance(); // singleton
     }
     

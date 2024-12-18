@@ -1,9 +1,11 @@
 <?php
-include_once "src/model/entity/Seat.php";
-include_once "src/model/entity/Room.php";
-include_once "src/model/entity/Movie.php";
-include_once "src/model/entity/Showing.php";
-include_once "src/model/repositories/SeatRepository.php";
+require_once "src/model/entity/Seat.php";
+require_once "src/model/entity/Room.php";
+require_once "src/model/entity/Movie.php";
+require_once "src/model/entity/Showing.php";
+require_once "src/model/services/RoomService.php";
+require_once "src/model/services/TicketService.php";
+require_once "src/model/repositories/SeatRepository.php";
 
 class SeatService {
     private SeatRepository $seatRepository;

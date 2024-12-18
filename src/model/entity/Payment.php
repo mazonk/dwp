@@ -1,6 +1,6 @@
 <?php
-include_once "src/model/entity/Address.php";
-include_once "src/model/entity/Booking.php";
+require_once "src/model/entity/Address.php";
+require_once "src/model/entity/Booking.php";
 
 enum PaymentStatus: string {
   case CONFIRMED = 'confirmed';
@@ -61,7 +61,7 @@ class Payment {
     return $this->checkoutSessionId;
   }
 
-  public function getPaymentStatus(): Status {
+  public function getPaymentStatus(): PaymentStatus {
     return $this->paymentStatus;
   }
 
@@ -113,4 +113,3 @@ class Payment {
     $this->booking = $booking;
   }
 }
-?>

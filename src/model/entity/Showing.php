@@ -1,6 +1,6 @@
 <?php
-include_once "src/model/entity/Movie.php";
-include_once "src/model/entity/Room.php";
+require_once "src/model/entity/Movie.php";
+require_once "src/model/entity/Room.php";
 
 class Showing {
     private int $showingId;
@@ -57,4 +57,3 @@ class Showing {
         $this->showingTime = $showingTime;
     }
 }
-?>

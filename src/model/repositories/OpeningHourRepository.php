@@ -1,8 +1,9 @@
 <?php
+require_once 'src/model/database/dbcon/DatabaseConnection.php';
+
 class OpeningHourRepository {
 
   private function getdb(): PDO {
-    require_once 'src/model/database/dbcon/DatabaseConnection.php';
     return DatabaseConnection::getInstance();
   }
 

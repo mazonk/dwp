@@ -1,6 +1,6 @@
 <?php
 require_once "src/controller/OpeningHourController.php";
-require_once "src/view/components/admin-sections/openingHours/OpeningHoursCard.php";
+include_once "src/view/components/admin-sections/openingHours/OpeningHoursCard.php";
 ?>
 
 <div>

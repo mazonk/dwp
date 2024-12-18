@@ -1,5 +1,5 @@
 <?php
-include_once 'src/model/services/ImageUploadService.php';
+require_once 'src/model/services/ImageUploadService.php';
 
 class ImageUploadController {
     private ImageUploadService $imageUploadService;

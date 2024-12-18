@@ -1,8 +1,7 @@
-<?php
-require_once 'session_config.php';
-include_once 'src/controller/ShowingController.php';
-include_once 'src/controller/VenueController.php';
-include_once 'src/controller/TicketController.php';
+<?php  require_once 'session_config.php';
+require_once 'src/controller/ShowingController.php';
+require_once 'src/controller/VenueController.php';
+require_once 'src/controller/TicketController.php';
 
 // Get booking details from session
 if (!isset($_SESSION['activeBooking'])) {
@@ -217,6 +216,8 @@ unset($_SESSION['addressFormData']);
         </div>
     </main>
 </body>
+
+<?php include_once("src/view/components/Footer.php"); ?>
 
 </html>
 

@@ -5,4 +5,3 @@ class Director extends Person {
         parent::__construct($directorId, $firstName, $lastName);
     }
 }
-?>

@@ -1,6 +1,6 @@
 <?php require_once 'session_config.php';
 require_once 'src/model/entity/User.php';
-include_once 'src/model/repositories/AuthRepository.php';
+require_once 'src/model/repositories/AuthRepository.php';
 require_once 'src/model/services/UserService.php';
 require_once 'src/model/services/UserRoleService.php';
 
@@ -33,7 +33,7 @@ class AuthService {
                 }
     
                 // Fetch the 'User' user role
-                $userRole = $this->userRoleService->getUserRoleByType('Customer');
+                $userRole = $this->userRoleService->getUserRoleByType('Guest');
                 if (is_array($userRole) && isset($userRole['error']) && $userRole['error']) {
                     $errors['general'] = "Registration failed. Couldn't register you as a user.";
                     return $errors;
@@ -68,7 +68,6 @@ class AuthService {
                 $errors['general'] = "Registration failed. Please try again.";
             }
         }
-    
         return $errors;
     }
     
@@ -82,7 +81,7 @@ class AuthService {
         if (!empty($errors)) {
             return ['errors' => $errors];
         }
-    
+
         try {
             // Check if the user exists
             if (!$this->authRepository->userExists($formData['email'])) {
