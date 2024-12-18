@@ -207,6 +207,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <!-- Daily showings -->
             <div id="dailyShowingsList" class="grid grid-cols-5 gap-4 w-full">
+            <div class="col-span-5 text-center text-2xl font-semibold">Playing today:</div>
                 <?php
                 renderMovies($showingController, $page, $moviesPerPage);
                 ?>
