@@ -75,7 +75,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     echo '<img src="src/assets/'.htmlspecialchars($companyInfo->getLogoUrl()).'" alt="Company Logo" class="w-24 h-24 object-cover rounded-full mr-4">';
                     echo '<div>';
                         echo '<h2 class="text-xl font-semibold text-white" id="companyNameDisplay">'.htmlspecialchars($companyInfo->getCompanyName()).'</h2>';
-                        echo '<p class="text-lg text-gray-300 mt-4">'. $companyInfo->getCompanyDescription() .'</p>';
+                        echo '<p class="text-lg text-gray-300 mt-4 mb-4">'. $companyInfo->getCompanyDescription() .'</p>';
+                        echo '<div class="flex flex-row space-x-1.5 text-white mb-2">';
+                            $companyAddress = $companyInfo->getAddress();
+                            echo '<p id="companyStreetNrDisplay">'.htmlspecialchars($companyAddress->getStreetNr()).'</p>';
+                            echo '<p id="companyStreetDisplay">'.htmlspecialchars($companyAddress->getStreet()).',</p>';
+                            echo '<p id="companyPostalCodeDisplay">'.htmlspecialchars($companyAddress->getPostalCode()->getPostalCode()).'</p>';
+                            echo '<p id="companyCityDisplay">'.htmlspecialchars($companyAddress->getPostalCode()->getCity()).'</p>';
+                        echo '</div>';
                     echo '</div>';
                 echo '</div>';
             }
@@ -151,7 +158,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === 4 && xhr.status === 200) {
                         document.getElementById('dailyShowingsList').innerHTML = xhr.responseText;
-                        console.log(currentPage);
                         prevPageButton.disabled = currentPage === 1;
                         const totalPages = Math.ceil(totalMovies / moviesPerPage);
                         nextPageButton.disabled = currentPage >= totalPages;
@@ -183,15 +189,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         });
     </script>
 </head>
-<body class="max-w-[1440px] w-[100%] mx-auto px-[100px] bg-bgDark text-textLight overflow-y-auto pt-[80px]">
+<body class="max-w-[1440px] w-[100%] mx-auto px-[100px] bg-bgDark text-textLight overflow-y-auto">
     <!-- Navbar -->
-    <nav class="fixed top-0 left-0 w-full z-10 bg-bgDark">
-        <?php include_once("src/view/components/Navbar.php"); ?>
-    </nav>
-    <div class="w-full">
-        <?php include_once("src/view/components/PromoImage.php"); ?>
-    </div>
-    <main class="mt-12 p-4">
+    <?php include_once("src/view/components/Navbar.php"); ?>
+
+    <main class="mt-16 p-4">
         <div class="flex items-center justify-between">
             <!-- Left Arrow - Previous -->  
             <!-- Set button to disable, so they can't navigate to page < 1 -->
@@ -241,4 +243,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </main>
 </body>
+<?php include_once("src/view/components/Footer.php"); ?>
 </html>

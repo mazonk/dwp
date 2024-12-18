@@ -9,7 +9,7 @@ unset($_SESSION['contactSuccess']);
 ?>
 
 <footer class="flex flex-col gap-[4rem] mt-[8rem]">
-  <div class="flex justify-between gap-[2rem]">
+  <div id="contact" class="flex justify-between gap-[2rem]">
     <!-- Site Links -->
     <div class="min-w-[250px] flex flex-col gap-[1.5rem]">
       <h4 class="text-[1.125rem] font-bold leading-tight">Useful Links</h4>

@@ -9,7 +9,9 @@ require_once 'src/controller/InvoiceController.php';
 require_once 'loadEnv.php';
 
 // Load environment variables for Stripe API keys
-loadEnv();
+if ($_SERVER['HTTP_HOST'] == 'localhost') {
+  loadEnv();
+}
 $stripe_secret_key = getenv('STRIPE_SK');
 $endpoint_secret = getenv('STRIPE_WH_SECRET');
 

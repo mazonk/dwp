@@ -31,7 +31,14 @@ if (is_array($user) && isset($user['errorMessage']) && $user['errorMessage']) {
 } else { //else render component
 
     //fetch bookings
-    $bookings = $bookingController->getBookingsByUserId($_SESSION['loggedInUser']['userId']);
+    $bookings = $bookingController->getBookingsByUserId($user->getId());
+
+    if (!empty($bookings) && is_array($bookings) && (!isset($bookings['errorMessage']) || !$bookings['errorMessage'])) {
+        $bookings = array_filter($bookingController->getBookingsByUserId($_SESSION['loggedInUser']['userId']), function($booking) {
+            return $booking->getStatus()->value !== 'pending';
+        });
+    }
+    
     $initialBookings = count($bookings) > 8 ? array_slice($bookings, 0, 8) : $bookings;
 
     $editMode = isset($_GET['edit']) && $_GET['edit'] == "true";
@@ -56,7 +63,7 @@ if (is_array($user) && isset($user['errorMessage']) && $user['errorMessage']) {
                     <img src="src/assets/default-profile-picture.png" alt="Profile Picture" class="w-[250px] h-[250px] object-cover rounded-full">
                     <div class="break-words w-[250px] space-y-4">
                         <?php if ($editMode): ?>
-                            <form id="editProfileInfoForm" class="flex flex-col space-y-6">
+                            <form action="<?php echo $_SESSION['baseRoute'] ?>profile" method="put" id="editProfileInfoForm" class="flex flex-col space-y-6">
                                 <input type="hidden" name="userId" id="userId" value="<?php echo htmlspecialchars($user->getId()) ?>" />
                                 <input type="text" required name="firstName" id="firstName" value="<?php echo htmlspecialchars($user->getFirstName()) ?>" 
                                     class="text-[1rem] bg-bgSemiDark border-[1px] border-borderDark text-textNormal focus:border-textNormal w-full rounded-md outline-none leading-snug py-[.5rem] px-[.875rem]" />
@@ -67,7 +74,7 @@ if (is_array($user) && isset($user['errorMessage']) && $user['errorMessage']) {
                                 <input type="date" required name="dob" id="dob" value="<?php echo htmlspecialchars($user->getDob()->format('Y-m-d')) ?>" 
                                     class="text-[1rem] bg-bgSemiDark border-[1px] border-borderDark text-textNormal focus:border-textNormal w-full rounded-md outline-none leading-snug py-[.5rem] px-[.875rem]" />
                                 <div class="flex space-x-0 mt-4 justify-between">
-                                    <button type="submit" 
+                                    <button type="submit" name="submit"
                                         class="text-[1rem] font-semibold bg-primary py-2 w-1/2 text-center border border-borderDark text-textDark hover:bg-primaryHover rounded-[6px]">
                                         Save Changes
                                     </button>
@@ -140,7 +147,7 @@ if (is_array($user) && isset($user['errorMessage']) && $user['errorMessage']) {
     document.addEventListener('DOMContentLoaded', () => {
         const editProfileInfoForm = document.getElementById('editProfileInfoForm');
         const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
-
+        
         if (editProfileInfoForm) {
             const errorMessageElement = document.createElement('p');
             errorMessageElement.classList.add('text-red-500', 'text-center', 'font-medium');
@@ -196,7 +203,6 @@ if (is_array($user) && isset($user['errorMessage']) && $user['errorMessage']) {
                 const params = Object.keys(updatedUserInfo)
                     .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(updatedUserInfo[key])}`)
                     .join('&');
-                    console.log(params);
                 xhr.send(params);
             });
         }
@@ -218,7 +224,6 @@ if (is_array($user) && isset($user['errorMessage']) && $user['errorMessage']) {
             xhr.onreadystatechange = () => {
                 if (xhr.readyState === 4 && xhr.status === 200) {
                     let response;
-                            console.log(xhr.response);
                             try {
                                 response = JSON.parse(xhr.response); // Parse the JSON response
                             } catch (e) {

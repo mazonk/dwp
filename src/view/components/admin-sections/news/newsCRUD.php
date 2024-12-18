@@ -73,7 +73,7 @@ include_once "src/view/components/admin-sections/news/NewsCardAdmin.php";
                     </div>
                     <div class="mb-4">
                         <label for="editImageURLInput" class="block text-sm font-medium text-text-textLight">Image</label>
-                        <input type="file" id="editImageURLInput" name="editImageURLInput" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" accept="image/*" required>
+                        <input type="file" id="editImageURLInput" name="editImageURLInput" class="mt-1 block w-full p-2 bg-bgDark border border-borderDark rounded-md outline-none focus:border-textNormal duration-[.2s] ease-in-out" accept="image/*" >
                         <div id="editImageURLInputDisplay" class="mt-2 text-sm text-textLight"></div>
                     </div>
                     <div class="mb-4">
@@ -256,7 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
         xhr.open('PUT', `${baseRoute}news/edit`, true);
 
-        let image = "";
+        let image = editImageURLInputDisplay.textContent;
         if (editImageURLInput.files.length == 1) {
             image = editImageURLInput.files[0].name;
         }
