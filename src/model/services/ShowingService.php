@@ -153,7 +153,8 @@ class ShowingService {
                     'movieId' => $showing['movieId'],
                     'roomId' => $showing['roomId'],
                     'roomNumber' => $showing['roomNumber'],
-                    'venueId' => $showing['venueId']
+                    'venueId' => $showing['venueId'],
+                    'archived' => $showing['archived']
                 ];
             }
             return $showings;

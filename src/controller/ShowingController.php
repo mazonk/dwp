@@ -101,7 +101,7 @@ class ShowingController {
 
     public function editShowing(array $showingData): array {
         $errors = $this->showingService->editShowing($showingData);
-        
+
         if(count($errors) == 0) {
             // Check if there are any errors from adding the news
             if (isset($errors['error']) && $errors['error']) {
@@ -114,7 +114,7 @@ class ShowingController {
     }
 
     public function archiveShowing(int $showingId): array {
-        $result = $this->showingService->archiveShowing(htmlspecialchars($showingId));
+        $result = $this->showingService->archiveShowing($showingId);
         if (isset($result['error']) && $result['error']) {
             return ['errorMessage' => $result['message']];
         }
@@ -122,7 +122,7 @@ class ShowingController {
     }
 
     public function restoreShowing(int $showingId): array {
-        $result = $this->showingService->restoreShowing(htmlspecialchars($showingId));
+        $result = $this->showingService->restoreShowing($showingId);
         if (isset($result['error']) && $result['error']) {
             return ['errorMessage' => $result['message']];
         }

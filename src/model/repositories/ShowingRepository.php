@@ -162,7 +162,7 @@ class ShowingRepository {
     }
 
     public function addShowing(array $showingData): void {
-        $showingQuery = $this->db->prepare("INSERT INTO Showing (showingDate, showingTime, movieId, roomId) VALUES (:showingDate, :showingTime, :movieId, :roomId)");
+        $showingQuery = $this->db->prepare("INSERT INTO Showing (showingDate, showingTime, movieId, roomId, archived) VALUES (:showingDate, :showingTime, :movieId, :roomId, :archived)");
         $venueShowingQuery = $this->db->prepare("INSERT INTO VenueShowing (venueId, showingId) VALUES (:venueId, :showingId)");
         try {
             $this->db->beginTransaction();
@@ -170,7 +170,8 @@ class ShowingRepository {
                 ":showingDate" => $showingData['showingDate'],
                 ":showingTime" => $showingData['showingTime'],
                 ":movieId" => $showingData['movieId'],
-                ":roomId" => $showingData['roomId']
+                ":roomId" => $showingData['roomId'],
+                ":archived" => 0
             ));
             $showingId = $this->db->lastInsertId(); // Get the ID of the last inserted showing
             $venueShowingQuery->execute(array(":venueId" => $showingData['venueId'], ":showingId" => $showingId));
@@ -203,21 +204,22 @@ class ShowingRepository {
         }
     }
 
-    public function archiveShowing (int $showingId) {
-        $query = $this->db->prepare("UPDATE Showing SET isActive = 0 WHERE showingId = :showingId");
+    public function archiveShowing (int $showingId): void {
+        $query = $this->db->prepare("UPDATE Showing SET archived = 1 WHERE showingId = :showingId");
         try {
             $query->execute(array(":showingId" => $showingId));
-            } catch (PDOException $e) {
-                throw new PDOException("Unable to archive showing!");
+        } catch (PDOException $e) {
+            throw new PDOException("Unable to archive showing!");
         }
+
     }
 
-    public function restoreShowing (int $showingId) {
-        $query = $this->db->prepare("UPDATE Showing SET isActive = 1 WHERE showingId = :showingId");
+    public function restoreShowing (int $showingId):void {
+        $query = $this->db->prepare("UPDATE Showing SET archived = 0 WHERE showingId = :showingId");
         try {
             $query->execute(array(":showingId" => $showingId));
-            } catch (PDOException $e) {
-                throw new PDOException("Unable to restore showing!");
+        } catch (PDOException $e) {
+            throw new PDOException("Unable to restore showing!");
         }
     }
 }
