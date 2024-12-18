@@ -1,5 +1,6 @@
 <?php
 include_once "src/model/repositories/RoomRepository.php";
+include_once "src/model/services/VenueService.php";
 include_once "src/model/entity/Room.php";
 
 class RoomService {
@@ -22,6 +23,24 @@ class RoomService {
             } else {
                 return new Room($result['roomId'], $result['roomNumber'], $venue);
             }
+        } catch (Exception $e) {
+            return ['error' => true,'message' => $e->getMessage()];
+        }
+    }
+
+    public function getRoomsByVenueId(int $venueId): array {
+        try {
+            $results = $this->roomRepository->getRoomsByVenueId($venueId);
+            $rooms = [];
+            foreach ($results as $result) {
+                $venue = $this->venueService->getVenueById($result['venueId']);
+                if (is_array($venue) && isset($venue['error']) && $venue['error']) {
+                    return $venue; //return the errors if there are any
+                } else {
+                    $rooms[] = new Room($result['roomId'], $result['roomNumber'], $venue);
+                }
+            }
+            return $rooms;
         } catch (Exception $e) {
             return ['error' => true,'message' => $e->getMessage()];
         }
