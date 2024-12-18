@@ -72,6 +72,9 @@
     <a href="<?php echo $_SESSION['baseRoute']?>home">
       <img src="src/assets/<?php echo htmlspecialchars($companyInfo->getLogoUrl()) ?>" alt="Company Logo" class="w-12 h-12 object-cover rounded-full mr-4">
     </a>
+    <p class="absolute left ml-[12%] transform -translate-x-1/2 text-2xl font-bold text-yellow-400">
+    SpicyPisces Cinema
+  </p>
     <!-- Menu -->
     <div class="flex justify-center items-center gap-[2.5rem] ml-[195px]">
       <a href="<?php echo $_SESSION['baseRoute']?>home" class="font-medium hover:text-yellow-400 transition duration-300">Home</a>
