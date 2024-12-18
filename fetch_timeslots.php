@@ -2,19 +2,19 @@
 include_once "src/controller/OpeningHourController.php";
 include_once "src/controller/ShowingController.php";
 
-if (isset($_POST['venueId'], $_POST['showingDate'], $_POST['movieId'], $_POST['todayDay'], $_POST['duration'])) {
+if (isset($_POST['venueId'], $_POST['showingDate'], $_POST['movieId'], $_POST['weekday'], $_POST['duration'])) {
     // Sanitize input
     $venueId = intval(trim($_POST['venueId']));
     $showingDate = htmlspecialchars(trim($_POST['showingDate']));
     $movieId = intval(trim($_POST['movieId']));
-    $todayDay = htmlspecialchars(trim($_POST['todayDay']));
+    $weekday = htmlspecialchars(trim($_POST['weekday']));
     $duration = intval(trim($_POST['duration']));
 
     $openingHourController = new OpeningHourController();
     $showingController = new ShowingController();
 
     // Get the venue's opening hours for the specified day
-    $openingHour = $openingHourController->getCurrentOpeningHourByDay($todayDay);
+    $openingHour = $openingHourController->getCurrentOpeningHourByDay($weekday);
     if (is_array($openingHour) && isset($openingHour['errorMessage']) && $openingHour['errorMessage']) {
         echo json_encode(['error' => true, 'message' => $openingHour['errorMessage']]);
         exit;
