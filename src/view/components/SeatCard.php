@@ -7,7 +7,7 @@ class SeatCard {
         $seatNr = $seat->getSeatNr();
         $row = $seat->getRow();
 
-        $seatClass = $isAvailable ? 'bg-lime-600' : 'bg-purple-500';
+        $seatClass = $isAvailable ? 'bg-blue-600' : 'bg-red-500';
         $availabilityAttribute = $isAvailable ? 'true' : 'false';
 
         $output = "<div class='seat-card $seatClass p-1 w-15 h-auto rounded text-center cursor-pointer' data-seat-id='$seatId' data-seat-nr='$seatNr' data-row='$row' data-is-available='$availabilityAttribute' data-showing-id='$showingId' data-user-id='$userId'>";
