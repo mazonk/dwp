@@ -148,6 +148,7 @@ class ShowingRepository {
         $this->db->exec("SET SQL_BIG_SELECTS=1");
         $query = $this->db->prepare("SELECT * FROM Showing as s
         JOIN VenueShowing as vs ON s.showingId = vs.showingId
+        JOIN Room as r ON s.roomId = r.roomId
         AND s.movieId = :movieId
         AND s.showingDate >= :today
         ORDER BY s.showingDate, s.showingTime ASC");
@@ -180,14 +181,25 @@ class ShowingRepository {
         }
     }
 
-    public function editShowing(array $showingData) {
-        $query = $this->db->prepare("UPDATE Showing SET showingDate = :showingDate, showingTime = :showingTime, movieId = :movieId, roomId = :roomId 
+    public function editShowing(array $showingData): void {
+        $showingQuery = $this->db->prepare("UPDATE Showing SET showingDate = :showingDate, showingTime = :showingTime, movieId = :movieId, roomId = :roomId 
         WHERE showingId = :showingId");
+        $venueShowingQuery = $this->db->prepare("UPDATE VenueShowing SET venueId = :venueId WHERE showingId = :showingId");
+        
         try {
-            $query->execute(array( ":showingDate" =>$showingData['showingDate'],":showingTime" => $showingData['showingTime'], ":movieId" => $showingData['movieId'], 
-            ":roomId" => $showingData['roomId'], ":showingId" => $showingData['showingId']));
-            } catch (PDOException $e) {
-                throw new PDOException("Unable to edit showing!");
+            $this->db->beginTransaction();
+            $showingQuery->execute(array(
+                ":showingDate" => $showingData['showingDate'],
+                ":showingTime" => $showingData['showingTime'],
+                ":movieId" => $showingData['movieId'],
+                ":roomId" => $showingData['roomId'],
+                ":showingId" => $showingData['showingId']
+            ));
+            $venueShowingQuery->execute(array(":venueId" => $showingData['venueId'], ":showingId" => $showingData['showingId']));
+            $this->db->commit();
+        } catch (PDOException $e) {
+            $this->db->rollBack();
+            throw new PDOException("Failed to add showing!");
         }
     }
 

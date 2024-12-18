@@ -152,6 +152,7 @@ class ShowingService {
                     'showingTime' => $showing['showingTime'],
                     'movieId' => $showing['movieId'],
                     'roomId' => $showing['roomId'],
+                    'roomNumber' => $showing['roomNumber'],
                     'venueId' => $showing['venueId']
                 ];
             }
@@ -179,9 +180,9 @@ class ShowingService {
 
     public function editShowing(array $showingData): array {
         $errors = [];
-        $this->validateFormInputs($showingData, $errors);
+        $this->validateShowingFormInputs($showingData, $errors);
 
-        if (count($errors) == 0) {
+        if (count($errors) == 0) { // If there are no validation errors, add the showing
             try {
                 $this->showingRepository->editShowing($showingData);
                 return ['success' => true];
@@ -189,7 +190,7 @@ class ShowingService {
                 return ['error' => true, 'message' => $e->getMessage()];
             }
         } else {
-            return $errors;
+            return $errors; // If there are validation errors, return them
         }
     }
 
