@@ -246,6 +246,7 @@ $addShowingData = [
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4 && xhr.status === 200) {
                     let response;
+                    console.log(xhr.response);
                     try {
                         response = JSON.parse(xhr.response);
                     } catch (e) {
@@ -258,7 +259,7 @@ $addShowingData = [
                             addShowingTimeInput.innerHTML = '<option value="" disabled selected>Select a time slot</option>';
                             response.availableTimes.forEach((timeSlot) => {
                                 const option = document.createElement('option');
-                                option.value = timeSlot.startTime;
+                                option.value = `${timeSlot.startTime}-${timeSlot.endTime}`;
                                 option.textContent = `${timeSlot.startTime} - ${timeSlot.endTime}`;
                                 addShowingTimeInput.appendChild(option);
                             });
@@ -267,7 +268,7 @@ $addShowingData = [
                             addShowingRoomInput.innerHTML = '<option value="" disabled selected>Select a room</option>';
                             response.availableRooms.forEach((room) => {
                                 const option = document.createElement('option');
-                                option.value = room.roomNumber;
+                                option.value = room.roomId;
                                 option.textContent = `Room ${room.roomNumber}`;
                                 addShowingRoomInput.appendChild(option);
                             });
@@ -323,31 +324,21 @@ $addShowingData = [
             const showingDate = addShowingDateInput.value;
             const showingTime = addShowingTimeInput.value;
 
-            if (!venueId || !showingDate) {
+            if (!venueId || !showingDate || !showingTime) {
                 return;
-            } 
-            const { duration, movieId } = showingData;
-
-            // Create a Date object
-            const date = new Date(showingDate);
-            // Get the weekday as a number (0 for Sunday, 1 for Monday, etc.)
-            const dayNumber = date.getDay();
-            // Map the day number to weekday names
-            const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-            const weekday = weekdays[dayNumber];
+            }
 
             const data = {
                 venueId: venueId,
                 showingDate: showingDate,
-                duration: duration,
-                movieId: movieId,
-                weekday: weekday
+                showingTime: showingTime
             };
 
-            fetchRequest('timeslots', data);
+            fetchRequest('rooms', data);
         }
 
         addShowingVenueInput.addEventListener('change', fetchAvailableTimeslots);
         addShowingDateInput.addEventListener('change', fetchAvailableTimeslots);
+        addShowingTimeInput.addEventListener('change', fetchAvailableRooms);
     });
 </script>
