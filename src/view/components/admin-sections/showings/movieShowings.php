@@ -10,13 +10,7 @@ if (isset($_GET['selectedMovie']) && is_numeric($_GET['selectedMovie'])) {
     $venueController = new VenueController();
     $allVenues = $venueController->getAllVenues();
     $movie = $movieController->getMovieById($movieId);
-    $showings = $showingController->getShowingsForMovieAdmin($movieId);
-
-    // Filter out past showings
-    $today = new DateTime();
-    $showings = array_filter($showings, function ($showing) use ($today) {
-        return new DateTime($showing['showingDate']) >= $today;
-    });
+    $showings = $showingController->getRelevantShowingsForMovie($movieId);
 } else {
     $showings = ['errorMessage' => 'Invalid or missing movie ID.'];
 }
@@ -85,7 +79,7 @@ $addShowingData = [
                     data-movie="<?php echo htmlspecialchars($showing['movieId']); ?>">
                     
                     <!-- today label -->
-                    <?php if (new DateTime($showing['showingDate']) == $today) { ?>
+                    <?php if ($showing['showingDate'] == date('Y-m-d')) { ?>
                         <span class="bg-primary text-textDark text-xs font-semibold px-2 py-1 rounded-full mb-2 inline-block">Today</span>
                     <?php } ?>
                     <h3 class="text-lg font-semibold text-white mb-2">
@@ -153,6 +147,7 @@ $addShowingData = [
                         </select>
                         <p id="error-add-showing-room" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
                     </div>
+                    <p id="error-add-showing-general" class="mt-1 text-red-500 hidden text-xs mb-[.25rem]"></p>
                     <!-- Buttons -->
                     <div class="flex justify-end">
                         <button type="submit" id="saveAddShowingButton" class="bg-primary text-textDark py-2 px-4 rounded border border-transparent hover:bg-primaryHover duration-[.2s] ease-in-out">Add</button>
@@ -212,21 +207,11 @@ $addShowingData = [
             noShowingsMessage.classList.add('hidden');
         });
 
-        // Add showing
-        const addShowingButton = document.getElementById('addShowingButton');
+        /*== Add Showing ==*/
         const addShowingModal = document.getElementById('addShowingModal');
+        const addShowingForm = document.getElementById('addShowingForm');
+        const addShowingButton = document.getElementById('addShowingButton');
         const cancelAddShowingButton = document.getElementById('cancelAddShowingButton');
-        let showingData;
-
-        addShowingButton.addEventListener('click', () => {
-            showingData = addShowingButton.dataset.addshowing;
-            showingData = JSON.parse(showingData);
-            addShowingModal.classList.remove('hidden');
-        });
-
-        cancelAddShowingButton.addEventListener('click', () => {
-            addShowingModal.classList.add('hidden');
-        });
 
         const addShowingVenueInput = document.getElementById('addShowingVenueInput');
         const addShowingVenueError = document.getElementById('error-add-showing-venue');
@@ -236,6 +221,87 @@ $addShowingData = [
         const addShowingTimeError = document.getElementById('error-add-showing-time');
         const addShowingRoomInput = document.getElementById('addShowingRoomInput');
         const addShowingRoomError = document.getElementById('error-add-showing-room');
+        const addShowingGeneralError = document.getElementById('error-add-showing-general');
+        let showingData;
+
+        // Open modal
+        addShowingButton.addEventListener('click', () => {
+            showingData = addShowingButton.dataset.addshowing;
+            showingData = JSON.parse(showingData);
+            addShowingModal.classList.remove('hidden');
+        });
+
+        // Close modal
+        cancelAddShowingButton.addEventListener('click', () => {
+            addShowingModal.classList.add('hidden');
+            clearValues('add');
+        });
+
+        // Submit the add form
+		addShowingForm.addEventListener('submit', function(event) {
+			event.preventDefault(); // Prevent default form submission
+			const xhr = new XMLHttpRequest();
+			const baseRoute = '<?php echo $_SESSION['baseRoute'];?>';
+			xhr.open('POST', `${baseRoute}showing/add`, true);
+        
+
+            const addShowingData = {
+                action: 'addShowing',
+                venueId: addShowingVenueInput.value,
+                showingDate: addShowingDateInput.value,
+                showingTime: addShowingTimeInput.value.split('-')[0], // Get the start time
+                movieId: showingData.movieId,
+                roomId: addShowingRoomInput.value
+			}
+
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function() {
+				// If the request is done and successful
+				if (xhr.readyState === 4 && xhr.status === 200) {
+					let response;
+					try {
+						response = JSON.parse(xhr.response); // Parse the JSON response
+					} catch (e) {
+						console.error('Could not parse response as JSON:', e);
+						return;
+					}
+
+					if (response.success) {
+						alert('Success! Showing added successfully.');
+						window.location.reload();
+						clearValues('add');
+					} else {
+						// Display error messages
+                        if (response.errors['showingDate']) {
+                            addShowingDateError.textContent = response.errors['showingDate'];
+                            addShowingDateError.classList.remove('hidden');
+                        }
+                        if (response.errors['showingTime']) {
+                            addShowingTimeError.textContent = response.errors['showingTime'];
+                            addShowingTimeError.classList.remove('hidden');
+                        }
+                        if (response.errors['general']) {
+                            addShowingGeneralError.textContent = response.errors['general'];
+                            addShowingGeneralError.classList.remove('hidden');
+                        }
+						if (response.errorMessage) {
+							console.error('Error:', response.errorMessage);
+						}
+                        else {
+							console.error('Error:', response.errors);
+						}
+					}
+				}
+			};
+
+			// Send data as URL-encoded string
+			const params = Object.keys(addShowingData)
+				.map(key => `${encodeURIComponent(key)}=${encodeURIComponent(addShowingData[key])}`)
+				.join('&');
+			xhr.send(params);
+        });
+
+        
 
         function fetchRequest(route, data) {
             const xhr = new XMLHttpRequest();
@@ -246,7 +312,6 @@ $addShowingData = [
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4 && xhr.status === 200) {
                     let response;
-                    console.log(xhr.response);
                     try {
                         response = JSON.parse(xhr.response);
                     } catch (e) {
@@ -276,10 +341,10 @@ $addShowingData = [
                         
                     } else {
                         if (route == "timeslots") {
-                            addShowingTimeInput.innerHTML = '<option value="" disabled>No available slots</option>';
+                            addShowingTimeInput.innerHTML = `<option value="">${response.message}</option>`;
                         }
                         else if (route == "rooms") {
-                            addShowingRoomInput.innerHTML = '<option value="" disabled>No available rooms for this timeslot</option>';
+                            addShowingRoomInput.innerHTML = `<option value="">${response.message}</option>`;
                         }
                     }
                 }
@@ -293,11 +358,29 @@ $addShowingData = [
 
         function fetchAvailableTimeslots() {
             const venueId = addShowingVenueInput.value;
-            const showingDate = addShowingDateInput.value;
+            let showingDate = addShowingDateInput.value;
 
             if (!venueId || !showingDate) {
                 return;
             } 
+
+            // Check if the selected date is today or later
+            const selectedDate = new Date(showingDate);
+            const today = new Date();
+            // Reset time components to midnight (start of the day)
+            selectedDate.setHours(0, 0, 0, 0);
+            today.setHours(0, 0, 0, 0);
+
+            if (selectedDate < today) {
+                addShowingDateError.textContent = 'Please select a date that is today or a later date.';
+                addShowingDateError.classList.remove('hidden');
+                return;
+            }
+            else if (selectedDate >= today) {
+                addShowingDateError.textContent = '';
+                addShowingDateError.classList.add('hidden');
+            }
+
             const { duration, movieId } = showingData;
 
             // Create a Date object
@@ -340,5 +423,25 @@ $addShowingData = [
         addShowingVenueInput.addEventListener('change', fetchAvailableTimeslots);
         addShowingDateInput.addEventListener('change', fetchAvailableTimeslots);
         addShowingTimeInput.addEventListener('change', fetchAvailableRooms);
+
+        // Clear error messages and input values
+        function clearValues(action) {
+            if (action === 'edit') {
+                /* errorEditOpeningHourDay.classList.add('hidden');
+                errorEditOpeningHourOpeningTime.classList.add('hidden');
+                errorEditOpeningHourClosingTime.classList.add('hidden');
+                errorEditOpeningHourIsCurrent.classList.add('hidden');
+                errorEditOpeningHourGeneral.classList.add('hidden');
+                editOpeningHourForm.reset(); */
+            }
+            else if (action === 'add') {
+                addShowingVenueError.classList.add('hidden');
+                addShowingDateError.classList.add('hidden');
+                addShowingTimeError.classList.add('hidden');
+                addShowingRoomError.classList.add('hidden');
+                addShowingGeneralError.classList.add('hidden');
+                addShowingForm.reset();
+            }
+        }
     });
 </script>
