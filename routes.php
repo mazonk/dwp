@@ -83,6 +83,8 @@ post($baseRoute.'profile', 'src/view/pages/ProfilePage.php'); // used at toggle 
 post($baseRoute.'booking/checkout', 'src/view/pages/CheckoutPage.php'); // used at toggle dropdown
 post($baseRoute.'booking/charge', 'third-party/charge.php'); // used at stripe payment
 post($baseRoute.'stripe-webhook', 'stripe_webhook.php'); // used at stripe webhook
+post($baseRoute.'fetch-timeslots', 'fetch_timeslots.php'); // used at showing crud
+post($baseRoute.'fetch-rooms', 'fetch_rooms.php'); // used at showing crud
 
 // Post route for register
 post($baseRoute.'register', function() {
@@ -718,4 +720,126 @@ put($baseRoute . 'movies/restore', function() {
     }
 });
 
+require_once 'src/controller/ShowingController.php';
+// Add Showing post route
+post($baseRoute.'showing/add', function() {
+    $showingController = new ShowingController();
 
+    if (isset($_POST['action']) && $_POST['action'] === 'addShowing') {
+        $showingData = [
+            'venueId' => htmlspecialchars(trim($_POST['venueId'])),
+            'showingDate' => htmlspecialchars(trim($_POST['showingDate'])),
+            'showingTime' => htmlspecialchars(trim($_POST['showingTime'])),
+            'movieId' => htmlspecialchars(trim($_POST['movieId'])),
+            'roomId' => htmlspecialchars(trim($_POST['roomId'])),
+        ];
+
+        $result = $showingController->addShowing($showingData);
+
+        if (isset($result['success']) && $result['success'] === true) {
+            // Return a success response
+            echo json_encode(['success' => true]);
+        } else if (isset($result['errorMessage'])) {
+            // Return an error response
+            echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);
+        } else {
+            if (is_array($result)) {
+                // Sanitize the array of errors
+                $sanitizedErrors = array_map(function($error) {
+                    return htmlspecialchars($error);
+                }, $result);
+
+                echo json_encode(['success' => false, 'errors' => $sanitizedErrors]);
+            } else {
+                // Return a single error response
+                echo json_encode(['success' => false, 'errors' => htmlspecialchars($result)]);
+            }
+        }
+    } else {
+        // Invalid action response
+        echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
+    }
+});
+
+put($baseRoute.'showing/edit', function() {
+    $showingController = new ShowingController();
+    parse_str(file_get_contents("php://input"), $_PUT); // Parse the PUT request
+
+    if (isset($_PUT['action']) && $_PUT['action'] === 'editShowing') {
+        $showingData = [
+            'showingId' => htmlspecialchars(trim($_PUT['showingId'])),
+            'venueId' => htmlspecialchars(trim($_PUT['venueId'])),
+            'showingDate' => htmlspecialchars(trim($_PUT['showingDate'])),
+            'showingTime' => htmlspecialchars(trim($_PUT['showingTime'])),
+            'movieId' => htmlspecialchars(trim($_PUT['movieId'])),
+            'roomId' => htmlspecialchars(trim($_PUT['roomId'])),
+        ];
+
+        $result = $showingController->editShowing($showingData);
+
+        if (isset($result['success']) && $result['success'] === true) {
+            // Return a success response
+            echo json_encode(['success' => true]);
+        } else if (isset($result['errorMessage'])) {
+            // Return an error response
+            echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);
+        } else {
+            if (is_array($result)) {
+                // Sanitize the array of errors
+                $sanitizedErrors = array_map(function($error) {
+                    return htmlspecialchars($error);
+                }, $result);
+
+                echo json_encode(['success' => false, 'errors' => $sanitizedErrors]);
+            } else {
+                // Return a single error response
+                echo json_encode(['success' => false, 'errors' => htmlspecialchars($result)]);
+            }
+        }
+    } else {
+        // Invalid action response
+        echo json_encode(['success' => false, 'errorMessage' => 'Invalid action.']);
+    }
+});
+
+// Archive showings
+put($baseRoute . 'showing/archive', function() {
+    $showingController = new ShowingController();
+    parse_str(file_get_contents("php://input"), $_PUT); // Parse the PUT request
+
+
+    if (isset($_PUT['action']) && $_PUT['action'] === 'archiveShowing') {
+        $showingId = htmlspecialchars(trim($_PUT['showingId']));
+
+        $result = $showingController->archiveShowing($showingId);
+
+        if (isset($result['success']) && $result['success'] === true) {
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);
+        }
+    } else {
+        echo json_encode(['success' => false, 'errorMessage' => 'Invalid movie ID.' . $_PUT['showingId']]);
+    }
+});
+
+
+put($baseRoute . 'showing/restore', function() {
+    $showingController = new ShowingController();
+    parse_str(file_get_contents("php://input"), $_PUT); // Parse the PUT request
+
+
+    if (isset($_PUT['action']) && $_PUT['action'] === 'restoreShowing') {
+        $showingId = htmlspecialchars(trim($_PUT['showingId']));
+
+        $result = $showingController->restoreShowing($showingId);
+
+        if (isset($result['success']) && $result['success'] === true) {
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false, 'errorMessage' => htmlspecialchars($result['errorMessage'])]);
+        }
+    } else {
+        echo json_encode(['success' => false, 'errorMessage' => 'Invalid movie ID.' . $_PUT['movieId']]);
+    }
+});

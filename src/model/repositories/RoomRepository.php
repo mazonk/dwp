@@ -23,4 +23,19 @@ class RoomRepository {
         
         return $result;
     }
+
+    public function getRoomsByVenueId(int $venueId): array {
+        $db = $this->getdb();
+        $query = $db->prepare("SELECT * FROM Room WHERE venueId = :venueId");
+        try{
+            $query->execute(array(":venueId" => $venueId));
+            $result = $query->fetchAll(PDO::FETCH_ASSOC);
+            if (empty($result)) {
+                throw new Exception("No rooms found!");
+            }
+            return $result;
+        } catch (PDOException $e) {
+            throw new Exception("Unable to fetch rooms!");
+        }
+    }
 }

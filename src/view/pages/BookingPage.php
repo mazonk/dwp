@@ -185,8 +185,10 @@ else if (isset($_SESSION['activeBooking']) && $_SESSION['activeBooking']['expiry
                             if (errorMessage === '') {
                                 // If validation passes, deselect the seat
                                 selectedSeats = tempSeats;
+
                                 this.classList.remove('bg-lime-600');
                                 this.classList.add('bg-blue-600');
+
                             } else {
                                 // Show error message if deselecting causes invalid gaps
                                 showError(errorMessage, this);
@@ -204,8 +206,10 @@ else if (isset($_SESSION['activeBooking']) && $_SESSION['activeBooking']['expiry
                             if (errorMessage === '') {
                                 // If validation passes, select the seat
                                 selectedSeats.push(seatId);
+
                                 this.classList.remove('bg-blue-600');
                                 this.classList.add('bg-lime-600');
+
                             } else {
                                 // Show error message if adding the seat causes invalid gaps
                                 showError(errorMessage, this);

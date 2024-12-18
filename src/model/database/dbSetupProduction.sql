@@ -139,6 +139,7 @@ CREATE TABLE Showing (
     showingTime TIME NOT NULL,
     movieId INT NOT NULL,
     roomId INT NOT NULL,
+    archived BOOLEAN NOT NULL,
     FOREIGN KEY (movieId) REFERENCES Movie(movieId),
     FOREIGN KEY (roomId) REFERENCES Room(roomId)
 );

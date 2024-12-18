@@ -2,6 +2,7 @@
 require_once "src/controller/MovieController.php";
 require_once "src/controller/ShowingController.php";
 require_once "src/controller/GenreController.php";
+
 require_once "src/model/entity/Showing.php";
 include_once "src/view/components/MovieCard.php";
 include_once "src/view/components/ShowingCard.php";

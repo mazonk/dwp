@@ -6,7 +6,8 @@ class GenreRepository
     public function __construct() {
     }
 
-    private function getdb(): PDO {
+    private function getdb(): PDO
+    {
         require_once 'src/model/database/dbcon/DatabaseConnection.php';
         return DatabaseConnection::getInstance(); // singleton
     }
