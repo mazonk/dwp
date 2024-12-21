@@ -28,3 +28,11 @@
     - In your browser, go to *http://localhost/your-project-folder/*.
     - The system should now be accessible, allowing ticket bookings and seat reservations.
 
+Admin login credentials:
+username: admin@admin.com
+password: Password1
+
+Stripe test card details:
+card number: 4242 4242 4242 4242
+expiry: any future date
+cvc: any 3-digit code
